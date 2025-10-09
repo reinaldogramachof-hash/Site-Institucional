@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Plena Personalizados - Plena Informática</title>
+
+  <!-- Meta SEO -->
+  <meta name="description" content="Personalize camisetas, canecas, brindes e decoração com a Plena Informática. Qualidade premium e atendimento especialista em São José dos Campos."/>
+  <meta name="author" content="Plena Informática"/>
+  <meta name="theme-color" content="#1e40af"/>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Plena Informática - Personalizados sob medida"/>
+  <meta property="og:description" content="Transformamos suas ideias em produtos únicos: vestuário, canecas, brindes e muito mais."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://plenainformatica.com.br/personalizados"/>
+  <meta property="og:locale" content="pt_BR"/>
+  <meta property="og:site_name" content="Plena Informática"/>
+  <link rel="canonical" href="https://plenainformatica.com.br/personalizados"/>
+
+  <!-- Schema -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Service",
+    "name":"Personalizados - Plena Informática",
+    "description":"Produção de itens personalizados (vestuário, canecas/copos, decoração e brindes).",
+    "provider":{"@type":"LocalBusiness","name":"Plena Informática"},
+    "areaServed":"São José dos Campos e região",
+    "serviceType":"Produtos personalizados sob demanda"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root{
+      --primary:#1e40af;      /* azul base */
+      --secondary:#2563eb;    /* azul claro */
+      --brand-orange:#ea580c; /* laranja institucional */
+      --accent:#059669;
+      --dark:#1f2937;
+      --light:#f8fafc;
+    }
+
+    body{
+      font-family:'Poppins',sans-serif;
+      /* Fundo em tom de azul contrastando com as demais cores */
+      background: radial-gradient(1200px 600px at 10% -10%, #e0f2fe 0%, transparent 60%),
+                  radial-gradient(1000px 500px at 110% 10%, #dbeafe 0%, transparent 55%),
+                  linear-gradient(135deg, #eef2ff 0%, #dbeafe 40%, #bfdbfe 100%);
+    }
+    section[id]{scroll-margin-top:5.5rem}
+
+    /* Header sticky + blur */
+    .header-blur{backdrop-filter:saturate(180%) blur(8px); background:rgba(255,255,255,.9)}
+
+    /* Filtros/Galeria */
+    .filter-btn{transition:background-color .25s ease,color .25s ease,transform .15s ease, box-shadow .25s ease, border-color .25s ease}
+    .filter-btn.active{
+      color:#fff;
+      background-color:var(--secondary);
+      border-color:var(--secondary)!important;
+      transform:translateY(-2px);
+      box-shadow:0 8px 18px rgba(37,99,235,.25);
+    }
+    .filter-btn:not(.active){
+      background:#fff;
+      color:#374151;
+      border:2px solid #cbd5e1;
+    }
+
+    .gallery-item{
+      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+      border:2px solid transparent;
+      border-radius:.75rem;
+      background:#fff;
+    }
+    .gallery-item:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 20px rgba(0,0,0,.12);
+      border-color:#93c5fd; /* leve azul ao passar o mouse */
+    }
+    .overlay-text{transition:opacity .25s ease}
+    .gallery-item:hover .overlay-text{opacity:1}
+
+    /* Drag & drop */
+    .drag-area{border:2px dashed #93c5fd; transition:background-color .2s ease, border-color .2s ease}
+    .drag-area.active{background-color:#dbeafe; border-color:#2563eb}
+
+    /* Pulso do botão WhatsApp (consistente) */
+    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}70%{box-shadow:0 0 0 18px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+    .pulse-ring{animation:pulse 2s infinite}
+
+    /* Acessibilidade */
+    .accessible-outline:focus-visible,
+    #menu-btn:focus-visible,
+    .filter-btn:focus-visible{outline:2px solid var(--secondary); outline-offset:2px}
+
+    /* Reduzir movimento */
+    @media (prefers-reduced-motion:reduce){
+      .filter-btn,.gallery-item{transition:none;transform:none}
+      .pulse-ring{animation:none !important}
+    }
+  </style>
+</head>
+<body class="text-gray-800">
+
+  <!-- Header unificado -->
+  <header class="header-blur shadow-md fixed top-0 left-0 right-0 z-50">
+    <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+      <a href="index.html" class="text-2xl font-bold text-gray-800">
+        Plena <span class="text-blue-600">Informática</span>
+      </a>
+      <div class="hidden md:flex items-center space-x-6">
+        <a href="index.html#services" class="text-gray-600 hover:text-blue-600 transition">Início</a>
+        <a href="servicos.html" class="text-gray-600 hover:text-blue-600 transition">Serviços</a>
+        <a href="#assistente" class="text-gray-600 hover:text-blue-600 transition">Assistente de Criação</a>
+        <a href="index.html#contact" class="text-gray-600 hover:text-blue-600 transition">Contato</a>
+        <button type="button" class="accessible-outline bg-green-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-green-600 transition"
+                data-whatsapp-phone="5512992191018"
+                data-whatsapp-message="Olá! Gostaria de informações sobre produtos personalizados.">
+          Fale Conosco
+        </button>
+      </div>
+      <button id="menu-btn" type="button" class="md:hidden p-2 rounded accessible-outline text-gray-800" aria-label="Abrir menu" aria-controls="mobile-menu" aria-expanded="false">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </nav>
+    <!-- Menu mobile -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+      <a href="index.html#services" class="block py-3 px-6 text-gray-600 hover:bg-blue-50 transition">Início</a>
+      <a href="servicos.html" class="block py-3 px-6 text-gray-600 hover:bg-blue-50 transition">Serviços</a>
+      <a href="#assistente" class="block py-3 px-6 text-gray-600 hover:bg-blue-50 transition">Assistente de Criação</a>
+      <a href="index.html#contact" class="block py-3 px-6 text-gray-600 hover:bg-blue-50 transition">Contato</a>
+      <button type="button" class="accessible-outline block w-full text-left py-3 px-6 font-semibold text-white bg-green-500 hover:bg-green-600 transition"
+              data-whatsapp-phone="5512992191018"
+              data-whatsapp-message="Olá! Gostaria de informações sobre produtos personalizados.">
+        Fale Conosco
+      </button>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-6 pt-28 pb-16 md:pb-20">
+    <!-- Título -->
+    <div class="text-center mb-12 md:mb-14">
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-800">
+        Plena <span class="text-blue-600">Personalizados</span>
+      </h1>
+      <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Dê vida às suas ideias. Qualidade, durabilidade e criatividade em cada item que produzimos.</p>
+    </div>
+
+    <!-- Subtítulo (Setor de Personalizados) em azul -->
+    <h2 class="text-2xl md:text-3xl font-bold text-blue-600 text-center mb-8">Setor de Personalizados</h2>
+
+    <!-- Filtros -->
+    <div id="filters" class="flex justify-center flex-wrap gap-3 md:gap-4 mb-10 md:mb-12">
+      <button type="button" class="filter-btn active accessible-outline px-4 py-2 rounded-lg font-semibold shadow border-2" data-filter="all" aria-pressed="true">Todos</button>
+      <button type="button" class="filter-btn accessible-outline px-4 py-2 rounded-lg font-semibold shadow border-2" data-filter="vestuario" aria-pressed="false">Vestuário</button>
+      <button type="button" class="filter-btn accessible-outline px-4 py-2 rounded-lg font-semibold shadow border-2" data-filter="canecas" aria-pressed="false">Canecas & Copos</button>
+      <button type="button" class="filter-btn accessible-outline px-4 py-2 rounded-lg font-semibold shadow border-2" data-filter="decoracao" aria-pressed="false">Decoração</button>
+      <button type="button" class="filter-btn accessible-outline px-4 py-2 rounded-lg font-semibold shadow border-2" data-filter="brindes" aria-pressed="false">Brindes</button>
+    </div>
+
+    <!-- Galeria -->
+    <div id="gallery" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-16 md:mb-20">
+      <div class="gallery-item overflow-hidden relative" data-category="canecas">
+        <img src="images/caneca capa.jpg" alt="Caneca Criativa personalizada" class="w-full h-full object-cover" loading="lazy" decoding="async"/>
+        <div class="absolute inset-0 bg-black/0 hover:bg-black/40 transition flex items-center justify-center p-4">
+          <p class="text-white font-bold text-center text-lg opacity-0 overlay-text">Caneca Criativa</p>
+        </div>
+      </div>
+      <div class="gallery-item overflow-hidden relative" data-category="vestuario">
+        <img src="images/camiseta capa.jpg" alt="Camiseta temática personalizada" class="w-full h-full object-cover" loading="lazy" decoding="async"/>
+        <div class="absolute inset-0 bg-black/0 hover:bg-black/40 transition flex items-center justify-center p-4">
+          <p class="text-white font-bold text-center text-lg opacity-0 overlay-text">Camiseta Temática</p>
+        </div>
+      </div>
+      <div class="gallery-item overflow-hidden relative" data-category="decoracao">
+        <img src="images/almofada capa.jpg" alt="Almofada decorativa personalizada" class="w-full h-full object-cover" loading="lazy" decoding="async"/>
+        <div class="absolute inset-0 bg-black/0 hover:bg-black/40 transition flex items-center justify-center p-4">
+          <p class="text-white font-bold text-center text-lg opacity-0 overlay-text">Almofada Decorativa</p>
+        </div>
+      </div>
+      <div class="gallery-item overflow-hidden relative" data-category="brindes">
+        <img src="images/chaveiro capa.jpg" alt="Chaveiro corporativo personalizado" class="w-full h-full object-cover" loading="lazy" decoding="async"/>
+        <div class="absolute inset-0 bg-black/0 hover:bg-black/40 transition flex items-center justify-center p-4">
+          <p class="text-white font-bold text-center text-lg opacity-0 overlay-text">Chaveiro Corporativo</p>
+        </div>
+      </div>
+      <div class="gallery-item overflow-hidden relative" data-category="vestuario">
+        <img src="images/moletom capa.jpg" alt="Moletom personalizado" class="w-full h-full object-cover" loading="lazy" decoding="async"/>
+        <div class="absolute inset-0 bg-black/0 hover:bg-black/40 transition flex items-center justify-center p-4">
+          <p class="text-white font-bold text-center text-lg opacity-0 overlay-text">Moletom Personalizado</p>
+        </div>
+      </div>
+      <div class="gallery-item overflow-hidden relative" data-category="brindes">
+        <img src="images/mousepad capa.jpg" alt="Mousepad com logo personalizado" class="w-full h-full object-cover" loading="lazy" decoding="async"/>
+        <div class="absolute inset-0 bg-black/0 hover:bg-black/40 transition flex items-center justify-center p-4">
+          <p class="text-white font-bold text-center text-lg opacity-0 overlay-text">Mousepad com Logo</p>
+        </div>
+      </div>
+      <div class="gallery-item overflow-hidden relative" data-category="canecas">
+        <img src="images/copo capa.jpg" alt="Copo personalizado" class="w-full h-full object-cover" loading="lazy" decoding="async"/>
+        <div class="absolute inset-0 bg-black/0 hover:bg-black/40 transition flex items-center justify-center p-4">
+          <p class="text-white font-bold text-center text-lg opacity-0 overlay-text">Copo Personalizado</p>
+        </div>
+      </div>
+      <div class="gallery-item overflow-hidden relative" data-category="decoracao">
+        <img src="images/azulejo capa.jpg" alt="Azulejo personalizado" class="w-full h-full object-cover" loading="lazy" decoding="async"/>
+        <div class="absolute inset-0 bg-black/0 hover:bg-black/40 transition flex items-center justify-center p-4">
+          <p class="text-white font-bold text-center text-lg opacity-0 overlay-text">Azulejo Personalizado</p>
+        </div>
+      </div>
+      <div class="gallery-item overflow-hidden relative" data-category="brindes">
+        <img src="images/ecobag capa.jpg" alt="Ecobag personalizada" class="w-full h-full object-cover" loading="lazy" decoding="async"/>
+        <div class="absolute inset-0 bg-black/0 hover:bg-black/40 transition flex items-center justify-center p-4">
+          <p class="text-white font-bold text-center text-lg opacity-0 overlay-text">Ecobag</p>
+        </div>
+      </div>
+      <div class="gallery-item overflow-hidden relative" data-category="vestuario">
+        <img src="images/bone capa.jpg" alt="Boné personalizado" class="w-full h-full object-cover" loading="lazy" decoding="async"/>
+        <div class="absolute inset-0 bg-black/0 hover:bg-black/40 transition flex items-center justify-center p-4">
+          <p class="text-white font-bold text-center text-lg opacity-0 overlay-text">Boné</p>
+        </div>
+      </div>
+      <div class="gallery-item overflow-hidden relative" data-category="vestuario">
+        <img src="images/uniforme capa.jpg" alt="Uniformes corporativos personalizados" class="w-full h-full object-cover" loading="lazy" decoding="async"/>
+        <div class="absolute inset-0 bg-black/0 hover:bg-black/40 transition flex items-center justify-center p-4">
+          <p class="text-white font-bold text-center text-lg opacity-0 overlay-text">Uniformes</p>
+        </div>
+      </div>
+      <div class="gallery-item overflow-hidden relative" data-category="canecas">
+        <img src="images/chopp capa.jpg" alt="Caneca de chopp personalizada" class="w-full h-full object-cover" loading="lazy" decoding="async"/>
+        <div class="absolute inset-0 bg-black/0 hover:bg-black/40 transition flex items-center justify-center p-4">
+          <p class="text-white font-bold text-center text-lg opacity-0 overlay-text">Caneca de Chopp</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Depoimentos -->
+    <section aria-labelledby="depoimentos-title" class="my-16 md:my-20">
+      <h2 id="depoimentos-title" class="text-3xl font-bold text-center mb-10 text-gray-800">A Satisfação de Quem Cria Conosco</h2>
+      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div class="bg-white rounded-xl shadow-lg p-8 border border-blue-100">
+          <p class="text-gray-600 italic mb-4">"As camisetas para o evento da nossa empresa ficaram perfeitas! Qualidade incrível da estampa e do tecido, e a entrega foi super rápida."</p>
+          <p class="font-bold text-right text-blue-600">- Carla Mendes</p>
+          <p class="text-sm text-gray-500 text-right">Marketing - Construtora Alfa</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-lg p-8 border border-blue-100">
+          <p class="text-gray-600 italic mb-4">"Fiz uma caneca com uma foto para presentear minha mãe e ela amou! A qualidade da imagem ficou excelente, com cores super vivas."</p>
+          <p class="font-bold text-right text-blue-600">- Rafael Lima</p>
+          <p class="text-sm text-gray-500 text-right">Cliente Satisfeito</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Assistente de Criação -->
+    <section id="assistente" class="bg-white/90 backdrop-blur rounded-xl shadow-2xl border border-blue-100 py-14 md:py-18">
+      <div class="container mx-auto px-6">
+        <div class="text-center">
+          <h3 class="text-3xl md:text-4xl font-bold text-blue-600 drop-shadow-sm">Assistente de Criação Plena</h3>
+          <p class="mt-4 text-lg text-gray-700 max-w-3xl mx-auto">Pronto para criar? Siga os passos e envie seu projeto diretamente para nossa equipe.</p>
+        </div>
+
+        <div class="max-w-4xl mx-auto mt-10 bg-slate-50 rounded-xl shadow p-6 md:p-8 border border-blue-100">
+          <form id="creation-assistant-form">
+            <!-- Passo 1 -->
+            <div class="mb-8">
+              <h4 class="text-xl font-bold mb-3 text-gray-700">Passo 1: Sobre o seu Projeto</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <select id="produto-escolhido" class="w-full p-3 border border-blue-200 rounded-lg bg-white" required>
+                  <option value="" disabled selected>Selecione o produto principal...</option>
+                  <optgroup label="Vestuário">
+                    <option value="Camiseta">Camiseta</option>
+                    <option value="Moletom">Moletom</option>
+                    <option value="Uniforme">Uniforme</option>
+                    <option value="Boné">Boné</option>
+                  </optgroup>
+                  <optgroup label="Canecas & Copos">
+                    <option value="Caneca de Cerâmica">Caneca de Cerâmica</option>
+                    <option value="Caneca de Chopp">Caneca de Chopp</option>
+                    <option value="Copo Térmico">Copo Térmico</option>
+                  </optgroup>
+                  <optgroup label="Decoração">
+                    <option value="Almofada">Almofada</option>
+                    <option value="Azulejo">Azulejo</option>
+                  </optgroup>
+                  <optgroup label="Brindes & Outros">
+                    <option value="Chaveiro">Chaveiro</option>
+                    <option value="Mousepad">Mousepad</option>
+                    <option value="Ecobag">Ecobag</option>
+                  </optgroup>
+                  <option value="Outro">Outro (descreva nos detalhes)</option>
+                </select>
+                <input type="number" id="quantidade" placeholder="Quantidade (Ex: 10)" class="w-full p-3 border border-blue-200 rounded-lg" required min="1"/>
+              </div>
+            </div>
+
+            <!-- Passo 2 -->
+            <div class="mb-8">
+              <h4 class="text-xl font-bold mb-3 text-gray-700">Passo 2: Sua Arte</h4>
+              <div id="drag-drop-area" class="drag-area w-full p-8 text-center rounded-lg cursor-pointer bg-white">
+                <svg class="mx-auto h-12 w-12 text-blue-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                <p class="mt-2 text-gray-600">Arraste e solte seus arquivos aqui</p>
+                <p class="text-xs text-gray-500">ou <span class="text-blue-600 font-semibold">clique para selecionar</span></p>
+                <input type="file" id="arte-upload" class="hidden" accept="image/*,.pdf,.ai,.cdr,.zip,.rar" multiple/>
+              </div>
+              <div id="file-list" class="text-sm text-gray-600 mt-2">Nenhum arquivo selecionado.</div>
+              <p class="text-xs text-gray-500 mt-2">
+                Para profissionais:
+                <button type="button" id="open-instructions" class="text-blue-600 underline font-semibold accessible-outline">
+                  veja as instruções de fechamento de arquivo
+                </button>.
+              </p>
+            </div>
+
+            <!-- Passo 3 -->
+            <div class="mb-8">
+              <h4 class="text-xl font-bold mb-3 text-gray-700">Passo 3: Detalhes e Referências</h4>
+              <textarea id="instrucoes" placeholder="Descreva com detalhes o que você quer. Ex: 'Logo no peito esquerdo, texto “Equipe 2025” nas costas.' Se o produto não estiver na lista, descreva-o aqui." class="w-full p-3 border border-blue-200 rounded-lg" rows="5" required></textarea>
+              <input type="text" id="link-referencia" placeholder="Cole aqui um link de referência (opcional)" class="w-full p-3 border border-blue-200 rounded-lg mt-4"/>
+            </div>
+
+            <!-- Passo 4 -->
+            <div class="mb-8">
+              <h4 class="text-xl font-bold mb-3 text-gray-700">Passo 4: Seus Dados para Contato</h4>
+              <input type="text" id="nome-cliente" placeholder="Seu Nome ou Nome da Empresa" class="w-full p-3 border border-blue-200 rounded-lg" required/>
+            </div>
+
+            <div class="text-center">
+              <button type="submit" class="w-full md:w-auto bg-green-500 text-white font-bold px-10 md:px-12 py-4 rounded-lg hover:bg-green-600 transition text-lg">
+                Enviar Projeto para Orçamento
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA azul -->
+    <section class="bg-blue-600 text-white rounded-xl shadow-2xl p-8 md:p-12 text-center my-16 md:my-20">
+      <h2 class="text-3xl md:text-4xl font-bold mb-3">Ainda com Dúvidas?</h2>
+      <p class="max-w-2xl mx-auto mb-6 md:mb-8 text-blue-100">Nossa equipe está pronta para te ajudar a criar o produto perfeito. Clique abaixo e fale conosco!</p>
+      <button type="button" class="accessible-outline bg-white text-blue-600 font-bold px-8 py-4 rounded-lg hover:bg-blue-100 transition transform hover:scale-105"
+              data-whatsapp-phone="5512992191018"
+              data-whatsapp-message="Olá! Gostaria de tirar uma dúvida sobre produtos personalizados.">
+        Falar com um Especialista
+      </button>
+    </section>
+
+    <!-- Técnicas -->
+    <section aria-labelledby="tecnicas-title" class="my-16 md:mb-10">
+      <h2 id="tecnicas-title" class="text-3xl font-bold text-center mb-10 md:mb-12 text-gray-800">Nossas Técnicas: A Alma do Seu Produto</h2>
+      <div class="grid md:grid-cols-3 gap-6 md:gap-8">
+        <article class="bg-white rounded-xl shadow-lg p-8 border-t-4 border-blue-500 flex flex-col">
+          <h3 class="text-2xl font-semibold mb-3 text-blue-600">Sublimação</h3>
+          <p class="text-gray-600 flex-grow">A tinta vira gás e penetra na fibra do material, garantindo uma estampa com toque zero, que não racha e não desbota.</p>
+        </article>
+        <article class="bg-white rounded-xl shadow-lg p-8 border-t-4 border-blue-500 flex flex-col">
+          <h3 class="text-2xl font-semibold mb-3 text-blue-600">DTF Têxtil</h3>
+          <p class="text-gray-600 flex-grow">Impressão de alta tecnologia transferida para o tecido, funcionando em qualquer cor ou tipo de malha.</p>
+        </article>
+        <article class="bg-white rounded-xl shadow-lg p-8 border-t-4 border-blue-500 flex flex-col">
+          <h3 class="text-2xl font-semibold mb-3 text-blue-600">DTF UV</h3>
+          <p class="text-gray-600 flex-grow">Cria um adesivo com relevo, curado com luz UV. Ideal para superfícies rígidas, com máxima resistência.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer — igual ao das páginas Index/Serviços -->
+  <footer class="bg-gray-900 text-white py-16">
+    <div class="container mx-auto px-6">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div class="md:col-span-2">
+          <a href="index.html" class="text-2xl font-bold text-white flex items-center mb-6">
+            Plena <span class="text-orange-500 ml-1">Informática</span>
+          </a>
+          <p class="text-slate-400 mb-6 max-w-md">Há 15 anos transformando ideias em realidade. Oferecemos soluções completas em serviços digitais, personalizados e tecnologia.</p>
+          <div class="flex items-center space-x-4 mb-6">
+            <div class="flex items-center bg-green-100 text-green-800 py-1 px-3 rounded-full text-sm font-medium">
+              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              Site Seguro
+            </div>
+            <div class="text-slate-400 text-sm">Protegido com SSL</div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="font-bold text-lg mb-6">Serviços</h3>
+          <ul class="space-y-3">
+            <li><a href="servicos.html" class="text-slate-400 hover:text-white transition">Serviços Digitais</a></li>
+            <li><a href="personalizados.html" class="text-slate-400 hover:text-white transition">Personalizados</a></li>
+            <li><a href="tecnologia.html" class="text-slate-400 hover:text-white transition">Tecnologia</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-bold text-lg mb-6">Contato</h3>
+          <ul class="space-y-3 text-slate-400">
+            <li class="flex items-start">
+              <svg class="w-5 h-5 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <span>São José dos Campos, SP</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              <span>(12) 98148-8505</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              <span>plenainfotecnologia@gmail.com</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              <span>@plenainf_2025</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800 mt-12 pt-8">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="text-center md:text-left mb-4 md:mb-0">
+            <p class="text-lg italic text-slate-400 mb-2">"Tudo posso naquele que me fortalece." - Filipenses 4:13</p>
+            <p class="text-sm text-slate-500">&copy; 2025 Plena Informática. Todos os direitos reservados.</p>
+            <p class="text-xs text-slate-600 mt-1">Desenvolvido por Plena Informática</p>
+          </div>
+          <div class="flex space-x-6 text-sm text-slate-400">
+            <a href="#" class="hover:text-white transition open-modal" data-modal="terms">Termos de Uso</a>
+            <a href="#" class="hover:text-white transition open-modal" data-modal="privacy">Política de Privacidade</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal: Termos -->
+  <div id="terms-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4 modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="terms-modal-title">
+    <div class="bg-white p-8 rounded-lg shadow-2xl max-w-2xl w-full relative">
+      <button type="button" class="modal-close accessible-outline text-gray-500 hover:text-gray-700 absolute top-4 right-4" aria-label="Fechar termos">&times;</button>
+      <h2 id="terms-modal-title" class="text-2xl font-bold mb-4">Termos de Uso - Serviços Digitais</h2>
+      <div class="text-slate-700 space-y-4">
+        <p>Ao utilizar nossos serviços digitais e de personalizados, você concorda com os seguintes termos e condições:</p>
+        <h3 class="font-bold text-lg mt-6 mb-2">1. Serviços Prestados</h3>
+        <p>A Plena Informática oferece serviços de criação/produção de itens personalizados e serviços digitais correlatos.</p>
+        <h3 class="font-bold text-lg mt-6 mb-2">2. Responsabilidades do Cliente</h3>
+        <p>Fornecer informações e artes com precisão para a execução do pedido.</p>
+        <h3 class="font-bold text-lg mt-6 mb-2">3. Prazos e Entregas</h3>
+        <p>Variam conforme complexidade; serão comunicados previamente.</p>
+        <h3 class="font-bold text-lg mt-6 mb-2">4. Propriedade Intelectual</h3>
+        <p>Materiais produzidos são de propriedade do cliente, vedada a reprodução não autorizada por terceiros.</p>
+        <p class="mt-6 text-sm text-slate-500">Última atualização: Outubro de 2025</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Privacidade -->
+  <div id="privacy-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4 modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="privacy-modal-title">
+    <div class="bg-white p-8 rounded-lg shadow-2xl max-w-2xl w-full relative">
+      <button type="button" class="modal-close accessible-outline text-gray-500 hover:text-gray-700 absolute top-4 right-4" aria-label="Fechar política">&times;</button>
+      <h2 id="privacy-modal-title" class="text-2xl font-bold mb-4">Política de Privacidade - Serviços & Personalizados</h2>
+      <div class="text-slate-700 space-y-4">
+        <p>Descreve como coletamos, usamos e protegemos suas informações.</p>
+        <h3 class="font-bold text-lg mt-6 mb-2">1. Informações Coletadas</h3>
+        <p>Dados necessários para prestação dos serviços e produção de itens.</p>
+        <h3 class="font-bold text-lg mt-6 mb-2">2. Uso das Informações</h3>
+        <ul class="list-disc pl-5 mt-2">
+          <li>Prestação dos serviços solicitados</li>
+          <li>Comunicação sobre andamento</li>
+          <li>Melhoria contínua</li>
+        </ul>
+        <h3 class="font-bold text-lg mt-6 mb-2">3. Proteção de Dados</h3>
+        <p>Medidas de segurança para garantir confidencialidade.</p>
+        <p class="mt-6 text-sm text-slate-500">Última atualização: Outubro de 2025</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Instruções (mantido) -->
+  <div id="instructions-modal" class="fixed inset-0 bg-black/75 hidden items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="instructions-modal-title">
+    <div class="bg-white p-8 rounded-lg shadow-2xl max-w-2xl w-full relative">
+      <button type="button" id="close-instructions" class="accessible-outline text-gray-500 hover:text-gray-700 absolute top-4 right-4" aria-label="Fechar instruções">&times;</button>
+      <h2 id="instructions-modal-title" class="text-2xl font-bold mb-4">Instruções para Fechamento de Arquivo</h2>
+      <ul class="list-disc list-inside space-y-2 text-gray-600" id="instructions-modal-description">
+        <li><strong>Formatos:</strong> PNG (transparente), PDF, AI ou CDR.</li>
+        <li><strong>Resolução:</strong> mínimo 300 DPI.</li>
+        <li><strong>Cores:</strong> preferencialmente CMYK.</li>
+        <li><strong>Fontes:</strong> converter em curvas.</li>
+        <li><strong>Múltiplos:</strong> compactar em .zip ou .rar.</li>
+      </ul>
+      <div class="text-right mt-8">
+        <button type="button" class="accessible-outline bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition" id="instructions-confirm">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botão flutuante do WhatsApp (apenas ele, sem agente virtual) -->
+  <button type="button" class="pulse-ring accessible-outline fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg flex items-center justify-center hover:bg-green-600 transition z-50"
+          aria-label="Fale conosco no WhatsApp"
+          data-whatsapp-phone="5512992191018"
+          data-whatsapp-message="Olá! Gostaria de falar com a equipe de produtos personalizados.">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z"/></svg>
+  </button>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      /* MENU MOBILE */
+      const menuBtn = document.getElementById('menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if(menuBtn && mobileMenu){
+        menuBtn.addEventListener('click', () => {
+          const hidden = mobileMenu.classList.toggle('hidden');
+          menuBtn.setAttribute('aria-expanded', String(!hidden));
+        });
+        mobileMenu.querySelectorAll('a,button').forEach(el=>{
+          el.addEventListener('click',()=>{
+            mobileMenu.classList.add('hidden');
+            menuBtn.setAttribute('aria-expanded','false');
+          });
+        });
+        document.addEventListener('keydown', e=>{
+          if(e.key==='Escape' && !mobileMenu.classList.contains('hidden')){
+            mobileMenu.classList.add('hidden');
+            menuBtn.setAttribute('aria-expanded','false');
+            menuBtn.focus();
+          }
+        });
+      }
+
+      /* WHATSAPP UNIVERSAL */
+      function openWhatsApp(phone, message){
+        const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`;
+        window.open(url,'_blank','noopener,noreferrer');
+      }
+      document.querySelectorAll('[data-whatsapp-phone]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const phone = btn.getAttribute('data-whatsapp-phone') || '5512992191018';
+          const message = btn.getAttribute('data-whatsapp-message') || 'Olá! Gostaria de mais informações sobre produtos personalizados da Plena Informática.';
+          openWhatsApp(phone, message);
+        });
+      });
+
+      /* FILTROS DA GALERIA + contorno azul nos itens da categoria selecionada */
+      const filters = document.querySelectorAll('.filter-btn');
+      const galleryItems = document.querySelectorAll('.gallery-item');
+
+      function applySelectedOutline(filter){
+        galleryItems.forEach(item=>{
+          const category = item.dataset.category || '';
+          const show = filter === 'all' || category.includes(filter);
+          item.classList.toggle('hidden', !show);
+          item.setAttribute('aria-hidden', String(!show));
+          // contorno azul apenas nos que estão visíveis (categoria selecionada)
+          if(show){
+            item.classList.add('ring-2','ring-blue-500','ring-offset-2','ring-offset-blue-50');
+          } else {
+            item.classList.remove('ring-2','ring-blue-500','ring-offset-2','ring-offset-blue-50');
+          }
+        });
+      }
+
+      filters.forEach(button=>{
+        button.addEventListener('click',()=>{
+          filters.forEach(b=>{
+            const isActive = b===button;
+            b.classList.toggle('active', isActive);
+            b.setAttribute('aria-pressed', String(isActive));
+          });
+          const filter = button.dataset.filter || 'all';
+          applySelectedOutline(filter);
+        });
+      });
+
+      // estado inicial (Todos)
+      applySelectedOutline('all');
+
+      /* MODAIS (Termos/Privacidade e Instruções) — foco confinado */
+      const termsModal = document.getElementById('terms-modal');
+      const privacyModal = document.getElementById('privacy-modal');
+      const modalCloseButtons = document.querySelectorAll('.modal-close');
+      const openModalButtons = document.querySelectorAll('.open-modal');
+      const focusableSelector = 'a[href],button:not([disabled]),textarea,input,select,[tabindex]:not([tabindex="-1"])';
+      const modalMap = {terms: termsModal, privacy: privacyModal};
+      let activeModal=null, lastFocusedElement=null;
+
+      function openModal(modal){
+        if(!modal) return;
+        if(activeModal && activeModal!==modal) closeModal();
+        lastFocusedElement=document.activeElement;
+        modal.classList.remove('hidden'); modal.classList.add('flex');
+        modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+        activeModal=modal;
+        const focusables = Array.from(modal.querySelectorAll(focusableSelector)).filter(el=>el.offsetParent!==null);
+        focusables[0]?.focus();
+      }
+      function closeModal(){
+        if(!activeModal) return;
+        activeModal.classList.add('hidden'); activeModal.classList.remove('flex');
+        activeModal.setAttribute('aria-hidden','true'); document.body.style.overflow='';
+        lastFocusedElement && typeof lastFocusedElement.focus==='function' && lastFocusedElement.focus();
+        activeModal=null;
+      }
+      openModalButtons.forEach(btn=>{
+        btn.addEventListener('click', e=>{
+          e.preventDefault();
+          const type = btn.getAttribute('data-modal');
+          openModal(modalMap[type]);
+        });
+      });
+      modalCloseButtons.forEach(btn=>btn.addEventListener('click', closeModal));
+      window.addEventListener('click', e=>{ if(activeModal && e.target===activeModal) closeModal(); });
+      document.addEventListener('keydown', e=>{
+        if(e.key==='Escape' && activeModal){ closeModal(); return; }
+        if(e.key==='Tab' && activeModal){
+          const focusables = Array.from(activeModal.querySelectorAll(focusableSelector)).filter(el=>el.offsetParent!==null);
+          if(!focusables.length) return;
+          const first=focusables[0], last=focusables[focusables.length-1];
+          if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+          else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+        }
+      });
+
+      // Modal de Instruções (reuso do mesmo controlador de foco de cima)
+      const openInstructionsBtn = document.getElementById('open-instructions');
+      const closeInstructionsBtn = document.getElementById('close-instructions');
+      const instructionsConfirmBtn = document.getElementById('instructions-confirm');
+      const instructionsModal = document.getElementById('instructions-modal');
+
+      openInstructionsBtn?.addEventListener('click', (e)=>{ e.preventDefault(); openModal(instructionsModal); });
+      closeInstructionsBtn?.addEventListener('click', ()=>closeModal());
+      instructionsConfirmBtn?.addEventListener('click', ()=>closeModal());
+      instructionsModal?.addEventListener('click', (e)=>{ if(e.target===instructionsModal) closeModal(); });
+    });
+  </script>
+</body>
+</html>

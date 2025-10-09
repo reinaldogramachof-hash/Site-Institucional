@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plena Informática - Soluções Digitais e Personalizadas</title>
+    
+    <!-- Meta Tags SEO -->
+    <meta name="description" content="Há 15 anos transformando ideias em realidade. Soluções completas em TI, produtos personalizados e desenvolvimento web em São José dos Campos.">
+    <meta name="keywords" content="soluções digitais São José dos Campos, desenvolvimento web, produtos personalizados, tecnologia, informática">
+    <meta name="author" content="Plena Informática">
+    <meta name="theme-color" content="#1e40af">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Plena Informática - Soluções Completas em um só lugar">
+    <meta property="og:description" content="15 anos de excelência em soluções digitais, produtos personalizados e tecnologia.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://plenainformatica.com.br">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:site_name" content="Plena Informática">
+    <link rel="canonical" href="https://plenainformatica.com.br/">
+    
+    <!-- Schema Markup para SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Plena Informática",
+      "description": "Soluções digitais, produtos personalizados e serviços de tecnologia com 15 anos de experiência",
+      "url": "https://plenainformatica.com.br",
+      "telephone": "+5512981488505",
+      "email": "plenainfotecnologia@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "São José dos Campos",
+        "addressRegion": "SP"
+      },
+      "openingHours": "Mo-Fr 09:00-18:00, Sa 09:00-13:00",
+      "areaServed": "São José dos Campos e região"
+    }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1e40af;
+            --secondary: #ea580c;
+            --accent: #059669;
+            --dark: #1e293b;
+            --light: #f8fafc;
+
+            /* TOM DE LARANJA LEVE PARA FUNDO */
+            --plena-orange-wash: #FFF1E8; /* leve, quente e neutro para leitura */
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            /* textura sutil alaranjada no fundo geral (quase imperceptível) */
+            background-image:
+              radial-gradient(60rem 60rem at -10% -20%, rgba(234,88,12,.04) 0%, transparent 60%),
+              radial-gradient(40rem 40rem at 120% 120%, rgba(255,140,0,.05) 0%, transparent 60%);
+        }
+
+        /* seção branca “alaranja” */
+        .bg-plena-orange-wash { background: var(--plena-orange-wash); }
+
+        .particles {
+            position: relative;
+            z-index: 0;
+        }
+        
+        .font-accent { font-family: 'Poppins', sans-serif; }
+
+        /* deixa o ancoramento perfeito abaixo do header fixo */
+        section[id] { scroll-margin-top: 6.75rem; }
+
+        #menu-btn:focus-visible {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
+        }
+        
+        /* Gradientes e efeitos */
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--secondary) 0%, #ea580c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-gradient {
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .card-gradient:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Glass */
+        .glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Hero section com imagem de fundo */
+        .hero-bg-image {
+            background-image: url('sjc.webp');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .hero-overlay { background: rgba(0, 0, 0, 0.6); }
+        
+        /* Botões premium */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary) 0%, #ea580c 100%);
+            box-shadow: 0 4px 15px 0 rgba(234, 88, 12, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px 0 rgba(234, 88, 12, 0.4);
+        }
+        
+        /* Timeline */
+        .timeline-item { position: relative; padding-left: 2rem; }
+        .timeline-item::before {
+            content: '';
+            position: absolute; left: 0; top: 0.5rem;
+            width: 12px; height: 12px; border-radius: 50%; background: var(--secondary);
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute; left: 5px; top: 1.5rem; bottom: -1.5rem; width: 2px; background: #e2e8f0;
+        }
+        .timeline-item:last-child::after { display: none; }
+        
+        /* partículas */
+        .particles::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 226, 0.03) 0%, transparent 50%);
+            pointer-events: none; z-index: -1;
+        }
+        
+        /* animações */
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(34,197,94,.7); }
+            70% { box-shadow: 0 0 0 15px rgba(34,197,94,0); }
+            100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+        }
+        .pulse-ring { animation: pulse 2s infinite; }
+        .animate-fade-in-up { animation: fadeInUp .8s ease-out forwards; }
+        
+        /* card glows */
+        .card-glow-orange:hover { box-shadow: 0 0 20px 0 rgba(249,115,22,.5); transform: translateY(-5px); }
+        .card-glow-blue:hover   { box-shadow: 0 0 20px 0 rgba(59,130,246,.5);  transform: translateY(-5px); }
+        .card-glow-green:hover  { box-shadow: 0 0 20px 0 rgba(22,163,74,.5);   transform: translateY(-5px); }
+        
+        /* Assistente virtual */
+        .chat-bubble {
+            position: relative; background: white; border-radius: 20px; padding: 1.5rem;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,.1); max-width: 500px; margin: 0 auto;
+        }
+        .chat-bubble:after {
+            content:''; position:absolute; bottom:-10px; left:50px;
+            border-width:10px 10px 0; border-style:solid; border-color:white transparent; width:0;
+        }
+        
+        /* Carrossel de depoimentos */
+        .testimonials-carousel { position: relative; overflow: hidden; }
+        .testimonials-track { display:flex; transition: transform .5s ease; }
+        .testimonial-card { flex:0 0 100%; transition: all .3s ease; padding:0 15px; box-sizing:border-box; }
+        .testimonial-card:hover, .testimonial-card:active { box-shadow: 0 10px 30px -5px rgba(0,0,0,.2); transform: translateY(-5px); }
+        @media (min-width:768px){ .testimonial-card{ flex:0 0 33.333%; } }
+        .carousel-indicator { width:10px;height:10px;border-radius:50%;background:#cbd5e1;cursor:pointer;transition:all .3s ease;border:none;padding:0; }
+        .carousel-indicator.active { background:#ea580c; transform: scale(1.2); }
+        .carousel-indicator:focus-visible { outline:2px solid var(--secondary); outline-offset:2px; }
+        .carousel-prev:focus-visible, .carousel-next:focus-visible { outline:2px solid var(--secondary); outline-offset:4px; }
+        
+        /* Modal */
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.7); z-index:1000; align-items:center; justify-content:center; }
+        .modal-content { background:white; border-radius:10px; padding:2rem; max-width:600px; width:90%; max-height:80vh; overflow-y:auto; position:relative; }
+        .modal-close { position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.5rem; cursor:pointer; color:#6b7280; }
+        .modal-close:hover { color:#374151; }
+        
+        /* Ajustes responsivos */
+        @media (max-width: 360px) {
+            .container { padding-left:1rem; padding-right:1rem; }
+            #hero h1 { font-size:2rem; }
+        }
+        @media (max-width: 768px) {
+            body { font-size:16px; }
+            .hero-bg-image { background-attachment: scroll; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .animate-fade-in-up { animation:none; }
+            .pulse-ring { animation:none !important; }
+            .card-gradient:hover, .testimonial-card:hover { transform:none; }
+        }
+    </style>
+</head>
+<body class="text-gray-800 particles">
+
+    <!-- Header -->
+    <header class="bg-white/90 backdrop-blur-md shadow-md fixed top-0 left-0 right-0 z-50">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-gray-800 font-accent">
+                Plena <span class="text-orange-500">Informática</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#services" class="text-gray-600 hover:text-orange-500 transition duration-300">Serviços</a>
+                <a href="#journey" class="text-gray-600 hover:text-orange-500 transition duration-300">Nossa Jornada</a>
+                <a href="#testimonials" class="text-gray-600 hover:text-orange-500 transition duration-300">Depoimentos</a>
+                <a href="#contact" class="text-gray-600 hover:text-orange-500 transition duration-300">Contato</a>
+                <button type="button" class="whatsapp-btn bg-orange-500 text-white font-bold px-5 py-2 rounded-lg hover:bg-orange-600 transition duration-300">
+                    Fale Conosco
+                </button>
+            </div>
+            
+            <!-- Menu Mobile -->
+            <div class="md:hidden">
+                <button id="menu-btn" class="text-gray-800 focus:outline-none" aria-label="Alternar navegação mobile">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Menu Mobile Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+            <a href="#services" class="block py-3 px-6 text-gray-600 hover:bg-orange-50 transition duration-300">Serviços</a>
+            <a href="#journey" class="block py-3 px-6 text-gray-600 hover:bg-orange-50 transition duration-300">Nossa Jornada</a>
+            <a href="#testimonials" class="block py-3 px-6 text-gray-600 hover:bg-orange-50 transition duration-300">Depoimentos</a>
+            <a href="#contact" class="block py-3 px-6 text-gray-600 hover:bg-orange-50 transition duration-300">Contato</a>
+
+            <button type="button" class="whatsapp-btn block w-full text-left py-3 px-6 font-semibold text-white bg-orange-500 hover:bg-orange-600 transition duration-300">
+                Fale Conosco
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section com Imagem de Fundo -->
+    <section id="hero" class="relative h-[80vh] min-h-[500px] flex items-center justify-center text-white overflow-hidden pt-20">
+        <div class="absolute top-0 left-0 w-full h-full bg-cover bg-center hero-bg-image" style="background-image: url('sjc.webbp.jpg');" role="img" aria-label="Vista panorâmica de São José dos Campos"></div>
+        <div class="absolute top-0 left-0 w-full h-full hero-overlay z-10" aria-hidden="true"></div>
+        
+        <div class="relative z-20 container mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight text-white drop-shadow-lg font-accent">
+                Soluções Completas <br class="hidden md:block"> em um só lugar.
+            </h1>
+            <p class="mt-6 text-lg md:text-xl text-slate-200 max-w-3xl mx-auto drop-shadow-lg">
+                Da otimização de documentos à criação de produtos únicos, a Plena é sua parceira ideal em São José dos Campos.
+            </p>
+            <!-- BOTÃO REMOVIDO CONFORME SOLICITAÇÃO -->
+        </div>
+    </section>
+
+    <!-- Serviços (fundo laranja leve) -->
+    <section id="services" class="py-20 bg-plena-orange-wash">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 animate-on-scroll font-accent">Nossos Departamentos</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <a href="servicos.html" class="block rounded-xl shadow-lg transform hover:-translate-y-2 transition-all duration-300 animate-on-scroll card-glow-orange card-gradient">
+                    <div class="rounded-xl p-8 text-center h-full flex flex-col justify-center">
+                        <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-6 mx-auto">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-orange-500 font-accent">Serviços Digitais</h3>
+                        <p class="text-gray-600">Agilidade e profissionalismo para suas necessidades do dia a dia. De currículos a suporte MEI, estamos aqui para ajudar.</p>
+                    </div>
+                </a>
+                <a href="personalizados.html" class="block rounded-xl shadow-lg transform hover:-translate-y-2 transition-all duration-300 animate-on-scroll card-glow-blue card-gradient" style="animation-delay: 200ms;">
+                    <div class="rounded-xl p-8 text-center h-full flex flex-col justify-center">
+                        <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mb-6 mx-auto">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-blue-600 font-accent">Personalizados</h3>
+                        <p class="text-gray-600">Transforme suas ideias em realidade. Canecas, camisetas, e uma infinidade de produtos com a sua cara e qualidade garantida.</p>
+                    </div>
+                </a>
+                <a href="tecnologia.html" class="block rounded-xl shadow-lg transform hover:-translate-y-2 transition-all duration-300 animate-on-scroll card-glow-green card-gradient" style="animation-delay: 400ms;">
+                    <div class="rounded-xl p-8 text-center h-full flex flex-col justify-center">
+                        <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center mb-6 mx-auto">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-emerald-500 font-accent">Tecnologia</h3>
+                        <p class="text-gray-600">Soluções digitais para o seu negócio. Desenvolvemos pequenos projetos e sites que posicionam sua marca no mundo online.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nossa Jornada (mantém azul/gradiente) -->
+    <section id="journey" class="py-20 gradient-bg text-white">
+        <div class="container mx-auto px-6">
+            <div class="max-w-3xl mx-auto text-center mb-16">
+                <span class="text-amber-300 font-semibold tracking-wider uppercase">Nossa Jornada</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-6 font-accent">15 Anos Transformando Ideias em Realidade</h2>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <div class="timeline-item mb-12">
+                            <h3 class="text-xl font-bold mb-2">2010 - A Fundação</h3>
+                            <p class="text-slate-300">A Plena Informática inicia sua trajetória com serviços essenciais como elaboração de currículos e impressão de documentos.</p>
+                        </div>
+                        
+                        <div class="timeline-item mb-12">
+                            <h3 class="text-xl font-bold mb-2">2012 - Expansão dos Serviços</h3>
+                            <p class="text-slate-300">Expandimos nossa atuação com um setor de papelaria, tornando-nos um ponto de referência local.</p>
+                        </div>
+                        
+                        <div class="timeline-item mb-12">
+                            <h3 class="text-xl font-bold mb-2">2015 - O Mergulho no Digital</h3>
+                            <p class="text-slate-300">Aprofundamos nossa expertise no universo digital com assessoria para Imposto de Renda e suporte ao MEI.</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="timeline-item mb-12">
+                            <h3 class="text-xl font-bold mb-2">2020 - O Despertar da Criatividade</h3>
+                            <p class="text-slate-300">Damos nossos primeiros passos no mundo da personalização com produção de produtos únicos.</p>
+                        </div>
+                        
+                        <div class="timeline-item mb-12">
+                            <h3 class="text-xl font-bold mb-2">2025 - A Consolidação e o Futuro</h3>
+                            <p class="text-slate-300">Reinvenção com os departamentos de Personalizados e Tecnologia, oferecendo um ecossistema de soluções 360°.</p>
+                        </div>
+                        
+                        <div class="mt-8 bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                            <p class="text-slate-300">Com mais de 15 anos de experiência, continuamos evoluindo para oferecer as melhores soluções integradas para nossos clientes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Depoimentos (fundo laranja leve) -->
+    <section id="testimonials" class="py-20 bg-plena-orange-wash">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 animate-on-scroll font-accent">O Que Nossos Clientes Dizem</h2>
+            
+            <div class="testimonials-carousel relative">
+                <div class="testimonials-track" id="testimonials-track">
+                    <!-- Depoimentos -->
+                    <div class="testimonial-card">
+                        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-lg p-8 h-full">
+                            <p class="text-gray-600 italic mb-4">"Eu buscava apenas a regularização do meu IR e saí com um catálogo digital e produtos personalizados para a minha empresa. A Plena enxergou um potencial que nem eu via!"</p>
+                            <p class="font-bold text-right text-orange-500">- Joana Silva</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-lg p-8 h-full">
+                            <p class="text-gray-600 italic mb-4">"Precisávamos de uniformes para nossa equipe e o resultado foi impecável. Qualidade da estampa e do tecido, além de um atendimento super atencioso. Recomendo de olhos fechados."</p>
+                            <p class="font-bold text-right text-blue-600">- Marcos Andrade</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-lg p-8 h-full">
+                            <p class="text-gray-600 italic mb-4">"Fizeram a criação do meu currículo e a impressão de um presente personalizado para o meu pai. Tudo rápido, com preço justo e um capricho enorme. Virei cliente fiel."</p>
+                            <p class="font-bold text-right text-emerald-500">- Carolina Lima</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-lg p-8 h-full">
+                            <p class="text-gray-600 italic mb-4">"O site que a Plena desenvolveu para minha empresa aumentou nossas vendas em 40%. Profissionais incríveis e muito competentes!"</p>
+                            <p class="font-bold text-right text-purple-600">- Ricardo Oliveira</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-lg p-8 h-full">
+                            <p class="text-gray-600 italic mb-4">"Serviço de impressão de alta qualidade e entrega rápida. Já fiz vários pedidos e sempre superam minhas expectativas."</p>
+                            <p class="font-bold text-right text-pink-600">- Ana Paula Santos</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-lg p-8 h-full">
+                            <p class="text-gray-600 italic mb-4">"A assessoria para MEI foi fundamental para regularizar minha situação. Atendimento humanizado e preço justo. Recomendo!"</p>
+                            <p class="font-bold text-right text-indigo-600">- Carlos Mendes</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Controles -->
+                <button type="button" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-2 shadow-lg transition duration-300 carousel-prev z-10" aria-label="Depoimentos anteriores">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <button type="button" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-2 shadow-lg transition duration-300 carousel-next z-10" aria-label="Próximos depoimentos">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Indicadores -->
+            <div class="flex justify-center mt-8 space-x-2" id="carousel-indicators"></div>
+        </div>
+    </section>
+
+    <!-- Assistente Virtual -->
+    <section class="py-20 bg-slate-50">
+        <div class="container mx-auto px-6 text-center">
+            <div class="max-w-3xl mx-auto">
+                <div class="flex items-start justify-center mb-8">
+                    <div class="flex-shrink-0 mr-4">
+                        <!-- Avatar Plena (amigável, com headset) -->
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white" aria-hidden="true">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32" role="img" aria-label="Assistente virtual Plena">
+                            <defs>
+                              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0" stop-color="#FF8C00"/>
+                                <stop offset="1" stop-color="#EA580C"/>
+                              </linearGradient>
+                            </defs>
+                            <circle cx="32" cy="32" r="20" fill="url(#g)"/>
+                            <circle cx="26" cy="30" r="2.3" fill="#fff"/>
+                            <circle cx="38" cy="30" r="2.3" fill="#fff"/>
+                            <path d="M24 37c2.8 3 12.2 3 15 0" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M18 32a14 14 0 0 1 28 0" fill="none" stroke="#1e293b" stroke-opacity=".85" stroke-width="2"/>
+                            <rect x="14.5" y="29" rx="3" ry="3" width="6" height="10" fill="#1e293b" opacity=".9"/>
+                            <path d="M44 38c-4 6-10 7-13 7" fill="none" stroke="#1e293b" stroke-opacity=".85" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="31" cy="45" r="2.4" fill="#1e293b"/>
+                          </svg>
+                        </div>
+                    </div>
+                    <div class="chat-bubble text-left">
+                        <h3 class="text-xl font-bold mb-2 text-slate-800">Em que posso lhe ajudar hoje?</h3>
+                        <p class="text-slate-600 mb-4">Estou aqui para conectar você com a solução perfeita para sua necessidade.</p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                            <button type="button" class="whatsapp-btn-digital bg-orange-500 text-white py-3 px-4 rounded-lg hover:bg-orange-600 transition duration-300 text-sm font-medium">
+                                Preciso de Serviços Digitais
+                            </button>
+                            <button type="button" class="whatsapp-btn-personalizados bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 transition duration-300 text-sm font-medium">
+                                Quero Produtos Personalizados
+                            </button>
+                            <button type="button" class="whatsapp-btn-digital bg-green-500 text-white py-3 px-4 rounded-lg hover:bg-green-600 transition duration-300 text-sm font-medium">
+                                Busco Soluções em Tecnologia
+                            </button>
+                            <button type="button" class="whatsapp-btn-digital bg-slate-700 text-white py-3 px-4 rounded-lg hover:bg-slate-800 transition duration-300 text-sm font-medium">
+                                Falar com um Consultor
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="text-slate-500 text-sm mt-6">Nosso assistente virtual irá direcionar você para o especialista mais adequado</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-gray-900 text-white py-16">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <a href="index.html" class="text-2xl font-bold text-white flex items-center mb-6 font-accent">
+                        Plena <span class="text-orange-500 ml-1">Informática</span>
+                    </a>
+                    <p class="text-slate-400 mb-6 max-w-md">Há 15 anos transformando ideias em realidade. Oferecemos soluções completas em serviços digitais, personalizados e tecnologia.</p>
+                    
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="flex items-center bg-green-100 text-green-800 py-1 px-3 rounded-full text-sm font-medium">
+                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Site Seguro
+                        </div>
+                        <div class="text-slate-400 text-sm">
+                            Protegido com SSL
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="font-bold text-lg mb-6 font-accent">Serviços</h3>
+                    <ul class="space-y-3">
+                        <li><a href="servicos.html" class="text-slate-400 hover:text-white transition duration-300">Serviços Digitais</a></li>
+                        <li><a href="personalizados.html" class="text-slate-400 hover:text-white transition duration-300">Personalizados</a></li>
+                        <li><a href="tecnologia.html" class="text-slate-400 hover:text-white transition duration-300">Tecnologia</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-bold text-lg mb-6 font-accent">Contato</h3>
+                    <ul class="space-y-3 text-slate-400">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <span>São José dos Campos, SP</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                            </svg>
+                            <span>(12) 98148-8505</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>plenainfotecnologia@gmail.com</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                            <span>@plenainf_2025</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-800 mt-12 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="text-center md:text-left mb-4 md:mb-0">
+                        <p class="text-lg italic text-slate-400 mb-2">"Tudo posso naquele que me fortalece." - Filipenses 4:13</p>
+                        <p class="text-sm text-slate-500">&copy; 2025 Plena Informática. Todos os direitos reservados.</p>
+                        <p class="text-xs text-slate-600 mt-1">Desenvolvido por Plena Informática</p>
+                    </div>
+                    
+                    <div class="flex space-x-6 text-sm text-slate-400">
+                        <a href="#" class="hover:text-white transition duration-300 open-modal" data-modal="terms">Termos de Uso</a>
+                        <a href="#" class="hover:text-white transition duration-300 open-modal" data-modal="privacy">Política de Privacidade</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Botão do WhatsApp Pulsante -->
+    <button type="button" class="whatsapp-btn-digital pulse-ring fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg flex items-center justify-center hover:bg-green-600 transition duration-300 z-50" aria-label="Fale conosco no WhatsApp">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z"/>
+        </svg>
+    </button>
+
+    <!-- Modais -->
+    <div id="terms-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="terms-modal-title">
+        <div class="modal-content">
+            <button type="button" class="modal-close" aria-label="Fechar termos">&times;</button>
+            <h2 id="terms-modal-title" class="text-2xl font-bold mb-4 font-accent">Termos de Uso</h2>
+            <div class="text-slate-700 space-y-4">
+                <p>Ao acessar e utilizar os serviços da Plena Informática, você concorda com os seguintes termos e condições:</p>
+                <h3 class="font-bold text-lg mt-6 mb-2">1. Aceitação dos Termos</h3>
+                <p>O uso deste site e dos serviços oferecidos pela Plena Informática implica na aceitação integral destes Termos de Uso.</p>
+                <h3 class="font-bold text-lg mt-6 mb-2">2. Serviços Oferecidos</h3>
+                <p>A Plena Informática oferece serviços digitais, produtos personalizados e soluções em tecnologia. Todos os serviços estão sujeitos à disponibilidade e podem ser alterados sem aviso prévio.</p>
+                <h3 class="font-bold text-lg mt-6 mb-2">3. Propriedade Intelectual</h3>
+                <p>Todo o conteúdo deste site, incluindo textos, gráficos, logotipos, imagens e software, é propriedade da Plena Informática e protegido por leis de direitos autorais.</p>
+                <h3 class="font-bold text-lg mt-6 mb-2">4. Limitação de Responsabilidade</h3>
+                <p>A Plena Informática não se responsabiliza por danos diretos, indiretos, incidentais ou consequenciais resultantes do uso ou incapacidade de uso dos serviços.</p>
+                <h3 class="font-bold text-lg mt-6 mb-2">5. Alterações nos Termos</h3>
+                <p>Reservamo-nos o direito de modificar estes Termos de Uso a qualquer momento. As alterações entram em vigor imediatamente após sua publicação no site.</p>
+                <p class="mt-6 text-sm text-slate-500">Última atualização: Outubro de 2025</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="privacy-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="privacy-modal-title">
+        <div class="modal-content">
+            <button type="button" class="modal-close" aria-label="Fechar política">&times;</button>
+            <h2 id="privacy-modal-title" class="text-2xl font-bold mb-4 font-accent">Política de Privacidade</h2>
+            <div class="text-slate-700 space-y-4">
+                <p>Esta Política de Privacidade descreve como a Plena Informática coleta, usa e protege suas informações pessoais.</p>
+                <h3 class="font-bold text-lg mt-6 mb-2">1. Informações Coletadas</h3>
+                <p>Coletamos informações que você nos fornece voluntariamente, como nome, e-mail, telefone e outras informações necessárias para a prestação de nossos serviços.</p>
+                <h3 class="font-bold text-lg mt-6 mb-2">2. Uso das Informações</h3>
+                <p>Utilizamos suas informações para:
+                <ul class="list-disc pl-5 mt-2">
+                    <li>Prestar os serviços solicitados</li>
+                    <li>Melhorar nossa oferta de produtos e serviços</li>
+                    <li>Enviar comunicações sobre nossos serviços</li>
+                    <li>Cumprir obrigações legais</li>
+                </ul>
+                </p>
+                <h3 class="font-bold text-lg mt-6 mb-2">3. Compartilhamento de Informações</h3>
+                <p>Não vendemos, trocamos ou transferimos suas informações pessoais para terceiros, exceto quando necessário para a prestação de serviços ou por exigência legal.</p>
+                <h3 class="font-bold text-lg mt-6 mb-2">4. Segurança</h3>
+                <p>Implementamos medidas de segurança para proteger suas informações contra acesso não autorizado, alteração, divulgação ou destruição.</p>
+                <h3 class="font-bold text-lg mt-6 mb-2">5. Seus Direitos</h3>
+                <p>Você tem o direito de acessar, corrigir ou excluir suas informações pessoais. Entre em contato conosco para exercer esses direitos.</p>
+                <h3 class="font-bold text-lg mt-6 mb-2">6. Cookies</h3>
+                <p>Utilizamos cookies para melhorar sua experiência em nosso site. Você pode configurar seu navegador para recusar cookies, mas isso pode afetar a funcionalidade do site.</p>
+                <p class="mt-6 text-sm text-slate-500">Última atualização: Outubro de 2025</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Menu mobile
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (menuBtn && mobileMenu) {
+                menuBtn.setAttribute('aria-controls', 'mobile-menu');
+                menuBtn.setAttribute('aria-expanded', 'false');
+
+                menuBtn.addEventListener('click', () => {
+                    const isHidden = mobileMenu.classList.toggle('hidden');
+                    menuBtn.setAttribute('aria-expanded', String(!isHidden));
+                });
+
+                // Fechar menu ao clicar em um link
+                mobileMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                        menuBtn.setAttribute('aria-expanded', 'false');
+                    });
+                });
+
+                document.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        menuBtn.setAttribute('aria-expanded', 'false');
+                        menuBtn.focus();
+                    }
+                });
+            }
+
+            // Scroll animation com Intersection Observer
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+            const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
+            elementsToAnimate.forEach(el => observer.observe(el));
+
+            // Smooth scroll com offset do header (sem “vazar” hero)
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+              anchor.addEventListener('click', function (event) {
+                const href = this.getAttribute('href');
+                if (!href || href === '#') return;
+
+                const target = document.querySelector(href);
+                if (!target) return;
+
+                event.preventDefault();
+
+                const header = document.querySelector('header');
+                const headerHeight = header ? header.offsetHeight : 0;
+                const extra = 12; // respiro
+                const top = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - extra;
+
+                window.scrollTo({ top, behavior: 'smooth' });
+              });
+            });
+
+            // ========== WHATSAPP CORRIGIDO - FUNÇÃO UNIVERSAL ==========
+            function openWhatsApp(phone, message = null) {
+                const defaultMessage = 'Olá! Gostaria de mais informações sobre os serviços da Plena Informática.';
+                const finalMessage = message || defaultMessage;
+                const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(finalMessage)}`;
+                window.open(url, '_blank', 'noopener,noreferrer');
+            }
+            function openWhatsAppDigital(message = null) { openWhatsApp('5512981488505', message); }
+            function openWhatsAppPersonalizados(message = null) {
+                const personalizadosMessage = 'Olá! Gostaria de mais informações sobre produtos personalizados.';
+                openWhatsApp('5512992191018', message || personalizadosMessage);
+            }
+            document.querySelectorAll('.whatsapp-btn-digital').forEach(btn => {
+                btn.addEventListener('click', () => openWhatsAppDigital());
+            });
+            document.querySelectorAll('.whatsapp-btn-personalizados').forEach(btn => {
+                btn.addEventListener('click', () => openWhatsAppPersonalizados());
+            });
+            document.querySelectorAll('.whatsapp-btn').forEach(btn => {
+                btn.addEventListener('click', () => openWhatsAppDigital());
+            });
+
+            // Animação de entrada
+            const fadeObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in-up');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.card-gradient, .timeline-item').forEach((el) => {
+                el.style.opacity = '0';
+                fadeObserver.observe(el);
+            });
+
+            // Carrossel de depoimentos
+            const testimonialsTrack = document.getElementById('testimonials-track');
+            const testimonialCards = Array.from(document.querySelectorAll('.testimonial-card'));
+            const carouselIndicators = document.getElementById('carousel-indicators');
+            const prevButton = document.querySelector('.carousel-prev');
+            const nextButton = document.querySelector('.carousel-next');
+
+            if (testimonialsTrack && testimonialCards.length) {
+                let currentIndex = 0;
+                let autoPlayInterval = null;
+                let resizeTimeout;
+                const cardCount = testimonialCards.length;
+                let cardsPerView = getCardsPerView();
+                let totalSlides = Math.max(1, Math.ceil(cardCount / cardsPerView));
+                const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+                function getCardsPerView() { return window.innerWidth < 768 ? 1 : 3; }
+                function stopAutoPlay() { if (autoPlayInterval) { clearInterval(autoPlayInterval); autoPlayInterval = null; } }
+                function startAutoPlay() {
+                    if (totalSlides <= 1 || prefersReducedMotion.matches) { stopAutoPlay(); return; }
+                    stopAutoPlay(); autoPlayInterval = setInterval(nextSlide, 5000);
+                }
+                function updateCarousel() {
+                    testimonialsTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
+                    if (carouselIndicators) {
+                        Array.from(carouselIndicators.children).forEach((indicator, index) => {
+                            indicator.classList.toggle('active', index === currentIndex);
+                        });
+                    }
+                }
+                function goToSlide(index) { currentIndex = index; updateCarousel(); }
+                function nextSlide() { currentIndex = (currentIndex + 1) % totalSlides; updateCarousel(); }
+                function prevSlide() { currentIndex = (currentIndex - 1 + totalSlides) % totalSlides; updateCarousel(); }
+                function toggleControls() {
+                    const shouldHide = totalSlides <= 1;
+                    if (prevButton) prevButton.classList.toggle('hidden', shouldHide);
+                    if (nextButton) nextButton.classList.toggle('hidden', shouldHide);
+                    if (carouselIndicators) carouselIndicators.classList.toggle('hidden', shouldHide);
+                }
+                function renderIndicators() {
+                    if (!carouselIndicators) return;
+                    carouselIndicators.innerHTML = '';
+                    for (let i = 0; i < totalSlides; i++) {
+                        const indicator = document.createElement('button');
+                        indicator.type = 'button';
+                        indicator.classList.add('carousel-indicator');
+                        indicator.setAttribute('aria-label', `Ir para depoimento ${i + 1}`);
+                        if (i === currentIndex) indicator.classList.add('active');
+                        indicator.addEventListener('click', () => { stopAutoPlay(); goToSlide(i); startAutoPlay(); });
+                        carouselIndicators.appendChild(indicator);
+                    }
+                    toggleControls();
+                }
+                function handleResize() {
+                    const newCardsPerView = getCardsPerView();
+                    if (newCardsPerView === cardsPerView) return;
+                    cardsPerView = newCardsPerView;
+                    totalSlides = Math.max(1, Math.ceil(cardCount / cardsPerView));
+                    currentIndex = Math.min(currentIndex, totalSlides - 1);
+                    renderIndicators(); updateCarousel();
+                    if (totalSlides <= 1) { stopAutoPlay(); } else { startAutoPlay(); }
+                }
+                function handleMotionPreferenceChange(event) { if (event.matches) stopAutoPlay(); else startAutoPlay(); }
+
+                renderIndicators(); updateCarousel(); startAutoPlay();
+                if (prevButton) prevButton.addEventListener('click', () => { if (totalSlides <= 1) return; stopAutoPlay(); prevSlide(); startAutoPlay(); });
+                if (nextButton) nextButton.addEventListener('click', () => { if (totalSlides <= 1) return; stopAutoPlay(); nextSlide(); startAutoPlay(); });
+
+                testimonialsTrack.addEventListener('mouseenter', stopAutoPlay);
+                testimonialsTrack.addEventListener('mouseleave', startAutoPlay);
+                testimonialsTrack.addEventListener('touchstart', stopAutoPlay);
+                testimonialsTrack.addEventListener('touchend', startAutoPlay);
+
+                if (typeof prefersReducedMotion.addEventListener === 'function') {
+                    prefersReducedMotion.addEventListener('change', handleMotionPreferenceChange);
+                } else if (typeof prefersReducedMotion.addListener === 'function') {
+                    prefersReducedMotion.addListener(handleMotionPreferenceChange);
+                }
+
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(handleResize, 150);
+                });
+            }
+            
+            // Modal
+            const termsModal = document.getElementById('terms-modal');
+            const privacyModal = document.getElementById('privacy-modal');
+            const modalCloseButtons = document.querySelectorAll('.modal-close');
+            const openModalButtons = document.querySelectorAll('.open-modal');
+            const focusableSelector = 'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
+            const modalMap = { terms: termsModal, privacy: privacyModal };
+            let activeModal = null;
+            let lastFocusedElement = null;
+
+            function openModal(modal) {
+                if (!modal) return;
+                if (activeModal && activeModal !== modal) { closeModal(); }
+                lastFocusedElement = document.activeElement;
+                modal.style.display = 'flex';
+                modal.setAttribute('aria-hidden', 'false');
+                activeModal = modal;
+                document.body.style.overflow = 'hidden';
+
+                const focusableElements = Array.from(modal.querySelectorAll(focusableSelector)).filter(el => el.offsetParent !== null);
+                const firstFocusable = focusableElements[0];
+                if (firstFocusable) firstFocusable.focus();
+            }
+
+            function closeModal() {
+                if (!activeModal) return;
+                activeModal.style.display = 'none';
+                activeModal.setAttribute('aria-hidden', 'true');
+                if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') lastFocusedElement.focus();
+                activeModal = null;
+                document.body.style.overflow = '';
+            }
+
+            openModalButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const modalType = button.getAttribute('data-modal');
+                    const modal = modalMap[modalType];
+                    openModal(modal);
+                });
+            });
+            
+            modalCloseButtons.forEach(button => { button.addEventListener('click', closeModal); });
+            window.addEventListener('click', (event) => { if (activeModal && event.target === activeModal) closeModal(); });
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && activeModal) { closeModal(); return; }
+                if (event.key === 'Tab' && activeModal) {
+                    const focusableElements = Array.from(activeModal.querySelectorAll(focusableSelector)).filter(el => el.offsetParent !== null);
+                    if (!focusableElements.length) { event.preventDefault(); return; }
+                    const firstElement = focusableElements[0];
+                    const lastElement  = focusableElements[focusableElements.length - 1];
+                    if (event.shiftKey && document.activeElement === firstElement) { event.preventDefault(); lastElement.focus(); }
+                    else if (!event.shiftKey && document.activeElement === lastElement) { event.preventDefault(); firstElement.focus(); }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
