@@ -6,14 +6,14 @@
     <title>Plena Informática - Soluções Digitais e Personalizadas</title>
     
     <!-- Meta Tags SEO -->
-    <meta name="description" content="Há 15 anos transformando ideias em realidade. Soluções completas em TI, produtos personalizados e desenvolvimento web em São José dos Campos.">
+    <meta name="description" content="Há 20 anos transformando ideias em realidade. Soluções completas em TI, produtos personalizados e desenvolvimento web em São José dos Campos.">
     <meta name="keywords" content="soluções digitais São José dos Campos, desenvolvimento web, produtos personalizados, tecnologia, informática">
     <meta name="author" content="Plena Informática">
     <meta name="theme-color" content="#1e40af">
     
     <!-- Open Graph Tags -->
     <meta property="og:title" content="Plena Informática - Soluções Completas em um só lugar">
-    <meta property="og:description" content="15 anos de excelência em soluções digitais, produtos personalizados e tecnologia.">
+    <meta property="og:description" content="20 anos de excelência em soluções digitais, produtos personalizados e tecnologia.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://plenainformatica.com.br">
     <meta property="og:locale" content="pt_BR">
@@ -26,7 +26,7 @@
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "Plena Informática",
-      "description": "Soluções digitais, produtos personalizados e serviços de tecnologia com 15 anos de experiência",
+      "description": "Soluções digitais, produtos personalizados e serviços de tecnologia com 20 anos de experiência",
       "url": "https://plenainformatica.com.br",
       "telephone": "+5512981488505",
       "email": "plenainfotecnologia@gmail.com",
@@ -66,7 +66,7 @@
               radial-gradient(40rem 40rem at 120% 120%, rgba(255,140,0,.05) 0%, transparent 60%);
         }
 
-        /* seção branca “alaranja” */
+        /* seção branca "alaranja" */
         .bg-plena-orange-wash { background: var(--plena-orange-wash); }
 
         .particles {
@@ -118,8 +118,24 @@
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            animation: zoomEffect 20s ease-in-out infinite;
         }
-        .hero-overlay { background: rgba(0, 0, 0, 0.6); }
+        
+        @keyframes zoomEffect {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .hero-overlay { 
+            background: rgba(0, 0, 0, 0.5); 
+        }
         
         /* Botões premium */
         .btn-primary {
@@ -171,16 +187,6 @@
         .card-glow-blue:hover   { box-shadow: 0 0 20px 0 rgba(59,130,246,.5);  transform: translateY(-5px); }
         .card-glow-green:hover  { box-shadow: 0 0 20px 0 rgba(22,163,74,.5);   transform: translateY(-5px); }
         
-        /* Assistente virtual */
-        .chat-bubble {
-            position: relative; background: white; border-radius: 20px; padding: 1.5rem;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,.1); max-width: 500px; margin: 0 auto;
-        }
-        .chat-bubble:after {
-            content:''; position:absolute; bottom:-10px; left:50px;
-            border-width:10px 10px 0; border-style:solid; border-color:white transparent; width:0;
-        }
-        
         /* Carrossel de depoimentos */
         .testimonials-carousel { position: relative; overflow: hidden; }
         .testimonials-track { display:flex; transition: transform .5s ease; }
@@ -205,12 +211,17 @@
         }
         @media (max-width: 768px) {
             body { font-size:16px; }
-            .hero-bg-image { background-attachment: scroll; }
+            .hero-bg-image { 
+                background-attachment: scroll; 
+                animation: none; /* Remove animação no mobile para performance */
+            }
+            #hero h1 { font-size:2.5rem; }
         }
         @media (prefers-reduced-motion: reduce) {
             .animate-fade-in-up { animation:none; }
             .pulse-ring { animation:none !important; }
             .card-gradient:hover, .testimonial-card:hover { transform:none; }
+            .hero-bg-image { animation: none; }
         }
     </style>
 </head>
@@ -255,22 +266,23 @@
         </div>
     </header>
 
-    <!-- Hero Section com Imagem de Fundo -->
-    <section id="hero" class="relative h-[80vh] min-h-[500px] flex items-center justify-center text-white overflow-hidden pt-20">
-        <div class="absolute top-0 left-0 w-full h-full bg-cover bg-center hero-bg-image" style="background-image: url('sjc.webbp.jpg');" role="img" aria-label="Vista panorâmica de São José dos Campos"></div>
-        <div class="absolute top-0 left-0 w-full h-full hero-overlay z-10" aria-hidden="true"></div>
-        
-        <div class="relative z-20 container mx-auto px-6 text-center">
-            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight text-white drop-shadow-lg font-accent">
-                Soluções Completas <br class="hidden md:block"> em um só lugar.
-            </h1>
-            <p class="mt-6 text-lg md:text-xl text-slate-200 max-w-3xl mx-auto drop-shadow-lg">
-                Da otimização de documentos à criação de produtos únicos, a Plena é sua parceira ideal em São José dos Campos.
-            </p>
-            <!-- BOTÃO REMOVIDO CONFORME SOLICITAÇÃO -->
-        </div>
-    </section>
+   <!-- Hero Section com Imagem de Fundo -->
+<section id="hero" class="relative h-[70vh] min-h-[500px] flex items-center justify-center text-white overflow-hidden pt-16">
+    <div class="absolute top-0 left-0 w-full h-full bg-cover bg-center hero-bg-image" style="background-image: url('sjc.webp.jpg'); background-position: center 45%;" role="img" aria-label="Vista panorâmica de São José dos Campos"></div>
+    <div class="absolute top-0 left-0 w-full h-full hero-overlay z-10" aria-hidden="true"></div>
 
+    <div class="relative z-20 container mx-auto px-6 text-center flex flex-col items-center h-full">
+        <!-- Badge 20 anos de história -->
+        <div class="inline-flex items-center bg-orange-500/20 backdrop-blur-sm border border-orange-400/30 rounded-full px-6 py-3 mb-4 mt-4 animate-fade-in-up">
+            <span class="text-orange-300 font-semibold text-lg tracking-wide"> 20 anos de história</span>
+        </div>
+                         
+        <!-- Título principal - QUASE NA DIVISA -->
+        <h1 class="text-5xl md:text-7xl font-extrabold leading-tight text-white drop-shadow-2xl font-accent mb-6 mt-auto animate-fade-in-up" style="animation-delay: 200ms;">
+            Soluções Completas <br class="hidden md:block"> em um só lugar.
+        </h1>
+    </div>
+</section>
     <!-- Serviços (fundo laranja leve) -->
     <section id="services" class="py-20 bg-plena-orange-wash">
         <div class="container mx-auto px-6">
@@ -318,43 +330,48 @@
         <div class="container mx-auto px-6">
             <div class="max-w-3xl mx-auto text-center mb-16">
                 <span class="text-amber-300 font-semibold tracking-wider uppercase">Nossa Jornada</span>
-                <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-6 font-accent">15 Anos Transformando Ideias em Realidade</h2>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-6 font-accent">Há 20 Anos Transformando Ideias em Realidade</h2>
             </div>
             
             <div class="max-w-4xl mx-auto">
                 <div class="grid md:grid-cols-2 gap-8">
                     <div>
                         <div class="timeline-item mb-12">
-                            <h3 class="text-xl font-bold mb-2">2010 - A Fundação</h3>
-                            <p class="text-slate-300">A Plena Informática inicia sua trajetória com serviços essenciais como elaboração de currículos e impressão de documentos.</p>
+                            <h3 class="text-xl font-bold mb-2">2005 - Os Primeiros Passos</h3>
+                            <p class="text-slate-300">Comecei o curso de informática básica e alguns meses depois iniciei com elaboração de currículos e serviços de impressão. Logo foram aparecendo outros documentos como orçamentos, contratos e trabalhos acadêmicos.</p>
                         </div>
                         
                         <div class="timeline-item mb-12">
-                            <h3 class="text-xl font-bold mb-2">2012 - Expansão dos Serviços</h3>
-                            <p class="text-slate-300">Expandimos nossa atuação com um setor de papelaria, tornando-nos um ponto de referência local.</p>
+                            <h3 class="text-xl font-bold mb-2">2010 - Expansão para Serviços Fiscais</h3>
+                            <p class="text-slate-300">Demos um importante passo com o início dos serviços de Imposto de Renda, expandindo nossa atuação no universo digital e fiscal.</p>
                         </div>
                         
                         <div class="timeline-item mb-12">
-                            <h3 class="text-xl font-bold mb-2">2015 - O Mergulho no Digital</h3>
-                            <p class="text-slate-300">Aprofundamos nossa expertise no universo digital com assessoria para Imposto de Renda e suporte ao MEI.</p>
+                            <h3 class="text-xl font-bold mb-2">2016 - Suporte ao MEI</h3>
+                            <p class="text-slate-300">Iniciamos o suporte especializado para Microempreendedores Individuais, ajudando na formalização e regularização de pequenos negócios.</p>
                         </div>
                     </div>
                     
                     <div>
                         <div class="timeline-item mb-12">
                             <h3 class="text-xl font-bold mb-2">2020 - O Despertar da Criatividade</h3>
-                            <p class="text-slate-300">Damos nossos primeiros passos no mundo da personalização com produção de produtos únicos.</p>
+                            <p class="text-slate-300">Demos nossos primeiros passos no mundo da personalização com produção de produtos únicos, expandindo nossa criatividade para além dos serviços digitais.</p>
                         </div>
                         
                         <div class="timeline-item mb-12">
-                            <h3 class="text-xl font-bold mb-2">2025 - A Consolidação e o Futuro</h3>
-                            <p class="text-slate-300">Reinvenção com os departamentos de Personalizados e Tecnologia, oferecendo um ecossistema de soluções 360°.</p>
+                            <h3 class="text-xl font-bold mb-2">2023 - Consolidação dos Departamentos</h3>
+                            <p class="text-slate-300">Estruturação definitiva dos departamentos de Personalizados e Tecnologia, oferecendo um ecossistema completo de soluções integradas.</p>
                         </div>
                         
-                        <div class="mt-8 bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                            <p class="text-slate-300">Com mais de 15 anos de experiência, continuamos evoluindo para oferecer as melhores soluções integradas para nossos clientes.</p>
+                        <div class="timeline-item mb-12">
+                            <h3 class="text-xl font-bold mb-2">2025 - O Futuro</h3>
+                            <p class="text-slate-300">Continuamos evoluindo para oferecer as melhores soluções 360° para nossos clientes, sempre acompanhando as tendências do mercado.</p>
                         </div>
                     </div>
+                </div>
+
+                <div class="mt-8 bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 text-center">
+                    <p class="text-slate-300 text-lg">Com 20 anos de experiência, continuamos comprometidos em transformar suas ideias em realidade através de soluções completas e personalizadas.</p>
                 </div>
             </div>
         </div>
@@ -424,58 +441,6 @@
         </div>
     </section>
 
-    <!-- Assistente Virtual -->
-    <section class="py-20 bg-slate-50">
-        <div class="container mx-auto px-6 text-center">
-            <div class="max-w-3xl mx-auto">
-                <div class="flex items-start justify-center mb-8">
-                    <div class="flex-shrink-0 mr-4">
-                        <!-- Avatar Plena (amigável, com headset) -->
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white" aria-hidden="true">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32" role="img" aria-label="Assistente virtual Plena">
-                            <defs>
-                              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-                                <stop offset="0" stop-color="#FF8C00"/>
-                                <stop offset="1" stop-color="#EA580C"/>
-                              </linearGradient>
-                            </defs>
-                            <circle cx="32" cy="32" r="20" fill="url(#g)"/>
-                            <circle cx="26" cy="30" r="2.3" fill="#fff"/>
-                            <circle cx="38" cy="30" r="2.3" fill="#fff"/>
-                            <path d="M24 37c2.8 3 12.2 3 15 0" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-                            <path d="M18 32a14 14 0 0 1 28 0" fill="none" stroke="#1e293b" stroke-opacity=".85" stroke-width="2"/>
-                            <rect x="14.5" y="29" rx="3" ry="3" width="6" height="10" fill="#1e293b" opacity=".9"/>
-                            <path d="M44 38c-4 6-10 7-13 7" fill="none" stroke="#1e293b" stroke-opacity=".85" stroke-width="2" stroke-linecap="round"/>
-                            <circle cx="31" cy="45" r="2.4" fill="#1e293b"/>
-                          </svg>
-                        </div>
-                    </div>
-                    <div class="chat-bubble text-left">
-                        <h3 class="text-xl font-bold mb-2 text-slate-800">Em que posso lhe ajudar hoje?</h3>
-                        <p class="text-slate-600 mb-4">Estou aqui para conectar você com a solução perfeita para sua necessidade.</p>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
-                            <button type="button" class="whatsapp-btn-digital bg-orange-500 text-white py-3 px-4 rounded-lg hover:bg-orange-600 transition duration-300 text-sm font-medium">
-                                Preciso de Serviços Digitais
-                            </button>
-                            <button type="button" class="whatsapp-btn-personalizados bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 transition duration-300 text-sm font-medium">
-                                Quero Produtos Personalizados
-                            </button>
-                            <button type="button" class="whatsapp-btn-digital bg-green-500 text-white py-3 px-4 rounded-lg hover:bg-green-600 transition duration-300 text-sm font-medium">
-                                Busco Soluções em Tecnologia
-                            </button>
-                            <button type="button" class="whatsapp-btn-digital bg-slate-700 text-white py-3 px-4 rounded-lg hover:bg-slate-800 transition duration-300 text-sm font-medium">
-                                Falar com um Consultor
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <p class="text-slate-500 text-sm mt-6">Nosso assistente virtual irá direcionar você para o especialista mais adequado</p>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer id="contact" class="bg-gray-900 text-white py-16">
         <div class="container mx-auto px-6">
@@ -484,7 +449,7 @@
                     <a href="index.html" class="text-2xl font-bold text-white flex items-center mb-6 font-accent">
                         Plena <span class="text-orange-500 ml-1">Informática</span>
                     </a>
-                    <p class="text-slate-400 mb-6 max-w-md">Há 15 anos transformando ideias em realidade. Oferecemos soluções completas em serviços digitais, personalizados e tecnologia.</p>
+                    <p class="text-slate-400 mb-6 max-w-md">Há 20 anos transformando ideias em realidade. Oferecemos soluções completas em serviços digitais, personalizados e tecnologia.</p>
                     
                     <div class="flex items-center space-x-4 mb-6">
                         <div class="flex items-center bg-green-100 text-green-800 py-1 px-3 rounded-full text-sm font-medium">
@@ -660,7 +625,7 @@
             const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
             elementsToAnimate.forEach(el => observer.observe(el));
 
-            // Smooth scroll com offset do header (sem “vazar” hero)
+            // Smooth scroll com offset do header (sem "vazar" hero)
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
               anchor.addEventListener('click', function (event) {
                 const href = this.getAttribute('href');
