@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Plena Digital | Painel do Cliente</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-auth-compat.js"></script>
+  <style>
+    :root { --primary:#ea580c; --primary-dark:#c2410c; --bg-app:#f8fafc; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background-color: var(--bg-app); color:#1e293b; }
+    .gradient-bg { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); }
+    .btn-primary { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; font-weight:600; border-radius:10px; transition: all .3s; box-shadow: 0 4px 14px 0 rgba(234,88,12,.39); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px 0 rgba(234,88,12,.45); }
+    .card { background:white; border-radius:16px; padding:1.5rem; box-shadow:0 1px 3px rgba(0,0,0,.05); border:1px solid #f1f5f9; }
+    .notification { position:fixed; top:24px; right:24px; padding:16px 20px; border-radius:12px; color:white; font-weight:500; box-shadow:0 10px 25px -5px rgba(0,0,0,.1); z-index:1000; transform: translateX(400px); transition: transform .4s cubic-bezier(.34,1.56,.64,1); display:flex; align-items:center; gap:10px; max-width:400px; }
+    .notification.show { transform: translateX(0); }
+    .notification.success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+    .notification.error { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 h-16">
+    <div class="container mx-auto px-6 h-full flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center text-white font-bold">P</div>
+        <span class="font-bold text-slate-800 text-lg tracking-tight">Plena <span class="text-orange-600">Digital</span></span>
+      </a>
+      <nav class="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-600">
+        <a href="servicos.html" class="hover:text-orange-600 transition">Serviços Digitais</a>
+        <a href="#" id="btn-logout" class="hover:text-orange-600 transition">Sair</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    <section class="container mx-auto px-6 py-8">
+      <h1 class="text-2xl font-bold text-slate-900 mb-6">Painel do Cliente</h1>
+      <div class="grid lg:grid-cols-3 gap-6">
+        <div class="card lg:col-span-1">
+          <h2 class="font-bold text-lg mb-4">Meus Dados</h2>
+          <div id="profile-box" class="text-sm text-slate-600">Carregando...</div>
+        </div>
+        <div class="card lg:col-span-2">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="font-bold text-lg">Meus Currículos</h2>
+            <a href="servicos.html#ferramentas" class="btn-primary px-4 py-2 text-sm">Criar Novo</a>
+          </div>
+          <div id="cv-list" class="text-sm">Carregando...</div>
+        </div>
+      </div>
+
+      <div class="card mt-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="font-bold text-lg">Meus Agendamentos</h2>
+          <a href="servicos.html#agendamento" class="btn-primary px-4 py-2 text-sm">Novo Agendamento</a>
+        </div>
+        <div class="flex gap-4 mb-4">
+          <input id="apt-from" type="text" class="border rounded px-3 py-2 text-sm" placeholder="De (dd/mm/aaaa)">
+          <input id="apt-to" type="text" class="border rounded px-3 py-2 text-sm" placeholder="Até (dd/mm/aaaa)">
+          <button id="apt-filter" class="btn-primary px-4 py-2 text-sm">Filtrar</button>
+        </div>
+        <div id="apt-list" class="text-sm">Carregando...</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-slate-900 text-white pt-8 pb-8 mt-8">
+    <div class="container mx-auto px-6 text-sm text-slate-400">
+      &copy; 2025 Plena Informática. Todos os direitos reservados.
+    </div>
+  </footer>
+
+  <div id="notification-container"></div>
+
+  <script>
+    function showNotification(message, type) {
+      const container = document.getElementById('notification-container');
+      const n = document.createElement('div');
+      n.className = 'notification ' + (type || 'success');
+      n.innerHTML = '<i class="ph ph-info text-xl"></i><span>' + message + '</span>';
+      container.appendChild(n);
+      setTimeout(() => n.classList.add('show'), 10);
+      setTimeout(() => { n.classList.remove('show'); setTimeout(() => n.remove(), 400); }, 4000);
+    }
+
+    async function refreshAccessTokenIfNeeded() {
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (!refreshToken) return false;
+      try {
+        const res = await fetch('/api/auth/refresh-token', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ refreshToken }) });
+        if (!res.ok) return false;
+        const data = await res.json();
+        if (data && data.accessToken && data.refreshToken) {
+          localStorage.setItem('accessToken', data.accessToken);
+          localStorage.setItem('refreshToken', data.refreshToken);
+          return true;
+        }
+        return false;
+      } catch { return false; }
+    }
+
+    async function apiFetch(url, options) {
+      const token = localStorage.getItem('accessToken');
+      const opts = Object.assign({ headers: {} }, options || {});
+      if (token) opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + token });
+      let res = await fetch(url, opts);
+      if (res.status === 401) {
+        const refreshed = await refreshAccessTokenIfNeeded();
+        if (refreshed) {
+          const newToken = localStorage.getItem('accessToken');
+          const retryOpts = Object.assign({}, opts, { headers: Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + newToken }) });
+          res = await fetch(url, retryOpts);
+        }
+      }
+      return res;
+    }
+
+    function toISOFromBR(d) {
+      const p = String(d).split('/'); if (p.length !== 3) return null;
+      return p[2] + '-' + p[1].padStart(2,'0') + '-' + p[0].padStart(2,'0');
+    }
+
+    async function loadProfile() {
+      const res = await apiFetch('/api/auth/me');
+      const box = document.getElementById('profile-box');
+      if (!res.ok) { box.textContent = 'Não foi possível carregar seus dados.'; return; }
+      const u = await res.json();
+      box.innerHTML = '<div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center">' + (u.name ? u.name[0] : 'U') + '</div><div><div class="font-bold">' + (u.name || 'Usuário') + '</div><div class="text-slate-500">' + (u.email || '') + '</div></div></div>';
+    }
+
+    async function loadCVs() {
+      const res = await apiFetch('/api/curricula');
+      const box = document.getElementById('cv-list');
+      if (!res.ok) { box.textContent = 'Não foi possível carregar currículos.'; return; }
+      const { items } = await res.json();
+      if (!items || !items.length) { box.textContent = 'Você ainda não possui currículos.'; return; }
+      const rows = items.map(it => {
+        const created = new Date(it.created_at).toLocaleDateString('pt-BR');
+        const pdf = it.pdf_url ? '<a href="' + it.pdf_url + '" target="_blank" class="text-orange-600">Baixar PDF</a>' : '<button data-id="' + it.id + '" class="text-orange-600 underline" onclick="generatePDF(this)">Gerar PDF</button>';
+        const del = '<button data-id="' + it.id + '" class="text-slate-600 underline" onclick="deleteCV(this)">Excluir</button>';
+        return '<tr><td class="py-2">' + it.title + '</td><td class="py-2">' + it.template + '</td><td class="py-2">' + created + '</td><td class="py-2">' + pdf + '</td><td class="py-2">' + del + '</td></tr>';
+      }).join('');
+      box.innerHTML = '<table class="w-full text-left"><thead><tr><th class="py-2">Título</th><th class="py-2">Modelo</th><th class="py-2">Criado</th><th class="py-2">PDF</th><th class="py-2">Ações</th></tr></thead><tbody>' + rows + '</tbody></table>';
+    }
+
+    async function generatePDF(btn) {
+      const id = btn.dataset.id;
+      const res = await apiFetch('/api/curricula/' + id + '/generate-pdf', { method: 'POST' });
+      if (!res.ok) { showNotification('Erro ao gerar PDF', 'error'); return; }
+      const { url } = await res.json();
+      if (url) window.open(url, '_blank');
+      loadCVs();
+    }
+
+    async function deleteCV(btn) {
+      if (!confirm('Excluir este currículo?')) return;
+      const id = btn.dataset.id;
+      const res = await apiFetch('/api/curricula/' + id, { method: 'DELETE' });
+      if (!res.ok) { showNotification('Erro ao excluir', 'error'); return; }
+      showNotification('Currículo excluído', 'success');
+      loadCVs();
+    }
+
+    async function loadAppointments() {
+      const box = document.getElementById('apt-list');
+      const q = [];
+      const from = toISOFromBR(document.getElementById('apt-from').value);
+      const to = toISOFromBR(document.getElementById('apt-to').value);
+      if (from) q.push('from=' + encodeURIComponent(from));
+      if (to) q.push('to=' + encodeURIComponent(to));
+      const url = '/api/appointments' + (q.length ? ('?' + q.join('&')) : '');
+      const res = await apiFetch(url);
+      if (!res.ok) { box.textContent = 'Não foi possível carregar agendamentos.'; return; }
+      const { items } = await res.json();
+      if (!items || !items.length) { box.textContent = 'Nenhum agendamento encontrado.'; return; }
+      const rows = items.map(it => {
+        const dt = new Date(it.scheduled_date);
+        const ds = dt.toLocaleDateString('pt-BR') + ' ' + String(dt.getHours()).padStart(2,'0') + ':' + String(dt.getMinutes()).padStart(2,'0');
+        const st = it.status;
+        const cancel = st === 'pending' || st === 'confirmed' ? '<button data-id="' + it.id + '" class="text-slate-600 underline" onclick="cancelApt(this)">Cancelar</button>' : '';
+        return '<tr><td class="py-2">' + it.service_type + '</td><td class="py-2">' + ds + '</td><td class="py-2">' + st + '</td><td class="py-2">' + cancel + '</td></tr>';
+      }).join('');
+      box.innerHTML = '<table class="w-full text-left"><thead><tr><th class="py-2">Serviço</th><th class="py-2">Data</th><th class="py-2">Status</th><th class="py-2">Ações</th></tr></thead><tbody>' + rows + '</tbody></table>';
+    }
+
+    async function cancelApt(btn) {
+      const id = btn.dataset.id;
+      if (!confirm('Cancelar este agendamento?')) return;
+      const res = await apiFetch('/api/appointments/' + id, { method: 'DELETE' });
+      if (!res.ok) { showNotification('Erro ao cancelar', 'error'); return; }
+      showNotification('Agendamento cancelado', 'success');
+      loadAppointments();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      try { if (window.firebase && window.FIREBASE_CONFIG && !firebase.apps.length) { firebase.initializeApp(window.FIREBASE_CONFIG) } } catch {}
+      if (!localStorage.getItem('accessToken')) { showNotification('Faça login para acessar seu painel.', 'error'); setTimeout(() => { window.location.href = 'servicos.html'; }, 1200); return; }
+      document.getElementById('btn-logout').addEventListener('click', function(e){ e.preventDefault(); localStorage.removeItem('accessToken'); localStorage.removeItem('refreshToken'); showNotification('Você saiu.', 'success'); setTimeout(() => { window.location.href = 'servicos.html'; }, 800); });
+      if (typeof (window as any).flatpickr === 'function') {
+        flatpickr('#apt-from', { locale: 'pt', dateFormat: 'd/m/Y' });
+        flatpickr('#apt-to', { locale: 'pt', dateFormat: 'd/m/Y' });
+      } else {
+        const f = document.getElementById('apt-from') as HTMLInputElement
+        const t = document.getElementById('apt-to') as HTMLInputElement
+        if (f) f.type = 'date'
+        if (t) t.type = 'date'
+      }
+      document.getElementById('apt-filter').addEventListener('click', function(){ loadAppointments(); });
+      loadProfile();
+      loadCVs();
+      loadAppointments();
+    });
+  </script>
+</body>
+</html>

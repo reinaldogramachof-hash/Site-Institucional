@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Plena Digital | Painel Administrativo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif}
+  </style>
+</head>
+<body class="bg-slate-50">
+  <script>
+    const pass = window.prompt('Senha do painel');
+    if(pass !== 'plena2025'){ window.location.href = 'index.html'; }
+  </script>
+  <script>
+    (function(){
+      const apiKey = 'AIzaSyCzYrCUY_BX0OXvPkHATzEdnaD6Mx_TPlY';
+      window.__FIREBASE_CONFIG__ = Object.assign({}, window.__FIREBASE_CONFIG__||{}, { apiKey });
+      try {
+        const cfg = JSON.parse(localStorage.getItem('plena_firebase_config')||'{}');
+        localStorage.setItem('plena_firebase_config', JSON.stringify(Object.assign({}, cfg, { apiKey })));
+      } catch(e) {}
+    })();
+  </script>
+  <div class="min-h-screen grid grid-cols-1 md:grid-cols-[260px_1fr]">
+    <aside class="bg-slate-900 text-white p-6 flex md:flex-col gap-6 items-center md:items-start">
+      <a href="index.html" class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center text-white">
+          <i class="ph ph-squares-four"></i>
+        </div>
+        <span class="font-bold">Plena Digital</span>
+      </a>
+      <nav class="flex md:flex-col gap-4 text-sm">
+        <a href="admin.html" class="text-white/80 hover:text-white transition">Leads</a>
+        <a href="servicos.html" class="text-white/80 hover:text-white transition">Serviços</a>
+        <a href="personalizados.html" class="text-white/80 hover:text-white transition">Personalizados</a>
+      </nav>
+    </aside>
+    <main class="p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-slate-800">Leads</h1>
+        <div class="flex gap-2">
+          <button id="refresh" class="px-4 py-2 bg-slate-900 text-white rounded-lg">Atualizar</button>
+        </div>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white rounded-xl border border-slate-200 p-4">
+          <div class="text-xs text-slate-500">Total de Leads</div>
+          <div id="kpi-total" class="text-2xl font-bold">0</div>
+        </div>
+        <div class="bg-white rounded-xl border border-slate-200 p-4">
+          <div class="text-xs text-slate-500">Serviço Mais Pedido</div>
+          <div id="kpi-top" class="text-lg font-bold">-</div>
+        </div>
+        <div class="bg-white rounded-xl border border-slate-200 p-4">
+          <div class="text-xs text-slate-500">Leads Hoje</div>
+          <div id="kpi-today" class="text-2xl font-bold">0</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl border border-slate-200 p-0">
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead class="bg-slate-50 text-slate-600">
+              <tr>
+                <th class="px-4 py-3 text-left">Protocolo</th>
+                <th class="px-4 py-3 text-left">Data</th>
+                <th class="px-4 py-3 text-left">Cliente</th>
+                <th class="px-4 py-3 text-left">Serviço</th>
+                <th class="px-4 py-3 text-left">Status</th>
+                <th class="px-4 py-3 text-left">WhatsApp</th>
+              </tr>
+            </thead>
+            <tbody id="leads-body" class="divide-y"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer class="bg-blue-900 text-white mt-10">
+    <div class="container mx-auto px-6 py-12 grid md:grid-cols-3 gap-8">
+      <div>
+        <a href="index.html" class="text-2xl font-bold text-white font-heading group">
+          Plena <span class="text-blue-300 group-hover:text-blue-200 transition">Informática</span>
+        </a>
+        <p class="text-blue-100 mt-4">Há 20 anos transformando ideias em realidade. Soluções completas em serviços digitais, personalizados e tecnologia.</p>
+        <div class="flex items-center gap-3 mt-4">
+          <span class="inline-flex items-center gap-2 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+            <i class="ph-fill ph-shield-check"></i> Site Seguro
+          </span>
+          <span class="text-blue-200 text-xs">Protegido com SSL</span>
+        </div>
+      </div>
+      <div>
+        <h3 class="font-bold text-lg mb-6">Links Rápidos</h3>
+        <ul class="space-y-3 text-blue-100 text-sm">
+          <li><a href="index.html" class="hover:text-white transition">Início</a></li>
+          <li><a href="servicos.html" class="hover:text-white transition">Serviços Digitais</a></li>
+          <li><a href="personalizados.html" class="hover:text-white transition">Personalizados</a></li>
+          <li><a href="tecnologia.html" class="hover:text-white transition">Tecnologia</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-bold text-lg mb-6">Contato</h3>
+        <ul class="space-y-2 text-blue-100 text-sm">
+          <li class="flex items-center gap-2"><i class="ph-fill ph-map-pin"></i> São José dos Campos, SP</li>
+          <li class="flex items-center gap-2"><i class="ph-fill ph-phone"></i> (12) 99219-1018</li>
+          <li class="flex items-center gap-2"><i class="ph-fill ph-envelope"></i> contato@plenainformatica.com.br</li>
+        </ul>
+        <div class="flex items-center gap-6 mt-6 text-sm text-blue-200">
+          <a href="servicos.html#terms" class="hover:text-white transition">Termos de Uso</a>
+          <a href="servicos.html#privacy" class="hover:text-white transition">Política de Privacidade</a>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-blue-800 py-6 text-center text-blue-200 text-sm">
+      © 2025 Plena Informática. Todos os direitos reservados.
+    </div>
+  </footer>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    function getFirebaseConfig(){
+      let base={ apiKey:"SUA_API_KEY", authDomain:"SEU_PROJETO.firebaseapp.com", projectId:"SEU_PROJECT_ID", storageBucket:"SEU_PROJETO.appspot.com", messagingSenderId:"SEU_SENDER_ID", appId:"SEU_APP_ID" };
+      try{ const injected=window.__FIREBASE_CONFIG__||JSON.parse(localStorage.getItem('plena_firebase_config')||'null'); if(injected&&typeof injected==='object'){ base={...base,...injected}; } }catch(e){}
+      return base;
+    }
+    let db=null;
+    try{ const app=initializeApp(getFirebaseConfig()); db=getFirestore(app); }catch(e){ db=null; }
+    const body=document.getElementById('leads-body');
+    const kTotal=document.getElementById('kpi-total');
+    const kTop=document.getElementById('kpi-top');
+    const kToday=document.getElementById('kpi-today');
+    async function load(){
+      body.innerHTML='';
+      const items=[];
+      if(db){
+        const snap=await getDocs(collection(db,'leads_servicos'));
+        snap.forEach(d=>{ items.push({ id:d.id, ...d.data() }); });
+      } else {
+        const local=JSON.parse(localStorage.getItem('plena_requests')||'[]');
+        local.forEach(d=>items.push(d));
+      }
+      const byService={};
+      let today=0;
+      const todayStr=new Date().toDateString();
+      items.forEach(it=>{ const s=it.service||'-'; byService[s]=(byService[s]||0)+1; const dt=it.createdAt&&it.createdAt.toDate?it.createdAt.toDate(): (it.date?new Date(it.date):new Date()); if(dt.toDateString()===todayStr) today++; });
+      kTotal.textContent=String(items.length);
+      let top='-'; let topV=0; Object.entries(byService).forEach(([k,v])=>{ if(v>topV){ topV=v; top=k; } });
+      kTop.textContent=top;
+      kToday.textContent=String(today);
+      body.innerHTML=items.map(it=>{
+        const proto=it.protocol||'-';
+        const dt=it.createdAt&&it.createdAt.toDate?it.createdAt.toDate(): (it.date?new Date(it.date):new Date());
+        const dateStr=dt.toLocaleString();
+        const nome=it.nome||it.client||'-';
+        const serv=it.service||'-';
+        const status=it.status||'pending';
+        const msg=`*Olá, Plena Digital!*%0AProtocolo: ${proto}%0AServiço: ${serv}%0APodemos prosseguir?`;
+        return `<tr class="hover:bg-slate-50"><td class="px-4 py-3 font-mono">${proto}</td><td class="px-4 py-3">${dateStr}</td><td class="px-4 py-3">${nome}</td><td class="px-4 py-3">${serv}</td><td class="px-4 py-3">${status}</td><td class="px-4 py-3"><a class="px-3 py-1 rounded bg-emerald-600 text-white text-xs" target="_blank" href="https://api.whatsapp.com/send?phone=5512981488505&text=${msg}">Abrir</a></td></tr>`;
+      }).join('');
+    }
+    document.getElementById('refresh').addEventListener('click',load);
+    load();
+  </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoFinance - O Futuro das Finanças</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #0B0B0F; color: #fff; }
+        .text-gradient {
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Navbar Transparente -->
+    <nav class="fixed w-full z-50 top-0 py-6 border-b border-white/5 backdrop-blur-md">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="font-bold text-xl tracking-wider flex items-center gap-2">
+                <div class="w-3 h-3 bg-cyan-400 rounded-full shadow-[0_0_10px_#22d3ee]"></div> NEO
+            </div>
+            <div class="hidden md:flex gap-8 text-sm text-gray-400 font-medium">
+                <a href="#" class="hover:text-white transition">Produto</a>
+                <a href="#" class="hover:text-white transition">Integrações</a>
+                <a href="#" class="hover:text-white transition">Preços</a>
+            </div>
+            <a href="#" class="bg-white text-black px-5 py-2 rounded-lg font-bold text-sm hover:bg-cyan-50 transition">Acessar</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-40 pb-20 relative">
+        <!-- Glow Background -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] -z-10"></div>
+
+        <div class="container mx-auto px-6 text-center max-w-4xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-xs text-cyan-400 mb-8 font-medium">
+                <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span> v2.0 Disponível Agora
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold mb-8 leading-tight">
+                Controle Financeiro <br>
+                <span class="text-gradient">Inteligente & Automatizado</span>
+            </h1>
+            <p class="text-gray-400 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
+                Conecte todas as suas contas bancárias em um único dashboard. IA preditiva para te ajudar a economizar sem esforço.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-xl font-bold text-lg transition shadow-lg shadow-blue-500/20">Começar Grátis</button>
+                <button class="glass px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/5 transition flex items-center justify-center gap-2">
+                    <i class="ph-fill ph-play"></i> Ver Demo
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Preview (Glassmorphism) -->
+    <section class="pb-32 px-4">
+        <div class="container mx-auto max-w-5xl">
+            <div class="glass rounded-2xl p-2 border border-white/10 shadow-2xl shadow-blue-900/20">
+                <div class="bg-[#0F0F13] rounded-xl overflow-hidden relative aspect-video border border-white/5 flex items-center justify-center">
+                    <!-- Simulação de Interface -->
+                    <div class="absolute inset-0 flex">
+                        <!-- Sidebar -->
+                        <div class="w-48 border-r border-white/5 p-6 hidden md:block">
+                            <div class="space-y-4">
+                                <div class="h-2 w-20 bg-white/10 rounded"></div>
+                                <div class="h-2 w-16 bg-white/5 rounded"></div>
+                                <div class="h-2 w-24 bg-white/5 rounded"></div>
+                                <div class="h-2 w-12 bg-white/5 rounded"></div>
+                            </div>
+                        </div>
+                        <!-- Main -->
+                        <div class="flex-1 p-8">
+                            <div class="flex justify-between mb-8">
+                                <div class="h-8 w-32 bg-white/10 rounded"></div>
+                                <div class="h-8 w-8 bg-blue-500 rounded-full"></div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4 mb-8">
+                                <div class="h-24 bg-white/5 rounded-xl border border-white/5"></div>
+                                <div class="h-24 bg-white/5 rounded-xl border border-white/5"></div>
+                                <div class="h-24 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-xl border border-blue-500/30"></div>
+                            </div>
+                            <div class="h-40 bg-white/5 rounded-xl border border-white/5 w-full"></div>
+                        </div>
+                    </div>
+                    <!-- Badge Flutuante -->
+                    <div class="absolute bottom-8 right-8 glass px-4 py-2 rounded-lg flex items-center gap-3 animate-bounce">
+                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-black font-bold">R$</div>
+                        <div>
+                            <div class="text-xs text-gray-400">Economia</div>
+                            <div class="text-sm font-bold text-green-400">+ R$ 1.240</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="py-20 container mx-auto px-6">
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="glass p-8 rounded-2xl hover:bg-white/5 transition cursor-pointer group">
+                <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400 text-2xl mb-6 group-hover:scale-110 transition">
+                    <i class="ph-fill ph-lightning"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Sincronização Real-Time</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">Suas transações aparecem no painel em menos de 2 segundos após a compra.</p>
+            </div>
+            <div class="glass p-8 rounded-2xl hover:bg-white/5 transition cursor-pointer group">
+                <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center text-purple-400 text-2xl mb-6 group-hover:scale-110 transition">
+                    <i class="ph-fill ph-lock-key"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Segurança Bancária</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">Criptografia de ponta a ponta. Seus dados nunca são compartilhados.</p>
+            </div>
+            <div class="glass p-8 rounded-2xl hover:bg-white/5 transition cursor-pointer group">
+                <div class="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center text-cyan-400 text-2xl mb-6 group-hover:scale-110 transition">
+                    <i class="ph-fill ph-robot"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">IA Financeira</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">Nosso algoritmo analisa seus gastos e sugere onde cortar custos.</p>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

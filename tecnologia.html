@@ -3,673 +3,639 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Plena Informática - Tecnologia</title>
-  <meta name="description" content="Sistemas sob medida, sites e landing pages para pequenos e médios negócios. Simples de usar, prontos para vender e operar."/>
+  <title>Plena Tecnologia | Soluções Digitais Inteligentes</title>
+  <meta name="description" content="Sistemas Web, Cardápios Digitais, Agendamento e Automação. Tecnologia sob medida em São José dos Campos."/>
   <meta name="theme-color" content="#0a0a0f"/>
+  
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  
+  <!-- Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
   <style>
     :root {
       --primary: #10b981;
-      --primary-400: #34d399;
-      --bg: #0A0A0F;
-      --text: #e5e7eb;
-    }
-    
-    html {
-      font-size: 16px;
+      --primary-glow: #34d399;
+      --bg-dark: #0A0A0F;
     }
     
     body {
       font-family: 'Poppins', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
-    
-    section[id] {
-      scroll-margin-top: 6rem;
-    }
-    
-    .header-blur {
-      backdrop-filter: saturate(180%) blur(8px);
-      background: rgba(0, 0, 0, 0.72);
-    }
-    
-    .accessible-outline:focus-visible {
-      outline: 2px solid var(--primary);
-      outline-offset: 3px;
+      background-color: var(--bg-dark);
+      color: #e5e7eb;
+      overflow-x: hidden;
     }
 
-    /* Tipografia fluida e lapidação de espaçamentos */
-    .h1 {
-      font-weight: 700;
-      line-height: 1.12;
-      font-size: clamp(2.1rem, 3.6vw, 3.05rem);
-    }
-    
-    .h2 {
-      font-weight: 700;
-      line-height: 1.18;
-      font-size: clamp(1.6rem, 2.6vw, 2.15rem);
-    }
-    
-    .h3 {
-      font-weight: 600;
-      line-height: 1.22;
-      font-size: clamp(1.08rem, 1.9vw, 1.32rem);
-    }
-    
-    .lead {
-      font-size: clamp(1rem, 1.15vw, 1.08rem);
-      color: #cbd5e1;
-    }
-    
-    .section {
-      padding: 3.5rem 0;
-    }
-    
-    .section-tight {
-      padding: 2.2rem 0;
-    }
-
-    /* Botões */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      border-radius: 0.9rem;
-      padding: 0.85rem 1.15rem;
-      transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
-    }
-    
-    .btn-primary {
-      background: var(--primary);
-      color: #03120d;
-    }
-    
-    .btn-primary:hover {
-      background: var(--primary-400);
-      transform: translateY(-1px);
-    }
-    
-    .btn-ghost {
-      border: 2px solid rgba(16, 185, 129, 0.35);
-      color: #fff;
-    }
-    
-    .btn-ghost:hover {
-      border-color: var(--primary);
-      transform: translateY(-1px);
-    }
-
-    /* Cards refinados */
-    .grid-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-      gap: 1.1rem;
-    }
+    /* Matrix & Glass Effects */
+    #matrix-canvas { position: fixed; inset: 0; z-index: -2; opacity: 0.04; pointer-events: none; }
+    .container { margin-left: auto; margin-right: auto; }
+    @media (max-width: 768px) { .container { max-width: 100% !important; padding-left: 1rem; padding-right: 1rem; } }
+    :target { scroll-margin-top: 5rem; }
     
     .glass-wet {
       position: relative;
-      background: rgba(255, 255, 255, 0.045);
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      backdrop-filter: blur(12px) saturate(140%);
-      border-radius: 1.1rem;
-      overflow: hidden;
-    }
-    
-    .glass-wet::before {
-      content: "";
-      position: absolute;
-      inset: -20%;
-      background:
-        radial-gradient(120px 16px at 18% 10%, rgba(255, 255, 255, 0.08), transparent 60%),
-        radial-gradient(140px 18px at 62% 0%, rgba(255, 255, 255, 0.07), transparent 60%),
-        linear-gradient(115deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.05) 60%, rgba(255, 255, 255, 0) 100%);
-      filter: blur(0.4px);
-      pointer-events: none;
-      opacity: 0.75;
-    }
-    
-    .glass-wet::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.45;
-      background-image:
-        radial-gradient(3px 3px at 20% 30%, rgba(255, 255, 255, 0.10) 40%, transparent 41%),
-        radial-gradient(2.5px 2.5px at 40% 60%, rgba(255, 255, 255, 0.10) 40%, transparent 41%),
-        radial-gradient(2.5px 2.5px at 70% 20%, rgba(255, 255, 255, 0.10) 40%, transparent 41%),
-        radial-gradient(2.5px 2.5px at 85% 55%, rgba(255, 255, 255, 0.10) 40%, transparent 41%);
-      background-repeat: no-repeat;
-    }
-    
-    .feature {
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-    }
-    
-    .feature:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 26px rgba(16, 185, 129, 0.12);
-      border-color: rgba(16, 185, 129, 0.45);
-    }
-    
-    .feature .icon {
-      font-size: 2rem;
-    }
-
-    /* Fundo e spotlight */
-    #matrix-canvas {
-      position: fixed;
-      inset: 0;
-      z-index: -2;
-      opacity: 0.07;
-    }
-    
-    #spotlight {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    /* Badges de stack */
-    .stack-badges {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 0.85rem;
-    }
-    
-    .badge-card {
-      position: relative;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-      border-radius: 0.8rem;
-      padding: 0.8rem 0.95rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      overflow: hidden;
-      transition: border-color 0.2s ease, transform 0.15s ease;
-    }
-    
-    .badge-card:hover {
-      border-color: rgba(16, 185, 129, 0.45);
-      transform: translateY(-2px);
-    }
-    
-    .badge-icon {
-      width: 22px;
-      height: 22px;
-      flex: 0 0 22px;
-    }
-    
-    .badge-shimmer::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.08) 15%, transparent 30%);
-      transform: translateX(-100%);
-      animation: shimmer 3.2s ease-in-out infinite;
-    }
-    
-    @keyframes shimmer {
-      to {
-        transform: translateX(100%);
-      }
-    }
-
-    /* IA: botão e painel (com overlay e fechar) - CORRIGIDO */
-    .ia-fab {
-      position: fixed;
-      right: 18px;
-      bottom: 18px;
-      z-index: 50;
-      width: 64px;
-      height: 64px;
-      border-radius: 9999px;
-      color: #03120d;
-      background: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.35);
-      cursor: pointer;
-      border: none;
-    }
-    
-    .ia-fab::before {
-      content: "";
-      position: absolute;
-      inset: -6px;
-      border-radius: 9999px;
-      background: conic-gradient(from 0deg, rgba(16, 185, 129, 0) 0%, rgba(16, 185, 129, 0.8) 25%, rgba(16, 185, 129, 0) 50%, rgba(16, 185, 129, 0.8) 75%, rgba(16, 185, 129, 0) 100%);
-      filter: blur(6px);
-      animation: ring 3.5s linear infinite;
-      z-index: -1;
-    }
-    
-    @keyframes ring {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-    
-    #ia-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(2, 6, 12, 0.65);
-      backdrop-filter: blur(2px);
-      z-index: 40;
-      display: none;
-    }
-    
-    #ia-panel {
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-      z-index: 60; /* Adicionado z-index maior */
-      backdrop-filter: blur(12px) saturate(140%); /* Adicionado para consistência */
-    }
-
-    @media (min-width: 768px) {
-      #ia-panel {
-        right: 18px;
-        bottom: 92px;
-        width: 390px;
-        max-height: 72vh;
-        border-radius: 1rem;
-      }
-    }
-    
-    @media (max-width: 767px) {
-      #ia-panel {
-        left: 12px;
-        right: 12px;
-        bottom: 12px;
-        max-height: 78vh;
-        border-radius: 1rem;
-      }
-    }
-
-    .chip {
-      padding: 0.45rem 0.7rem;
-      border-radius: 0.7rem;
-      border: 1px solid #334155;
-      background: #0b1220;
-      color: #e2e8f0;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: border-color 0.2s ease;
-    }
-    
-    .chip:hover {
-      border-color: var(--primary);
-    }
-    
-    .msg {
-      font-size: 0.95rem;
-    }
-    
-    .msg-user {
-      color: #a7f3d0;
-    }
-    
-    .msg-bot {
-      color: #e5e7eb;
-    }
-
-    /* Botão voltar ao topo (esquerda) */
-    #to-top {
-      position: fixed;
-      left: 18px;
-      bottom: 18px;
-      z-index: 30;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease, transform 0.2s ease;
-    }
-    
-    #to-top.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    
-    #to-top:hover {
-      transform: translateY(-2px);
-    }
-
-    /* Modal genérico (presença + infos dos cards) */
-    .modal {
-      position: fixed;
-      inset: 0;
-      display: none;
-      z-index: 60;
-    }
-    
-    .modal.show {
-      display: flex;
-    }
-    
-    .modal-bg {
-      position: absolute;
-      inset: 0;
-      background: rgba(2, 6, 12, 0.7);
-      backdrop-filter: blur(2px);
-    }
-    
-    .modal-card {
-      position: relative;
-      margin: auto;
-      max-width: 46rem;
-      width: 92vw;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px) saturate(180%);
       border-radius: 1rem;
-    }
-    
-    .modal-body {
-      max-height: 70vh;
-      overflow: auto;
+      transition: all 0.3s ease;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-      }
+    .glass-wet:hover {
+      border-color: rgba(16, 185, 129, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.1);
+    }
+    .glass-wet[role="button"]:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(16,185,129,0.25); }
+
+    /* Components */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.75rem;
+      transition: all 0.2s; cursor: pointer; gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background: var(--primary); color: #000;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+    }
+    .btn-primary:hover { background: var(--primary-glow); transform: translateY(-1px); box-shadow: 0 0 25px rgba(16, 185, 129, 0.4); }
+    
+    .btn-ghost {
+      background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #fff;
+    }
+    .btn-ghost:hover { border-color: var(--primary); color: var(--primary); background: rgba(16, 185, 129, 0.05); }
+
+    .input-tech {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      border-radius: 0.5rem;
+      transition: border-color 0.3s;
+    }
+    .input-tech:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2); }
+
+    /* Modal Demo */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+      z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+      display: flex; align-items: center; justify-content: center; padding: 1rem;
+      overscroll-behavior: contain; touch-action: none;
+    }
+    .modal-backdrop.active { opacity: 1; pointer-events: all; }
+    
+    .modal-content {
+      width: 100%; max-width: 900px; background: #111; border: 1px solid #333;
+      border-radius: 1rem; transform: scale(0.95); transition: transform 0.3s;
+      overflow: hidden; display: flex; flex-direction: column; max-height: 90vh;
+      overscroll-behavior: contain;
+    }
+    .modal-backdrop.active .modal-content { transform: scale(1); }
+    
+    /* Badge Pulse */
+    .badge-pulse {
+      position: relative; display: inline-flex; align-items: center;
+      padding: 4px 12px; border-radius: 99px; font-size: 0.7rem;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--primary-glow); background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+    
+    /* Custom Select Icon */
+    .custom-select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2310b981' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
     }
 
-    /* Melhorias adicionais */
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
+    /* iPhone 15 Mockup */
+    .phone-mock {
+      position: relative;
+      width: 100%; max-width: 390px; height: auto; aspect-ratio: 390/844;
+      padding: 12px;
+      border-radius: 44px;
+      background: linear-gradient(145deg, #0b0b0f, #121219);
+      border: 2px solid #1f2937;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.06),
+        inset 0 12px 30px rgba(255,255,255,0.03),
+        0 25px 60px rgba(0,0,0,0.5);
     }
-    
-    .text-balance {
-      text-wrap: balance;
+    .phone-mock::before {
+      content: "";
+      position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+      width: 120px; height: 34px;
+      background: #000;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.6), inset 0 -4px 10px rgba(255,255,255,0.05);
+      z-index: 10;
     }
-    
-    .focus-visible:focus {
-      outline: 2px solid var(--primary);
-      outline-offset: 2px;
+    .phone-mock::after {
+      content: "";
+      position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
+      width: 120px; height: 5px;
+      background: linear-gradient(to right, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+      border-radius: 999px; opacity: 0.6;
+      z-index: 10;
     }
+    .phone-screen {
+      border-radius: 34px; overflow: auto; position: relative;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
+    }
+    @media (max-width: 400px) {
+      .phone-mock { max-width: 340px; }
+    }
+
+    .bar-anim { transition: width 300ms ease; }
+    #demo-container { overscroll-behavior: contain; }
   </style>
 </head>
-<body>
-  <!-- FX -->
-  <canvas id="matrix-canvas" aria-hidden="true"></canvas>
-  <div id="spotlight" aria-hidden="true"></div>
+<body class="overflow-x-hidden">
 
-  <!-- Header -->
-  <header class="header-blur sticky top-0 z-50 shadow shadow-emerald-500/10">
-    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-      <a href="index.html" class="text-2xl font-bold text-white focus-visible">Plena <span class="text-emerald-400">Tecnologia</span></a>
-      <a href="index.html" class="btn btn-primary accessible-outline">&larr; Voltar ao Início</a>
-    </nav>
+  <canvas id="matrix-canvas"></canvas>
+
+  <!-- Navbar -->
+  <header class="fixed w-full top-0 z-50 transition-all duration-300 border-b border-white/5 bg-black/50 backdrop-blur-md">
+    <div class="container mx-auto px-6 py-4 relative flex justify-between items-center">
+      <a href="#" class="text-xl font-bold tracking-tighter text-white flex items-center gap-2">
+        <i class="ph ph-code text-emerald-400 text-2xl"></i>
+        PLENA <span class="text-emerald-400">TECNOLOGIA</span>
+      </a>
+      
+      <nav class="hidden md:flex gap-8 text-sm font-medium text-gray-300">
+        <a href="index.html" class="hover:text-emerald-400 transition-colors">Início</a>
+        <a href="#solucoes" class="hover:text-emerald-400 transition-colors">Soluções</a>
+        <a href="#planos" class="hover:text-emerald-400 transition-colors">Planos</a>
+        <a href="#orcamento" class="hover:text-emerald-400 transition-colors">Calculadora</a>
+      </nav>
+
+      <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20estou%20visitando%20a%20p%C3%A1gina%20de%20tecnologia%20da%20Plena%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" class="hidden md:inline-flex btn btn-primary text-xs py-2 px-4">
+        <i class="ph ph-whatsapp-logo text-lg"></i> 
+        <span class="hidden sm:inline">Falar com Especialista</span>
+      </a>
+      <button id="mobile-menu-toggle" class="md:hidden btn btn-ghost text-xs py-2 px-3" aria-expanded="false" aria-controls="mobile-menu"><i class="ph ph-list text-lg"></i></button>
+    </div>
   </header>
+  <div id="mobile-menu" class="hidden fixed top-16 left-4 right-4 z-50 rounded-xl border border-white/10 bg-black/90 backdrop-blur-md p-4">
+    <div class="flex flex-col gap-3 text-sm">
+      <a href="index.html" class="px-3 py-2 rounded hover:bg-white/5">Início</a>
+      <a href="#solucoes" class="px-3 py-2 rounded hover:bg-white/5">Soluções</a>
+      <a href="#planos" class="px-3 py-2 rounded hover:bg-white/5">Planos</a>
+      <a href="#orcamento" class="px-3 py-2 rounded hover:bg-white/5">Calculadora</a>
+      <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20estou%20visitando%20a%20p%C3%A1gina%20de%20tecnologia%20da%20Plena%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" class="btn btn-primary w-full text-xs py-2">Falar com Especialista</a>
+    </div>
+  </div>
+  <main class="pt-24">
+    
+    <!-- HERO -->
+    <section class="min-h-[80vh] flex items-center justify-center relative px-4 md:px-6">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[480px] md:w-[600px] md:h-[600px] bg-emerald-500/10 rounded-full blur-[120px] -z-10"></div>
 
-  <main>
-    <!-- HERO refinado -->
-    <section class="section text-center">
-      <div class="container mx-auto px-6">
-        <h1 class="h1 text-balance">Tecnologia que cabe no seu negócio</h1>
-        <p class="lead mt-4 max-w-3xl mx-auto text-balance">
-          Sistemas e sites simples de usar, feitos sob medida para pequenas e médias empresas. Começamos pelo essencial, evoluímos com você.
+      <div class="container mx-auto text-center z-10 max-w-screen-sm md:max-w-3xl">
+        <div class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-900/20 text-emerald-400 text-xs font-mono uppercase">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          Software House Local
+        </div>
+        
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight tracking-tight">
+          Seu negócio merece<br />
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-emerald-400">Inteligência Digital.</span>
+        </h1>
+        
+        <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+          De cardápios digitais a sistemas de gestão completos. 
+          Criamos ferramentas que organizam sua empresa e vendem por você.
         </p>
-        <div class="mt-8 grid sm:grid-cols-3 gap-3 text-sm max-w-4xl mx-auto">
-          <div class="glass-wet p-4">
-            <div class="text-emerald-400 font-semibold">Processos claros</div>
-            <div class="text-gray-300">escopo enxuto e entregas contínuas</div>
-          </div>
-          <div class="glass-wet p-4">
-            <div class="text-emerald-400 font-semibold">Suporte próximo</div>
-            <div class="text-gray-300">treinamento e acompanhamento</div>
-          </div>
-          <div class="glass-wet p-4">
-            <div class="text-emerald-400 font-semibold">Custos previsíveis</div>
-            <div class="text-gray-300">planejamento por etapas</div>
-          </div>
-        </div>
-
-        <div class="mt-6">
-          <button id="open-presenca-btn" type="button" class="btn btn-ghost accessible-outline">
-            Presença Digital — por que importa?
-          </button>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a href="#solucoes" class="btn btn-primary w-full sm:w-auto">Explorar Soluções</a>
+          <a href="#orcamento" class="btn btn-ghost w-full sm:w-auto group">
+            <i class="ph ph-calculator text-lg"></i> Simular Custo
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- Presença + Soluções (cards clicáveis com apresentação) -->
-    <section id="presenca" class="section-tight">
-      <div class="container mx-auto px-6 grid md:grid-cols-2 gap-8 items-stretch">
-        <div class="glass-wet p-7 md:p-9">
-          <div class="inline-flex items-center text-emerald-300 font-mono text-xs tracking-widest uppercase mb-2">
-            Presença digital que converte
-          </div>
-          <h2 class="h2 text-balance">Site e landing page: seu vendedor 24h</h2>
-          <p class="mt-3 text-gray-200">
-            Ser encontrado, explicar sua oferta e facilitar o contato. Sites e landing pages bem estruturados constroem confiança e geram leads qualificados.
-          </p>
-          <ul class="mt-5 space-y-3 text-gray-200">
-            <!-- TEXTO OTIMIZADO AQUI -->
-            <li class="flex"><span class="text-emerald-400 mr-3">✔</span> <strong>Comunicação direta:</strong> mensagem clara que conecta com seu público</li>
-            <li class="flex"><span class="text-emerald-400 mr-3">✔</span> <strong>Performance e visibilidade:</strong> rápido e bem posicionado no Google</li>
-            <li class="flex"><span class="text-emerald-400 mr-3">✔</span> <strong>Conversão otimizada:</strong> gatilhos que transformam visitantes em clientes</li>
-          </ul>
-          <div class="mt-6 flex flex-wrap gap-3">
-            <a href="#contato" class="btn btn-primary accessible-outline">Quero uma proposta objetiva</a>
-            <button id="open-presenca-btn-2" type="button" class="btn btn-ghost accessible-outline">Entenda a importância</button>
-          </div>
-        </div>
-
-        <div class="grid-cards">
-          <article class="glass-wet feature p-6 border border-white/10 cursor-pointer" data-info="sistemas" tabindex="0" role="button" aria-label="Saiba mais sobre Sistemas sob medida">
-            <div class="icon mb-3" aria-hidden="true">💻</div>
-            <h3 class="h3">Sistemas sob medida</h3>
-            <p class="text-gray-300 mt-1">Cadastros, estoque, agenda, relatórios e integrações — só o que você precisa.</p>
-            <ul class="mt-3 text-sm text-gray-400 space-y-1 list-disc pl-5">
-              <li>Interface simples</li><li>Multi-dispositivo</li><li>Evolução por etapas</li>
-            </ul>
-          </article>
-          <article class="glass-wet feature p-6 border border-white/10 cursor-pointer" data-info="sites" tabindex="0" role="button" aria-label="Saiba mais sobre Sites e landing pages">
-            <div class="icon mb-3" aria-hidden="true">🌐</div>
-            <h3 class="h3">Sites e landing pages</h3>
-            <p class="text-gray-300 mt-1">Estrutura focada em conversão, SEO técnico e carregamento rápido.</p>
-            <ul class="mt-3 text-sm text-gray-400 space-y-1 list-disc pl-5">
-              <li>Copy orientada à ação</li><li>WhatsApp e formulários</li><li>Métricas</li>
-            </ul>
-          </article>
-          <article class="glass-wet feature p-6 border border-white/10 cursor-pointer" data-info="automacao" tabindex="0" role="button" aria-label="Saiba mais sobre Automação de processos">
-            <div class="icon mb-3" aria-hidden="true">🤖</div>
-            <h3 class="h3">Automação de processos</h3>
-            <p class="text-gray-300 mt-1">Atendimento inicial, qualificação de leads e tarefas repetitivas automatizadas.</p>
-            <ul class="mt-3 text-sm text-gray-400 space-y-1 list-disc pl-5">
-              <li>Respostas frequentes</li><li>Roteamento</li><li>Integrações</li>
-            </ul>
-          </article>
-          <article class="glass-wet feature p-6 border border-white/10 cursor-pointer" data-info="mvp" tabindex="0" role="button" aria-label="Saiba mais sobre Comece pequeno">
-            <div class="icon mb-3" aria-hidden="true">🧩</div>
-            <h3 class="h3">Comece pequeno</h3>
-            <p class="text-gray-300 mt-1">MVP primeiro. Aprenda com uso real e invista com segurança.</p>
-            <ul class="mt-3 text-sm text-gray-400 space-y-1 list-disc pl-5">
-              <li>Escopo enxuto</li><li>Roadmap claro</li><li>Custos previsíveis</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Processo -->
-    <section id="solucoes" class="section">
+    <!-- VITRINE DE PRODUTOS -->
+    <section id="solucoes" class="py-20 relative">
       <div class="container mx-auto px-6">
-        <div class="text-center mb-10">
-          <h2 class="h2 text-balance">Como entregamos resultado</h2>
-          <p class="lead mt-2 max-w-2xl mx-auto text-balance">Um caminho direto: diagnóstico, MVP funcional e evolução guiada por dados.</p>
+        <div class="mb-12 flex flex-col md:flex-row justify-between items-end gap-4">
+          <div>
+            <span class="text-emerald-400 font-mono text-xs tracking-widest uppercase">Ecossistema Completo</span>
+            <h2 class="text-3xl font-bold text-white mt-2">Soluções para cada etapa</h2>
+          </div>
+          <div class="text-sm text-gray-400">Do cartão de visita ao sistema de gestão.</div>
         </div>
 
-        <div class="grid-cards">
-          <div class="glass-wet p-6 border border-white/10">
-            <div class="text-emerald-400 font-mono text-sm mb-1">01</div>
-            <h3 class="h3">Diagnóstico rápido</h3>
-            <p class="text-gray-300 mt-2">Mapeamos objetivos, canais e gargalos. Definimos o menor caminho viável.</p>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <!-- 1. Landing Page -->
+          <div class="glass-wet p-6 hover:border-purple-500/30 group cursor-pointer" onclick="openDemo('express')">
+             <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 bg-purple-500/20 rounded flex items-center justify-center text-purple-400"><i class="ph ph-rocket-launch text-xl"></i></div>
+                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Vendas</span>
+             </div>
+             <h3 class="text-lg font-bold text-white mb-2">Página de Alta Conversão</h3>
+             <p class="text-sm text-gray-400 mb-4">Site de página única focado em captar leads no Google e Instagram.</p>
+             <span class="text-purple-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
           </div>
-          <div class="glass-wet p-6 border border-white/10">
-            <div class="text-emerald-400 font-mono text-sm mb-1">02</div>
-            <h3 class="h3">MVP que gera valor</h3>
-            <p class="text-gray-300 mt-2">Primeira versão no ar com o essencial para vender e operar.</p>
+
+          <!-- Desenvolvimento de Sites: Linha Extra (6 cards) -->
+          <div class="glass-wet p-6 hover:border-teal-500/30 group cursor-pointer" onclick="openDemo('site','basico','onepage')">
+             <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 bg-teal-500/20 rounded flex items-center justify-center text-teal-400"><i class="ph ph-browser text-xl"></i></div>
+                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
+             </div>
+             <h3 class="text-lg font-bold text-white mb-2">Site One-page</h3>
+             <p class="text-sm text-gray-400 mb-4">Apresentação simples com CTA. Ideal para campanhas.</p>
+             <span class="text-teal-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
           </div>
-          <div class="glass-wet p-6 border border-white/10">
-            <div class="text-emerald-400 font-mono text-sm mb-1">03</div>
-            <h3 class="h3">Evolução por etapas</h3>
-            <p class="text-gray-300 mt-2">Melhorias orientadas por uso real e métricas — sem desperdício.</p>
+
+          <div class="glass-wet p-6 hover:border-sky-500/30 group cursor-pointer" onclick="openDemo('site','basico','portfolio')">
+             <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 bg-sky-500/20 rounded flex items-center justify-center text-sky-400"><i class="ph ph-layout text-xl"></i></div>
+                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
+             </div>
+             <h3 class="text-lg font-bold text-white mb-2">Site Portfólio</h3>
+             <p class="text-sm text-gray-400 mb-4">Exiba projetos e depoimentos. Foco em credibilidade.</p>
+             <span class="text-sky-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+          </div>
+
+          <div class="glass-wet p-6 hover:border-indigo-500/30 group cursor-pointer" onclick="openDemo('site','medio','institucional')">
+             <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 bg-indigo-500/20 rounded flex items-center justify-center text-indigo-400"><i class="ph ph-buildings text-xl"></i></div>
+                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
+             </div>
+             <h3 class="text-lg font-bold text-white mb-2">Site Institucional</h3>
+             <p class="text-sm text-gray-400 mb-4">Múltiplas páginas, blog e formulários personalizados.</p>
+             <span class="text-indigo-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+          </div>
+
+          <div class="glass-wet p-6 hover:border-violet-500/30 group cursor-pointer" onclick="openDemo('site','medio','blog')">
+             <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i class="ph ph-newspaper text-xl"></i></div>
+                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
+             </div>
+             <h3 class="text-lg font-bold text-white mb-2">Site com Blog</h3>
+             <p class="text-sm text-gray-400 mb-4">Publicações otimizadas para SEO e compartilhamento.</p>
+             <span class="text-violet-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+          </div>
+
+          <div class="glass-wet p-6 hover:border-rose-500/30 group cursor-pointer" onclick="openDemo('site','avancado','loja')">
+             <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 bg-rose-500/20 rounded flex items-center justify-center text-rose-400"><i class="ph ph-storefront text-xl"></i></div>
+                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">E‑commerce</span>
+             </div>
+             <h3 class="text-lg font-bold text-white mb-2">Loja Online</h3>
+             <p class="text-sm text-gray-400 mb-4">Catálogo, carrinho e integração com pagamentos.</p>
+             <span class="text-rose-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+          </div>
+
+          <div class="glass-wet p-6 hover:border-emerald-500/30 group cursor-pointer" onclick="openDemo('site','avancado','corporativo')">
+             <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i class="ph ph-seal-check text-xl"></i></div>
+                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Premium</span>
+             </div>
+             <h3 class="text-lg font-bold text-white mb-2">Site Corporativo Premium</h3>
+             <p class="text-sm text-gray-400 mb-4">Design exclusivo, animações e integrações avançadas.</p>
+             <span class="text-emerald-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+          </div>
+          <!-- 2. Cardápio Digital -->
+          <div class="glass-wet p-6 hover:border-orange-500/30 group cursor-pointer" onclick="openDemo('cardapio')">
+             <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i class="ph ph-pizza text-xl"></i></div>
+                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Food</span>
+             </div>
+             <h3 class="text-lg font-bold text-white mb-2">Cardápio Digital PWA</h3>
+             <p class="text-sm text-gray-400 mb-4">Seu cliente pede pelo celular e o pedido chega pronto no WhatsApp. Sem taxas.</p>
+             <span class="text-orange-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+          </div>
+
+          <!-- 3. Agendamento -->
+          <div class="glass-wet p-6 hover:border-blue-500/30 group cursor-pointer" onclick="openDemo('agenda')">
+             <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i class="ph ph-calendar-check text-xl"></i></div>
+                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Serviços</span>
+             </div>
+             <h3 class="text-lg font-bold text-white mb-2">Agendamento Online</h3>
+             <p class="text-sm text-gray-400 mb-4">Para barbearias e clínicas. Agenda automática 24h por dia.</p>
+             <span class="text-blue-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+          </div>
+
+          <!-- 4. Cartão Interativo -->
+          <div class="glass-wet p-6 hover:border-pink-500/30 group cursor-pointer" onclick="openDemo('bio')">
+             <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 bg-pink-500/20 rounded flex items-center justify-center text-pink-400"><i class="ph ph-identification-card text-xl"></i></div>
+                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Networking</span>
+             </div>
+             <h3 class="text-lg font-bold text-white mb-2">Bio Link / Cartão Digital</h3>
+             <p class="text-sm text-gray-400 mb-4">Centralize seus links, PIX e contatos em um cartão virtual elegante.</p>
+             <span class="text-pink-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+          </div>
+
+          <!-- 5. Gestão de OS -->
+          <div class="glass-wet p-6 hover:border-yellow-500/30 group cursor-pointer" onclick="openDemo('os')">
+             <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i class="ph ph-wrench text-xl"></i></div>
+                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Técnico</span>
+             </div>
+             <h3 class="text-lg font-bold text-white mb-2">Sistema de Ordens (OS)</h3>
+             <p class="text-sm text-gray-400 mb-4">Controle de entrada e saída de equipamentos com status para o cliente.</p>
+             <span class="text-yellow-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+          </div>
+
+          <!-- 6. ERP Business -->
+          <div class="glass-wet p-6 hover:border-emerald-500/30 group cursor-pointer" onclick="openDemo('business')">
+             <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i class="ph ph-chart-line-up text-xl"></i></div>
+                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Gestão</span>
+             </div>
+             <h3 class="text-lg font-bold text-white mb-2">Painel Business Pro</h3>
+             <p class="text-sm text-gray-400 mb-4">Substitua planilhas. Estoque, financeiro e clientes em um sistema seguro.</p>
+             <span class="text-emerald-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- PLANOS -->
+    <section id="planos" class="py-20 bg-black/30 border-t border-white/5">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-white mb-2">Investimento Transparente</h2>
+          <p class="text-gray-400">Sem custos ocultos. Você sabe exatamente o que está comprando.</p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+          <!-- Plano 1 -->
+          <div class="glass-wet p-8 border-t-4 border-t-gray-600">
+            <span class="badge-pulse">Entrada</span>
+            <h3 class="text-2xl font-bold text-white mt-4">Pacote Express</h3>
+            <div class="mt-2 mb-6 text-3xl font-bold text-emerald-400">R$ 890 <span class="text-sm text-gray-500 font-normal">/único</span></div>
+            <ul class="space-y-3 text-sm text-gray-300 mb-8">
+               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Landing Page ou Cartão Digital</li>
+               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Botão WhatsApp</li>
+               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Hospedagem (1 ano)</li>
+            </ul>
+            <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20tenho%20interesse%20no%20Pacote%20Express.%20Pode%20me%20enviar%20detalhes%20e%20disponibilidade%3F" target="_blank" class="btn btn-ghost w-full">Contratar</a>
+          </div>
+
+          <!-- Plano 2 -->
+          <div class="glass-wet p-8 border border-emerald-500/50 shadow-2xl relative transform lg:-translate-y-4 bg-emerald-900/10">
+            <span class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-emerald-500 text-black text-xs font-bold px-3 py-1 rounded-full">POPULAR</span>
+            <span class="badge-pulse bg-emerald-500/20 text-emerald-300">Profissional</span>
+            <h3 class="text-2xl font-bold text-white mt-4">Pack Negócios</h3>
+            <div class="mt-2 mb-6 text-3xl font-bold text-emerald-400">R$ 2.400 <span class="text-sm text-gray-500 font-normal">/projeto</span></div>
+            <ul class="space-y-3 text-sm text-gray-300 mb-8">
+               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Site Institucional ou Loja Simples</li>
+               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Painel Administrativo</li>
+               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Otimização Google (SEO)</li>
+               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Configuração Google Meu Negócio</li>
+            </ul>
+            <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20tenho%20interesse%20no%20Pack%20Neg%C3%B3cios.%20Gostaria%20de%20avancar%20com%20a%20contrata%C3%A7%C3%A3o." target="_blank" class="btn btn-primary w-full">Contratar</a>
+          </div>
+
+          <!-- Plano 3 -->
+          <div class="glass-wet p-8 border-t-4 border-t-purple-500">
+            <span class="badge-pulse border-purple-500/40 text-purple-300">Sistemas</span>
+            <h3 class="text-2xl font-bold text-white mt-4">Software House</h3>
+            <div class="mt-2 mb-6 text-3xl font-bold text-emerald-400">R$ 4.500 <span class="text-sm text-gray-500 font-normal">/inicial</span></div>
+            <ul class="space-y-3 text-sm text-gray-300 mb-8">
+               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-purple-500"></i> Sistema Web Personalizado</li>
+               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-purple-500"></i> Banco de Dados & Login</li>
+               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-purple-500"></i> Automação de Processos</li>
+               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-purple-500"></i> Suporte Prioritário</li>
+            </ul>
+            <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20preciso%20de%20um%20Sistema%20Personalizado.%20Podemos%20agendar%20uma%20reuni%C3%A3o%20para%20detalhes%3F" target="_blank" class="btn btn-ghost w-full">Agendar Reunião</a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Planos & Pagamento -->
-    <section class="section-tight">
+    <!-- CALCULADORA -->
+    <section id="orcamento" class="py-20">
       <div class="container mx-auto px-6">
-        <div class="glass-wet p-7">
-          <h2 class="h2 mb-2 text-balance">Planos e pagamento</h2>
-          <p class="text-gray-300">Opções que cabem no bolso e dão previsibilidade.</p>
+        <div class="glass-wet p-6 md:p-12 rounded-2xl max-w-5xl mx-auto border border-white/10">
+          <div class="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
+            <div>
+              <h2 class="text-2xl font-bold mb-2 flex items-center gap-2">
+                <i class="ph ph-calculator text-emerald-400"></i>
+                Calculadora Inteligente
+              </h2>
+              <p class="text-gray-400 mb-8 text-sm">Selecione os módulos e obtenha uma estimativa instantânea.</p>
+              
+              <form id="calc-form" class="space-y-5">
+                <div>
+                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1 block">Projeto Base <i title="Escolha o tipo de projeto para estimar o investimento" class="ph ph-info text-gray-500"></i></label>
+                  <select id="projectType" onchange="handleProjectChange()" class="custom-select w-full input-tech p-3 text-sm bg-gray-900">
+                    <option value="0">Selecione...</option>
+                    <option value="890">Página de Alta Conversão (Landing Express)</option>
+                    <option value="1500">Cardápio Digital PWA</option>
+                    <option value="2000">Agendamento Online</option>
+                    <option value="450">Bio Link / Cartão Digital</option>
+                    <option value="2500">Sistema de Ordens (OS)</option>
+                    <option value="4500">Painel Business Pro (Web App)</option>
+                    <option value="2400">Site Institucional</option>
+                  </select>
+                </div>
 
-          <div class="mt-6 grid md:grid-cols-3 gap-4">
-            <div class="glass-wet p-5">
-              <h3 class="h3 mb-1">Projeto por etapas</h3>
-              <p class="text-gray-300">Definimos um MVP e entregamos em partes. Você valida e decide os próximos passos.</p>
-              <ul class="mt-3 text-sm text-gray-400 space-y-1 list-disc pl-5">
-                <li>Pagamento por entrega</li>
-                <li>Sem surpresa de custos</li>
-                <li>Prioridades ajustáveis</li>
-              </ul>
-            </div>
-            <div class="glass-wet p-5">
-              <h3 class="h3 mb-1">Mensalidade com suporte</h3>
-              <p class="text-gray-300">Pacote completo para site ou sistema leve, com hospedagem e atualização.</p>
-              <ul class="mt-3 text-sm text-gray-400 space-y-1 list-disc pl-5">
-                <li>Hospedagem e monitoramento</li>
-                <li>Suporte e pequenas melhorias</li>
-                <li>Relatórios básicos</li>
-              </ul>
-              <p class="text-gray-400 mt-2 text-sm">Planos mensais sob demanda — ideal para manter tudo funcionando.</p>
-            </div>
-            <div class="glass-wet p-5">
-              <h3 class="h3 mb-1">Parcelamento acessível</h3>
-              <p class="text-gray-300">Opções de entrada + parcelas ou até 12x no cartão (quando aplicável).</p>
-              <ul class="mt-3 text-sm text-gray-400 space-y-1 list-disc pl-5">
-                <li>Entrada + 3x/6x/9x</li>
-                <li>Até 12x no cartão</li>
-                <li>PIX recorrente</li>
-              </ul>
-              <p class="text-gray-400 mt-2 text-sm">Ajustamos à realidade do seu negócio local.</p>
-            </div>
-          </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1 block">Módulos Extras <i title="Adicione funcionalidades compatíveis com seu projeto" class="ph ph-info text-gray-500"></i></label>
+                  <div id="features-group" class="space-y-2">
+                    <label class="flex items-center gap-2 text-sm text-gray-300">
+                      <input type="checkbox" class="accent-emerald-500" data-key="whatsapp" data-price="300" data-label="Botão WhatsApp Flutuante (+R$ 300)" onchange="handleFeaturesChange()">
+                      <span>Botão WhatsApp Flutuante (+R$ 300)</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-sm text-gray-300">
+                      <input type="checkbox" class="accent-sky-500" data-key="blog" data-price="800" data-label="Blog de Notícias (+R$ 800)" onchange="handleFeaturesChange()">
+                      <span>Blog de Notícias (+R$ 800)</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-sm text-gray-300">
+                      <input type="checkbox" class="accent-indigo-500" data-key="login" data-price="1500" data-label="Área Restrita/Login (+R$ 1500)" onchange="handleFeaturesChange()">
+                      <span>Área Restrita/Login (+R$ 1500)</span>
+                    </label>
+                    <label class="flex items-center gap-2 text-sm text-gray-300">
+                      <input type="checkbox" class="accent-violet-500" data-key="bot" data-price="2000" data-label="Automação/Chatbot (+R$ 2000)" onchange="handleFeaturesChange()">
+                      <span>Automação/Chatbot (+R$ 2000)</span>
+                    </label>
+                  </div>
+                </div>
 
-          <div class="text-center mt-6">
-            <a href="#contato" class="btn btn-primary accessible-outline">Quero simular meu plano</a>
+                <div>
+                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1 block">Prazo de Entrega <i title="Urgente aumenta o investimento e reduz prazo" class="ph ph-info text-gray-500"></i></label>
+                  <select id="deadline" onchange="handleDeadlineChange()" class="custom-select w-full input-tech p-3 text-sm bg-gray-900">
+                    <option value="1">Normal (15-30 dias)</option>
+                    <option value="1.3">Urgente (+30%)</option>
+                  </select>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                  <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 block">Seu nome</label>
+                    <input id="calc-name" class="w-full input-tech p-3 text-sm" placeholder="Seu nome ou empresa">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 block">WhatsApp ou e-mail</label>
+                    <input id="calc-contact" class="w-full input-tech p-3 text-sm" placeholder="(12) 99999-0000 ou email@dominio.com">
+                  </div>
+                </div>
+                <div class="text-center mt-2">
+                  <button type="button" id="calc-clear" class="btn btn-ghost w-full md:w-auto text-xs">Limpar</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="relative">
+              <div class="bg-gray-950 border border-gray-800 rounded-lg p-5 font-mono text-sm shadow-2xl">
+                
+                <div class="mb-5 rounded border border-gray-800 bg-gray-900 p-4">
+                   <div class="text-center mb-4">
+                      <p class="text-gray-500 text-xs uppercase">Estimativa Total</p>
+                      <div id="totalPrice" class="text-4xl font-bold text-emerald-400">R$ 0,00</div>
+                   </div>
+                   <div class="space-y-2">
+                      <div>
+                         <div class="flex justify-between text-xs text-gray-400 mb-1">
+                            <span>Desenvolvimento & Lógica</span>
+                            <span id="devValue" class="text-emerald-400">R$ 0,00</span>
+                         </div>
+                         <div class="h-2 bg-emerald-900/20 rounded">
+                            <div id="devBar" class="h-2 bg-emerald-500 rounded bar-anim" style="width:0%"></div>
+                         </div>
+                      </div>
+                      <div>
+                         <div class="flex justify-between text-xs text-gray-400 mb-1">
+                            <span>UI/UX Design</span>
+                            <span id="designValue" class="text-sky-400">R$ 0,00</span>
+                         </div>
+                         <div class="h-2 bg-sky-900/20 rounded">
+                            <div id="designBar" class="h-2 bg-sky-500 rounded bar-anim" style="width:0%"></div>
+                         </div>
+                      </div>
+                      <div>
+                         <div class="flex justify-between text-xs text-gray-400 mb-1">
+                            <span>Infraestrutura & Setup</span>
+                            <span id="infraValue" class="text-violet-400">R$ 0,00</span>
+                         </div>
+                         <div class="h-2 bg-violet-900/20 rounded">
+                            <div id="infraBar" class="h-2 bg-violet-500 rounded bar-anim" style="width:0%"></div>
+                         </div>
+                      </div>
+                   </div>
+                   <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4 text-xs">
+                      <div class="bg-black/30 border border-gray-800 rounded p-3">
+                         <div class="text-gray-400 mb-1">Simulação de Parcelas</div>
+                         <div class="flex items-center justify-between">
+                           <span class="text-gray-500">3x</span>
+                           <span id="threeInstallments" class="text-white">R$ 0,00</span>
+                         </div>
+                         <div class="flex items-center justify-between mt-1">
+                           <span class="text-gray-500">6x</span>
+                           <span id="sixInstallments" class="text-white">R$ 0,00</span>
+                         </div>
+                      </div>
+                      <div class="bg-black/30 border border-gray-800 rounded p-3">
+                         <div class="text-gray-400 mb-1">Prazo Estimado</div>
+                         <div id="deadlineInfo" class="text-white">Selecione um projeto</div>
+                      </div>
+                   </div>
+                   <div class="mt-4 bg-black/30 border border-gray-800 rounded p-3 text-xs">
+                      <div class="text-gray-400 mb-1">Resumo da Seleção</div>
+                      <div class="space-y-1 text-white">
+                        <div>Projeto: <span id="selectedProject">—</span></div>
+                        <div>Prazo: <span id="selectedDeadline">—</span></div>
+                        <div>Nome: <span id="selectedClientName">—</span></div>
+                        <div>Contato: <span id="selectedClientContact">—</span></div>
+                        <div>Extras:</div>
+                        <ul id="selectedExtrasList" class="list-disc list-inside text-white/90"></ul>
+                      </div>
+                   </div>
+                </div>
+
+                <button id="calc-submit" onclick="sendCalcToWhatsapp()" class="btn btn-primary w-full text-sm">
+                  <i class="ph ph-whatsapp-logo text-lg"></i> Validar Proposta
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Contato -->
-    <section id="contato" class="section">
+    <section id="contato" class="section-tight pb-20">
       <div class="container mx-auto px-6">
         <div class="text-center mb-8">
-          <h2 class="h2 text-balance">Conte seu cenário — sugerimos o caminho</h2>
-          <p class="lead mt-2 max-w-2xl mx-auto text-balance">Preencha os detalhes e retornamos com uma proposta objetiva.</p>
+          <h2 class="text-2xl font-bold text-white">Conte seu cenário</h2>
+          <p class="text-gray-400 mt-2 max-w-xl mx-auto text-sm">Se preferir não usar a calculadora, descreva sua necessidade livremente e nosso time entrará em contato.</p>
         </div>
         <div class="max-w-3xl mx-auto glass-wet p-7">
           <form id="tech-project-form">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
                 <label for="name" class="sr-only">Seu nome ou empresa</label>
-                <input id="name" class="w-full bg-gray-900/60 border border-gray-700 text-white p-3 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Seu nome ou empresa" required>
+                <input id="name" class="w-full input-tech p-3 text-sm" placeholder="Seu nome ou empresa" required>
               </div>
               <div>
                 <label for="contact-info" class="sr-only">Seu WhatsApp ou e-mail</label>
-                <input id="contact-info" class="w-full bg-gray-900/60 border border-gray-700 text-white p-3 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Seu WhatsApp ou e-mail" required>
+                <input id="contact-info" class="w-full input-tech p-3 text-sm" placeholder="Seu WhatsApp ou e-mail" required>
               </div>
             </div>
             <div class="mt-5">
-              <label for="service-interest" class="block text-gray-400 font-medium mb-2">O que você precisa agora?</label>
-              <select id="service-interest" class="w-full bg-gray-900/60 border border-gray-700 text-white p-3 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" required>
-                <option value="" disabled selected>Selecione...</option>
-                <option>Sistema sob medida</option>
-                <option>Site/Landing Page</option>
-                <option>Automação no WhatsApp</option>
-                <option>Outro (descreva abaixo)</option>
-              </select>
-            </div>
-            <div class="mt-5">
-              <label for="project-details" class="block text-gray-400 font-medium mb-2">Descreva rapidamente seu cenário</label>
-              <textarea id="project-details" rows="6" class="w-full bg-gray-900/60 border border-gray-700 text-white p-3 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Ex.: cadastro de clientes, fluxo de agendamento, integração com planilhas, landing para campanha local..." required></textarea>
+              <label for="project-details" class="block text-gray-400 font-medium mb-2 text-sm">Detalhes do projeto</label>
+              <textarea id="project-details" rows="4" class="w-full input-tech p-3 text-sm" placeholder="Ex.: Preciso de um sistema para controlar estoque da minha loja de peças..." required></textarea>
             </div>
             <div class="text-center mt-7">
-              <button type="submit" class="btn btn-primary accessible-outline w-full md:w-auto">Enviar para análise</button>
+              <button id="contact-submit" type="submit" class="btn btn-ghost w-full md:w-auto">Enviar para análise</button>
             </div>
           </form>
         </div>
       </div>
     </section>
 
-    <!-- Stack (mantido no lugar do carrossel) -->
-    <section class="section-tight">
-      <div class="container mx-auto px-6">
-        <h3 class="h3 mb-4 text-center text-emerald-300 font-mono tracking-widest uppercase">Ferramentas que usamos</h3>
-        <div class="stack-badges">
-          <div class="badge-card badge-shimmer"><svg class="badge-icon" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v16H4z" stroke="#34d399" stroke-width="2"/><path d="M7 12h10M12 7v10" stroke="#34d399" stroke-width="2" stroke-linecap="round"/></svg><span>Sites e SEO</span></div>
-          <div class="badge-card badge-shimmer"><svg class="badge-icon" viewBox="0 0 24 24" fill="none"><path d="M4 12h16" stroke="#10b981" stroke-width="2"/><circle cx="12" cy="12" r="8" stroke="#10b981" stroke-width="2"/></svg><span>APIs e integrações</span></div>
-          <div class="badge-card badge-shimmer"><svg class="badge-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="14" rx="2" stroke="#34d399" stroke-width="2"/><path d="M7 20h10" stroke="#34d399" stroke-width="2" stroke-linecap="round"/></svg><span>Dashboards</span></div>
-          <div class="badge-card badge-shimmer"><svg class="badge-icon" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="#10b981" stroke-width="2" stroke-linecap="round"/></svg><span>Sheets/ERP</span></div>
-          <div class="badge-card badge-shimmer"><svg class="badge-icon" viewBox="0 0 24 24" fill="none"><rect x="4" y="8" width="16" height="10" rx="2" stroke="#34d399" stroke-width="2"/><path d="M8 8V6a4 4 0 118 0v2" stroke="#34d399" stroke-width="2"/></svg><span>WhatsApp</span></div>
-          <div class="badge-card badge-shimmer"><svg class="badge-icon" viewBox="0 0 24 24" fill="none"><path d="M4 14l4-4 4 4 4-4 4 4" stroke="#10b981" stroke-width="2" stroke-linecap="round"/></svg><span>Deploy e monitoramento</span></div>
-        </div>
-      </div>
-    </section>
   </main>
 
-  <!-- Rodapé padronizado -->
-  <footer class="bg-gray-900 text-white py-16">
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white py-16 border-t border-white/5 relative z-10">
     <div class="container mx-auto px-6">
       <div class="grid md:grid-cols-4 gap-8">
         <div class="md:col-span-2">
-          <a href="index.html" class="text-2xl font-bold text-white flex items-center mb-6 focus-visible">Plena <span class="text-emerald-400 ml-1">Informática</span></a>
-          <p class="text-slate-400 mb-6 max-w-md">Soluções em serviços digitais, personalizados e tecnologia — do essencial ao sob medida.</p>
+          <a href="index.html" class="text-2xl font-bold text-white flex items-center mb-6">Plena <span class="text-emerald-400 ml-1">Informática</span></a>
+          <p class="text-slate-400 mb-6 max-w-md">Soluções em serviços digitais, personalizados e tecnologia <i class="ph ph-code text-emerald-400 text-2xl align-middle"></i> do essencial ao sob medida.</p>
           <div class="flex items-center space-x-4 mb-6">
-            <div class="flex items-center bg-green-100 text-green-800 py-1 px-3 rounded-full text-sm font-medium">
-              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              Site seguro
+            <div class="flex items-center bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 py-1 px-3 rounded-full text-sm font-medium">
+              <i class="ph-fill ph-shield-check mr-2"></i> Site Seguro
             </div>
             <div class="text-slate-400 text-sm">Protegido com SSL</div>
           </div>
         </div>
         <div>
-          <h3 class="font-bold text-lg mb-6">Serviços</h3>
+          <h3 class="font-bold text-lg mb-6 text-white">Serviços</h3>
           <ul class="space-y-3">
-            <li><a href="servicos.html" class="text-slate-400 hover:text-white transition focus-visible">Serviços Digitais</a></li>
-            <li><a href="personalizados.html" class="text-slate-400 hover:text-white transition focus-visible">Personalizados</a></li>
-            <li><a href="tecnologia.html" class="text-slate-400 hover:text-white transition focus-visible">Tecnologia</a></li>
+            <li><a href="index.html" class="text-slate-400 hover:text-white transition">Início</a></li>
+            <li><a href="servicos.html" class="text-slate-400 hover:text-white transition">Serviços Digitais</a></li>
+            <li><a href="personalizados.html" class="text-slate-400 hover:text-white transition">Personalizados</a></li>
+            <li><a href="tecnologia.html" class="text-slate-400 hover:text-white transition">Tecnologia</a></li>
           </ul>
         </div>
         <div>
-          <h3 class="font-bold text-lg mb-6">Contato</h3>
+          <h3 class="font-bold text-lg mb-6 text-white">Contato</h3>
           <ul class="space-y-3 text-slate-400">
-            <li class="flex items-start"><svg class="w-5 h-5 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span>São José dos Campos, SP</span></li>
-            <li class="flex items-center"><svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg><span>(12) 98148-8505</span></li>
-            <li class="flex items-center"><svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2z"/></svg><span>tecnologia@plenainformatica.com.br</span>
+            <li class="flex items-start"><i class="ph ph-map-pin w-5 h-5 mr-3 mt-1"></i> São José dos Campos, SP</li>
+            <li class="flex items-center"><i class="ph ph-whatsapp-logo w-5 h-5 mr-3"></i> (12) 99219-1018</li>
+            <li class="flex items-center"><i class="ph ph-envelope w-5 h-5 mr-3"></i> tecnologia@plenainformatica.com.br</li>
           </ul>
         </div>
       </div>
@@ -681,506 +647,655 @@
             <p class="text-xs text-slate-600 mt-1">Desenvolvido por Plena Informática</p>
           </div>
           <div class="flex space-x-6 text-sm text-slate-400">
-            <a href="#" class="hover:text-white transition focus-visible">Termos de Uso</a>
-            <a href="#" class="hover:text-white transition focus-visible">Política de Privacidade</a>
+            <a href="#" class="hover:text-white transition duration-300 open-modal" data-modal="terms">Termos de Uso</a>
+            <a href="#" class="hover:text-white transition duration-300 open-modal" data-modal="privacy">Política de Privacidade</a>
           </div>
         </div>
       </div>
     </div>
   </footer>
 
-  <!-- FAB IA + overlay - CORRIGIDO -->
-  <div id="ia-overlay" aria-hidden="true"></div>
-  <button id="ia-toggle" type="button" aria-expanded="false" aria-controls="ia-panel" class="ia-fab accessible-outline">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor"><path d="M.5 24l1.7-6.2A11.5 11.5 0 1 1 12 23.5a11.3 11.3 0 0 1-5.7-1.5L.5 24zm6.7-3.9c1.7 1 3.3 1.6 5.4 1.6 5.5 0 10-4.5 10-10S18.1 1.1 12.6 1.1A10 10 0 0 0 2.6 11c0 2.3.7 4.4 1.9 6.2l-1.1 4 3.8-1.1z"/></svg>
-    <span class="sr-only">Assistente de Tecnologia</span>
-  </button>
-
-  <aside id="ia-panel" class="fixed hidden glass-wet p-0 border border-white/10" role="dialog" aria-modal="true" aria-labelledby="ia-title">
-    <header class="flex items-center justify-between px-4 py-3 border-b border-white/10">
-      <div class="flex items-center gap-2">
-        <div class="w-6 h-6 rounded-full bg-emerald-500/90 flex items-center justify-center text-[11px] font-black">IA</div>
-        <div>
-          <div id="ia-title" class="text-white font-semibold leading-tight">Plena • Assistente</div>
-          <div class="text-[11px] text-emerald-300/90 -mt-0.5">online — responde em segundos</div>
-        </div>
-      </div>
-      <button id="ia-close" class="accessible-outline text-white/80 hover:text-white text-2xl leading-none px-2" aria-label="Fechar">&times;</button>
-    </header>
-    <div class="p-4 max-h-[60vh] overflow-y-auto space-y-3" id="ia-messages" aria-live="polite">
-      <div class="msg msg-bot">Oi! Em 4 passos eu preparo um briefing e envio para nosso especialista no WhatsApp. Vamos começar?</div>
-      <div class="flex flex-wrap gap-2">
-        <button class="chip ia-choice" data-choice="service:Sistema sob medida">Sistema sob medida</button>
-        <button class="chip ia-choice" data-choice="service:Site/Landing Page">Site/Landing Page</button>
-        <button class="chip ia-choice" data-choice="service:Automação no WhatsApp">Automação no WhatsApp</button>
-        <button class="chip ia-choice" data-choice="service:Outro">Outro</button>
-      </div>
-    </div>
-    <div class="px-4 pb-4 pt-2 border-t border-white/10">
-      <div class="flex gap-2">
-        <label for="ia-input" class="sr-only">Digite sua mensagem</label>
-        <input id="ia-input" type="text" placeholder="Escreva aqui..." class="flex-1 bg-gray-900/60 border border-gray-700 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"/>
-        <button id="ia-send" class="btn btn-primary">Enviar</button>
-      </div>
-      <p class="text-[11px] text-gray-400 mt-2">Dica: "quero organizar estoque", "landing para captação local", "integrar com planilhas".</p>
-    </div>
-  </aside>
-
-  <!-- Botão Voltar ao Topo (esquerda) -->
-  <button id="to-top" class="btn btn-primary accessible-outline fixed" aria-label="Voltar ao topo">↑</button>
-
-  <!-- Modal: Presença Digital -->
-  <div id="presenca-modal" class="modal" aria-hidden="true">
-    <div class="modal-bg" data-close="presenca"></div>
-    <div class="modal-card glass-wet border border-white/10">
-      <header class="flex justify-between items-center px-5 py-4 border-b border-white/10">
-        <h3 class="h3">Por que a presença digital importa?</h3>
-        <button class="accessible-outline text-white/80 hover:text-white text-2xl leading-none px-2" data-close="presenca" aria-label="Fechar">&times;</button>
-      </header>
-      <div class="modal-body p-5 text-gray-200">
-        <p class="mb-3">Seu cliente procura no Google e nas redes antes de decidir. Um site simples e uma landing bem construída funcionam como um vendedor 24h.</p>
-        <ul class="list-disc pl-5 space-y-2 text-gray-300">
-          <li><strong>Confiança:</strong> aparência profissional e informações claras.</li>
-          <li><strong>Captação:</strong> formulário e WhatsApp com mensagem pronta.</li>
-          <li><strong>Local:</strong> destaque para bairro, cidade e mapa.</li>
-          <li><strong>Métricas:</strong> saiba o que está dando resultado.</li>
-        </ul>
-        <div class="mt-5 flex flex-wrap gap-3">
-          <a href="#contato" class="btn btn-primary">Quero um site que gere clientes</a>
-          <button class="btn btn-ghost" data-close="presenca">Entendi</button>
-        </div>
+  <div id="terms-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="terms-modal-title">
+    <div class="bg-white p-8 rounded-lg shadow-2xl max-w-2xl w-full relative">
+      <button type="button" class="modal-close text-gray-500 hover:text-gray-700 absolute top-4 right-4" aria-label="Fechar termos">&times;</button>
+      <h2 id="terms-modal-title" class="text-2xl font-bold mb-4">Termos de Uso – Tecnologia</h2>
+      <div class="text-slate-700 space-y-4">
+        <p>Ao utilizar os serviços de tecnologia da Plena Informática, você concorda com estes termos.</p>
+        <h3 class="font-bold text-lg mt-6 mb-2">Serviços</h3>
+        <p>Desenvolvimento de sites, sistemas web, integrações e automações.</p>
+        <h3 class="font-bold text-lg mt-6 mb-2">Responsabilidades</h3>
+        <p>Fornecer informações corretas e aprovar materiais em tempo hábil.</p>
+        <h3 class="font-bold text-lg mt-6 mb-2">Prazos</h3>
+        <p>Variam conforme escopo e dependem de aprovações do cliente.</p>
+        <p class="mt-6 text-sm text-slate-500">Última atualização: Outubro de 2025</p>
       </div>
     </div>
   </div>
 
-  <!-- Modal: Info Cards -->
-  <div id="info-modal" class="modal" aria-hidden="true">
-    <div class="modal-bg" data-close="info"></div>
-    <div class="modal-card glass-wet border border-white/10">
-      <header class="flex justify-between items-center px-5 py-4 border-b border-white/10">
-        <h3 id="info-title" class="h3">Título</h3>
-        <button class="accessible-outline text-white/80 hover:text-white text-2xl leading-none px-2" data-close="info" aria-label="Fechar">&times;</button>
-      </header>
-      <div id="info-body" class="modal-body p-5 text-gray-200">...</div>
-      <div class="px-5 pb-5 flex gap-3">
-        <a href="#contato" class="btn btn-primary">Quero conversar</a>
-        <button class="btn btn-ghost" data-close="info">Fechar</button>
+  <div id="privacy-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="privacy-modal-title">
+    <div class="bg-white p-8 rounded-lg shadow-2xl max-w-2xl w-full relative">
+      <button type="button" class="modal-close text-gray-500 hover:text-gray-700 absolute top-4 right-4" aria-label="Fechar política">&times;</button>
+      <h2 id="privacy-modal-title" class="text-2xl font-bold mb-4">Política de Privacidade – Tecnologia</h2>
+      <div class="text-slate-700 space-y-4">
+        <p>Descreve como coletamos e usamos dados para projetos de tecnologia.</p>
+        <h3 class="font-bold text-lg mt-6 mb-2">Dados Coletados</h3>
+        <p>Nome, contato e informações do projeto fornecidas voluntariamente.</p>
+        <h3 class="font-bold text-lg mt-6 mb-2">Uso</h3>
+        <p>Elaboração de propostas, execução do projeto e comunicação.</p>
+        <h3 class="font-bold text-lg mt-6 mb-2">Proteção</h3>
+        <p>Medidas de segurança para proteger seus dados.</p>
+        <p class="mt-6 text-sm text-slate-500">Última atualização: Outubro de 2025</p>
       </div>
     </div>
   </div>
+
+  <!-- MODAL DE DEMO (Showcase) -->
+  <div id="demo-modal" class="modal-backdrop" onclick="closeDemo(event)">
+    <div class="modal-content bg-gray-900">
+       <div class="browser-mockup flex justify-between items-center">
+          <div class="flex items-center gap-1.5">
+            <div class="browser-dot bg-red-500"></div>
+            <div class="browser-dot bg-yellow-500"></div>
+            <div class="browser-dot bg-green-500"></div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="flex rounded-full overflow-hidden border border-gray-700">
+              <button id="view-mobile-toggle" class="px-3 py-1 text-xs bg-gray-800 text-gray-300">📱 Mobile</button>
+              <button id="view-desktop-toggle" class="px-3 py-1 text-xs bg-gray-700 text-white">💻 Desktop</button>
+            </div>
+            <button onclick="closeDemo()" class="text-gray-500 hover:text-white"><i class="ph ph-x text-lg"></i></button>
+          </div>
+       </div>
+       <div class="bg-gray-800 p-3">
+         <div id="level-controls" class="flex items-center justify-center gap-2">
+           <button class="px-3 py-1 text-xs rounded bg-gray-700 text-white" data-level="basico">Básico</button>
+           <button class="px-3 py-1 text-xs rounded bg-gray-700 text-white" data-level="medio">Médio</button>
+           <button class="px-3 py-1 text-xs rounded bg-gray-700 text-white" data-level="avancado">Avançado</button>
+         </div>
+       </div>
+       <div id="demo-container" class="flex-grow bg-gray-800 flex items-center justify-center relative overflow-hidden w-full h-[500px] md:h-[70vh]">
+           <iframe id="demo-frame" class="w-full h-full border-0" src="about:blank" scrolling="yes"></iframe>
+       </div>
+      <div class="p-4 border-t border-gray-800 bg-black text-center">
+          <a id="demo-whatsapp-cta" href="https://wa.me/5512992191018?text=Ol%C3%A1,%20quero%20um%20projeto%20igual%20ao%20demo" target="_blank" class="btn btn-primary py-2 px-6 text-sm">Quero um projeto igual a este</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts (Lógica + Firebase) -->
+  <script type="module">
+    // --- FIREBASE INIT ---
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCzYrCUY_BX0OXvPkHATzEdnaD6Mx_TPlY",
+      authDomain: "plena-informatica.firebaseapp.com",
+      projectId: "plena-informatica",
+      storageBucket: "plena-informatica.appspot.com",
+      messagingSenderId: "981488505",
+      appId: "SEU_APP_ID" // Insira o App ID do Firebase aqui quando tiver
+    };
+
+    let db = null;
+    try {
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        console.log("Firebase Conectado!");
+    } catch (e) {
+        console.log("Modo Offline: Configuração Firebase pendente.");
+    }
+
+    // Função Global de Salvamento
+    window.saveLead = async (leadData) => {
+        if (!db) return;
+        try {
+            await addDoc(collection(db, "leads_calc"), {
+                ...leadData,
+                createdAt: serverTimestamp(),
+                userAgent: navigator.userAgent
+            });
+        } catch (e) {
+            console.error("Erro Firebase:", e);
+        }
+    };
+  </script>
+  <script>
+    const termsModal = document.getElementById('terms-modal');
+    const privacyModal = document.getElementById('privacy-modal');
+    const modalCloseButtons = document.querySelectorAll('.modal-close');
+    const openModalButtons = document.querySelectorAll('.open-modal');
+    const modalMap = { terms: termsModal, privacy: privacyModal };
+    let activeModal = null;
+    let lastFocusedElement = null;
+    function openModal(modal) {
+      if (!modal) return;
+      if (activeModal && activeModal !== modal) closeModal();
+      lastFocusedElement = document.activeElement;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      activeModal = modal;
+      const focusables = Array.from(modal.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])')).filter(el => el.offsetParent !== null);
+      focusables[0] && focusables[0].focus();
+    }
+    function closeModal() {
+      if (!activeModal) return;
+      activeModal.classList.add('hidden');
+      activeModal.classList.remove('flex');
+      activeModal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      lastFocusedElement && typeof lastFocusedElement.focus === 'function' && lastFocusedElement.focus();
+      activeModal = null;
+    }
+    openModalButtons.forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        const type = btn.getAttribute('data-modal');
+        openModal(modalMap[type]);
+      });
+    });
+    modalCloseButtons.forEach(btn => btn.addEventListener('click', closeModal));
+    window.addEventListener('click', e => { if (activeModal && e.target === activeModal) closeModal(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && activeModal) { closeModal(); return; }
+      if (e.key === 'Tab' && activeModal) {
+        const focusables = Array.from(activeModal.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])')).filter(el => el.offsetParent !== null);
+        if (!focusables.length) return;
+        const first = focusables[0], last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+  </script>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const WA_PHONE = '5512981488505';
-      const prefersReduced = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : {matches: false, addEventListener: null, addListener: null};
-
-      /* Util */
-      const openWhatsApp = (msg) => window.open(`https://api.whatsapp.com/send?phone=${WA_PHONE}&text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
-
-      /* ==== Matrix Rain (suave) ==== */
-      const canvas = document.getElementById('matrix-canvas');
-      const ctx = canvas.getContext('2d');
-      let drops = [], fontSize = 16, last = 0, running = true, rafId = null;
-      
-      function resizeMatrix() {
-        const dpr = window.devicePixelRatio || 1;
-        canvas.width = innerWidth * dpr;
-        canvas.height = innerHeight * dpr;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        fontSize = Math.max(14, Math.min(20, Math.floor(innerWidth / 80)));
-        const cols = Math.floor(innerWidth / fontSize) * 0.8;
-        drops = new Array(Math.max(10, Math.floor(cols))).fill(1);
-        ctx.font = `${fontSize}px "Roboto Mono", monospace`;
-      }
-      
-      function drawMatrix(t) {
-        if (!running) return;
-        const dt = t - (last || t);
-        last = t;
-        ctx.fillStyle = 'rgba(10, 10, 15, 0.03)';
-        ctx.fillRect(0, 0, innerWidth, innerHeight);
-        ctx.fillStyle = '#10b981';
-        const chars = '01';
+    // --- MATRIX EFFECT ---
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, drops;
+    function resize() {
+        width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight;
+        const fontSize = 14; const cols = Math.floor(width / fontSize);
+        drops = new Array(cols).fill(1); ctx.font = `${fontSize}px monospace`;
+    }
+    resize();
+    function draw() {
+        ctx.fillStyle = 'rgba(10, 10, 15, 0.05)'; ctx.fillRect(0, 0, width, height); ctx.fillStyle = '#10b981';
         for (let i = 0; i < drops.length; i++) {
-          const text = chars[Math.random() * chars.length | 0];
-          ctx.fillText(text, i * fontSize * 1.1, drops[i] * fontSize);
-          if (drops[i] * fontSize > innerHeight && Math.random() > 0.992) {
-            drops[i] = 0;
-          }
-          drops[i] += (dt > 40 ? 0.9 : 0.6);
+            const text = String.fromCharCode(Math.random() * 128);
+            ctx.fillText(text, i * 14, drops[i] * 14);
+            if (drops[i] * 14 > height && Math.random() > 0.98) drops[i] = 0; drops[i]++;
         }
-        rafId = requestAnimationFrame(drawMatrix);
-      }
-      
-      function startMatrix() {
-        if (prefersReduced.matches) return;
-        running = true;
-        resizeMatrix();
-        cancelAnimationFrame(rafId);
-        rafId = requestAnimationFrame(drawMatrix);
-      }
-      
-      function stopMatrix() {
-        running = false;
-        cancelAnimationFrame(rafId);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
-      
-      window.addEventListener('resize', () => {
-        if (!prefersReduced.matches) resizeMatrix();
-      });
+        requestAnimationFrame(draw);
+    }
+    draw(); window.addEventListener('resize', resize);
 
-      /* ==== Spotlight (menor e mais intenso) ==== */
-      const spotlight = document.getElementById('spotlight');
-      let sx = innerWidth / 2, sy = innerHeight / 2, tx = sx, ty = sy, spotId = null, active = true;
-      
-      function renderSpot() {
-        if (!active) return;
-        sx += (tx - sx) * 0.18;
-        sy += (ty - sy) * 0.18;
-        spotlight.style.background = `radial-gradient(160px 160px at ${sx}px ${sy}px, rgba(16,185,129,.28), rgba(16,185,129,.08) 38%, rgba(16,185,129,0) 60%)`;
-        spotId = requestAnimationFrame(renderSpot);
-      }
-      
-      function enableSpot() {
-        if (prefersReduced.matches || /Mobi|Android/i.test(navigator.userAgent)) {
-          disableSpot();
-          return;
-        }
-        active = true;
-        cancelAnimationFrame(spotId);
-        renderSpot();
-      }
-      
-      function disableSpot() {
-        active = false;
-        cancelAnimationFrame(spotId);
-        spotlight.style.background = 'none';
-      }
-      
-      window.addEventListener('mousemove', e => {
-        tx = e.clientX;
-        ty = e.clientY;
-      });
-
-      /* ==== IA (toggle, overlay e fechar robusto) - CORRIGIDO ==== */
-      const iaToggle = document.getElementById('ia-toggle');
-      const iaPanel = document.getElementById('ia-panel');
-      const iaClose = document.getElementById('ia-close');
-      const iaOverlay = document.getElementById('ia-overlay');
-      const iaMsgs = document.getElementById('ia-messages');
-      const iaInput = document.getElementById('ia-input');
-      const iaSend = document.getElementById('ia-send');
-      let iaOpen = false;
-
-      const brief = {service: null, objective: null, users: null, tools: null, deadline: null, budget: null};
-      let phase = 'service';
-
-      function addMsg(txt, who = 'bot') {
-        const d = document.createElement('div');
-        d.className = `msg ${who === 'bot' ? 'msg-bot' : 'msg-user'}`;
-        d.textContent = txt;
-        iaMsgs.appendChild(d);
-        iaMsgs.scrollTop = iaMsgs.scrollHeight;
-      }
-      
-      function addChips(arr) {
-        const w = document.createElement('div');
-        w.className = 'flex flex-wrap gap-2';
-        arr.forEach(t => {
-          const b = document.createElement('button');
-          b.className = 'chip ia-choice';
-          b.textContent = t;
-          w.appendChild(b);
-        });
-        iaMsgs.appendChild(w);
-        iaMsgs.scrollTop = iaMsgs.scrollHeight;
-      }
-
-      function openIA() {
-        iaPanel.classList.remove('hidden');
-        iaOverlay.style.display = 'block';
-        iaToggle.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
-        iaOpen = true;
-        iaInput.focus();
+    // --- CALCULADORA LÓGICA ---
+    function calculateTotal() {
+        const base = parseFloat(document.getElementById('projectType').value);
+        const featureChecks = Array.from(document.querySelectorAll('#features-group input[type=checkbox]'));
+        const selectedFeatures = featureChecks.filter(cb => cb.checked);
+        const feature = selectedFeatures.reduce((sum, cb) => sum + parseFloat(cb.getAttribute('data-price')), 0);
+        const multiplier = parseFloat(document.getElementById('deadline').value);
+        const nameVal = String(document.getElementById('calc-name')?.value || '').trim();
+        const contactVal = String(document.getElementById('calc-contact')?.value || '').trim();
         
-        // Reset do assistente se estiver vazio
-        if (iaMsgs.children.length <= 2) {
-          phase = 'service';
-          Object.keys(brief).forEach(key => brief[key] = null);
-        }
-      }
-      
-      function closeIA() {
-        iaPanel.classList.add('hidden');
-        iaOverlay.style.display = 'none';
-        iaToggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-        iaOpen = false;
-        iaToggle.focus();
-      }
-      
-      iaToggle.addEventListener('click', () => iaOpen ? closeIA() : openIA());
-      iaClose.addEventListener('click', closeIA);
-      iaOverlay.addEventListener('click', closeIA);
-      document.addEventListener('keydown', e => {
-        if (e.key === 'Escape' && iaOpen) closeIA();
-      });
-
-      iaMsgs.addEventListener('click', (e) => {
-        const el = e.target.closest('.ia-choice');
-        if (!el) return;
-        const val = el.textContent;
-        
-        if (phase === 'service') {
-          brief.service = val;
-          addMsg(`> ${val}`, 'user');
-          addMsg('Qual é o objetivo principal? (ex.: organizar estoque, captar leads, automatizar atendimento)');
-          addChips(['Organizar operação', 'Vender mais online', 'Atender mais rápido', 'Outro objetivo']);
-          phase = 'objective';
-          return;
+        if (base === 0) {
+            document.getElementById('totalPrice').innerText = "R$ 0,00";
+            document.getElementById('devBar').style.width = '0%';
+            document.getElementById('designBar').style.width = '0%';
+            document.getElementById('infraBar').style.width = '0%';
+            document.getElementById('devValue').innerText = "R$ 0,00";
+            document.getElementById('designValue').innerText = "R$ 0,00";
+            document.getElementById('infraValue').innerText = "R$ 0,00";
+            document.getElementById('selectedClientName').innerText = nameVal || '—';
+            document.getElementById('selectedClientContact').innerText = contactVal || '—';
+            document.getElementById('selectedProject').innerText = '—';
+            document.getElementById('selectedDeadline').innerText = '—';
+            document.getElementById('threeInstallments').innerText = 'R$ 0,00';
+            document.getElementById('sixInstallments').innerText = 'R$ 0,00';
+            const selectedList = document.getElementById('selectedExtrasList');
+            selectedList.innerHTML = '';
+            const li = document.createElement('li'); li.textContent = 'Sem extras'; selectedList.appendChild(li);
+            const btn = document.getElementById('calc-submit');
+            if (btn) btn.textContent = 'Validar Proposta';
+            return;
         }
         
-        if (phase === 'objective') {
-          brief.objective = val;
-          addMsg(`> ${val}`, 'user');
-          addMsg('Quem vai usar no dia a dia? Informe cargos e quantidade (ex.: dono e 2 vendedores).');
-          addChips(['Só eu', '2–3 pessoas', '4–10 pessoas', 'Equipe maior']);
-          phase = 'users';
-          return;
-        }
-        
-        if (phase === 'users') {
-          brief.users = val;
-          addMsg(`> ${val}`, 'user');
-          addMsg('Há ferramentas para integrar?');
-          addChips(['Google Sheets', 'Excel', 'ERP', 'WhatsApp Business', 'Nenhuma', 'Outras']);
-          phase = 'tools';
-          return;
-        }
-        
-        if (phase === 'tools') {
-          brief.tools = brief.tools ? (brief.tools + ', ' + val) : val;
-          addMsg(`> ${val}`, 'user');
-          addMsg('Prazos e orçamento? Só para guiar escopo.');
-          addChips(['Urgente (≤ 2 semanas)', '3–6 semanas', 'Sem pressa', 'Definimos juntos']);
-          addChips(['Até 2k', '2k–5k', '5k–10k', '> 10k', 'A definir']);
-          phase = 'finish';
-          return;
-        }
-        
-        if (phase === 'finish') {
-          if (/semanas|pressa|juntos/i.test(val)) brief.deadline = val;
-          else brief.budget = val;
-          addMsg(`> ${val}`, 'user');
-          
-          if (brief.deadline && brief.budget) {
-            const resumo = [
-              `Projeto: ${brief.service || '-'}`,
-              `Objetivo: ${brief.objective || '-'}`,
-              `Usuários: ${brief.users || '-'}`,
-              `Integrações: ${brief.tools || '-'}`,
-              `Prazo: ${brief.deadline || '-'}`,
-              `Orçamento: ${brief.budget || '-'}`
-            ].join('\n');
-            
-            addMsg('Resumo pronto! Quer enviar para nosso especialista no WhatsApp?');
-            const wrap = document.createElement('div');
-            wrap.className = 'mt-2 flex gap-2';
-            
-            const send = document.createElement('button');
-            send.className = 'btn btn-primary';
-            send.textContent = 'Enviar no WhatsApp';
-            send.addEventListener('click', () => openWhatsApp(`Olá! Segue briefing:\n\n${resumo}\n\nPode sugerir um MVP em etapas e orçamento inicial?`));
-            
-            const close = document.createElement('button');
-            close.className = 'btn btn-ghost';
-            close.textContent = 'Fechar assistente';
-            close.addEventListener('click', closeIA);
-            
-            wrap.appendChild(send);
-            wrap.appendChild(close);
-            iaMsgs.appendChild(wrap);
-            iaMsgs.scrollTop = iaMsgs.scrollHeight;
-          }
-        }
-      });
+        const total = (base + feature) * multiplier;
+        const dev = total * 0.5;
+        const design = total * 0.3;
+        const infra = total * 0.2;
 
-      function handleFree(text) {
-        const t = text.toLowerCase();
-        if (t.startsWith('alterar objetivo')) {
-          brief.objective = text.split('alterar objetivo').pop().trim();
-          addMsg('Objetivo atualizado.', 'bot');
-          return;
-        }
-        if (t.startsWith('orçamento')) {
-          brief.budget = text.split('orçamento').pop().trim();
-          addMsg('Orçamento atualizado.', 'bot');
-          return;
-        }
-        if (t.startsWith('prazo')) {
-          brief.deadline = text.split('prazo').pop().trim();
-          addMsg('Prazo atualizado.', 'bot');
-          return;
-        }
-        
-        if (phase === 'objective') brief.objective = text;
-        else if (phase === 'users') brief.users = text;
-        else if (phase === 'tools') brief.tools = brief.tools ? (brief.tools + ', ' + text) : text;
-        else if (phase === 'finish') {
-          if (!brief.deadline) brief.deadline = text;
-          else if (!brief.budget) brief.budget = text;
-        }
-        iaMsgs.scrollTop = iaMsgs.scrollHeight;
-      }
-      
-      iaSend.addEventListener('click', () => {
-        const v = iaInput.value.trim();
-        if (!v) return;
-        addMsg(v, 'user');
-        iaInput.value = '';
-        handleFree(v);
-      });
-      
-      iaInput.addEventListener('keypress', e => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          iaSend.click();
-        }
-      });
+        document.getElementById('totalPrice').innerText = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        document.getElementById('devBar').style.width = (dev / total * 100) + '%';
+        document.getElementById('designBar').style.width = (design / total * 100) + '%';
+        document.getElementById('infraBar').style.width = (infra / total * 100) + '%';
+        document.getElementById('devValue').innerText = dev.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        document.getElementById('designValue').innerText = design.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        document.getElementById('infraValue').innerText = infra.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-      /* ==== Form -> WhatsApp ==== */
-      const form = document.getElementById('tech-project-form');
-      form?.addEventListener('submit', e => {
-        e.preventDefault();
-        const name = document.getElementById('name')?.value?.trim() || 'Não informado';
-        const contact = document.getElementById('contact-info')?.value?.trim() || 'Não informado';
-        const service = document.getElementById('service-interest')?.value || 'Não informado';
-        const details = document.getElementById('project-details')?.value?.trim() || 'Sem detalhes adicionais.';
-        const msg = [
-          'Olá! Tenho interesse em um projeto de tecnologia.',
-          '',
-          `*Nome/Empresa:* ${name}`,
-          `*Contato:* ${contact}`,
-          `*Serviço de Interesse:* ${service}`,
-          '',
-          '*Detalhes do Projeto:*',
-          details
-        ].join('\n');
-        openWhatsApp(msg);
-      });
+        const three = total * 0.35;
+        const six = total * 0.2;
+        document.getElementById('threeInstallments').innerText = three.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) + ' /mês';
+        document.getElementById('sixInstallments').innerText = six.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) + ' /mês';
 
-      /* ==== Voltar ao topo (esquerda) ==== */
-      const toTop = document.getElementById('to-top');
-      const onScroll = () => {
-        if (window.scrollY > 200) {
-          toTop.classList.add('visible');
+        const typeSel = document.getElementById('projectType');
+        const typeText = typeSel.options[typeSel.selectedIndex].text;
+        document.getElementById('selectedProject').innerText = typeText;
+        const dlSel = document.getElementById('deadline');
+        const dlVal = parseFloat(dlSel.value);
+        let baseMin = 14, baseMax = 21;
+        if (/Cardápio/.test(typeText)) { baseMin = 10; baseMax = 20; }
+        else if (/Agendamento/.test(typeText)) { baseMin = 14; baseMax = 21; }
+        else if (/Bio Link/.test(typeText)) { baseMin = 7; baseMax = 14; }
+        else if (/Ordens/.test(typeText) || /Business/.test(typeText)) { baseMin = 21; baseMax = 35; }
+        else if (/Site Institucional/.test(typeText)) { baseMin = 21; baseMax = 28; }
+        else if (/Página de Alta Conversão/.test(typeText)) { baseMin = 14; baseMax = 21; }
+        const factor = dlVal === 1.3 ? 0.7 : 1;
+        const estMin = Math.max(5, Math.round(baseMin * factor));
+        const estMax = Math.max(estMin + 3, Math.round(baseMax * factor));
+        document.getElementById('deadlineInfo').innerText = estMin + '–' + estMax + ' dias';
+        document.getElementById('selectedDeadline').innerText = estMin + '–' + estMax + ' dias';
+        document.getElementById('selectedClientName').innerText = nameVal || '—';
+        document.getElementById('selectedClientContact').innerText = contactVal || '—';
+
+        const selectedList = document.getElementById('selectedExtrasList');
+        selectedList.innerHTML = '';
+        if (selectedFeatures.length === 0) {
+          const li = document.createElement('li'); li.textContent = 'Sem extras'; selectedList.appendChild(li);
         } else {
-          toTop.classList.remove('visible');
+          selectedFeatures.forEach(cb => { const li = document.createElement('li'); li.textContent = cb.getAttribute('data-label'); selectedList.appendChild(li); });
         }
-      };
-      window.addEventListener('scroll', onScroll);
-      onScroll();
-      toTop.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}));
 
-      /* ==== Modal Presença ==== */
-      const presencaModal = document.getElementById('presenca-modal');
-      
-      function openModal(m) {
-        m.classList.add('show');
-        m.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-      }
-      
-      function closeModal(m) {
-        m.classList.remove('show');
-        m.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-      }
-      
-      document.querySelectorAll('#open-presenca-btn, #open-presenca-btn-2').forEach(btn => {
-        btn.addEventListener('click', () => openModal(presencaModal));
-      });
-      
-      presencaModal.addEventListener('click', (e) => {
-        if (e.target.dataset.close === 'presenca' || e.target.classList.contains('modal')) {
-          closeModal(presencaModal);
+        const state = {
+          ptIdx: typeSel.selectedIndex,
+          featuresKeys: selectedFeatures.map(cb => cb.getAttribute('data-key')),
+          dlIdx: dlSel.selectedIndex,
+          name: nameVal,
+          contact: contactVal
+        };
+        localStorage.setItem('calcState', JSON.stringify(state));
+        const params = new URLSearchParams(location.search);
+        params.set('pt', String(state.ptIdx));
+        params.set('fk', state.featuresKeys.join(','));
+        params.set('dl', String(state.dlIdx));
+        if (nameVal) params.set('nm', nameVal);
+        if (contactVal) params.set('ct', contactVal);
+        history.replaceState(null, '', `${location.pathname}?${params.toString()}`);
+
+        const btn = document.getElementById('calc-submit');
+        if (btn) {
+          btn.querySelector('.ph.ph-whatsapp-logo')?.classList.add('hidden');
+          btn.textContent = 'Validar proposta de ' + typeText;
         }
+
+        if (window.analytics && typeof window.analytics.track === 'function') {
+          window.analytics.track('calc_update', { project: typeText, total });
+        }
+    }
+
+    function handleProjectChange() {
+      updateFeaturesAvailability();
+      calculateTotal();
+    }
+
+    function handleFeaturesChange() { calculateTotal(); }
+    function handleDeadlineChange() { calculateTotal(); }
+
+    function updateFeaturesAvailability() {
+      const typeSel = document.getElementById('projectType');
+      const typeText = typeSel.options[typeSel.selectedIndex].text;
+      const checks = Array.from(document.querySelectorAll('#features-group input[type=checkbox]'));
+      const blogCb = document.querySelector('#features-group input[data-key="blog"]');
+      const loginCb = document.querySelector('#features-group input[data-key="login"]');
+      checks.forEach(cb => { cb.disabled = false; cb.parentElement.classList.remove('opacity-50','cursor-not-allowed'); });
+      const isSite = /Site|Página|Portfólio|Bio Link/.test(typeText);
+      const isSystem = /Painel|Ordens|Agendamento/.test(typeText);
+      if (!isSite && blogCb) { blogCb.checked = false; blogCb.disabled = true; blogCb.parentElement.classList.add('opacity-50','cursor-not-allowed'); }
+      if (!(isSite || isSystem) && loginCb) { loginCb.checked = false; loginCb.disabled = true; loginCb.parentElement.classList.add('opacity-50','cursor-not-allowed'); }
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+      const params = new URLSearchParams(location.search);
+      const state = params.has('pt') ? { ptIdx: parseInt(params.get('pt')), featuresKeys: (params.get('fk')||'').split(',').filter(Boolean), dlIdx: parseInt(params.get('dl')), name: params.get('nm')||'', contact: params.get('ct')||'' } : null;
+      if (state) {
+        const ptSel = document.getElementById('projectType');
+        const dlSel = document.getElementById('deadline');
+        if (state.ptIdx >=0 && state.ptIdx < ptSel.options.length) ptSel.selectedIndex = state.ptIdx;
+        if (state.dlIdx >=0 && state.dlIdx < dlSel.options.length) dlSel.selectedIndex = state.dlIdx;
+        if (state.featuresKeys && state.featuresKeys.length) {
+          Array.from(document.querySelectorAll('#features-group input[type=checkbox]')).forEach(cb => {
+            cb.checked = state.featuresKeys.includes(cb.getAttribute('data-key'));
+          });
+        }
+        if (state.name) document.getElementById('calc-name').value = state.name;
+        if (state.contact) document.getElementById('calc-contact').value = state.contact;
+      } else {
+        const ptSel = document.getElementById('projectType');
+        const dlSel = document.getElementById('deadline');
+        if (ptSel) ptSel.selectedIndex = 0;
+        if (dlSel) dlSel.selectedIndex = 0;
+        Array.from(document.querySelectorAll('#features-group input[type=checkbox]')).forEach(cb => { cb.checked = false; });
+        const nameEl = document.getElementById('calc-name');
+        const contactEl = document.getElementById('calc-contact');
+        if (nameEl) nameEl.value = '';
+        if (contactEl) contactEl.value = '';
+      }
+      updateFeaturesAvailability();
+      calculateTotal();
+      document.getElementById('calc-name')?.addEventListener('input', calculateTotal);
+      document.getElementById('calc-contact')?.addEventListener('input', calculateTotal);
+      document.getElementById('calc-clear')?.addEventListener('click', function(){
+        const nameEl = document.getElementById('calc-name');
+        const contactEl = document.getElementById('calc-contact');
+        const ptSel = document.getElementById('projectType');
+        const dlSel = document.getElementById('deadline');
+        if (nameEl) nameEl.value = '';
+        if (contactEl) contactEl.value = '';
+        if (ptSel) ptSel.selectedIndex = 0;
+        if (dlSel) dlSel.selectedIndex = 0;
+        Array.from(document.querySelectorAll('#features-group input[type=checkbox]')).forEach(cb => { cb.checked = false; });
+        localStorage.removeItem('calcState');
+        const params = new URLSearchParams(location.search);
+        params.delete('nm');
+        params.delete('ct');
+        params.delete('pt');
+        params.delete('fk');
+        params.delete('dl');
+        history.replaceState(null, '', `${location.pathname}${params.toString() ? '?' + params.toString() : ''}`);
+        updateFeaturesAvailability();
+        calculateTotal();
       });
 
-      /* ==== Modal Info (cards) ==== */
-      const infoModal = document.getElementById('info-modal');
-      const infoTitle = document.getElementById('info-title');
-      const infoBody = document.getElementById('info-body');
-      const infoCopy = {
-        sistemas: {
-          t: 'Sistemas sob medida',
-          b: 'Organize cadastros, estoque, agenda e relatórios em um só lugar. Interface simples, acessível no computador e no celular. Integramos com planilhas ou sistemas que você já usa.'
-        },
-        sites: {
-          t: 'Sites e landing pages',
-          b: 'Página enxuta e direta, feita para explicar sua oferta e gerar contato. Otimizada para Google e com carregamento rápido. Integração com WhatsApp e formulários.'
-        },
-        automacao: {
-          t: 'Automação de processos',
-          b: 'Economize tempo nas tarefas repetitivas. Atenda mais rápido com mensagens automáticas, qualifique leads e dispare ações (planilhas, e-mails, CRM) sem esforço.'
-        },
-        mvp: {
-          t: 'Comece pequeno',
-          b: 'Tiramos a ideia do papel com uma primeira versão útil (MVP). Você valida com clientes reais e investe no que traz resultado.'
-        }
-      };
-      
-      document.querySelectorAll('[data-info]').forEach(card => {
-        card.addEventListener('click', () => {
-          const k = card.getAttribute('data-info');
-          const c = infoCopy[k];
-          if (!c) return;
-          infoTitle.textContent = c.t;
-          infoBody.textContent = c.b;
-          openModal(infoModal);
+      const contactForm = document.getElementById('tech-project-form');
+      if (contactForm) {
+        contactForm.addEventListener('submit', function(e){
+          e.preventDefault();
+          const btn = document.getElementById('contact-submit');
+          const original = btn ? btn.innerHTML : null;
+          if (btn) { btn.disabled = true; btn.textContent = 'Processando...'; }
+
+          const name = String(document.getElementById('name')?.value || '').trim();
+          const contact = String(document.getElementById('contact-info')?.value || '').trim();
+          const details = String(document.getElementById('project-details')?.value || '').trim();
+          if (!name || !contact || !details) {
+            alert('Por favor, preencha nome, contato e detalhes.');
+            if (btn) { btn.disabled = false; btn.innerHTML = original; }
+            return;
+          }
+
+          const text = `*Olá, Plena Tecnologia!* 🚀\n\nEstou descrevendo meu cenário:\n\n🧑‍💼 *Cliente:* ${name}\n📲 *Contato:* ${contact}\n📝 *Detalhes:* ${details}\n\nPodemos falar para avançar?`;
+          const url = `https://wa.me/5512992191018?text=${encodeURIComponent(text)}`;
+
+          try {
+            if (window.saveLead) {
+              window.saveLead({ source: 'contact', name, contact, details });
+            }
+          } catch (err) {
+            console.warn('Falha ao salvar lead:', err);
+          } finally {
+            window.open(url, '_blank');
+            if (btn) { btn.disabled = false; btn.innerHTML = original; }
+          }
         });
-        
-        // Adicionar suporte a teclado
-        card.addEventListener('keydown', (e) => {
+      }
+      const mobileToggle = document.getElementById('mobile-menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (mobileToggle && mobileMenu) {
+        mobileToggle.addEventListener('click', function(e){
+          e.preventDefault();
+          const willOpen = mobileMenu.classList.contains('hidden');
+          mobileMenu.classList.toggle('hidden');
+          mobileToggle.setAttribute('aria-expanded', String(willOpen));
+          document.body.style.overflow = willOpen ? 'hidden' : '';
+        });
+        window.addEventListener('click', function(e){
+          if (mobileMenu.classList.contains('hidden')) return;
+          const inside = mobileMenu.contains(e.target) || mobileToggle.contains(e.target);
+          if (!inside) {
+            mobileMenu.classList.add('hidden');
+            mobileToggle.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+          }
+        });
+        document.querySelectorAll('#mobile-menu a').forEach(function(a){
+          a.addEventListener('click', function(){
+            mobileMenu.classList.add('hidden');
+            mobileToggle.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+          });
+        });
+      }
+      document.querySelectorAll('[onclick^="openDemo"]').forEach(function(el){
+        el.setAttribute('role','button');
+        el.setAttribute('tabindex','0');
+        el.addEventListener('keydown', function(e){
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
-            const k = card.getAttribute('data-info');
-            const c = infoCopy[k];
-            if (!c) return;
-            infoTitle.textContent = c.t;
-            infoBody.textContent = c.b;
-            openModal(infoModal);
+            try {
+              const m = this.getAttribute('onclick').match(/openDemo\(([^)]*)\)/);
+              if (m && m[1] != null) {
+                const parts = m[1].split(',').map(function(s){ return s.trim().replace(/^['"]|['"]$/g,''); });
+                const type = parts[0]; const level = parts[1]; const variant = parts[2];
+                openDemo(type, level, variant);
+              }
+            } catch(err) {}
           }
         });
       });
-      
-      infoModal.addEventListener('click', (e) => {
-        if (e.target.dataset.close === 'info' || e.target.classList.contains('modal')) {
-          closeModal(infoModal);
+      document.querySelectorAll('#level-controls [data-level]').forEach(function(btn){
+        btn.setAttribute('tabindex','0');
+        btn.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); switchLevel(this.getAttribute('data-level')); } });
+      });
+      window.addEventListener('keydown', function(e){
+        if (e.key === 'Escape') { const modal = document.getElementById('demo-modal'); if (modal && modal.classList.contains('active')) closeDemo({ target: modal }); }
+      });
+    });
+
+    function sendCalcToWhatsapp() {
+        const btn = document.getElementById('calc-submit');
+        const originalHTML = btn ? btn.innerHTML : null;
+        if (btn) { btn.disabled = true; btn.textContent = 'Processando...'; }
+
+        const total = document.getElementById('totalPrice').innerText;
+        const typeSel = document.getElementById('projectType');
+        const type = typeSel.options[typeSel.selectedIndex].text;
+        const featChecks = Array.from(document.querySelectorAll('#features-group input[type=checkbox]:checked'));
+        const feat = featChecks.length ? featChecks.map(cb => cb.getAttribute('data-label')).join(', ') : 'Sem extras';
+        const deadlineText = document.getElementById('selectedDeadline').innerText;
+        const nameEl = document.getElementById('calc-name');
+        const contactEl = document.getElementById('calc-contact');
+        const nameVal = String(nameEl?.value || '').trim();
+        const contactVal = String(contactEl?.value || '').trim();
+
+        if (!nameVal || !contactVal) {
+            alert('Por favor, preencha seu nome e contato antes de enviar.');
+            if (btn) { btn.disabled = false; btn.innerHTML = originalHTML; }
+            return;
+        }
+
+        if (total === "R$ 0,00") {
+            alert("Por favor, selecione um projeto base.");
+            if (btn) { btn.disabled = false; btn.innerHTML = originalHTML; }
+            return;
+        }
+
+        const text = `*Olá, Plena Tecnologia!* 🚀\n\nFiz uma simulação no site e gostaria de validar:\n\n🧑‍💼 *Cliente:* ${nameVal}\n📲 *Contato:* ${contactVal}\n\n📦 *Projeto:* ${type}\n🧩 *Extras:* ${feat}\n⏱ *Prazo:* ${deadlineText}\n💰 *Investimento Estimado:* ${total}\n\nPodemos agendar uma conversa?`;
+
+        const url = `https://wa.me/5512992191018?text=${encodeURIComponent(text)}`;
+
+        try {
+            if (window.saveLead) {
+                window.saveLead({ type, feat, total });
+            }
+        } catch (err) {
+            console.warn('Falha ao salvar lead:', err);
+        } finally {
+            window.open(url, '_blank');
+            if (btn) { btn.disabled = false; btn.innerHTML = originalHTML; }
+        }
+    }
+
+    const demoFiles = {
+      cardapio: { medio: 'examples/cardapio_intermediario.html' },
+      express: { avancado: 'examples/landing_avancado.html' },
+      agenda: { basico: 'examples/agendamento_basico.html' },
+      bio: { avancado: 'examples/cartao_avancado.html' },
+      business: { medio: 'examples/gestao_intermediario.html' },
+      os: { avancado: 'examples/os_avancado.html' },
+      site: { basico: 'examples/site_onepage.html', medio: 'examples/site_institucional.html', avancado: 'examples/site_avancado.html' }
+    };
+
+    const demoVariantFiles = {
+      site: {
+        onepage: 'examples/site_onepage.html',
+        portfolio: 'examples/site_portolio.html',
+        institucional: 'examples/site_institucional.html',
+        blog: 'examples/site_blog.html',
+        loja: 'examples/site_lojaonline.html',
+        corporativo: 'examples/site_corporativo_premium.html'
+      }
+    };
+
+    const defaultLevel = {
+      cardapio: 'medio',
+      express: 'avancado',
+      agenda: 'basico',
+      bio: 'avancado',
+      business: 'medio',
+      os: 'avancado',
+      site: 'avancado'
+    };
+
+    let currentType = null;
+    let currentLevel = 'medio';
+    let currentView = 'desktop';
+
+    function getDemoTitle(type, variant) {
+      if (type === 'express') return 'Página de Alta Conversão';
+      if (type === 'site') {
+        const siteMap = {
+          onepage: 'Site One-page',
+          portfolio: 'Site Portfólio',
+          institucional: 'Site Institucional',
+          blog: 'Site com Blog',
+          loja: 'Loja Online',
+          corporativo: 'Site Corporativo Premium'
+        };
+        return siteMap[variant] || 'Site Institucional';
+      }
+      const titles = {
+        cardapio: 'Cardápio Digital PWA',
+        agenda: 'Agendamento Online',
+        bio: 'Bio Link / Cartão Digital',
+        os: 'Sistema de Ordens (OS)',
+        business: 'Painel Business Pro'
+      };
+      return titles[type] || 'Projeto';
+    }
+
+    function setView(view) {
+      currentView = view;
+      const modalContent = document.querySelector('#demo-modal .modal-content');
+      const container = document.getElementById('demo-container');
+      const mobileBtn = document.getElementById('view-mobile-toggle');
+      const desktopBtn = document.getElementById('view-desktop-toggle');
+      if (view === 'mobile') {
+        modalContent.classList.remove('max-w-6xl');
+        modalContent.classList.add('max-w-[420px]');
+        container.className = 'relative phone-mock mx-auto flex items-center justify-center';
+        const frame = document.getElementById('demo-frame');
+        frame.className = 'phone-screen w-full h-full border-0 bg-white';
+        if (mobileBtn) mobileBtn.className = 'px-3 py-1 text-xs bg-gray-700 text-white';
+        if (desktopBtn) desktopBtn.className = 'px-3 py-1 text-xs bg-gray-800 text-gray-300';
+      } else {
+        modalContent.classList.remove('max-w-[420px]');
+        modalContent.classList.add('max-w-6xl');
+        container.className = 'flex-grow bg-gray-800 flex items-center justify-center relative overflow-hidden w-full h-[500px] md:h-[70vh]';
+        const frame = document.getElementById('demo-frame');
+        frame.className = 'w-full h-full border-0';
+        if (desktopBtn) desktopBtn.className = 'px-3 py-1 text-xs bg-gray-700 text-white';
+        if (mobileBtn) mobileBtn.className = 'px-3 py-1 text-xs bg-gray-800 text-gray-300';
+      }
+    }
+
+    function switchLevel(level) {
+      const frame = document.getElementById('demo-frame');
+      currentLevel = level;
+      const files = demoFiles[currentType] || {};
+      const file = files[level] || null;
+      frame.src = file || 'about:blank';
+    }
+
+    function updateLevelControls(type) {
+      const levelsAvailable = demoFiles[type] ? Object.keys(demoFiles[type]) : [];
+      document.querySelectorAll('#level-controls [data-level]').forEach(btn => {
+        const lvl = btn.getAttribute('data-level');
+        if (levelsAvailable.includes(lvl)) {
+          btn.classList.remove('hidden');
+        } else {
+          btn.classList.add('hidden');
         }
       });
+    }
 
-      /* ==== Preferências de movimento ==== */
-      function applyMotion() {
-        if (prefersReduced.matches) {
-          stopMatrix();
-          disableSpot();
-        } else {
-          startMatrix();
-          enableSpot();
-        }
+    function openDemo(type, level, variant) {
+      const modal = document.getElementById('demo-modal');
+      currentType = type;
+      const isMobileViewport = window.innerWidth < 768;
+      setView(isMobileViewport ? 'mobile' : 'desktop');
+      updateLevelControls(type);
+      const lvl = level || defaultLevel[type] || 'medio';
+      if (variant && demoVariantFiles[type] && demoVariantFiles[type][variant]) {
+        const frame = document.getElementById('demo-frame');
+        frame.src = demoVariantFiles[type][variant];
+        currentLevel = lvl;
+        document.querySelectorAll('#level-controls [data-level]').forEach(btn => {
+          const bLevel = btn.getAttribute('data-level');
+          if (bLevel !== lvl) btn.classList.add('hidden'); else btn.classList.remove('hidden');
+        });
+      } else {
+        switchLevel(lvl);
       }
-      
-      if (prefersReduced.addEventListener) {
-        prefersReduced.addEventListener('change', applyMotion);
-      } else if (prefersReduced.addListener) {
-        prefersReduced.addListener(applyMotion);
+      const levelMap = { basico: 'Básico', medio: 'Médio', avancado: 'Avançado' };
+      const levelLabel = levelMap[lvl] || lvl;
+      const title = getDemoTitle(type, variant);
+      const text = `Olá, acabei de ver o demo: ${title} — Nível: ${levelLabel}. Quero um projeto igual.`;
+      const cta = document.getElementById('demo-whatsapp-cta');
+      if (cta) cta.href = `https://wa.me/5512992191018?text=${encodeURIComponent(text)}`;
+      document.body.style.overflow = 'hidden';
+      modal.classList.add('active');
+    }
+
+    function closeDemo(e) {
+      if (e) {
+        const isBackdrop = e.target.classList && e.target.classList.contains('modal-backdrop');
+        if (!isBackdrop) return;
       }
-      
-      applyMotion();
+      document.getElementById('demo-modal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('view-mobile-toggle')?.addEventListener('click', function(e){ e.stopPropagation(); setView('mobile'); });
+    document.getElementById('view-desktop-toggle')?.addEventListener('click', function(e){ e.stopPropagation(); setView('desktop'); });
+    document.querySelectorAll('#level-controls [data-level]')?.forEach(btn => {
+      btn.addEventListener('click', function(e){ e.stopPropagation(); switchLevel(this.getAttribute('data-level')); });
     });
+
+    (function trapModalScroll(){
+      const modal = document.getElementById('demo-modal');
+      function isWithinScrollable(target){
+        const container = document.getElementById('demo-container');
+        const phone = document.querySelector('.phone-mock');
+        return (container && container.contains(target)) || (phone && phone.contains(target));
+      }
+      ['wheel','touchmove','touchstart'].forEach(evt => {
+        modal.addEventListener(evt, function(e){ if (!isWithinScrollable(e.target)) { e.preventDefault(); } }, { passive:false });
+      });
+    })();
   </script>
 </body>
 </html>

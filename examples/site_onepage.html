@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Energy - Soluções Solares</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-white text-gray-800">
+    
+    <!-- Navbar Fixa -->
+    <nav class="fixed w-full bg-white/90 backdrop-blur-sm border-b border-gray-100 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="font-bold text-xl text-green-600 tracking-tighter">EcoSolar</div>
+            <div class="hidden md:flex gap-6 text-sm font-medium">
+                <a href="#como-funciona" class="hover:text-green-600">Como Funciona</a>
+                <a href="#beneficios" class="hover:text-green-600">Benefícios</a>
+                <a href="#depoimentos" class="hover:text-green-600">Depoimentos</a>
+            </div>
+            <a href="#contato" class="bg-green-600 text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-green-700 transition">Orçamento Grátis</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="pt-32 pb-20 px-6 text-center bg-gradient-to-b from-green-50 to-white">
+        <div class="max-w-3xl mx-auto">
+            <span class="text-green-600 font-bold text-sm uppercase tracking-wider mb-4 block">Energia Limpa para sua Casa</span>
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 text-gray-900 leading-tight">Economize até 95% na sua conta de luz.</h1>
+            <p class="text-lg text-gray-600 mb-8">Instalação completa de painéis solares em 7 dias. Financiamento facilitado e garantia de 25 anos.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg shadow-lg shadow-green-600/20 hover:transform hover:-translate-y-1 transition">Simular Economia</button>
+                <button class="text-gray-600 font-bold px-8 py-4 hover:text-green-600 flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" /></svg> Ver Vídeo
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Benefícios (Grid Simples) -->
+    <section id="beneficios" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-3 gap-12">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center text-3xl mb-6 mx-auto">💰</div>
+                    <h3 class="text-xl font-bold mb-3">Retorno Rápido</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">O investimento se paga em média entre 3 a 5 anos com a economia gerada.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 mx-auto">🏠</div>
+                    <h3 class="text-xl font-bold mb-3">Valorização</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Imóveis com energia solar valem até 10% a mais no mercado imobiliário.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-2xl flex items-center justify-center text-3xl mb-6 mx-auto">🌱</div>
+                    <h3 class="text-xl font-bold mb-3">Sustentabilidade</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Reduza sua pegada de carbono e contribua para um planeta mais limpo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contato (CTA Final) -->
+    <section id="contato" class="py-20 bg-gray-900 text-white text-center">
+        <div class="container mx-auto px-6 max-w-2xl">
+            <h2 class="text-3xl font-bold mb-6">Pronto para zerar sua conta?</h2>
+            <p class="text-gray-400 mb-8">Fale com um de nossos engenheiros agora mesmo pelo WhatsApp.</p>
+            <button class="bg-green-500 text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-green-400 transition w-full sm:w-auto">
+                Chamar no WhatsApp
+            </button>
+        </div>
+    </section>
+
+</body>
+</html>

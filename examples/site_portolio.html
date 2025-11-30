@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marina Luz - Fotografia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Lato', sans-serif; }
+        h1, h2, .serif { font-family: 'Playfair Display', serif; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+
+    <nav class="p-8 flex justify-between items-center">
+        <div class="text-2xl font-bold tracking-widest serif">MARINA.LUZ</div>
+        <div class="space-x-6 text-sm uppercase tracking-widest hidden md:block">
+            <a href="#" class="hover:text-stone-500">Trabalhos</a>
+            <a href="#" class="hover:text-stone-500">Sobre</a>
+            <a href="#" class="hover:text-stone-500">Contato</a>
+        </div>
+    </nav>
+
+    <header class="px-8 py-20 text-center max-w-4xl mx-auto">
+        <h1 class="text-5xl md:text-7xl mb-6 italic">Capturando a essência <br> de momentos únicos.</h1>
+        <p class="text-stone-500 text-lg font-light">Fotografia lifestyle, casamentos e editorial em São Paulo e região.</p>
+    </header>
+
+    <!-- Grid Masonry Simples -->
+    <section class="px-4 md:px-8 pb-20">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-4">
+                <div class="bg-stone-200 h-[500px] w-full rounded-lg bg-cover bg-center relative group cursor-pointer overflow-hidden" style="background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')">
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition"></div>
+                    <div class="absolute bottom-6 left-6 text-white opacity-0 group-hover:opacity-100 transition transform group-hover:translate-y-0 translate-y-4">
+                        <p class="uppercase tracking-widest text-xs">Casamento</p>
+                        <h3 class="serif text-2xl">Julia & Marcos</h3>
+                    </div>
+                </div>
+                <div class="bg-stone-200 h-[300px] w-full rounded-lg bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1531747056595-07f6cbbe10ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')"></div>
+            </div>
+            <div class="space-y-4 md:pt-20">
+                <div class="bg-stone-200 h-[300px] w-full rounded-lg bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')"></div>
+                <div class="bg-stone-200 h-[500px] w-full rounded-lg bg-cover bg-center relative group cursor-pointer overflow-hidden" style="background-image: url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')">
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition"></div>
+                    <div class="absolute bottom-6 left-6 text-white opacity-0 group-hover:opacity-100 transition transform group-hover:translate-y-0 translate-y-4">
+                        <p class="uppercase tracking-widest text-xs">Editorial</p>
+                        <h3 class="serif text-2xl">Vogue Inspired</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

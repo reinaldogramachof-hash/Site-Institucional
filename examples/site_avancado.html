@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelo Avançado - Plena Tecnologia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #050507; color: #fff; }
+        h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+        
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Efeitos de Fundo -->
+    <div class="fixed top-0 left-0 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px] -z-10 animate-pulse"></div>
+    <div class="fixed bottom-0 right-0 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[100px] -z-10"></div>
+
+    <!-- Navbar Flutuante -->
+    <nav class="fixed w-full z-50 top-0 py-6">
+        <div class="container mx-auto px-6">
+            <div class="glass-card rounded-full px-8 py-4 flex justify-between items-center shadow-2xl shadow-black/50">
+                <div class="text-xl font-bold tracking-tighter flex items-center gap-2">
+                    <div class="w-3 h-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
+                    NEXUS<span class="font-light text-gray-400">DIGITAL</span>
+                </div>
+                <div class="hidden md:flex gap-8 text-sm font-medium text-gray-300">
+                    <a href="#" class="hover:text-white transition">Plataforma</a>
+                    <a href="#" class="hover:text-white transition">Soluções</a>
+                    <a href="#" class="hover:text-white transition">Preços</a>
+                </div>
+                <a href="#" class="bg-white text-black px-6 py-2 rounded-full text-sm font-bold hover:scale-105 transition transform">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-48 pb-32 container mx-auto px-6 relative">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs font-medium text-purple-300 mb-8">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+                </span>
+                A nova era da inteligência financeira
+            </div>
+            <h1 class="text-6xl md:text-8xl font-bold mb-8 leading-none tracking-tight">
+                O futuro é <br> <span class="text-gradient">Descentralizado.</span>
+            </h1>
+            <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
+                Gerencie ativos digitais, automatize pagamentos e escale sua operação global com nossa infraestrutura bancária de última geração.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button class="bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-purple-500/30 transition">Começar Agora</button>
+                <button class="glass-card px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/5 transition flex items-center justify-center gap-2">
+                    <i class="ph-fill ph-play-circle"></i> Ver Demo
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Grid -->
+    <section class="py-20 container mx-auto px-6">
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="glass-card p-8 rounded-3xl hover:border-purple-500/50 transition group">
+                <div class="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-500">
+                    <i class="ph ph-lightning text-2xl text-yellow-400"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4">Ultra Rápido</h3>
+                <p class="text-gray-400">Processamento de dados em tempo real com latência zero.</p>
+            </div>
+            <div class="glass-card p-8 rounded-3xl hover:border-pink-500/50 transition group">
+                <div class="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-500">
+                    <i class="ph ph-lock-key text-2xl text-pink-400"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4">Criptografia Militar</h3>
+                <p class="text-gray-400">Seus dados protegidos por protocolos de segurança avançados.</p>
+            </div>
+            <div class="glass-card p-8 rounded-3xl hover:border-blue-500/50 transition group">
+                <div class="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-500">
+                    <i class="ph ph-globe text-2xl text-blue-400"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4">Global Scale</h3>
+                <p class="text-gray-400">Infraestrutura distribuída em 12 regiões ao redor do mundo.</p>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

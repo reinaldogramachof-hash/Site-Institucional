@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Pro - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Public Sans', sans-serif; }</style>
+</head>
+<body class="bg-slate-100 flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-slate-900 text-white hidden md:flex flex-col">
+        <div class="p-6 text-xl font-bold flex items-center gap-2">
+            <div class="w-8 h-8 bg-indigo-500 rounded-lg"></div> AdminPro
+        </div>
+        <nav class="flex-1 px-4 space-y-2">
+            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-indigo-600 rounded-lg text-white font-medium">
+                <i class="ph-fill ph-squares-four text-xl"></i> Dashboard
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition">
+                <i class="ph-fill ph-shopping-cart text-xl"></i> Pedidos
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition">
+                <i class="ph-fill ph-users text-xl"></i> Clientes
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition">
+                <i class="ph-fill ph-package text-xl"></i> Estoque
+            </a>
+        </nav>
+        <div class="p-4 border-t border-slate-800">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-slate-700"></div>
+                <div>
+                    <p class="text-sm font-bold">Admin</p>
+                    <p class="text-xs text-slate-400">Gerente</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-y-auto">
+        
+        <!-- Topbar -->
+        <header class="bg-white p-4 shadow-sm flex justify-between items-center md:hidden">
+            <div class="font-bold text-indigo-900">AdminPro</div>
+            <button class="text-slate-600"><i class="ph-bold ph-list text-2xl"></i></button>
+        </header>
+
+        <div class="p-6">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">Visão Geral</h2>
+                    <p class="text-slate-500">Bem-vindo de volta, Admin.</p>
+                </div>
+                <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 transition">
+                    + Novo Pedido
+                </button>
+            </div>
+
+            <!-- Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <div class="flex justify-between mb-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-green-600 text-2xl">
+                            <i class="ph-fill ph-currency-dollar"></i>
+                        </div>
+                        <span class="text-xs font-bold bg-green-50 text-green-600 px-2 py-1 rounded h-fit">+12%</span>
+                    </div>
+                    <p class="text-slate-500 text-sm">Faturamento</p>
+                    <h3 class="text-2xl font-bold text-slate-800">R$ 42.500</h3>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <div class="flex justify-between mb-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-2xl">
+                            <i class="ph-fill ph-shopping-bag"></i>
+                        </div>
+                        <span class="text-xs font-bold bg-blue-50 text-blue-600 px-2 py-1 rounded h-fit">Hoje</span>
+                    </div>
+                    <p class="text-slate-500 text-sm">Pedidos Totais</p>
+                    <h3 class="text-2xl font-bold text-slate-800">145</h3>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <div class="flex justify-between mb-4">
+                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center text-orange-600 text-2xl">
+                            <i class="ph-fill ph-warning-circle"></i>
+                        </div>
+                        <span class="text-xs font-bold bg-orange-50 text-orange-600 px-2 py-1 rounded h-fit">Ação</span>
+                    </div>
+                    <p class="text-slate-500 text-sm">Estoque Baixo</p>
+                    <h3 class="text-2xl font-bold text-slate-800">8 Itens</h3>
+                </div>
+            </div>
+
+            <!-- Tabela Recente -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-6 border-b border-slate-100 font-bold text-slate-700">Últimos Pedidos</div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50 text-slate-500 uppercase font-bold text-xs">
+                            <tr>
+                                <th class="p-4">ID</th>
+                                <th class="p-4">Cliente</th>
+                                <th class="p-4">Valor</th>
+                                <th class="p-4">Status</th>
+                                <th class="p-4">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr>
+                                <td class="p-4 text-slate-500">#2045</td>
+                                <td class="p-4 font-bold text-slate-700">Mercado Silva</td>
+                                <td class="p-4">R$ 1.200,00</td>
+                                <td class="p-4"><span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-bold">Pago</span></td>
+                                <td class="p-4"><button class="text-slate-400 hover:text-indigo-600"><i class="ph-bold ph-dots-three"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 text-slate-500">#2044</td>
+                                <td class="p-4 font-bold text-slate-700">Padaria Central</td>
+                                <td class="p-4">R$ 540,00</td>
+                                <td class="p-4"><span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-bold">Pendente</span></td>
+                                <td class="p-4"><button class="text-slate-400 hover:text-indigo-600"><i class="ph-bold ph-dots-three"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

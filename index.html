@@ -58,7 +58,7 @@
         }
         
         body { 
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
             background: #f8fafc;
             /* textura sutil alaranjada no fundo geral (quase imperceptível) */
             background-image:
@@ -74,7 +74,7 @@
             z-index: 0;
         }
         
-        .font-accent { font-family: 'Poppins', sans-serif; }
+        .font-accent { font-family: 'Poppins', 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
 
         /* deixa o ancoramento perfeito abaixo do header fixo */
         section[id] { scroll-margin-top: 6.75rem; }
@@ -227,7 +227,6 @@
 </head>
 <body class="text-gray-800 particles">
 
-    <!-- Header -->
     <header class="bg-white/90 backdrop-blur-md shadow-md fixed top-0 left-0 right-0 z-50">
         <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
             <a href="index.html" class="text-2xl font-bold text-gray-800 font-accent">
@@ -242,7 +241,7 @@
                     Fale Conosco
                 </button>
             </div>
-            
+
             <!-- Menu Mobile -->
             <div class="md:hidden">
                 <button id="menu-btn" class="text-gray-800 focus:outline-none" aria-label="Alternar navegação mobile">
@@ -252,7 +251,7 @@
                 </button>
             </div>
         </nav>
-        
+
         <!-- Menu Mobile Dropdown -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
             <a href="#services" class="block py-3 px-6 text-gray-600 hover:bg-orange-50 transition duration-300">Serviços</a>
@@ -286,41 +285,78 @@
     <!-- Serviços (fundo laranja leve) -->
     <section id="services" class="py-20 bg-plena-orange-wash">
         <div class="container mx-auto px-6">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 animate-on-scroll font-accent">Nossos Departamentos</h2>
-            <div class="grid md:grid-cols-3 gap-8">
-                <a href="servicos.html" class="block rounded-xl shadow-lg transform hover:-translate-y-2 transition-all duration-300 animate-on-scroll card-glow-orange card-gradient">
-                    <div class="rounded-xl p-8 text-center h-full flex flex-col justify-center">
-                        <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-6 mx-auto">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-4 text-orange-500 font-accent">Serviços Digitais</h3>
-                        <p class="text-gray-600">Agilidade e profissionalismo para suas necessidades do dia a dia. De currículos a suporte MEI, estamos aqui para ajudar.</p>
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 animate-on-scroll font-accent">Nossos Departamentos</h2>
+
+            <div class="hidden md:flex justify-center mb-8 gap-2" aria-hidden="false">
+                <button type="button" id="toggle-desktop" class="px-4 py-2 rounded-lg font-semibold bg-orange-500 text-white hover:bg-orange-600 transition">Versão Desktop</button>
+                <button type="button" id="toggle-mobile" class="px-4 py-2 rounded-lg font-semibold bg-slate-200 text-slate-800 hover:bg-slate-300 transition">Versão Mobile</button>
+            </div>
+
+            <div id="services-mobile" class="block md:hidden space-y-6">
+                <a href="servicos.html" class="flex items-center gap-4 rounded-xl bg-white shadow-lg p-5 active:scale-[.99] transition">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                     </div>
-                </a>
-                <a href="personalizados.html" class="block rounded-xl shadow-lg transform hover:-translate-y-2 transition-all duration-300 animate-on-scroll card-glow-blue card-gradient" style="animation-delay: 200ms;">
-                    <div class="rounded-xl p-8 text-center h-full flex flex-col justify-center">
-                        <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mb-6 mx-auto">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-4 text-blue-600 font-accent">Personalizados</h3>
-                        <p class="text-gray-600">Transforme suas ideias em realidade. Canecas, camisetas, e uma infinidade de produtos com a sua cara e qualidade garantida.</p>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-bold text-orange-500">Serviços Digitais</h3>
+                        <p class="text-sm text-gray-600">Currículos, IR e suporte MEI com agilidade.</p>
                     </div>
+                    <span class="text-sm font-bold text-orange-600">Abrir</span>
                 </a>
-                <a href="tecnologia.html" class="block rounded-xl shadow-lg transform hover:-translate-y-2 transition-all duration-300 animate-on-scroll card-glow-green card-gradient" style="animation-delay: 400ms;">
-                    <div class="rounded-xl p-8 text-center h-full flex flex-col justify-center">
-                        <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center mb-6 mx-auto">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-4 text-emerald-500 font-accent">Tecnologia</h3>
-                        <p class="text-gray-600">Soluções digitais para o seu negócio. Desenvolvemos pequenos projetos e sites que posicionam sua marca no mundo online.</p>
+
+                <a href="personalizados.html" class="flex items-center gap-4 rounded-xl bg-white shadow-lg p-5 active:scale-[.99] transition">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
                     </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-bold text-blue-600">Personalizados</h3>
+                        <p class="text-sm text-gray-600">Canecas, camisetas e presentes sob medida.</p>
+                    </div>
+                    <span class="text-sm font-bold text-blue-600">Abrir</span>
                 </a>
+
+                <a href="tecnologia.html" class="flex items-center gap-4 rounded-xl bg-white shadow-lg p-5 active:scale-[.99] transition">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-bold text-emerald-500">Tecnologia</h3>
+                        <p class="text-sm text-gray-600">Sites e pequenos projetos para sua marca.</p>
+                    </div>
+                    <span class="text-sm font-bold text-emerald-600">Abrir</span>
+                </a>
+            </div>
+
+            <div id="services-desktop" class="hidden md:block">
+                <div class="grid md:grid-cols-3 gap-8">
+                    <a href="servicos.html" class="block rounded-xl shadow-lg transform hover:-translate-y-2 transition-all duration-300 animate-on-scroll card-glow-orange card-gradient">
+                        <div class="rounded-xl p-8 text-center h-full flex flex-col justify-center">
+                            <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-6 mx-auto">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-orange-500 font-accent">Serviços Digitais</h3>
+                            <p class="text-gray-600">Agilidade e profissionalismo para suas necessidades do dia a dia. De currículos a suporte MEI, estamos aqui para ajudar.</p>
+                        </div>
+                    </a>
+                    <a href="personalizados.html" class="block rounded-xl shadow-lg transform hover:-translate-y-2 transition-all duration-300 animate-on-scroll card-glow-blue card-gradient" style="animation-delay: 200ms;">
+                        <div class="rounded-xl p-8 text-center h-full flex flex-col justify-center">
+                            <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mb-6 mx-auto">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-blue-600 font-accent">Personalizados</h3>
+                            <p class="text-gray-600">Transforme suas ideias em realidade. Canecas, camisetas, e uma infinidade de produtos com a sua cara e qualidade garantida.</p>
+                        </div>
+                    </a>
+                    <a href="tecnologia.html" class="block rounded-xl shadow-lg transform hover:-translate-y-2 transition-all duration-300 animate-on-scroll card-glow-green card-gradient" style="animation-delay: 400ms;">
+                        <div class="rounded-xl p-8 text-center h-full flex flex-col justify-center">
+                            <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center mb-6 mx-auto">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-emerald-500 font-accent">Tecnologia</h3>
+                            <p class="text-gray-600">Soluções digitais para o seu negócio. Desenvolvemos pequenos projetos e sites que posicionam sua marca no mundo online.</p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -441,7 +477,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer id="contact" class="bg-gray-900 text-white py-16">
         <div class="container mx-auto px-6">
             <div class="grid md:grid-cols-4 gap-8">
@@ -649,6 +684,8 @@
             function openWhatsApp(phone, message = null) {
                 const defaultMessage = 'Olá! Gostaria de mais informações sobre os serviços da Plena Informática.';
                 const finalMessage = message || defaultMessage;
+                const mailto = `mailto:contato@plenainformatica.com.br?subject=Contato%20Plena&body=${encodeURIComponent(finalMessage)}`;
+                window.open(mailto, '_blank');
                 const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(finalMessage)}`;
                 window.open(url, '_blank', 'noopener,noreferrer');
             }
@@ -821,6 +858,26 @@
                     else if (!event.shiftKey && document.activeElement === lastElement) { event.preventDefault(); firstElement.focus(); }
                 }
             });
+
+            const toggleDesktop = document.getElementById('toggle-desktop');
+            const toggleMobile = document.getElementById('toggle-mobile');
+            const servicesDesktop = document.getElementById('services-desktop');
+            const servicesMobile = document.getElementById('services-mobile');
+            function activateDesktop(){
+                if (servicesDesktop) { servicesDesktop.classList.add('md:block'); servicesDesktop.classList.remove('md:hidden'); }
+                if (servicesMobile) { servicesMobile.classList.add('md:hidden'); servicesMobile.classList.remove('md:block'); }
+                if (toggleDesktop) { toggleDesktop.classList.add('bg-orange-500','text-white'); toggleDesktop.classList.remove('bg-slate-200','text-slate-800'); }
+                if (toggleMobile) { toggleMobile.classList.add('bg-slate-200','text-slate-800'); toggleMobile.classList.remove('bg-orange-500','text-white'); }
+            }
+            function activateMobile(){
+                if (servicesMobile) { servicesMobile.classList.add('md:block'); servicesMobile.classList.remove('md:hidden'); }
+                if (servicesDesktop) { servicesDesktop.classList.add('md:hidden'); servicesDesktop.classList.remove('md:block'); }
+                if (toggleMobile) { toggleMobile.classList.add('bg-orange-500','text-white'); toggleMobile.classList.remove('bg-slate-200','text-slate-800'); }
+                if (toggleDesktop) { toggleDesktop.classList.add('bg-slate-200','text-slate-800'); toggleDesktop.classList.remove('bg-orange-500','text-white'); }
+            }
+            if (toggleDesktop) { toggleDesktop.addEventListener('click', activateDesktop); }
+            if (toggleMobile) { toggleMobile.addEventListener('click', activateMobile); }
+            activateDesktop();
         });
     </script>
 </body>

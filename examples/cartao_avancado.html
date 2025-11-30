@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucas Arq - Arquitetura & Design</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Inter:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2 { font-family: 'Space Grotesk', sans-serif; }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-glass {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.9);
+            color: black;
+            transform: scale(1.02);
+        }
+
+        /* Gradiente animado de fundo */
+        .animated-bg {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 animated-bg text-white">
+
+    <div class="w-full max-w-sm glass-card rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+        <!-- Header -->
+        <div class="flex flex-col items-center mb-8 relative z-10">
+            <div class="w-24 h-24 rounded-2xl mb-4 overflow-hidden border-2 border-white/30 shadow-lg relative">
+                 <div class="absolute inset-0 bg-black/20"></div>
+                 <!-- Placeholder Visual -->
+                 <div class="w-full h-full bg-gray-800 flex items-center justify-center text-3xl">🏛️</div>
+            </div>
+            <h1 class="text-3xl font-bold tracking-tight">Lucas Arq</h1>
+            <p class="text-white/70 text-sm tracking-wide uppercase mt-1 font-medium">Arquitetura Contemporânea</p>
+            
+            <div class="flex gap-3 mt-4">
+                <span class="px-3 py-1 bg-white/10 rounded-full text-[10px] border border-white/10">Interiores</span>
+                <span class="px-3 py-1 bg-white/10 rounded-full text-[10px] border border-white/10">Comercial</span>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="space-y-3 relative z-10">
+            <a href="#" class="btn-glass w-full py-4 rounded-xl flex items-center justify-center gap-3 group">
+                <i class="ph-fill ph-whatsapp-logo text-xl text-green-400 group-hover:text-black transition-colors"></i>
+                <span class="font-medium">Solicitar Orçamento</span>
+            </a>
+            
+            <a href="#" class="btn-glass w-full py-4 rounded-xl flex items-center justify-center gap-3 group">
+                <i class="ph-fill ph-images text-xl text-purple-400 group-hover:text-black transition-colors"></i>
+                <span class="font-medium">Ver Portfólio (Behance)</span>
+            </a>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <a href="#" class="btn-glass py-4 rounded-xl flex flex-col items-center justify-center gap-1 hover:bg-white/90 hover:text-black">
+                    <i class="ph-fill ph-map-pin text-lg"></i>
+                    <span class="text-xs">Escritório</span>
+                </a>
+                <a href="#" class="btn-glass py-4 rounded-xl flex flex-col items-center justify-center gap-1 hover:bg-white/90 hover:text-black">
+                    <i class="ph-fill ph-globe text-lg"></i>
+                    <span class="text-xs">Site Oficial</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer Socials -->
+        <div class="mt-10 flex justify-center gap-6 relative z-10">
+            <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white hover:text-black border border-white/10 flex items-center justify-center transition duration-300">
+                <i class="ph-fill ph-instagram-logo text-xl"></i>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white hover:text-black border border-white/10 flex items-center justify-center transition duration-300">
+                <i class="ph-fill ph-linkedin-logo text-xl"></i>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white hover:text-black border border-white/10 flex items-center justify-center transition duration-300">
+                <i class="ph-fill ph-pinterest-logo text-xl"></i>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

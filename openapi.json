@@ -1,0 +1,28 @@
+{
+  "openapi": "3.0.3",
+  "info": { "title": "Plena API", "version": "1.0.0" },
+  "paths": {
+    "/api/auth/login": { "post": { "summary": "Login", "responses": { "200": { "description": "OK" } } } },
+    "/api/users": { "get": { "summary": "Listar usuários (self)", "responses": { "200": { "description": "OK" } } } },
+    "/api/notifications": { "get": { "summary": "Listar notificações" }, "put": { "summary": "Ler todas", "responses": { "200": { "description": "OK" } } } },
+    "/api/notifications/{id}/read": { "put": { "summary": "Marcar como lida", "responses": { "200": { "description": "OK" } } } },
+    "/api/notifications/unread-count": { "get": { "summary": "Conta não lidas", "responses": { "200": { "description": "OK" } } } },
+    "/api/notifications/stream": { "get": { "summary": "SSE notificações", "responses": { "200": { "description": "SSE stream" } } } },
+    "/api/reports": { "get": { "summary": "Listar relatórios", "responses": { "200": { "description": "OK" } } } },
+    "/api/reports/generate": { "post": { "summary": "Gerar relatório", "responses": { "202": { "description": "Aceito" } } } },
+    "/api/reports/{id}": { "get": { "summary": "Detalhes relatório", "responses": { "200": { "description": "OK" } } } },
+    "/api/reports/{id}/download": { "get": { "summary": "Download signed URL", "responses": { "200": { "description": "OK" } } } },
+    "/api/support/tickets": { "get": { "summary": "Listar tickets" }, "post": { "summary": "Abrir ticket" } },
+    "/api/support/tickets/{id}": { "get": { "summary": "Detalhes ticket" } },
+    "/api/support/tickets/{id}/messages": { "post": { "summary": "Adicionar mensagem" } },
+    "/api/support/tickets/{id}/status": { "put": { "summary": "Atualizar status (admin)" } },
+    "/api/support/tickets/{id}/assign": { "put": { "summary": "Atribuir (admin)" } },
+    "/api/admin/users": { "get": { "summary": "Listar usuários (admin)" } },
+    "/api/admin/users/{id}": { "get": { "summary": "Detalhes usuário (admin)" }, "put": { "summary": "Atualizar usuário (admin)" } },
+    "/api/admin/appointments": { "get": { "summary": "Listar agendamentos (admin)" } },
+    "/api/admin/mei-services": { "get": { "summary": "Listar MEIs (admin)" } },
+    "/api/admin/payments": { "get": { "summary": "Listar pagamentos (admin)" } },
+    "/api/admin/metrics": { "get": { "summary": "Métricas em tempo real" } },
+    "/api/health": { "get": { "summary": "Health detalhado", "responses": { "200": { "description": "OK" } } } }
+  }
+}

@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DATABASE_URL=postgres://admin:password@postgres:5432/plena_digital
+      - MONGODB_URI=mongodb://mongo:27017/plena_digital
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=dev-secret
+      - JWT_REFRESH_SECRET=dev-refresh
+      - CORS_ORIGIN=http://localhost:3000
+    depends_on:
+      - postgres
+      - redis
+      - mongo
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: plena_digital
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+  redis:
+    image: redis:alpine
+  mongo:
+    image: mongo:5
