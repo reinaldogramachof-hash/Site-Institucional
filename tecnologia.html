@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="scroll-smooth">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Plena Tecnologia | Soluções Digitais Inteligentes</title>
-  <meta name="description" content="Sistemas Web, Cardápios Digitais, Agendamento e Automação. Tecnologia sob medida em São José dos Campos."/>
-  <meta name="theme-color" content="#0a0a0f"/>
-  
+  <meta name="description"
+    content="Sistemas Web, Cardápios Digitais, Agendamento e Automação. Tecnologia sob medida em São José dos Campos." />
+  <meta name="theme-color" content="#0a0a0f" />
+  <link rel="icon" type="image/jpg" href="plena.jpg" />
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet"/>
-  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;700&display=swap"
+    rel="stylesheet" />
+
   <!-- Icons -->
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -24,7 +29,7 @@
       --primary-glow: #34d399;
       --bg-dark: #0A0A0F;
     }
-    
+
     body {
       font-family: 'Poppins', sans-serif;
       background-color: var(--bg-dark);
@@ -33,11 +38,37 @@
     }
 
     /* Matrix & Glass Effects */
-    #matrix-canvas { position: fixed; inset: 0; z-index: -2; opacity: 0.04; pointer-events: none; }
-    .container { margin-left: auto; margin-right: auto; }
-    @media (max-width: 768px) { .container { max-width: 100% !important; padding-left: 1rem; padding-right: 1rem; } }
-    :target { scroll-margin-top: 5rem; }
-    
+    #matrix-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      opacity: 0.04;
+      pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+      #matrix-canvas {
+        display: none;
+      }
+    }
+
+    .container {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        max-width: 100% !important;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+    }
+
+    :target {
+      scroll-margin-top: 5rem;
+    }
+
     .glass-wet {
       position: relative;
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
@@ -52,127 +83,228 @@
       transform: translateY(-4px);
       box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.1);
     }
-    .glass-wet[role="button"]:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(16,185,129,0.25); }
+
+    .glass-wet[role="button"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+    }
 
     /* Components */
     .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.75rem;
-      transition: all 0.2s; cursor: pointer; gap: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      transition: all 0.2s;
+      cursor: pointer;
+      gap: 0.5rem;
     }
-    
+
     .btn-primary {
-      background: var(--primary); color: #000;
+      background: var(--primary);
+      color: #000;
       box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
     }
-    .btn-primary:hover { background: var(--primary-glow); transform: translateY(-1px); box-shadow: 0 0 25px rgba(16, 185, 129, 0.4); }
-    
-    .btn-ghost {
-      background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #fff;
+
+    .btn-primary:hover {
+      background: var(--primary-glow);
+      transform: translateY(-1px);
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
     }
-    .btn-ghost:hover { border-color: var(--primary); color: var(--primary); background: rgba(16, 185, 129, 0.05); }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: rgba(16, 185, 129, 0.05);
+    }
 
     .input-tech {
-      background: rgba(0,0,0,0.4);
-      border: 1px solid rgba(255,255,255,0.1);
+      font-size: 16px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       color: white;
       border-radius: 0.5rem;
       transition: border-color 0.3s;
     }
-    .input-tech:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2); }
+
+    @media (min-width: 768px) {
+      .input-tech {
+        font-size: 0.875rem;
+      }
+    }
+
+    .input-tech:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
 
     /* Modal Demo */
     .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
-      z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s;
-      display: flex; align-items: center; justify-content: center; padding: 1rem;
-      overscroll-behavior: contain; touch-action: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      overscroll-behavior: contain;
+      touch-action: none;
     }
-    .modal-backdrop.active { opacity: 1; pointer-events: all; }
-    
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
     .modal-content {
-      width: 100%; max-width: 900px; background: #111; border: 1px solid #333;
-      border-radius: 1rem; transform: scale(0.95); transition: transform 0.3s;
-      overflow: hidden; display: flex; flex-direction: column; max-height: 90vh;
+      width: 100%;
+      max-width: 900px;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 1rem;
+      transform: scale(0.95);
+      transition: transform 0.3s;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      max-height: 90vh;
       overscroll-behavior: contain;
     }
-    .modal-backdrop.active .modal-content { transform: scale(1); }
-    
+
+    .modal-backdrop.active .modal-content {
+      transform: scale(1);
+    }
+
     /* Badge Pulse */
     .badge-pulse {
-      position: relative; display: inline-flex; align-items: center;
-      padding: 4px 12px; border-radius: 99px; font-size: 0.7rem;
-      font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
-      color: var(--primary-glow); background: rgba(16, 185, 129, 0.1);
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--primary-glow);
+      background: rgba(16, 185, 129, 0.1);
       border: 1px solid rgba(16, 185, 129, 0.2);
     }
-    
+
     /* Custom Select Icon */
     .custom-select {
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2310b981' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-        background-position: right 0.5rem center;
-        background-repeat: no-repeat;
-        background-size: 1.5em 1.5em;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2310b981' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.5rem center;
+      background-repeat: no-repeat;
+      background-size: 1.5em 1.5em;
     }
 
     /* iPhone 15 Mockup */
     .phone-mock {
       position: relative;
-      width: 100%; max-width: 390px; height: auto; aspect-ratio: 390/844;
+      width: 100%;
+      max-width: 390px;
+      height: auto;
+      aspect-ratio: 390/844;
       padding: 12px;
       border-radius: 44px;
       background: linear-gradient(145deg, #0b0b0f, #121219);
       border: 2px solid #1f2937;
       box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,0.06),
-        inset 0 12px 30px rgba(255,255,255,0.03),
-        0 25px 60px rgba(0,0,0,0.5);
+        inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+        inset 0 12px 30px rgba(255, 255, 255, 0.03),
+        0 25px 60px rgba(0, 0, 0, 0.5);
     }
+
     .phone-mock::before {
       content: "";
-      position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
-      width: 120px; height: 34px;
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 34px;
       background: #000;
       border-radius: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.6), inset 0 -4px 10px rgba(255,255,255,0.05);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), inset 0 -4px 10px rgba(255, 255, 255, 0.05);
       z-index: 10;
     }
+
     .phone-mock::after {
       content: "";
-      position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
-      width: 120px; height: 5px;
-      background: linear-gradient(to right, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
-      border-radius: 999px; opacity: 0.6;
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 5px;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+      border-radius: 999px;
+      opacity: 0.6;
       z-index: 10;
     }
+
     .phone-screen {
-      border-radius: 34px; overflow: auto; position: relative;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+      border-radius: 34px;
+      overflow: auto;
+      position: relative;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
       touch-action: pan-y;
     }
+
     @media (max-width: 400px) {
-      .phone-mock { max-width: 340px; }
+      .phone-mock {
+        max-width: 340px;
+      }
     }
 
-    .bar-anim { transition: width 300ms ease; }
-    #demo-container { overscroll-behavior: contain; }
+    .bar-anim {
+      transition: width 300ms ease;
+    }
+
+    #demo-container {
+      overscroll-behavior: contain;
+    }
+
+    @media (max-width: 768px) {
+      #matrix-canvas {
+        display: none;
+      }
+    }
   </style>
 </head>
+
 <body class="overflow-x-hidden">
 
   <canvas id="matrix-canvas"></canvas>
 
   <!-- Navbar -->
-  <header class="fixed w-full top-0 z-50 transition-all duration-300 border-b border-white/5 bg-black/50 backdrop-blur-md">
+  <header
+    class="fixed w-full top-0 z-50 transition-all duration-300 border-b border-white/5 bg-black/50 backdrop-blur-md">
     <div class="container mx-auto px-6 py-4 relative flex justify-between items-center">
       <a href="#" class="text-xl font-bold tracking-tighter text-white flex items-center gap-2">
         <i class="ph ph-code text-emerald-400 text-2xl"></i>
         PLENA <span class="text-emerald-400">TECNOLOGIA</span>
       </a>
-      
+
       <nav class="hidden md:flex gap-8 text-sm font-medium text-gray-300">
         <a href="index.html" class="hover:text-emerald-400 transition-colors">Início</a>
         <a href="#solucoes" class="hover:text-emerald-400 transition-colors">Soluções</a>
@@ -180,44 +312,52 @@
         <a href="#orcamento" class="hover:text-emerald-400 transition-colors">Calculadora</a>
       </nav>
 
-      <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20estou%20visitando%20a%20p%C3%A1gina%20de%20tecnologia%20da%20Plena%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" class="hidden md:inline-flex btn btn-primary text-xs py-2 px-4">
-        <i class="ph ph-whatsapp-logo text-lg"></i> 
+      <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20estou%20visitando%20a%20p%C3%A1gina%20de%20tecnologia%20da%20Plena%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es."
+        target="_blank" class="hidden md:inline-flex btn btn-primary text-xs py-2 px-4">
+        <i class="ph ph-whatsapp-logo text-lg"></i>
         <span class="hidden sm:inline">Falar com Especialista</span>
       </a>
-      <button id="mobile-menu-toggle" class="md:hidden btn btn-ghost text-xs py-2 px-3" aria-expanded="false" aria-controls="mobile-menu"><i class="ph ph-list text-lg"></i></button>
+      <button id="mobile-menu-toggle" class="md:hidden btn btn-ghost text-xs py-2 px-3" aria-expanded="false"
+        aria-controls="mobile-menu"><i class="ph ph-list text-lg"></i></button>
     </div>
   </header>
-  <div id="mobile-menu" class="hidden fixed top-16 left-4 right-4 z-50 rounded-xl border border-white/10 bg-black/90 backdrop-blur-md p-4">
+  <div id="mobile-menu"
+    class="hidden fixed top-16 left-4 right-4 z-50 rounded-xl border border-white/10 bg-black/90 backdrop-blur-md p-4">
     <div class="flex flex-col gap-3 text-sm">
-      <a href="index.html" class="px-3 py-2 rounded hover:bg-white/5">Início</a>
-      <a href="#solucoes" class="px-3 py-2 rounded hover:bg-white/5">Soluções</a>
+      <a href="index.html" class="px-3 py-3 rounded hover:bg-white/5">Início</a>
+      <a href="#solucoes" class="px-3 py-3 rounded hover:bg-white/5">Soluções</a>
       <a href="#planos" class="px-3 py-2 rounded hover:bg-white/5">Planos</a>
       <a href="#orcamento" class="px-3 py-2 rounded hover:bg-white/5">Calculadora</a>
-      <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20estou%20visitando%20a%20p%C3%A1gina%20de%20tecnologia%20da%20Plena%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" class="btn btn-primary w-full text-xs py-2">Falar com Especialista</a>
+      <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20estou%20visitando%20a%20p%C3%A1gina%20de%20tecnologia%20da%20Plena%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es."
+        target="_blank" class="btn btn-primary w-full text-xs py-2">Falar com Especialista</a>
     </div>
   </div>
   <main class="pt-24">
-    
+
     <!-- HERO -->
-    <section class="min-h-[80vh] flex items-center justify-center relative px-4 md:px-6">
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[480px] md:w-[600px] md:h-[600px] bg-emerald-500/10 rounded-full blur-[120px] -z-10"></div>
+    <section class="min-h-[60vh] md:min-h-[80vh] flex items-center justify-center relative px-4 md:px-6">
+      <div
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[480px] md:w-[600px] md:h-[600px] bg-emerald-500/10 rounded-full blur-[120px] -z-10">
+      </div>
 
       <div class="container mx-auto text-center z-10 max-w-screen-sm md:max-w-3xl">
-        <div class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-900/20 text-emerald-400 text-xs font-mono uppercase">
+        <div
+          class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-900/20 text-emerald-400 text-xs font-mono uppercase">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           Software House Local
         </div>
-        
-        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight tracking-tight">
+
+        <h1 class="text-3xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight tracking-tight">
           Seu negócio merece<br />
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-emerald-400">Inteligência Digital.</span>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-emerald-400">Inteligência
+            Digital.</span>
         </h1>
-        
+
         <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
-          De cardápios digitais a sistemas de gestão completos. 
+          De cardápios digitais a sistemas de gestão completos.
           Criamos ferramentas que organizam sua empresa e vendem por você.
         </p>
-        
+
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <a href="#solucoes" class="btn btn-primary w-full sm:w-auto">Explorar Soluções</a>
           <a href="#orcamento" class="btn btn-ghost w-full sm:w-auto group">
@@ -228,7 +368,7 @@
     </section>
 
     <!-- VITRINE DE PRODUTOS -->
-    <section id="solucoes" class="py-20 relative">
+    <section id="solucoes" class="py-12 md:py-20 relative">
       <div class="container mx-auto px-6">
         <div class="mb-12 flex flex-col md:flex-row justify-between items-end gap-4">
           <div>
@@ -238,132 +378,178 @@
           <div class="text-sm text-gray-400">Do cartão de visita ao sistema de gestão.</div>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+
           <!-- 1. Landing Page -->
           <div class="glass-wet p-6 hover:border-purple-500/30 group cursor-pointer" onclick="openDemo('express')">
-             <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 bg-purple-500/20 rounded flex items-center justify-center text-purple-400"><i class="ph ph-rocket-launch text-xl"></i></div>
-                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Vendas</span>
-             </div>
-             <h3 class="text-lg font-bold text-white mb-2">Página de Alta Conversão</h3>
-             <p class="text-sm text-gray-400 mb-4">Site de página única focado em captar leads no Google e Instagram.</p>
-             <span class="text-purple-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+            <div class="flex justify-between items-start mb-4">
+              <div class="w-10 h-10 bg-purple-500/20 rounded flex items-center justify-center text-purple-400"><i
+                  class="ph ph-rocket-launch text-xl"></i></div>
+              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Vendas</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Página de Alta Conversão</h3>
+            <p class="text-sm text-gray-400 mb-4">Site de página única focado em captar leads no Google e Instagram.</p>
+            <span
+              class="text-purple-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
+              Demo <i class="ph ph-arrow-right"></i></span>
           </div>
 
           <!-- Desenvolvimento de Sites: Linha Extra (6 cards) -->
-          <div class="glass-wet p-6 hover:border-teal-500/30 group cursor-pointer" onclick="openDemo('site','basico','onepage')">
-             <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 bg-teal-500/20 rounded flex items-center justify-center text-teal-400"><i class="ph ph-browser text-xl"></i></div>
-                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
-             </div>
-             <h3 class="text-lg font-bold text-white mb-2">Site One-page</h3>
-             <p class="text-sm text-gray-400 mb-4">Apresentação simples com CTA. Ideal para campanhas.</p>
-             <span class="text-teal-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+          <div class="glass-wet p-6 hover:border-teal-500/30 group cursor-pointer"
+            onclick="openDemo('site','basico','onepage')">
+            <div class="flex justify-between items-start mb-4">
+              <div class="w-10 h-10 bg-teal-500/20 rounded flex items-center justify-center text-teal-400"><i
+                  class="ph ph-browser text-xl"></i></div>
+              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Site One-page</h3>
+            <p class="text-sm text-gray-400 mb-4">Apresentação simples com CTA. Ideal para campanhas.</p>
+            <span
+              class="text-teal-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
+              Demo <i class="ph ph-arrow-right"></i></span>
           </div>
 
-          <div class="glass-wet p-6 hover:border-sky-500/30 group cursor-pointer" onclick="openDemo('site','basico','portfolio')">
-             <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 bg-sky-500/20 rounded flex items-center justify-center text-sky-400"><i class="ph ph-layout text-xl"></i></div>
-                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
-             </div>
-             <h3 class="text-lg font-bold text-white mb-2">Site Portfólio</h3>
-             <p class="text-sm text-gray-400 mb-4">Exiba projetos e depoimentos. Foco em credibilidade.</p>
-             <span class="text-sky-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+          <div class="glass-wet p-6 hover:border-sky-500/30 group cursor-pointer"
+            onclick="openDemo('site','basico','portfolio')">
+            <div class="flex justify-between items-start mb-4">
+              <div class="w-10 h-10 bg-sky-500/20 rounded flex items-center justify-center text-sky-400"><i
+                  class="ph ph-layout text-xl"></i></div>
+              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Site Portfólio</h3>
+            <p class="text-sm text-gray-400 mb-4">Exiba projetos e depoimentos. Foco em credibilidade.</p>
+            <span
+              class="text-sky-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
+              Demo <i class="ph ph-arrow-right"></i></span>
           </div>
 
-          <div class="glass-wet p-6 hover:border-indigo-500/30 group cursor-pointer" onclick="openDemo('site','medio','institucional')">
-             <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 bg-indigo-500/20 rounded flex items-center justify-center text-indigo-400"><i class="ph ph-buildings text-xl"></i></div>
-                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
-             </div>
-             <h3 class="text-lg font-bold text-white mb-2">Site Institucional</h3>
-             <p class="text-sm text-gray-400 mb-4">Múltiplas páginas, blog e formulários personalizados.</p>
-             <span class="text-indigo-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+          <div class="glass-wet p-6 hover:border-indigo-500/30 group cursor-pointer"
+            onclick="openDemo('site','medio','institucional')">
+            <div class="flex justify-between items-start mb-4">
+              <div class="w-10 h-10 bg-indigo-500/20 rounded flex items-center justify-center text-indigo-400"><i
+                  class="ph ph-buildings text-xl"></i></div>
+              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Site Institucional</h3>
+            <p class="text-sm text-gray-400 mb-4">Múltiplas páginas, blog e formulários personalizados.</p>
+            <span
+              class="text-indigo-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
+              Demo <i class="ph ph-arrow-right"></i></span>
           </div>
 
-          <div class="glass-wet p-6 hover:border-violet-500/30 group cursor-pointer" onclick="openDemo('site','medio','blog')">
-             <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i class="ph ph-newspaper text-xl"></i></div>
-                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
-             </div>
-             <h3 class="text-lg font-bold text-white mb-2">Site com Blog</h3>
-             <p class="text-sm text-gray-400 mb-4">Publicações otimizadas para SEO e compartilhamento.</p>
-             <span class="text-violet-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+          <div class="glass-wet p-6 hover:border-violet-500/30 group cursor-pointer"
+            onclick="openDemo('site','medio','blog')">
+            <div class="flex justify-between items-start mb-4">
+              <div class="w-10 h-10 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
+                  class="ph ph-newspaper text-xl"></i></div>
+              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Site com Blog</h3>
+            <p class="text-sm text-gray-400 mb-4">Publicações otimizadas para SEO e compartilhamento.</p>
+            <span
+              class="text-violet-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
+              Demo <i class="ph ph-arrow-right"></i></span>
           </div>
 
-          <div class="glass-wet p-6 hover:border-rose-500/30 group cursor-pointer" onclick="openDemo('site','avancado','loja')">
-             <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 bg-rose-500/20 rounded flex items-center justify-center text-rose-400"><i class="ph ph-storefront text-xl"></i></div>
-                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">E‑commerce</span>
-             </div>
-             <h3 class="text-lg font-bold text-white mb-2">Loja Online</h3>
-             <p class="text-sm text-gray-400 mb-4">Catálogo, carrinho e integração com pagamentos.</p>
-             <span class="text-rose-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+          <div class="glass-wet p-6 hover:border-rose-500/30 group cursor-pointer"
+            onclick="openDemo('site','avancado','loja')">
+            <div class="flex justify-between items-start mb-4">
+              <div class="w-10 h-10 bg-rose-500/20 rounded flex items-center justify-center text-rose-400"><i
+                  class="ph ph-storefront text-xl"></i></div>
+              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">E‑commerce</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Loja Online</h3>
+            <p class="text-sm text-gray-400 mb-4">Catálogo, carrinho e integração com pagamentos.</p>
+            <span
+              class="text-rose-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
+              Demo <i class="ph ph-arrow-right"></i></span>
           </div>
 
-          <div class="glass-wet p-6 hover:border-emerald-500/30 group cursor-pointer" onclick="openDemo('site','avancado','corporativo')">
-             <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i class="ph ph-seal-check text-xl"></i></div>
-                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Premium</span>
-             </div>
-             <h3 class="text-lg font-bold text-white mb-2">Site Corporativo Premium</h3>
-             <p class="text-sm text-gray-400 mb-4">Design exclusivo, animações e integrações avançadas.</p>
-             <span class="text-emerald-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+          <div class="glass-wet p-6 hover:border-emerald-500/30 group cursor-pointer"
+            onclick="openDemo('site','avancado','corporativo')">
+            <div class="flex justify-between items-start mb-4">
+              <div class="w-10 h-10 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
+                  class="ph ph-seal-check text-xl"></i></div>
+              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Premium</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Site Corporativo Premium</h3>
+            <p class="text-sm text-gray-400 mb-4">Design exclusivo, animações e integrações avançadas.</p>
+            <span
+              class="text-emerald-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
+              Demo <i class="ph ph-arrow-right"></i></span>
           </div>
           <!-- 2. Cardápio Digital -->
           <div class="glass-wet p-6 hover:border-orange-500/30 group cursor-pointer" onclick="openDemo('cardapio')">
-             <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i class="ph ph-pizza text-xl"></i></div>
-                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Food</span>
-             </div>
-             <h3 class="text-lg font-bold text-white mb-2">Cardápio Digital PWA</h3>
-             <p class="text-sm text-gray-400 mb-4">Seu cliente pede pelo celular e o pedido chega pronto no WhatsApp. Sem taxas.</p>
-             <span class="text-orange-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+            <div class="flex justify-between items-start mb-4">
+              <div class="w-10 h-10 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i
+                  class="ph ph-pizza text-xl"></i></div>
+              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Food</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Cardápio Digital PWA</h3>
+            <p class="text-sm text-gray-400 mb-4">Seu cliente pede pelo celular e o pedido chega pronto no WhatsApp. Sem
+              taxas.</p>
+            <span
+              class="text-orange-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
+              Demo <i class="ph ph-arrow-right"></i></span>
           </div>
 
           <!-- 3. Agendamento -->
           <div class="glass-wet p-6 hover:border-blue-500/30 group cursor-pointer" onclick="openDemo('agenda')">
-             <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i class="ph ph-calendar-check text-xl"></i></div>
-                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Serviços</span>
-             </div>
-             <h3 class="text-lg font-bold text-white mb-2">Agendamento Online</h3>
-             <p class="text-sm text-gray-400 mb-4">Para barbearias e clínicas. Agenda automática 24h por dia.</p>
-             <span class="text-blue-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+            <div class="flex justify-between items-start mb-4">
+              <div class="w-10 h-10 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
+                  class="ph ph-calendar-check text-xl"></i></div>
+              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Serviços</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Agendamento Online</h3>
+            <p class="text-sm text-gray-400 mb-4">Para barbearias e clínicas. Agenda automática 24h por dia.</p>
+            <span
+              class="text-blue-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
+              Demo <i class="ph ph-arrow-right"></i></span>
           </div>
 
           <!-- 4. Cartão Interativo -->
           <div class="glass-wet p-6 hover:border-pink-500/30 group cursor-pointer" onclick="openDemo('bio')">
-             <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 bg-pink-500/20 rounded flex items-center justify-center text-pink-400"><i class="ph ph-identification-card text-xl"></i></div>
-                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Networking</span>
-             </div>
-             <h3 class="text-lg font-bold text-white mb-2">Bio Link / Cartão Digital</h3>
-             <p class="text-sm text-gray-400 mb-4">Centralize seus links, PIX e contatos em um cartão virtual elegante.</p>
-             <span class="text-pink-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+            <div class="flex justify-between items-start mb-4">
+              <div class="w-10 h-10 bg-pink-500/20 rounded flex items-center justify-center text-pink-400"><i
+                  class="ph ph-identification-card text-xl"></i></div>
+              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Networking</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Bio Link / Cartão Digital</h3>
+            <p class="text-sm text-gray-400 mb-4">Centralize seus links, PIX e contatos em um cartão virtual elegante.
+            </p>
+            <span
+              class="text-pink-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
+              Demo <i class="ph ph-arrow-right"></i></span>
           </div>
 
           <!-- 5. Gestão de OS -->
           <div class="glass-wet p-6 hover:border-yellow-500/30 group cursor-pointer" onclick="openDemo('os')">
-             <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i class="ph ph-wrench text-xl"></i></div>
-                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Técnico</span>
-             </div>
-             <h3 class="text-lg font-bold text-white mb-2">Sistema de Ordens (OS)</h3>
-             <p class="text-sm text-gray-400 mb-4">Controle de entrada e saída de equipamentos com status para o cliente.</p>
-             <span class="text-yellow-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+            <div class="flex justify-between items-start mb-4">
+              <div class="w-10 h-10 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
+                  class="ph ph-wrench text-xl"></i></div>
+              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Técnico</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Sistema de Ordens (OS)</h3>
+            <p class="text-sm text-gray-400 mb-4">Controle de entrada e saída de equipamentos com status para o cliente.
+            </p>
+            <span
+              class="text-yellow-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
+              Demo <i class="ph ph-arrow-right"></i></span>
           </div>
 
           <!-- 6. ERP Business -->
           <div class="glass-wet p-6 hover:border-emerald-500/30 group cursor-pointer" onclick="openDemo('business')">
-             <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i class="ph ph-chart-line-up text-xl"></i></div>
-                <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Gestão</span>
-             </div>
-             <h3 class="text-lg font-bold text-white mb-2">Painel Business Pro</h3>
-             <p class="text-sm text-gray-400 mb-4">Substitua planilhas. Estoque, financeiro e clientes em um sistema seguro.</p>
-             <span class="text-emerald-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver Demo <i class="ph ph-arrow-right"></i></span>
+            <div class="flex justify-between items-start mb-4">
+              <div class="w-10 h-10 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
+                  class="ph ph-chart-line-up text-xl"></i></div>
+              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Gestão</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Painel Business Pro</h3>
+            <p class="text-sm text-gray-400 mb-4">Substitua planilhas. Estoque, financeiro e clientes em um sistema
+              seguro.</p>
+            <span
+              class="text-emerald-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
+              Demo <i class="ph ph-arrow-right"></i></span>
           </div>
 
         </div>
@@ -371,7 +557,7 @@
     </section>
 
     <!-- PLANOS -->
-    <section id="planos" class="py-20 bg-black/30 border-t border-white/5">
+    <section id="planos" class="py-12 md:py-20 bg-black/30 border-t border-white/5">
       <div class="container mx-auto px-6">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold text-white mb-2">Investimento Transparente</h2>
@@ -383,49 +569,62 @@
           <div class="glass-wet p-8 border-t-4 border-t-gray-600">
             <span class="badge-pulse">Entrada</span>
             <h3 class="text-2xl font-bold text-white mt-4">Pacote Express</h3>
-            <div class="mt-2 mb-6 text-3xl font-bold text-emerald-400">R$ 890 <span class="text-sm text-gray-500 font-normal">/único</span></div>
+            <div class="mt-2 mb-6 text-3xl font-bold text-emerald-400">R$ 890 <span
+                class="text-sm text-gray-500 font-normal">/único</span></div>
             <ul class="space-y-3 text-sm text-gray-300 mb-8">
-               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Landing Page ou Cartão Digital</li>
-               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Botão WhatsApp</li>
-               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Hospedagem (1 ano)</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Landing Page ou Cartão
+                Digital</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Botão WhatsApp</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Hospedagem (1 ano)</li>
             </ul>
-            <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20tenho%20interesse%20no%20Pacote%20Express.%20Pode%20me%20enviar%20detalhes%20e%20disponibilidade%3F" target="_blank" class="btn btn-ghost w-full">Contratar</a>
+            <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20tenho%20interesse%20no%20Pacote%20Express.%20Pode%20me%20enviar%20detalhes%20e%20disponibilidade%3F"
+              target="_blank" class="btn btn-ghost w-full">Contratar</a>
           </div>
 
           <!-- Plano 2 -->
-          <div class="glass-wet p-8 border border-emerald-500/50 shadow-2xl relative transform lg:-translate-y-4 bg-emerald-900/10">
-            <span class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-emerald-500 text-black text-xs font-bold px-3 py-1 rounded-full">POPULAR</span>
+          <div
+            class="glass-wet p-8 border border-emerald-500/50 shadow-2xl relative transform lg:-translate-y-4 bg-emerald-900/10">
+            <span
+              class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-emerald-500 text-black text-xs font-bold px-3 py-1 rounded-full">POPULAR</span>
             <span class="badge-pulse bg-emerald-500/20 text-emerald-300">Profissional</span>
             <h3 class="text-2xl font-bold text-white mt-4">Pack Negócios</h3>
-            <div class="mt-2 mb-6 text-3xl font-bold text-emerald-400">R$ 2.400 <span class="text-sm text-gray-500 font-normal">/projeto</span></div>
+            <div class="mt-2 mb-6 text-3xl font-bold text-emerald-400">R$ 2.400 <span
+                class="text-sm text-gray-500 font-normal">/projeto</span></div>
             <ul class="space-y-3 text-sm text-gray-300 mb-8">
-               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Site Institucional ou Loja Simples</li>
-               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Painel Administrativo</li>
-               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Otimização Google (SEO)</li>
-               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Configuração Google Meu Negócio</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Site Institucional ou Loja
+                Simples</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Painel Administrativo</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Otimização Google (SEO)
+              </li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Configuração Google Meu
+                Negócio</li>
             </ul>
-            <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20tenho%20interesse%20no%20Pack%20Neg%C3%B3cios.%20Gostaria%20de%20avancar%20com%20a%20contrata%C3%A7%C3%A3o." target="_blank" class="btn btn-primary w-full">Contratar</a>
+            <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20tenho%20interesse%20no%20Pack%20Neg%C3%B3cios.%20Gostaria%20de%20avancar%20com%20a%20contrata%C3%A7%C3%A3o."
+              target="_blank" class="btn btn-primary w-full">Contratar</a>
           </div>
 
           <!-- Plano 3 -->
           <div class="glass-wet p-8 border-t-4 border-t-purple-500">
             <span class="badge-pulse border-purple-500/40 text-purple-300">Sistemas</span>
             <h3 class="text-2xl font-bold text-white mt-4">Software House</h3>
-            <div class="mt-2 mb-6 text-3xl font-bold text-emerald-400">R$ 4.500 <span class="text-sm text-gray-500 font-normal">/inicial</span></div>
+            <div class="mt-2 mb-6 text-3xl font-bold text-emerald-400">R$ 4.500 <span
+                class="text-sm text-gray-500 font-normal">/inicial</span></div>
             <ul class="space-y-3 text-sm text-gray-300 mb-8">
-               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-purple-500"></i> Sistema Web Personalizado</li>
-               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-purple-500"></i> Banco de Dados & Login</li>
-               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-purple-500"></i> Automação de Processos</li>
-               <li class="flex gap-2"><i class="ph-fill ph-check-circle text-purple-500"></i> Suporte Prioritário</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-purple-500"></i> Sistema Web Personalizado
+              </li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-purple-500"></i> Banco de Dados & Login</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-purple-500"></i> Automação de Processos</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-purple-500"></i> Suporte Prioritário</li>
             </ul>
-            <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20preciso%20de%20um%20Sistema%20Personalizado.%20Podemos%20agendar%20uma%20reuni%C3%A3o%20para%20detalhes%3F" target="_blank" class="btn btn-ghost w-full">Agendar Reunião</a>
+            <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20preciso%20de%20um%20Sistema%20Personalizado.%20Podemos%20agendar%20uma%20reuni%C3%A3o%20para%20detalhes%3F"
+              target="_blank" class="btn btn-ghost w-full">Agendar Reunião</a>
           </div>
         </div>
       </div>
     </section>
 
     <!-- CALCULADORA -->
-    <section id="orcamento" class="py-20">
+    <section id="orcamento" class="py-12 md:py-20">
       <div class="container mx-auto px-6">
         <div class="glass-wet p-6 md:p-12 rounded-2xl max-w-5xl mx-auto border border-white/10">
           <div class="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
@@ -435,11 +634,14 @@
                 Calculadora Inteligente
               </h2>
               <p class="text-gray-400 mb-8 text-sm">Selecione os módulos e obtenha uma estimativa instantânea.</p>
-              
+
               <form id="calc-form" class="space-y-5">
                 <div>
-                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1 block">Projeto Base <i title="Escolha o tipo de projeto para estimar o investimento" class="ph ph-info text-gray-500"></i></label>
-                  <select id="projectType" onchange="handleProjectChange()" class="custom-select w-full input-tech p-3 text-sm bg-gray-900">
+                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1 block">Projeto Base <i
+                      title="Escolha o tipo de projeto para estimar o investimento"
+                      class="ph ph-info text-gray-500"></i></label>
+                  <select id="projectType" onchange="handleProjectChange()"
+                    class="custom-select w-full input-tech p-3 text-sm bg-gray-900">
                     <option value="0">Selecione...</option>
                     <option value="890">Página de Alta Conversão (Landing Express)</option>
                     <option value="1500">Cardápio Digital PWA</option>
@@ -452,30 +654,38 @@
                 </div>
 
                 <div>
-                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1 block">Módulos Extras <i title="Adicione funcionalidades compatíveis com seu projeto" class="ph ph-info text-gray-500"></i></label>
+                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1 block">Módulos Extras <i
+                      title="Adicione funcionalidades compatíveis com seu projeto"
+                      class="ph ph-info text-gray-500"></i></label>
                   <div id="features-group" class="space-y-2">
                     <label class="flex items-center gap-2 text-sm text-gray-300">
-                      <input type="checkbox" class="accent-emerald-500" data-key="whatsapp" data-price="300" data-label="Botão WhatsApp Flutuante (+R$ 300)" onchange="handleFeaturesChange()">
+                      <input type="checkbox" class="accent-emerald-500" data-key="whatsapp" data-price="300"
+                        data-label="Botão WhatsApp Flutuante (+R$ 300)" onchange="handleFeaturesChange()">
                       <span>Botão WhatsApp Flutuante (+R$ 300)</span>
                     </label>
                     <label class="flex items-center gap-2 text-sm text-gray-300">
-                      <input type="checkbox" class="accent-sky-500" data-key="blog" data-price="800" data-label="Blog de Notícias (+R$ 800)" onchange="handleFeaturesChange()">
+                      <input type="checkbox" class="accent-sky-500" data-key="blog" data-price="800"
+                        data-label="Blog de Notícias (+R$ 800)" onchange="handleFeaturesChange()">
                       <span>Blog de Notícias (+R$ 800)</span>
                     </label>
                     <label class="flex items-center gap-2 text-sm text-gray-300">
-                      <input type="checkbox" class="accent-indigo-500" data-key="login" data-price="1500" data-label="Área Restrita/Login (+R$ 1500)" onchange="handleFeaturesChange()">
+                      <input type="checkbox" class="accent-indigo-500" data-key="login" data-price="1500"
+                        data-label="Área Restrita/Login (+R$ 1500)" onchange="handleFeaturesChange()">
                       <span>Área Restrita/Login (+R$ 1500)</span>
                     </label>
                     <label class="flex items-center gap-2 text-sm text-gray-300">
-                      <input type="checkbox" class="accent-violet-500" data-key="bot" data-price="2000" data-label="Automação/Chatbot (+R$ 2000)" onchange="handleFeaturesChange()">
+                      <input type="checkbox" class="accent-violet-500" data-key="bot" data-price="2000"
+                        data-label="Automação/Chatbot (+R$ 2000)" onchange="handleFeaturesChange()">
                       <span>Automação/Chatbot (+R$ 2000)</span>
                     </label>
                   </div>
                 </div>
 
                 <div>
-                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1 block">Prazo de Entrega <i title="Urgente aumenta o investimento e reduz prazo" class="ph ph-info text-gray-500"></i></label>
-                  <select id="deadline" onchange="handleDeadlineChange()" class="custom-select w-full input-tech p-3 text-sm bg-gray-900">
+                  <label class="block text-xs font-bold text-gray-500 uppercase mb-1 block">Prazo de Entrega <i
+                      title="Urgente aumenta o investimento e reduz prazo" class="ph ph-info text-gray-500"></i></label>
+                  <select id="deadline" onchange="handleDeadlineChange()"
+                    class="custom-select w-full input-tech p-3 text-sm bg-gray-900">
                     <option value="1">Normal (15-30 dias)</option>
                     <option value="1.3">Urgente (+30%)</option>
                   </select>
@@ -488,7 +698,8 @@
                   </div>
                   <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-1 block">WhatsApp ou e-mail</label>
-                    <input id="calc-contact" class="w-full input-tech p-3 text-sm" placeholder="(12) 99999-0000 ou email@dominio.com">
+                    <input id="calc-contact" class="w-full input-tech p-3 text-sm"
+                      placeholder="(12) 99999-0000 ou email@dominio.com">
                   </div>
                 </div>
                 <div class="text-center mt-2">
@@ -499,69 +710,69 @@
 
             <div class="relative">
               <div class="bg-gray-950 border border-gray-800 rounded-lg p-5 font-mono text-sm shadow-2xl">
-                
+
                 <div class="mb-5 rounded border border-gray-800 bg-gray-900 p-4">
-                   <div class="text-center mb-4">
-                      <p class="text-gray-500 text-xs uppercase">Estimativa Total</p>
-                      <div id="totalPrice" class="text-4xl font-bold text-emerald-400">R$ 0,00</div>
-                   </div>
-                   <div class="space-y-2">
-                      <div>
-                         <div class="flex justify-between text-xs text-gray-400 mb-1">
-                            <span>Desenvolvimento & Lógica</span>
-                            <span id="devValue" class="text-emerald-400">R$ 0,00</span>
-                         </div>
-                         <div class="h-2 bg-emerald-900/20 rounded">
-                            <div id="devBar" class="h-2 bg-emerald-500 rounded bar-anim" style="width:0%"></div>
-                         </div>
+                  <div class="text-center mb-4">
+                    <p class="text-gray-500 text-xs uppercase">Estimativa Total</p>
+                    <div id="totalPrice" class="text-4xl font-bold text-emerald-400">R$ 0,00</div>
+                  </div>
+                  <div class="space-y-2">
+                    <div>
+                      <div class="flex justify-between text-xs text-gray-400 mb-1">
+                        <span>Desenvolvimento & Lógica</span>
+                        <span id="devValue" class="text-emerald-400">R$ 0,00</span>
                       </div>
-                      <div>
-                         <div class="flex justify-between text-xs text-gray-400 mb-1">
-                            <span>UI/UX Design</span>
-                            <span id="designValue" class="text-sky-400">R$ 0,00</span>
-                         </div>
-                         <div class="h-2 bg-sky-900/20 rounded">
-                            <div id="designBar" class="h-2 bg-sky-500 rounded bar-anim" style="width:0%"></div>
-                         </div>
+                      <div class="h-2 bg-emerald-900/20 rounded">
+                        <div id="devBar" class="h-2 bg-emerald-500 rounded bar-anim" style="width:0%"></div>
                       </div>
-                      <div>
-                         <div class="flex justify-between text-xs text-gray-400 mb-1">
-                            <span>Infraestrutura & Setup</span>
-                            <span id="infraValue" class="text-violet-400">R$ 0,00</span>
-                         </div>
-                         <div class="h-2 bg-violet-900/20 rounded">
-                            <div id="infraBar" class="h-2 bg-violet-500 rounded bar-anim" style="width:0%"></div>
-                         </div>
+                    </div>
+                    <div>
+                      <div class="flex justify-between text-xs text-gray-400 mb-1">
+                        <span>UI/UX Design</span>
+                        <span id="designValue" class="text-sky-400">R$ 0,00</span>
                       </div>
-                   </div>
-                   <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4 text-xs">
-                      <div class="bg-black/30 border border-gray-800 rounded p-3">
-                         <div class="text-gray-400 mb-1">Simulação de Parcelas</div>
-                         <div class="flex items-center justify-between">
-                           <span class="text-gray-500">3x</span>
-                           <span id="threeInstallments" class="text-white">R$ 0,00</span>
-                         </div>
-                         <div class="flex items-center justify-between mt-1">
-                           <span class="text-gray-500">6x</span>
-                           <span id="sixInstallments" class="text-white">R$ 0,00</span>
-                         </div>
+                      <div class="h-2 bg-sky-900/20 rounded">
+                        <div id="designBar" class="h-2 bg-sky-500 rounded bar-anim" style="width:0%"></div>
                       </div>
-                      <div class="bg-black/30 border border-gray-800 rounded p-3">
-                         <div class="text-gray-400 mb-1">Prazo Estimado</div>
-                         <div id="deadlineInfo" class="text-white">Selecione um projeto</div>
+                    </div>
+                    <div>
+                      <div class="flex justify-between text-xs text-gray-400 mb-1">
+                        <span>Infraestrutura & Setup</span>
+                        <span id="infraValue" class="text-violet-400">R$ 0,00</span>
                       </div>
-                   </div>
-                   <div class="mt-4 bg-black/30 border border-gray-800 rounded p-3 text-xs">
-                      <div class="text-gray-400 mb-1">Resumo da Seleção</div>
-                      <div class="space-y-1 text-white">
-                        <div>Projeto: <span id="selectedProject">—</span></div>
-                        <div>Prazo: <span id="selectedDeadline">—</span></div>
-                        <div>Nome: <span id="selectedClientName">—</span></div>
-                        <div>Contato: <span id="selectedClientContact">—</span></div>
-                        <div>Extras:</div>
-                        <ul id="selectedExtrasList" class="list-disc list-inside text-white/90"></ul>
+                      <div class="h-2 bg-violet-900/20 rounded">
+                        <div id="infraBar" class="h-2 bg-violet-500 rounded bar-anim" style="width:0%"></div>
                       </div>
-                   </div>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4 text-xs">
+                    <div class="bg-black/30 border border-gray-800 rounded p-3">
+                      <div class="text-gray-400 mb-1">Simulação de Parcelas</div>
+                      <div class="flex items-center justify-between">
+                        <span class="text-gray-500">3x</span>
+                        <span id="threeInstallments" class="text-white">R$ 0,00</span>
+                      </div>
+                      <div class="flex items-center justify-between mt-1">
+                        <span class="text-gray-500">6x</span>
+                        <span id="sixInstallments" class="text-white">R$ 0,00</span>
+                      </div>
+                    </div>
+                    <div class="bg-black/30 border border-gray-800 rounded p-3">
+                      <div class="text-gray-400 mb-1">Prazo Estimado</div>
+                      <div id="deadlineInfo" class="text-white">Selecione um projeto</div>
+                    </div>
+                  </div>
+                  <div class="mt-4 bg-black/30 border border-gray-800 rounded p-3 text-xs">
+                    <div class="text-gray-400 mb-1">Resumo da Seleção</div>
+                    <div class="space-y-1 text-white">
+                      <div>Projeto: <span id="selectedProject">—</span></div>
+                      <div>Prazo: <span id="selectedDeadline">—</span></div>
+                      <div>Nome: <span id="selectedClientName">—</span></div>
+                      <div>Contato: <span id="selectedClientContact">—</span></div>
+                      <div>Extras:</div>
+                      <ul id="selectedExtrasList" class="list-disc list-inside text-white/90"></ul>
+                    </div>
+                  </div>
                 </div>
 
                 <button id="calc-submit" onclick="sendCalcToWhatsapp()" class="btn btn-primary w-full text-sm">
@@ -579,7 +790,8 @@
       <div class="container mx-auto px-6">
         <div class="text-center mb-8">
           <h2 class="text-2xl font-bold text-white">Conte seu cenário</h2>
-          <p class="text-gray-400 mt-2 max-w-xl mx-auto text-sm">Se preferir não usar a calculadora, descreva sua necessidade livremente e nosso time entrará em contato.</p>
+          <p class="text-gray-400 mt-2 max-w-xl mx-auto text-sm">Se preferir não usar a calculadora, descreva sua
+            necessidade livremente e nosso time entrará em contato.</p>
         </div>
         <div class="max-w-3xl mx-auto glass-wet p-7">
           <form id="tech-project-form">
@@ -590,15 +802,20 @@
               </div>
               <div>
                 <label for="contact-info" class="sr-only">Seu WhatsApp ou e-mail</label>
-                <input id="contact-info" class="w-full input-tech p-3 text-sm" placeholder="Seu WhatsApp ou e-mail" required>
+                <input id="contact-info" class="w-full input-tech p-3 text-sm" placeholder="Seu WhatsApp ou e-mail"
+                  required>
               </div>
             </div>
             <div class="mt-5">
-              <label for="project-details" class="block text-gray-400 font-medium mb-2 text-sm">Detalhes do projeto</label>
-              <textarea id="project-details" rows="4" class="w-full input-tech p-3 text-sm" placeholder="Ex.: Preciso de um sistema para controlar estoque da minha loja de peças..." required></textarea>
+              <label for="project-details" class="block text-gray-400 font-medium mb-2 text-sm">Detalhes do
+                projeto</label>
+              <textarea id="project-details" rows="4" class="w-full input-tech p-3 text-sm"
+                placeholder="Ex.: Preciso de um sistema para controlar estoque da minha loja de peças..."
+                required></textarea>
             </div>
             <div class="text-center mt-7">
-              <button id="contact-submit" type="submit" class="btn btn-ghost w-full md:w-auto">Enviar para análise</button>
+              <button id="contact-submit" type="submit" class="btn btn-ghost w-full md:w-auto">Enviar para
+                análise</button>
             </div>
           </form>
         </div>
@@ -612,10 +829,13 @@
     <div class="container mx-auto px-6">
       <div class="grid md:grid-cols-4 gap-8">
         <div class="md:col-span-2">
-          <a href="index.html" class="text-2xl font-bold text-white flex items-center mb-6">Plena <span class="text-emerald-400 ml-1">Informática</span></a>
-          <p class="text-slate-400 mb-6 max-w-md">Soluções em serviços digitais, personalizados e tecnologia <i class="ph ph-code text-emerald-400 text-2xl align-middle"></i> do essencial ao sob medida.</p>
+          <a href="index.html" class="text-2xl font-bold text-white flex items-center mb-6">Plena <span
+              class="text-emerald-400 ml-1">Informática</span></a>
+          <p class="text-slate-400 mb-6 max-w-md">Soluções em serviços digitais, personalizados e tecnologia <i
+              class="ph ph-code text-emerald-400 text-2xl align-middle"></i> do essencial ao sob medida.</p>
           <div class="flex items-center space-x-4 mb-6">
-            <div class="flex items-center bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 py-1 px-3 rounded-full text-sm font-medium">
+            <div
+              class="flex items-center bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 py-1 px-3 rounded-full text-sm font-medium">
               <i class="ph-fill ph-shield-check mr-2"></i> Site Seguro
             </div>
             <div class="text-slate-400 text-sm">Protegido com SSL</div>
@@ -635,7 +855,8 @@
           <ul class="space-y-3 text-slate-400">
             <li class="flex items-start"><i class="ph ph-map-pin w-5 h-5 mr-3 mt-1"></i> São José dos Campos, SP</li>
             <li class="flex items-center"><i class="ph ph-whatsapp-logo w-5 h-5 mr-3"></i> (12) 99219-1018</li>
-            <li class="flex items-center"><i class="ph ph-envelope w-5 h-5 mr-3"></i> tecnologia@plenainformatica.com.br</li>
+            <li class="flex items-center"><i class="ph ph-envelope w-5 h-5 mr-3"></i> tecnologia@plenainformatica.com.br
+            </li>
           </ul>
         </div>
       </div>
@@ -643,21 +864,24 @@
         <div class="flex flex-col md:flex-row justify-between items-center">
           <div class="text-center md:text-left mb-4 md:mb-0">
             <p class="text-lg italic text-slate-400 mb-2">"Tudo posso naquele que me fortalece." - Filipenses 4:13</p>
-            <p class="text-sm text-slate-500">&copy; 2025 Plena Informática. Todos os direitos reservados.</p>
+            <p class="text-sm text-slate-500">&copy; 2026 Plena Informática. Todos os direitos reservados.</p>
             <p class="text-xs text-slate-600 mt-1">Desenvolvido por Plena Informática</p>
           </div>
           <div class="flex space-x-6 text-sm text-slate-400">
             <a href="#" class="hover:text-white transition duration-300 open-modal" data-modal="terms">Termos de Uso</a>
-            <a href="#" class="hover:text-white transition duration-300 open-modal" data-modal="privacy">Política de Privacidade</a>
+            <a href="#" class="hover:text-white transition duration-300 open-modal" data-modal="privacy">Política de
+              Privacidade</a>
           </div>
         </div>
       </div>
     </div>
   </footer>
 
-  <div id="terms-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="terms-modal-title">
+  <div id="terms-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4" role="dialog"
+    aria-modal="true" aria-hidden="true" aria-labelledby="terms-modal-title">
     <div class="bg-white p-8 rounded-lg shadow-2xl max-w-2xl w-full relative">
-      <button type="button" class="modal-close text-gray-500 hover:text-gray-700 absolute top-4 right-4" aria-label="Fechar termos">&times;</button>
+      <button type="button" class="modal-close text-gray-500 hover:text-gray-700 absolute top-4 right-4"
+        aria-label="Fechar termos">&times;</button>
       <h2 id="terms-modal-title" class="text-2xl font-bold mb-4">Termos de Uso – Tecnologia</h2>
       <div class="text-slate-700 space-y-4">
         <p>Ao utilizar os serviços de tecnologia da Plena Informática, você concorda com estes termos.</p>
@@ -672,9 +896,11 @@
     </div>
   </div>
 
-  <div id="privacy-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="privacy-modal-title">
+  <div id="privacy-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4" role="dialog"
+    aria-modal="true" aria-hidden="true" aria-labelledby="privacy-modal-title">
     <div class="bg-white p-8 rounded-lg shadow-2xl max-w-2xl w-full relative">
-      <button type="button" class="modal-close text-gray-500 hover:text-gray-700 absolute top-4 right-4" aria-label="Fechar política">&times;</button>
+      <button type="button" class="modal-close text-gray-500 hover:text-gray-700 absolute top-4 right-4"
+        aria-label="Fechar política">&times;</button>
       <h2 id="privacy-modal-title" class="text-2xl font-bold mb-4">Política de Privacidade – Tecnologia</h2>
       <div class="text-slate-700 space-y-4">
         <p>Descreve como coletamos e usamos dados para projetos de tecnologia.</p>
@@ -692,32 +918,50 @@
   <!-- MODAL DE DEMO (Showcase) -->
   <div id="demo-modal" class="modal-backdrop" onclick="closeDemo(event)">
     <div class="modal-content bg-gray-900">
-       <div class="browser-mockup flex justify-between items-center">
-          <div class="flex items-center gap-1.5">
-            <div class="browser-dot bg-red-500"></div>
-            <div class="browser-dot bg-yellow-500"></div>
-            <div class="browser-dot bg-green-500"></div>
+      <div class="browser-mockup flex justify-between items-center">
+        <div class="flex items-center gap-1.5">
+          <div class="browser-dot bg-red-500"></div>
+          <div class="browser-dot bg-yellow-500"></div>
+          <div class="browser-dot bg-green-500"></div>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="hidden md:flex rounded-full overflow-hidden border border-gray-700">
+            <button id="view-mobile-toggle" class="px-3 py-1 text-xs bg-gray-800 text-gray-300">📱 Mobile</button>
+            <button id="view-desktop-toggle" class="px-3 py-1 text-xs bg-gray-700 text-white">💻 Desktop</button>
           </div>
-          <div class="flex items-center gap-2">
-            <div class="flex rounded-full overflow-hidden border border-gray-700">
-              <button id="view-mobile-toggle" class="px-3 py-1 text-xs bg-gray-800 text-gray-300">📱 Mobile</button>
-              <button id="view-desktop-toggle" class="px-3 py-1 text-xs bg-gray-700 text-white">💻 Desktop</button>
-            </div>
-            <button onclick="closeDemo()" class="text-gray-500 hover:text-white"><i class="ph ph-x text-lg"></i></button>
+          <button onclick="closeDemo(event)" class="text-gray-500 hover:text-white"><i
+              class="ph ph-x text-lg"></i></button>
+        </div>
+      </div>
+      <div class="bg-gray-800 p-3">
+        <div id="level-controls" class="flex items-center justify-center gap-2">
+          <button class="px-3 py-1 text-xs rounded bg-gray-700 text-white" data-level="basico">Básico</button>
+          <button class="px-3 py-1 text-xs rounded bg-gray-700 text-white" data-level="medio">Médio</button>
+          <button class="px-3 py-1 text-xs rounded bg-gray-700 text-white" data-level="avancado">Avançado</button>
+        </div>
+      </div>
+      <div id="demo-container"
+        class="flex-grow bg-gray-800 flex items-center justify-center relative overflow-hidden w-full h-[500px] md:h-[70vh]">
+        <!-- Status Bar iPhone 15 -->
+        <div id="mobile-status-bar"
+          class="absolute top-0 left-0 w-full h-12 px-6 flex justify-between items-end pb-2 z-20 pointer-events-none hidden">
+          <!-- Time -->
+          <div class="text-white font-medium text-sm w-1/3 pl-2">9:41</div>
+          <!-- Dynamic Island -->
+          <div class="bg-black rounded-full h-7 w-28 absolute left-1/2 -translate-x-1/2 top-2"></div>
+          <!-- Icons -->
+          <div class="flex items-center gap-1.5 text-white w-1/3 justify-end pr-2">
+            <i class="ph-fill ph-cell-signal-full"></i>
+            <span class="text-[10px] font-bold">5G</span>
+            <i class="ph-fill ph-battery-full text-lg"></i>
           </div>
-       </div>
-       <div class="bg-gray-800 p-3">
-         <div id="level-controls" class="flex items-center justify-center gap-2">
-           <button class="px-3 py-1 text-xs rounded bg-gray-700 text-white" data-level="basico">Básico</button>
-           <button class="px-3 py-1 text-xs rounded bg-gray-700 text-white" data-level="medio">Médio</button>
-           <button class="px-3 py-1 text-xs rounded bg-gray-700 text-white" data-level="avancado">Avançado</button>
-         </div>
-       </div>
-       <div id="demo-container" class="flex-grow bg-gray-800 flex items-center justify-center relative overflow-hidden w-full h-[500px] md:h-[70vh]">
-           <iframe id="demo-frame" class="w-full h-full border-0" src="about:blank" scrolling="yes"></iframe>
-       </div>
+        </div>
+        <iframe id="demo-frame" class="w-full h-full border-0" src="about:blank" scrolling="yes"></iframe>
+      </div>
       <div class="p-4 border-t border-gray-800 bg-black text-center">
-          <a id="demo-whatsapp-cta" href="https://wa.me/5512992191018?text=Ol%C3%A1,%20quero%20um%20projeto%20igual%20ao%20demo" target="_blank" class="btn btn-primary py-2 px-6 text-sm">Quero um projeto igual a este</a>
+        <a id="demo-whatsapp-cta"
+          href="https://wa.me/5512992191018?text=Ol%C3%A1,%20quero%20um%20projeto%20igual%20ao%20demo" target="_blank"
+          class="btn btn-primary py-2 px-6 text-sm">Quero um projeto igual a este</a>
       </div>
     </div>
   </div>
@@ -739,25 +983,25 @@
 
     let db = null;
     try {
-        const app = initializeApp(firebaseConfig);
-        db = getFirestore(app);
-        console.log("Firebase Conectado!");
+      const app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+      console.log("Firebase Conectado!");
     } catch (e) {
-        console.log("Modo Offline: Configuração Firebase pendente.");
+      console.log("Modo Offline: Configuração Firebase pendente.");
     }
 
     // Função Global de Salvamento
     window.saveLead = async (leadData) => {
-        if (!db) return;
-        try {
-            await addDoc(collection(db, "leads_calc"), {
-                ...leadData,
-                createdAt: serverTimestamp(),
-                userAgent: navigator.userAgent
-            });
-        } catch (e) {
-            console.error("Erro Firebase:", e);
-        }
+      if (!db) return;
+      try {
+        await addDoc(collection(db, "leads_calc"), {
+          ...leadData,
+          createdAt: serverTimestamp(),
+          userAgent: navigator.userAgent
+        });
+      } catch (e) {
+        console.error("Erro Firebase:", e);
+      }
     };
   </script>
   <script>
@@ -816,125 +1060,129 @@
     const ctx = canvas.getContext('2d');
     let width, height, drops;
     function resize() {
-        width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight;
-        const fontSize = 14; const cols = Math.floor(width / fontSize);
-        drops = new Array(cols).fill(1); ctx.font = `${fontSize}px monospace`;
+      width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight;
+      const fontSize = 14; const cols = Math.floor(width / fontSize);
+      drops = new Array(cols).fill(1); ctx.font = `${fontSize}px monospace`;
     }
     resize();
     function draw() {
-        ctx.fillStyle = 'rgba(10, 10, 15, 0.05)'; ctx.fillRect(0, 0, width, height); ctx.fillStyle = '#10b981';
-        for (let i = 0; i < drops.length; i++) {
-            const text = String.fromCharCode(Math.random() * 128);
-            ctx.fillText(text, i * 14, drops[i] * 14);
-            if (drops[i] * 14 > height && Math.random() > 0.98) drops[i] = 0; drops[i]++;
-        }
-        requestAnimationFrame(draw);
+      ctx.fillStyle = 'rgba(10, 10, 15, 0.05)'; ctx.fillRect(0, 0, width, height); ctx.fillStyle = '#10b981';
+      for (let i = 0; i < drops.length; i++) {
+        const text = String.fromCharCode(Math.random() * 128);
+        ctx.fillText(text, i * 14, drops[i] * 14);
+        if (drops[i] * 14 > height && Math.random() > 0.98) drops[i] = 0; drops[i]++;
+      }
+      if (window.innerWidth <= 768) {
+        setTimeout(() => requestAnimationFrame(draw), 1000);
+        return;
+      }
+      requestAnimationFrame(draw);
     }
     draw(); window.addEventListener('resize', resize);
 
     // --- CALCULADORA LÓGICA ---
     function calculateTotal() {
-        const base = parseFloat(document.getElementById('projectType').value);
-        const featureChecks = Array.from(document.querySelectorAll('#features-group input[type=checkbox]'));
-        const selectedFeatures = featureChecks.filter(cb => cb.checked);
-        const feature = selectedFeatures.reduce((sum, cb) => sum + parseFloat(cb.getAttribute('data-price')), 0);
-        const multiplier = parseFloat(document.getElementById('deadline').value);
-        const nameVal = String(document.getElementById('calc-name')?.value || '').trim();
-        const contactVal = String(document.getElementById('calc-contact')?.value || '').trim();
-        
-        if (base === 0) {
-            document.getElementById('totalPrice').innerText = "R$ 0,00";
-            document.getElementById('devBar').style.width = '0%';
-            document.getElementById('designBar').style.width = '0%';
-            document.getElementById('infraBar').style.width = '0%';
-            document.getElementById('devValue').innerText = "R$ 0,00";
-            document.getElementById('designValue').innerText = "R$ 0,00";
-            document.getElementById('infraValue').innerText = "R$ 0,00";
-            document.getElementById('selectedClientName').innerText = nameVal || '—';
-            document.getElementById('selectedClientContact').innerText = contactVal || '—';
-            document.getElementById('selectedProject').innerText = '—';
-            document.getElementById('selectedDeadline').innerText = '—';
-            document.getElementById('threeInstallments').innerText = 'R$ 0,00';
-            document.getElementById('sixInstallments').innerText = 'R$ 0,00';
-            const selectedList = document.getElementById('selectedExtrasList');
-            selectedList.innerHTML = '';
-            const li = document.createElement('li'); li.textContent = 'Sem extras'; selectedList.appendChild(li);
-            const btn = document.getElementById('calc-submit');
-            if (btn) btn.textContent = 'Validar Proposta';
-            return;
-        }
-        
-        const total = (base + feature) * multiplier;
-        const dev = total * 0.5;
-        const design = total * 0.3;
-        const infra = total * 0.2;
+      const base = parseFloat(document.getElementById('projectType').value);
+      const featureChecks = Array.from(document.querySelectorAll('#features-group input[type=checkbox]'));
+      const selectedFeatures = featureChecks.filter(cb => cb.checked);
+      const feature = selectedFeatures.reduce((sum, cb) => sum + parseFloat(cb.getAttribute('data-price')), 0);
+      const multiplier = parseFloat(document.getElementById('deadline').value);
+      const nameVal = String(document.getElementById('calc-name')?.value || '').trim();
+      const contactVal = String(document.getElementById('calc-contact')?.value || '').trim();
 
-        document.getElementById('totalPrice').innerText = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        document.getElementById('devBar').style.width = (dev / total * 100) + '%';
-        document.getElementById('designBar').style.width = (design / total * 100) + '%';
-        document.getElementById('infraBar').style.width = (infra / total * 100) + '%';
-        document.getElementById('devValue').innerText = dev.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        document.getElementById('designValue').innerText = design.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        document.getElementById('infraValue').innerText = infra.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
-        const three = total * 0.35;
-        const six = total * 0.2;
-        document.getElementById('threeInstallments').innerText = three.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) + ' /mês';
-        document.getElementById('sixInstallments').innerText = six.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) + ' /mês';
-
-        const typeSel = document.getElementById('projectType');
-        const typeText = typeSel.options[typeSel.selectedIndex].text;
-        document.getElementById('selectedProject').innerText = typeText;
-        const dlSel = document.getElementById('deadline');
-        const dlVal = parseFloat(dlSel.value);
-        let baseMin = 14, baseMax = 21;
-        if (/Cardápio/.test(typeText)) { baseMin = 10; baseMax = 20; }
-        else if (/Agendamento/.test(typeText)) { baseMin = 14; baseMax = 21; }
-        else if (/Bio Link/.test(typeText)) { baseMin = 7; baseMax = 14; }
-        else if (/Ordens/.test(typeText) || /Business/.test(typeText)) { baseMin = 21; baseMax = 35; }
-        else if (/Site Institucional/.test(typeText)) { baseMin = 21; baseMax = 28; }
-        else if (/Página de Alta Conversão/.test(typeText)) { baseMin = 14; baseMax = 21; }
-        const factor = dlVal === 1.3 ? 0.7 : 1;
-        const estMin = Math.max(5, Math.round(baseMin * factor));
-        const estMax = Math.max(estMin + 3, Math.round(baseMax * factor));
-        document.getElementById('deadlineInfo').innerText = estMin + '–' + estMax + ' dias';
-        document.getElementById('selectedDeadline').innerText = estMin + '–' + estMax + ' dias';
+      if (base === 0) {
+        document.getElementById('totalPrice').innerText = "R$ 0,00";
+        document.getElementById('devBar').style.width = '0%';
+        document.getElementById('designBar').style.width = '0%';
+        document.getElementById('infraBar').style.width = '0%';
+        document.getElementById('devValue').innerText = "R$ 0,00";
+        document.getElementById('designValue').innerText = "R$ 0,00";
+        document.getElementById('infraValue').innerText = "R$ 0,00";
         document.getElementById('selectedClientName').innerText = nameVal || '—';
         document.getElementById('selectedClientContact').innerText = contactVal || '—';
-
+        document.getElementById('selectedProject').innerText = '—';
+        document.getElementById('selectedDeadline').innerText = '—';
+        document.getElementById('threeInstallments').innerText = 'R$ 0,00';
+        document.getElementById('sixInstallments').innerText = 'R$ 0,00';
         const selectedList = document.getElementById('selectedExtrasList');
         selectedList.innerHTML = '';
-        if (selectedFeatures.length === 0) {
-          const li = document.createElement('li'); li.textContent = 'Sem extras'; selectedList.appendChild(li);
-        } else {
-          selectedFeatures.forEach(cb => { const li = document.createElement('li'); li.textContent = cb.getAttribute('data-label'); selectedList.appendChild(li); });
-        }
-
-        const state = {
-          ptIdx: typeSel.selectedIndex,
-          featuresKeys: selectedFeatures.map(cb => cb.getAttribute('data-key')),
-          dlIdx: dlSel.selectedIndex,
-          name: nameVal,
-          contact: contactVal
-        };
-        localStorage.setItem('calcState', JSON.stringify(state));
-        const params = new URLSearchParams(location.search);
-        params.set('pt', String(state.ptIdx));
-        params.set('fk', state.featuresKeys.join(','));
-        params.set('dl', String(state.dlIdx));
-        if (nameVal) params.set('nm', nameVal);
-        if (contactVal) params.set('ct', contactVal);
-        history.replaceState(null, '', `${location.pathname}?${params.toString()}`);
-
+        const li = document.createElement('li'); li.textContent = 'Sem extras'; selectedList.appendChild(li);
         const btn = document.getElementById('calc-submit');
-        if (btn) {
-          btn.querySelector('.ph.ph-whatsapp-logo')?.classList.add('hidden');
-          btn.textContent = 'Validar proposta de ' + typeText;
-        }
+        if (btn) btn.textContent = 'Validar Proposta';
+        return;
+      }
 
-        if (window.analytics && typeof window.analytics.track === 'function') {
-          window.analytics.track('calc_update', { project: typeText, total });
-        }
+      const total = (base + feature) * multiplier;
+      const dev = total * 0.5;
+      const design = total * 0.3;
+      const infra = total * 0.2;
+
+      document.getElementById('totalPrice').innerText = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      document.getElementById('devBar').style.width = (dev / total * 100) + '%';
+      document.getElementById('designBar').style.width = (design / total * 100) + '%';
+      document.getElementById('infraBar').style.width = (infra / total * 100) + '%';
+      document.getElementById('devValue').innerText = dev.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      document.getElementById('designValue').innerText = design.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      document.getElementById('infraValue').innerText = infra.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+      const three = total * 0.35;
+      const six = total * 0.2;
+      document.getElementById('threeInstallments').innerText = three.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) + ' /mês';
+      document.getElementById('sixInstallments').innerText = six.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) + ' /mês';
+
+      const typeSel = document.getElementById('projectType');
+      const typeText = typeSel.options[typeSel.selectedIndex].text;
+      document.getElementById('selectedProject').innerText = typeText;
+      const dlSel = document.getElementById('deadline');
+      const dlVal = parseFloat(dlSel.value);
+      let baseMin = 14, baseMax = 21;
+      if (/Cardápio/.test(typeText)) { baseMin = 10; baseMax = 20; }
+      else if (/Agendamento/.test(typeText)) { baseMin = 14; baseMax = 21; }
+      else if (/Bio Link/.test(typeText)) { baseMin = 7; baseMax = 14; }
+      else if (/Ordens/.test(typeText) || /Business/.test(typeText)) { baseMin = 21; baseMax = 35; }
+      else if (/Site Institucional/.test(typeText)) { baseMin = 21; baseMax = 28; }
+      else if (/Página de Alta Conversão/.test(typeText)) { baseMin = 14; baseMax = 21; }
+      const factor = dlVal === 1.3 ? 0.7 : 1;
+      const estMin = Math.max(5, Math.round(baseMin * factor));
+      const estMax = Math.max(estMin + 3, Math.round(baseMax * factor));
+      document.getElementById('deadlineInfo').innerText = estMin + '–' + estMax + ' dias';
+      document.getElementById('selectedDeadline').innerText = estMin + '–' + estMax + ' dias';
+      document.getElementById('selectedClientName').innerText = nameVal || '—';
+      document.getElementById('selectedClientContact').innerText = contactVal || '—';
+
+      const selectedList = document.getElementById('selectedExtrasList');
+      selectedList.innerHTML = '';
+      if (selectedFeatures.length === 0) {
+        const li = document.createElement('li'); li.textContent = 'Sem extras'; selectedList.appendChild(li);
+      } else {
+        selectedFeatures.forEach(cb => { const li = document.createElement('li'); li.textContent = cb.getAttribute('data-label'); selectedList.appendChild(li); });
+      }
+
+      const state = {
+        ptIdx: typeSel.selectedIndex,
+        featuresKeys: selectedFeatures.map(cb => cb.getAttribute('data-key')),
+        dlIdx: dlSel.selectedIndex,
+        name: nameVal,
+        contact: contactVal
+      };
+      localStorage.setItem('calcState', JSON.stringify(state));
+      const params = new URLSearchParams(location.search);
+      params.set('pt', String(state.ptIdx));
+      params.set('fk', state.featuresKeys.join(','));
+      params.set('dl', String(state.dlIdx));
+      if (nameVal) params.set('nm', nameVal);
+      if (contactVal) params.set('ct', contactVal);
+      history.replaceState(null, '', `${location.pathname}?${params.toString()}`);
+
+      const btn = document.getElementById('calc-submit');
+      if (btn) {
+        btn.querySelector('.ph.ph-whatsapp-logo')?.classList.add('hidden');
+        btn.textContent = 'Validar proposta de ' + typeText;
+      }
+
+      if (window.analytics && typeof window.analytics.track === 'function') {
+        window.analytics.track('calc_update', { project: typeText, total });
+      }
     }
 
     function handleProjectChange() {
@@ -951,21 +1199,21 @@
       const checks = Array.from(document.querySelectorAll('#features-group input[type=checkbox]'));
       const blogCb = document.querySelector('#features-group input[data-key="blog"]');
       const loginCb = document.querySelector('#features-group input[data-key="login"]');
-      checks.forEach(cb => { cb.disabled = false; cb.parentElement.classList.remove('opacity-50','cursor-not-allowed'); });
+      checks.forEach(cb => { cb.disabled = false; cb.parentElement.classList.remove('opacity-50', 'cursor-not-allowed'); });
       const isSite = /Site|Página|Portfólio|Bio Link/.test(typeText);
       const isSystem = /Painel|Ordens|Agendamento/.test(typeText);
-      if (!isSite && blogCb) { blogCb.checked = false; blogCb.disabled = true; blogCb.parentElement.classList.add('opacity-50','cursor-not-allowed'); }
-      if (!(isSite || isSystem) && loginCb) { loginCb.checked = false; loginCb.disabled = true; loginCb.parentElement.classList.add('opacity-50','cursor-not-allowed'); }
+      if (!isSite && blogCb) { blogCb.checked = false; blogCb.disabled = true; blogCb.parentElement.classList.add('opacity-50', 'cursor-not-allowed'); }
+      if (!(isSite || isSystem) && loginCb) { loginCb.checked = false; loginCb.disabled = true; loginCb.parentElement.classList.add('opacity-50', 'cursor-not-allowed'); }
     }
 
-    document.addEventListener('DOMContentLoaded', function(){
+    document.addEventListener('DOMContentLoaded', function () {
       const params = new URLSearchParams(location.search);
-      const state = params.has('pt') ? { ptIdx: parseInt(params.get('pt')), featuresKeys: (params.get('fk')||'').split(',').filter(Boolean), dlIdx: parseInt(params.get('dl')), name: params.get('nm')||'', contact: params.get('ct')||'' } : null;
+      const state = params.has('pt') ? { ptIdx: parseInt(params.get('pt')), featuresKeys: (params.get('fk') || '').split(',').filter(Boolean), dlIdx: parseInt(params.get('dl')), name: params.get('nm') || '', contact: params.get('ct') || '' } : null;
       if (state) {
         const ptSel = document.getElementById('projectType');
         const dlSel = document.getElementById('deadline');
-        if (state.ptIdx >=0 && state.ptIdx < ptSel.options.length) ptSel.selectedIndex = state.ptIdx;
-        if (state.dlIdx >=0 && state.dlIdx < dlSel.options.length) dlSel.selectedIndex = state.dlIdx;
+        if (state.ptIdx >= 0 && state.ptIdx < ptSel.options.length) ptSel.selectedIndex = state.ptIdx;
+        if (state.dlIdx >= 0 && state.dlIdx < dlSel.options.length) dlSel.selectedIndex = state.dlIdx;
         if (state.featuresKeys && state.featuresKeys.length) {
           Array.from(document.querySelectorAll('#features-group input[type=checkbox]')).forEach(cb => {
             cb.checked = state.featuresKeys.includes(cb.getAttribute('data-key'));
@@ -988,7 +1236,7 @@
       calculateTotal();
       document.getElementById('calc-name')?.addEventListener('input', calculateTotal);
       document.getElementById('calc-contact')?.addEventListener('input', calculateTotal);
-      document.getElementById('calc-clear')?.addEventListener('click', function(){
+      document.getElementById('calc-clear')?.addEventListener('click', function () {
         const nameEl = document.getElementById('calc-name');
         const contactEl = document.getElementById('calc-contact');
         const ptSel = document.getElementById('projectType');
@@ -1012,7 +1260,7 @@
 
       const contactForm = document.getElementById('tech-project-form');
       if (contactForm) {
-        contactForm.addEventListener('submit', function(e){
+        contactForm.addEventListener('submit', function (e) {
           e.preventDefault();
           const btn = document.getElementById('contact-submit');
           const original = btn ? btn.innerHTML : null;
@@ -1045,14 +1293,14 @@
       const mobileToggle = document.getElementById('mobile-menu-toggle');
       const mobileMenu = document.getElementById('mobile-menu');
       if (mobileToggle && mobileMenu) {
-        mobileToggle.addEventListener('click', function(e){
+        mobileToggle.addEventListener('click', function (e) {
           e.preventDefault();
           const willOpen = mobileMenu.classList.contains('hidden');
           mobileMenu.classList.toggle('hidden');
           mobileToggle.setAttribute('aria-expanded', String(willOpen));
           document.body.style.overflow = willOpen ? 'hidden' : '';
         });
-        window.addEventListener('click', function(e){
+        window.addEventListener('click', function (e) {
           if (mobileMenu.classList.contains('hidden')) return;
           const inside = mobileMenu.contains(e.target) || mobileToggle.contains(e.target);
           if (!inside) {
@@ -1061,82 +1309,82 @@
             document.body.style.overflow = '';
           }
         });
-        document.querySelectorAll('#mobile-menu a').forEach(function(a){
-          a.addEventListener('click', function(){
+        document.querySelectorAll('#mobile-menu a').forEach(function (a) {
+          a.addEventListener('click', function () {
             mobileMenu.classList.add('hidden');
             mobileToggle.setAttribute('aria-expanded', 'false');
             document.body.style.overflow = '';
           });
         });
       }
-      document.querySelectorAll('[onclick^="openDemo"]').forEach(function(el){
-        el.setAttribute('role','button');
-        el.setAttribute('tabindex','0');
-        el.addEventListener('keydown', function(e){
+      document.querySelectorAll('[onclick^="openDemo"]').forEach(function (el) {
+        el.setAttribute('role', 'button');
+        el.setAttribute('tabindex', '0');
+        el.addEventListener('keydown', function (e) {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             try {
               const m = this.getAttribute('onclick').match(/openDemo\(([^)]*)\)/);
               if (m && m[1] != null) {
-                const parts = m[1].split(',').map(function(s){ return s.trim().replace(/^['"]|['"]$/g,''); });
+                const parts = m[1].split(',').map(function (s) { return s.trim().replace(/^['"]|['"]$/g, ''); });
                 const type = parts[0]; const level = parts[1]; const variant = parts[2];
                 openDemo(type, level, variant);
               }
-            } catch(err) {}
+            } catch (err) { }
           }
         });
       });
-      document.querySelectorAll('#level-controls [data-level]').forEach(function(btn){
-        btn.setAttribute('tabindex','0');
-        btn.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); switchLevel(this.getAttribute('data-level')); } });
+      document.querySelectorAll('#level-controls [data-level]').forEach(function (btn) {
+        btn.setAttribute('tabindex', '0');
+        btn.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); switchLevel(this.getAttribute('data-level')); } });
       });
-      window.addEventListener('keydown', function(e){
+      window.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') { const modal = document.getElementById('demo-modal'); if (modal && modal.classList.contains('active')) closeDemo({ target: modal }); }
       });
     });
 
     function sendCalcToWhatsapp() {
-        const btn = document.getElementById('calc-submit');
-        const originalHTML = btn ? btn.innerHTML : null;
-        if (btn) { btn.disabled = true; btn.textContent = 'Processando...'; }
+      const btn = document.getElementById('calc-submit');
+      const originalHTML = btn ? btn.innerHTML : null;
+      if (btn) { btn.disabled = true; btn.textContent = 'Processando...'; }
 
-        const total = document.getElementById('totalPrice').innerText;
-        const typeSel = document.getElementById('projectType');
-        const type = typeSel.options[typeSel.selectedIndex].text;
-        const featChecks = Array.from(document.querySelectorAll('#features-group input[type=checkbox]:checked'));
-        const feat = featChecks.length ? featChecks.map(cb => cb.getAttribute('data-label')).join(', ') : 'Sem extras';
-        const deadlineText = document.getElementById('selectedDeadline').innerText;
-        const nameEl = document.getElementById('calc-name');
-        const contactEl = document.getElementById('calc-contact');
-        const nameVal = String(nameEl?.value || '').trim();
-        const contactVal = String(contactEl?.value || '').trim();
+      const total = document.getElementById('totalPrice').innerText;
+      const typeSel = document.getElementById('projectType');
+      const type = typeSel.options[typeSel.selectedIndex].text;
+      const featChecks = Array.from(document.querySelectorAll('#features-group input[type=checkbox]:checked'));
+      const feat = featChecks.length ? featChecks.map(cb => cb.getAttribute('data-label')).join(', ') : 'Sem extras';
+      const deadlineText = document.getElementById('selectedDeadline').innerText;
+      const nameEl = document.getElementById('calc-name');
+      const contactEl = document.getElementById('calc-contact');
+      const nameVal = String(nameEl?.value || '').trim();
+      const contactVal = String(contactEl?.value || '').trim();
 
-        if (!nameVal || !contactVal) {
-            alert('Por favor, preencha seu nome e contato antes de enviar.');
-            if (btn) { btn.disabled = false; btn.innerHTML = originalHTML; }
-            return;
+      if (!nameVal || !contactVal) {
+        alert('Por favor, preencha seu nome e contato antes de enviar.');
+        if (btn) { btn.disabled = false; btn.innerHTML = originalHTML; }
+        return;
+      }
+
+      if (total === "R$ 0,00") {
+        alert("Por favor, selecione um projeto base.");
+        if (btn) { btn.disabled = false; btn.innerHTML = originalHTML; }
+        return;
+      }
+
+      const text = `*Olá, Plena Tecnologia!* 🚀\n\nFiz uma simulação no site e gostaria de validar:\n\n🧑‍💼 *Cliente:* ${nameVal}\n📲 *Contato:* ${contactVal}\n\n📦 *Projeto:* ${type}\n🧩 *Extras:* ${feat}\n⏱ *Prazo:* ${deadlineText}\n💰 *Investimento Estimado:* ${total}\n\nPodemos agendar uma conversa?`;
+
+      const url = `https://wa.me/5512992191018?text=${encodeURIComponent(text)}`;
+
+      try {
+        if (window.saveLead) {
+          window.saveLead({ type, feat, total });
         }
-
-        if (total === "R$ 0,00") {
-            alert("Por favor, selecione um projeto base.");
-            if (btn) { btn.disabled = false; btn.innerHTML = originalHTML; }
-            return;
-        }
-
-        const text = `*Olá, Plena Tecnologia!* 🚀\n\nFiz uma simulação no site e gostaria de validar:\n\n🧑‍💼 *Cliente:* ${nameVal}\n📲 *Contato:* ${contactVal}\n\n📦 *Projeto:* ${type}\n🧩 *Extras:* ${feat}\n⏱ *Prazo:* ${deadlineText}\n💰 *Investimento Estimado:* ${total}\n\nPodemos agendar uma conversa?`;
-
-        const url = `https://wa.me/5512992191018?text=${encodeURIComponent(text)}`;
-
-        try {
-            if (window.saveLead) {
-                window.saveLead({ type, feat, total });
-            }
-        } catch (err) {
-            console.warn('Falha ao salvar lead:', err);
-        } finally {
-            window.open(url, '_blank');
-            if (btn) { btn.disabled = false; btn.innerHTML = originalHTML; }
-        }
+      } catch (err) {
+        console.warn('Falha ao salvar lead:', err);
+      } finally {
+        window.open(url, '_blank');
+        if (btn) { btn.disabled = false; btn.innerHTML = originalHTML; }
+      }
     }
 
     const demoFiles = {
@@ -1203,6 +1451,7 @@
       const container = document.getElementById('demo-container');
       const mobileBtn = document.getElementById('view-mobile-toggle');
       const desktopBtn = document.getElementById('view-desktop-toggle');
+      const statusBar = document.getElementById('mobile-status-bar');
       if (view === 'mobile') {
         modalContent.classList.remove('max-w-6xl');
         modalContent.classList.add('max-w-[420px]');
@@ -1211,6 +1460,7 @@
         frame.className = 'phone-screen w-full h-full border-0 bg-white';
         if (mobileBtn) mobileBtn.className = 'px-3 py-1 text-xs bg-gray-700 text-white';
         if (desktopBtn) desktopBtn.className = 'px-3 py-1 text-xs bg-gray-800 text-gray-300';
+        if (statusBar) statusBar.classList.remove('hidden');
       } else {
         modalContent.classList.remove('max-w-[420px]');
         modalContent.classList.add('max-w-6xl');
@@ -1219,6 +1469,7 @@
         frame.className = 'w-full h-full border-0';
         if (desktopBtn) desktopBtn.className = 'px-3 py-1 text-xs bg-gray-700 text-white';
         if (mobileBtn) mobileBtn.className = 'px-3 py-1 text-xs bg-gray-800 text-gray-300';
+        if (statusBar) statusBar.classList.add('hidden');
       }
     }
 
@@ -1273,29 +1524,34 @@
     function closeDemo(e) {
       if (e) {
         const isBackdrop = e.target.classList && e.target.classList.contains('modal-backdrop');
-        if (!isBackdrop) return;
+        const isButton = e.target.closest('button');
+        if (!isBackdrop && !isButton) return;
       }
       document.getElementById('demo-modal').classList.remove('active');
       document.body.style.overflow = '';
     }
 
-    document.getElementById('view-mobile-toggle')?.addEventListener('click', function(e){ e.stopPropagation(); setView('mobile'); });
-    document.getElementById('view-desktop-toggle')?.addEventListener('click', function(e){ e.stopPropagation(); setView('desktop'); });
+    document.getElementById('view-mobile-toggle')?.addEventListener('click', function (e) { e.stopPropagation(); setView('mobile'); });
+    document.getElementById('view-desktop-toggle')?.addEventListener('click', function (e) { e.stopPropagation(); setView('desktop'); });
     document.querySelectorAll('#level-controls [data-level]')?.forEach(btn => {
-      btn.addEventListener('click', function(e){ e.stopPropagation(); switchLevel(this.getAttribute('data-level')); });
+      btn.addEventListener('click', function (e) { e.stopPropagation(); switchLevel(this.getAttribute('data-level')); });
     });
 
-    (function trapModalScroll(){
+    (function trapModalScroll() {
       const modal = document.getElementById('demo-modal');
-      function isWithinScrollable(target){
+      function isWithinScrollable(target) {
         const container = document.getElementById('demo-container');
         const phone = document.querySelector('.phone-mock');
-        return (container && container.contains(target)) || (phone && phone.contains(target));
+        // Permite header e botões
+        const header = target.closest('.browser-mockup');
+        const btn = target.closest('button');
+        return (container && container.contains(target)) || (phone && phone.contains(target)) || !!header || !!btn;
       }
-      ['wheel','touchmove','touchstart'].forEach(evt => {
-        modal.addEventListener(evt, function(e){ if (!isWithinScrollable(e.target)) { e.preventDefault(); } }, { passive:false });
+      ['wheel', 'touchmove', 'touchstart'].forEach(evt => {
+        modal.addEventListener(evt, function (e) { if (!isWithinScrollable(e.target)) { e.preventDefault(); } }, { passive: false });
       });
     })();
   </script>
 </body>
+
 </html>

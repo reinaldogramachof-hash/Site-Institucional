@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plena Informática - Soluções Digitais e Personalizadas</title>
-    
-    <!-- Meta Tags SEO -->
-    <meta name="description" content="Há 20 anos transformando ideias em realidade. Soluções completas em TI, produtos personalizados e desenvolvimento web em São José dos Campos.">
-    <meta name="keywords" content="soluções digitais São José dos Campos, desenvolvimento web, produtos personalizados, tecnologia, informática">
+
+    <meta name="description"
+        content="Há 20 anos transformando ideias em realidade. Soluções completas em TI, produtos personalizados e desenvolvimento web em São José dos Campos.">
+    <meta name="keywords"
+        content="soluções digitais São José dos Campos, desenvolvimento web, produtos personalizados, tecnologia, informática">
     <meta name="author" content="Plena Informática">
     <meta name="theme-color" content="#1e40af">
-    
-    <!-- Open Graph Tags -->
+
     <meta property="og:title" content="Plena Informática - Soluções Completas em um só lugar">
-    <meta property="og:description" content="20 anos de excelência em soluções digitais, produtos personalizados e tecnologia.">
+    <meta property="og:description"
+        content="20 anos de excelência em soluções digitais, produtos personalizados e tecnologia.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://plenainformatica.com.br">
     <meta property="og:locale" content="pt_BR">
     <meta property="og:site_name" content="Plena Informática">
     <link rel="canonical" href="https://plenainformatica.com.br/">
-    
-    <!-- Schema Markup para SEO -->
+
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -43,8 +44,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <style>
         :root {
             --primary: #1e40af;
@@ -52,833 +55,1008 @@
             --accent: #059669;
             --dark: #1e293b;
             --light: #f8fafc;
-
-            /* TOM DE LARANJA LEVE PARA FUNDO */
-            --plena-orange-wash: #FFF1E8; /* leve, quente e neutro para leitura */
-        }
-        
-        body { 
-            font-family: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
-            background: #f8fafc;
-            /* textura sutil alaranjada no fundo geral (quase imperceptível) */
-            background-image:
-              radial-gradient(60rem 60rem at -10% -20%, rgba(234,88,12,.04) 0%, transparent 60%),
-              radial-gradient(40rem 40rem at 120% 120%, rgba(255,140,0,.05) 0%, transparent 60%);
+            --plena-orange-wash: #FFF1E8;
         }
 
-        /* seção branca "alaranja" */
-        .bg-plena-orange-wash { background: var(--plena-orange-wash); }
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-        .particles {
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 40%, #fef3f0 100%);
+            background-attachment: fixed;
             position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(234, 88, 12, .06) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(59, 130, 246, .04) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, .03) 0%, transparent 50%);
+            pointer-events: none;
             z-index: 0;
         }
-        
-        .font-accent { font-family: 'Poppins', 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
 
-        /* deixa o ancoramento perfeito abaixo do header fixo */
-        section[id] { scroll-margin-top: 6.75rem; }
+        body>* {
+            position: relative;
+            z-index: 1;
+        }
 
-        #menu-btn:focus-visible {
-            outline: 2px solid var(--secondary);
-            outline-offset: 2px;
+        .bg-plena-orange-wash {
+            background: var(--plena-orange-wash);
         }
-        
-        /* Gradientes e efeitos */
-        .gradient-bg {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+
+        .font-accent {
+            font-family: 'Poppins', sans-serif;
         }
-        
-        .gradient-text {
-            background: linear-gradient(135deg, var(--secondary) 0%, #ea580c 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+
+        section[id] {
+            scroll-margin-top: 6.75rem;
         }
-        
-        .card-gradient {
-            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-        .card-gradient:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        
-        /* Glass */
-        .glass {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Hero section com imagem de fundo */
+
+        /* Hero Image Animation */
         .hero-bg-image {
-            background-image: url('sjc.webp');
+            background-image: url('plena.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            animation: zoomEffect 20s ease-in-out infinite;
+            animation: zoomEffect 25s ease-in-out infinite, panEffect 40s ease-in-out infinite;
+            filter: brightness(0.95);
         }
-        
+
         @keyframes zoomEffect {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
+
+            0%,
             100% {
                 transform: scale(1);
             }
+
+            50% {
+                transform: scale(1.08);
+            }
         }
-        
-        .hero-overlay { 
-            background: rgba(0, 0, 0, 0.5); 
+
+        @keyframes panEffect {
+
+            0%,
+            100% {
+                background-position: center center;
+            }
+
+            25% {
+                background-position: 55% 45%;
+            }
+
+            75% {
+                background-position: 45% 55%;
+            }
         }
-        
-        /* Botões premium */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--secondary) 0%, #ea580c 100%);
-            box-shadow: 0 4px 15px 0 rgba(234, 88, 12, 0.3);
-            transition: all 0.3s ease;
+
+        .hero-overlay {
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.75) 0%, rgba(234, 88, 12, 0.65) 100%);
+            backdrop-filter: blur(1px);
         }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px 0 rgba(234, 88, 12, 0.4);
+
+        /* Cards & Gradients */
+        .card-gradient {
+            background: linear-gradient(145deg, #ffffff 0%, #fefefe 100%);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        .card-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, currentColor, transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .card-gradient:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 10px 20px -5px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-gradient:hover::before {
+            opacity: 1;
+        }
+
+        .card-glow-orange::before {
+            color: #f97316;
+        }
+
+        .card-glow-blue::before {
+            color: #3b82f6;
+        }
+
+        .card-glow-green::before {
+            color: #16a34a;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 25%, #3b82f6 50%, #1e40af 75%, #1e293b 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
         /* Timeline */
-        .timeline-item { position: relative; padding-left: 2rem; }
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            border-left: 2px solid #e2e8f0;
+            margin-left: 10px;
+            padding-bottom: 2rem;
+        }
+
         .timeline-item::before {
             content: '';
-            position: absolute; left: 0; top: 0.5rem;
-            width: 12px; height: 12px; border-radius: 50%; background: var(--secondary);
+            position: absolute;
+            left: -7px;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--secondary);
         }
-        .timeline-item::after {
-            content: '';
-            position: absolute; left: 5px; top: 1.5rem; bottom: -1.5rem; width: 2px; background: #e2e8f0;
+
+        .timeline-item:last-child {
+            border-left: 2px solid transparent;
         }
-        .timeline-item:last-child::after { display: none; }
-        
-        /* partículas */
-        .particles::before {
-            content: '';
-            position: absolute; inset: 0;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(120, 219, 226, 0.03) 0%, transparent 50%);
-            pointer-events: none; z-index: -1;
-        }
-        
-        /* animações */
-        @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(34,197,94,.7); }
-            70% { box-shadow: 0 0 0 15px rgba(34,197,94,0); }
-            100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
-        }
-        .pulse-ring { animation: pulse 2s infinite; }
-        .animate-fade-in-up { animation: fadeInUp .8s ease-out forwards; }
-        
-        /* card glows */
-        .card-glow-orange:hover { box-shadow: 0 0 20px 0 rgba(249,115,22,.5); transform: translateY(-5px); }
-        .card-glow-blue:hover   { box-shadow: 0 0 20px 0 rgba(59,130,246,.5);  transform: translateY(-5px); }
-        .card-glow-green:hover  { box-shadow: 0 0 20px 0 rgba(22,163,74,.5);   transform: translateY(-5px); }
-        
-        /* Carrossel de depoimentos */
-        .testimonials-carousel { position: relative; overflow: hidden; }
-        .testimonials-track { display:flex; transition: transform .5s ease; }
-        .testimonial-card { flex:0 0 100%; transition: all .3s ease; padding:0 15px; box-sizing:border-box; }
-        .testimonial-card:hover, .testimonial-card:active { box-shadow: 0 10px 30px -5px rgba(0,0,0,.2); transform: translateY(-5px); }
-        @media (min-width:768px){ .testimonial-card{ flex:0 0 33.333%; } }
-        .carousel-indicator { width:10px;height:10px;border-radius:50%;background:#cbd5e1;cursor:pointer;transition:all .3s ease;border:none;padding:0; }
-        .carousel-indicator.active { background:#ea580c; transform: scale(1.2); }
-        .carousel-indicator:focus-visible { outline:2px solid var(--secondary); outline-offset:2px; }
-        .carousel-prev:focus-visible, .carousel-next:focus-visible { outline:2px solid var(--secondary); outline-offset:4px; }
-        
-        /* Modal */
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.7); z-index:1000; align-items:center; justify-content:center; }
-        .modal-content { background:white; border-radius:10px; padding:2rem; max-width:600px; width:90%; max-height:80vh; overflow-y:auto; position:relative; }
-        .modal-close { position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.5rem; cursor:pointer; color:#6b7280; }
-        .modal-close:hover { color:#374151; }
-        
-        /* Ajustes responsivos */
-        @media (max-width: 360px) {
-            .container { padding-left:1rem; padding-right:1rem; }
-            #hero h1 { font-size:2rem; }
-        }
-        @media (max-width: 768px) {
-            body { font-size:16px; }
-            .hero-bg-image { 
-                background-attachment: scroll; 
-                animation: none; /* Remove animação no mobile para performance */
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.98);
             }
-            #hero h1 { font-size:2.5rem; }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
-        @media (prefers-reduced-motion: reduce) {
-            .animate-fade-in-up { animation:none; }
-            .pulse-ring { animation:none !important; }
-            .card-gradient:hover, .testimonial-card:hover { transform:none; }
-            .hero-bg-image { animation: none; }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            }
+
+            50% {
+                box-shadow: 0 0 0 20px rgba(34, 197, 94, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+            }
+        }
+
+        .pulse-ring {
+            animation: pulse-ring 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            background-size: 1000px 100%;
+            animation: shimmer 3s infinite;
+        }
+
+        /* Carousel */
+        .testimonials-carousel {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonials-track {
+            display: flex;
+            transition: transform .5s ease;
+        }
+
+        .testimonial-card {
+            flex: 0 0 100%;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        @media (min-width: 768px) {
+            .testimonial-card {
+                flex: 0 0 33.333%;
+            }
+
+            .hero-bg-image {
+                background-attachment: fixed;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-bg-image {
+                background-attachment: scroll;
+                animation: none;
+            }
+        }
+
+        .carousel-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            cursor: pointer;
+            transition: all .3s;
+            border: none;
+            padding: 0;
+        }
+
+        .carousel-indicator.active {
+            background: #ea580c;
+            transform: scale(1.2);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
         }
     </style>
 </head>
-<body class="text-gray-800 particles">
 
-    <header class="bg-white/90 backdrop-blur-md shadow-md fixed top-0 left-0 right-0 z-50">
-        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-bold text-gray-800 font-accent">
-                Plena <span class="text-orange-500">Informática</span>
+<body class="text-gray-800 antialiased">
+
+    <header
+        class="bg-white/80 backdrop-blur-xl shadow-lg shadow-gray-200/50 fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-gray-100/50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-gray-800 font-accent group flex items-center gap-2">
+                <div
+                    class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all">
+                    <span class="text-white font-bold text-lg">P</span>
+                </div>
+                Plena <span
+                    class="text-orange-500 group-hover:text-orange-600 transition bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">Informática</span>
             </a>
+
             <div class="hidden md:flex items-center space-x-8">
-                <a href="#services" class="text-gray-600 hover:text-orange-500 transition duration-300">Serviços</a>
-                <a href="#journey" class="text-gray-600 hover:text-orange-500 transition duration-300">Nossa Jornada</a>
-                <a href="#testimonials" class="text-gray-600 hover:text-orange-500 transition duration-300">Depoimentos</a>
-                <a href="#contact" class="text-gray-600 hover:text-orange-500 transition duration-300">Contato</a>
-                <button type="button" class="whatsapp-btn bg-orange-500 text-white font-bold px-5 py-2 rounded-lg hover:bg-orange-600 transition duration-300">
+                <a href="#services"
+                    class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition duration-300 relative group">
+                    Serviços
+                    <span
+                        class="absolute bottom-0 left-0 w-0 h-0.5 bg-orange-500 group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="#journey"
+                    class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition duration-300 relative group">
+                    Nossa Jornada
+                    <span
+                        class="absolute bottom-0 left-0 w-0 h-0.5 bg-orange-500 group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="#testimonials"
+                    class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition duration-300 relative group">
+                    Depoimentos
+                    <span
+                        class="absolute bottom-0 left-0 w-0 h-0.5 bg-orange-500 group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="#contact"
+                    class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition duration-300 relative group">
+                    Contato
+                    <span
+                        class="absolute bottom-0 left-0 w-0 h-0.5 bg-orange-500 group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <button type="button"
+                    class="whatsapp-btn bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold px-6 py-2.5 rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 transform hover:-translate-y-1 hover:scale-105">
                     Fale Conosco
                 </button>
             </div>
 
-            <!-- Menu Mobile -->
             <div class="md:hidden">
-                <button id="menu-btn" class="text-gray-800 focus:outline-none" aria-label="Alternar navegação mobile">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                <button id="menu-btn" class="text-gray-800 p-2 focus:outline-none" aria-label="Menu">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
             </div>
         </nav>
 
-        <!-- Menu Mobile Dropdown -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
-            <a href="#services" class="block py-3 px-6 text-gray-600 hover:bg-orange-50 transition duration-300">Serviços</a>
-            <a href="#journey" class="block py-3 px-6 text-gray-600 hover:bg-orange-50 transition duration-300">Nossa Jornada</a>
-            <a href="#testimonials" class="block py-3 px-6 text-gray-600 hover:bg-orange-50 transition duration-300">Depoimentos</a>
-            <a href="#contact" class="block py-3 px-6 text-gray-600 hover:bg-orange-50 transition duration-300">Contato</a>
-
-            <button type="button" class="whatsapp-btn block w-full text-left py-3 px-6 font-semibold text-white bg-orange-500 hover:bg-orange-600 transition duration-300">
-                Fale Conosco
-            </button>
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-lg">
+            <div class="flex flex-col p-4 space-y-2">
+                <a href="#services"
+                    class="block py-3 px-4 rounded-lg hover:bg-orange-50 text-gray-700 font-medium">Serviços</a>
+                <a href="#journey" class="block py-3 px-4 rounded-lg hover:bg-orange-50 text-gray-700 font-medium">Nossa
+                    Jornada</a>
+                <a href="#testimonials"
+                    class="block py-3 px-4 rounded-lg hover:bg-orange-50 text-gray-700 font-medium">Depoimentos</a>
+                <a href="#contact"
+                    class="block py-3 px-4 rounded-lg hover:bg-orange-50 text-gray-700 font-medium">Contato</a>
+                <button type="button"
+                    class="whatsapp-btn w-full text-center py-3 px-4 mt-2 font-bold text-white bg-orange-500 rounded-lg hover:bg-orange-600">
+                    Fale Conosco
+                </button>
+            </div>
         </div>
     </header>
 
-   <!-- Hero Section com Imagem de Fundo -->
-<section id="hero" class="relative h-[70vh] min-h-[500px] flex items-center justify-center text-white overflow-hidden pt-16">
-    <div class="absolute top-0 left-0 w-full h-full bg-cover bg-center hero-bg-image" style="background-image: url('sjc.webp.jpg'); background-position: center 45%;" role="img" aria-label="Vista panorâmica de São José dos Campos"></div>
-    <div class="absolute top-0 left-0 w-full h-full hero-overlay z-10" aria-hidden="true"></div>
+    <section id="hero"
+        class="relative h-[75vh] min-h-[550px] flex items-center justify-center text-white overflow-hidden pt-16">
+        <div class="absolute top-0 left-0 w-full h-full bg-cover bg-center hero-bg-image"
+            style="background-image: url('plena.jpg'); background-position: center 45%;" role="img"
+            aria-label="Plena Informática"></div>
+        <div class="absolute top-0 left-0 w-full h-full hero-overlay z-10"></div>
 
-    <div class="relative z-20 container mx-auto px-6 text-center flex flex-col items-center h-full">
-        <!-- Badge 20 anos de história -->
-        <div class="inline-flex items-center bg-orange-500/20 backdrop-blur-sm border border-orange-400/30 rounded-full px-6 py-3 mb-4 mt-4 animate-fade-in-up">
-            <span class="text-orange-300 font-semibold text-lg tracking-wide"> 20 anos de história</span>
-        </div>
-                         
-        <!-- Título principal - QUASE NA DIVISA -->
-        <h1 class="text-5xl md:text-7xl font-extrabold leading-tight text-white drop-shadow-2xl font-accent mb-6 mt-auto animate-fade-in-up" style="animation-delay: 200ms;">
-            Soluções Completas <br class="hidden md:block"> em um só lugar.
-        </h1>
-    </div>
-</section>
-    <!-- Serviços (fundo laranja leve) -->
-    <section id="services" class="py-20 bg-plena-orange-wash">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 animate-on-scroll font-accent">Nossos Departamentos</h2>
-
-            <div class="hidden md:flex justify-center mb-8 gap-2" aria-hidden="false">
-                <button type="button" id="toggle-desktop" class="px-4 py-2 rounded-lg font-semibold bg-orange-500 text-white hover:bg-orange-600 transition">Versão Desktop</button>
-                <button type="button" id="toggle-mobile" class="px-4 py-2 rounded-lg font-semibold bg-slate-200 text-slate-800 hover:bg-slate-300 transition">Versão Mobile</button>
+        <div class="relative z-20 container mx-auto px-6 text-center flex flex-col items-center justify-center h-full">
+            <div
+                class="inline-flex items-center bg-white/10 backdrop-blur-xl border border-white/30 rounded-full px-8 py-3 mb-8 animate-fade-in-up shadow-2xl">
+                <span
+                    class="w-2.5 h-2.5 rounded-full bg-orange-400 animate-pulse mr-3 shadow-lg shadow-orange-400/50"></span>
+                <span class="text-white font-bold text-sm md:text-base tracking-wider uppercase">20 anos de
+                    excelência</span>
             </div>
 
-            <div id="services-mobile" class="block md:hidden space-y-6">
-                <a href="servicos.html" class="flex items-center gap-4 rounded-xl bg-white shadow-lg p-5 active:scale-[.99] transition">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-bold text-orange-500">Serviços Digitais</h3>
-                        <p class="text-sm text-gray-600">Currículos, IR e suporte MEI com agilidade.</p>
-                    </div>
-                    <span class="text-sm font-bold text-orange-600">Abrir</span>
-                </a>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-black leading-tight text-white drop-shadow-2xl font-accent mb-8 animate-fade-in-up"
+                style="animation-delay: 200ms;">
+                Soluções <span
+                    class="bg-gradient-to-r from-orange-400 via-orange-300 to-yellow-300 bg-clip-text text-transparent">Completas</span><br
+                    class="hidden md:block"> em um só lugar.
+            </h1>
 
-                <a href="personalizados.html" class="flex items-center gap-4 rounded-xl bg-white shadow-lg p-5 active:scale-[.99] transition">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-bold text-blue-600">Personalizados</h3>
-                        <p class="text-sm text-gray-600">Canecas, camisetas e presentes sob medida.</p>
-                    </div>
-                    <span class="text-sm font-bold text-blue-600">Abrir</span>
-                </a>
+            <p class="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto mb-12 animate-fade-in-up leading-relaxed font-light"
+                style="animation-delay: 400ms;">
+                Tecnologia, Personalização e Serviços Digitais integrados para você e sua empresa.
+            </p>
 
-                <a href="tecnologia.html" class="flex items-center gap-4 rounded-xl bg-white shadow-lg p-5 active:scale-[.99] transition">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-bold text-emerald-500">Tecnologia</h3>
-                        <p class="text-sm text-gray-600">Sites e pequenos projetos para sua marca.</p>
-                    </div>
-                    <span class="text-sm font-bold text-emerald-600">Abrir</span>
+            <div class="flex flex-col sm:flex-row gap-4 animate-fade-in-up" style="animation-delay: 600ms;">
+                <a href="#services"
+                    class="btn-primary bg-gradient-to-r from-orange-500 to-orange-600 text-white px-10 py-4 rounded-2xl font-bold hover:from-orange-600 hover:to-orange-700 transition-all shadow-2xl shadow-orange-500/40 hover:shadow-orange-500/60 transform hover:-translate-y-1 hover:scale-105 flex items-center gap-2 justify-center">
+                    <span>Conhecer Soluções</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
                 </a>
-            </div>
-
-            <div id="services-desktop" class="hidden md:block">
-                <div class="grid md:grid-cols-3 gap-8">
-                    <a href="servicos.html" class="block rounded-xl shadow-lg transform hover:-translate-y-2 transition-all duration-300 animate-on-scroll card-glow-orange card-gradient">
-                        <div class="rounded-xl p-8 text-center h-full flex flex-col justify-center">
-                            <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-6 mx-auto">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-4 text-orange-500 font-accent">Serviços Digitais</h3>
-                            <p class="text-gray-600">Agilidade e profissionalismo para suas necessidades do dia a dia. De currículos a suporte MEI, estamos aqui para ajudar.</p>
-                        </div>
-                    </a>
-                    <a href="personalizados.html" class="block rounded-xl shadow-lg transform hover:-translate-y-2 transition-all duration-300 animate-on-scroll card-glow-blue card-gradient" style="animation-delay: 200ms;">
-                        <div class="rounded-xl p-8 text-center h-full flex flex-col justify-center">
-                            <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mb-6 mx-auto">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-4 text-blue-600 font-accent">Personalizados</h3>
-                            <p class="text-gray-600">Transforme suas ideias em realidade. Canecas, camisetas, e uma infinidade de produtos com a sua cara e qualidade garantida.</p>
-                        </div>
-                    </a>
-                    <a href="tecnologia.html" class="block rounded-xl shadow-lg transform hover:-translate-y-2 transition-all duration-300 animate-on-scroll card-glow-green card-gradient" style="animation-delay: 400ms;">
-                        <div class="rounded-xl p-8 text-center h-full flex flex-col justify-center">
-                            <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center mb-6 mx-auto">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-4 text-emerald-500 font-accent">Tecnologia</h3>
-                            <p class="text-gray-600">Soluções digitais para o seu negócio. Desenvolvemos pequenos projetos e sites que posicionam sua marca no mundo online.</p>
-                        </div>
-                    </a>
-                </div>
+                <a href="#contact"
+                    class="bg-white/10 backdrop-blur-xl border-2 border-white/30 text-white px-10 py-4 rounded-2xl font-bold hover:bg-white/20 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1 flex items-center gap-2 justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                        </path>
+                    </svg>
+                    <span>Fale Conosco</span>
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Nossa Jornada (mantém azul/gradiente) -->
-    <section id="journey" class="py-20 gradient-bg text-white">
+    <section id="services" class="py-32 relative overflow-hidden">
+        <div
+            class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-orange-50/50 via-blue-50/30 to-emerald-50/30 -z-10">
+        </div>
         <div class="container mx-auto px-6">
-            <div class="max-w-3xl mx-auto text-center mb-16">
-                <span class="text-amber-300 font-semibold tracking-wider uppercase">Nossa Jornada</span>
-                <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-6 font-accent">Há 20 Anos Transformando Ideias em Realidade</h2>
+            <div class="text-center mb-20">
+                <span
+                    class="inline-block text-orange-600 font-bold tracking-wider uppercase text-sm mb-4 px-4 py-2 bg-orange-100 rounded-full">Nossos
+                    Serviços</span>
+                <h2 class="text-4xl md:text-5xl font-black mb-6 font-accent text-gray-900 leading-tight">
+                    Nossos <span
+                        class="bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">Departamentos</span>
+                </h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed">Explore nosso ecossistema de soluções
+                    desenhado para atender todas as suas necessidades com excelência e inovação.</p>
             </div>
-            
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                <a href="servicos.html" class="group block h-full">
+                    <div
+                        class="card-gradient card-glow-orange h-full rounded-3xl p-10 flex flex-col items-center text-center bg-white relative overflow-hidden border border-gray-100/50">
+                        <div
+                            class="absolute top-0 right-0 w-32 h-32 bg-orange-500/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700">
+                        </div>
+                        <div
+                            class="w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 text-white flex items-center justify-center mb-8 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-xl shadow-orange-500/30 relative z-10">
+                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
+                        <h3
+                            class="text-2xl font-bold mb-4 text-gray-900 group-hover:text-orange-600 transition-colors font-accent relative z-10">
+                            Serviços Digitais</h3>
+                        <p class="text-gray-600 text-base leading-relaxed mb-8 flex-grow relative z-10">
+                            Agilidade e profissionalismo para o dia a dia. Currículos, Declaração de IR, suporte ao MEI
+                            e muito mais.
+                        </p>
+                        <span
+                            class="text-orange-600 font-bold text-sm flex items-center gap-2 group-hover:gap-3 transition-all relative z-10">
+                            Saiba mais <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="personalizados.html" class="group block h-full">
+                    <div
+                        class="card-gradient card-glow-blue h-full rounded-3xl p-10 flex flex-col items-center text-center bg-white relative overflow-hidden border border-gray-100/50">
+                        <div
+                            class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700">
+                        </div>
+                        <div
+                            class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white flex items-center justify-center mb-8 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-xl shadow-blue-500/30 relative z-10">
+                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                            </svg>
+                        </div>
+                        <h3
+                            class="text-2xl font-bold mb-4 text-gray-900 group-hover:text-blue-600 transition-colors font-accent relative z-10">
+                            Personalizados</h3>
+                        <p class="text-gray-600 text-base leading-relaxed mb-8 flex-grow relative z-10">
+                            Transforme ideias em presentes únicos. Canecas, camisetas, brindes corporativos e itens
+                            exclusivos com qualidade premium.
+                        </p>
+                        <span
+                            class="text-blue-600 font-bold text-sm flex items-center gap-2 group-hover:gap-3 transition-all relative z-10">
+                            Ver catálogo <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </span>
+                    </div>
+                </a>
+
+                <a href="tecnologia.html" class="group block h-full">
+                    <div
+                        class="card-gradient card-glow-green h-full rounded-3xl p-10 flex flex-col items-center text-center bg-white relative overflow-hidden border border-gray-100/50">
+                        <div
+                            class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700">
+                        </div>
+                        <div
+                            class="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white flex items-center justify-center mb-8 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-xl shadow-emerald-500/30 relative z-10">
+                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                            </svg>
+                        </div>
+                        <h3
+                            class="text-2xl font-bold mb-4 text-gray-900 group-hover:text-emerald-600 transition-colors font-accent relative z-10">
+                            Tecnologia</h3>
+                        <p class="text-gray-600 text-base leading-relaxed mb-8 flex-grow relative z-10">
+                            Posicione sua marca no digital. Desenvolvimento de sites, landing pages e sistemas web para
+                            impulsionar seu negócio.
+                        </p>
+                        <span
+                            class="text-emerald-600 font-bold text-sm flex items-center gap-2 group-hover:gap-3 transition-all relative z-10">
+                            Soluções Web <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="journey" class="py-32 gradient-bg text-white relative overflow-hidden">
+        <div
+            class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjAzIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30">
+        </div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-3xl mx-auto text-center mb-20">
+                <span
+                    class="inline-block bg-orange-500/20 backdrop-blur-sm border border-orange-400/30 text-orange-300 font-bold tracking-wider uppercase text-sm px-6 py-2.5 rounded-full mb-6">Nossa
+                    História</span>
+                <h2 class="text-4xl md:text-5xl font-black mt-2 font-accent leading-tight">
+                    20 Anos <span
+                        class="bg-gradient-to-r from-orange-400 to-yellow-300 bg-clip-text text-transparent">Transformando</span>
+                    Realidades
+                </h2>
+            </div>
+
             <div class="max-w-4xl mx-auto">
-                <div class="grid md:grid-cols-2 gap-8">
+                <div class="grid md:grid-cols-2 gap-12">
                     <div>
-                        <div class="timeline-item mb-12">
-                            <h3 class="text-xl font-bold mb-2">2005 - Os Primeiros Passos</h3>
-                            <p class="text-slate-300">Comecei o curso de informática básica e alguns meses depois iniciei com elaboração de currículos e serviços de impressão. Logo foram aparecendo outros documentos como orçamentos, contratos e trabalhos acadêmicos.</p>
+                        <div class="timeline-item animate-on-scroll">
+                            <h3 class="text-xl font-bold mb-2 text-white">2005 - O Início</h3>
+                            <p class="text-slate-300 text-sm">Começo com informática básica, currículos e impressões. A
+                                base de tudo.</p>
                         </div>
-                        
-                        <div class="timeline-item mb-12">
-                            <h3 class="text-xl font-bold mb-2">2010 - Expansão para Serviços Fiscais</h3>
-                            <p class="text-slate-300">Demos um importante passo com o início dos serviços de Imposto de Renda, expandindo nossa atuação no universo digital e fiscal.</p>
+                        <div class="timeline-item animate-on-scroll">
+                            <h3 class="text-xl font-bold mb-2 text-white">2010 - Expansão Fiscal</h3>
+                            <p class="text-slate-300 text-sm">Início dos serviços de Imposto de Renda, ampliando nossa
+                                atuação.</p>
                         </div>
-                        
-                        <div class="timeline-item mb-12">
-                            <h3 class="text-xl font-bold mb-2">2016 - Suporte ao MEI</h3>
-                            <p class="text-slate-300">Iniciamos o suporte especializado para Microempreendedores Individuais, ajudando na formalização e regularização de pequenos negócios.</p>
+                        <div class="timeline-item animate-on-scroll">
+                            <h3 class="text-xl font-bold mb-2 text-white">2016 - Foco no Empreendedor</h3>
+                            <p class="text-slate-300 text-sm">Especialização em suporte ao MEI, ajudando pequenos
+                                negócios a crescerem.</p>
                         </div>
                     </div>
-                    
                     <div>
-                        <div class="timeline-item mb-12">
-                            <h3 class="text-xl font-bold mb-2">2020 - O Despertar da Criatividade</h3>
-                            <p class="text-slate-300">Demos nossos primeiros passos no mundo da personalização com produção de produtos únicos, expandindo nossa criatividade para além dos serviços digitais.</p>
+                        <div class="timeline-item animate-on-scroll">
+                            <h3 class="text-xl font-bold mb-2 text-white">2020 - Criatividade</h3>
+                            <p class="text-slate-300 text-sm">Entrada no mercado de produtos personalizados e brindes
+                                exclusivos.</p>
                         </div>
-                        
-                        <div class="timeline-item mb-12">
-                            <h3 class="text-xl font-bold mb-2">2023 - Consolidação dos Departamentos</h3>
-                            <p class="text-slate-300">Estruturação definitiva dos departamentos de Personalizados e Tecnologia, oferecendo um ecossistema completo de soluções integradas.</p>
+                        <div class="timeline-item animate-on-scroll">
+                            <h3 class="text-xl font-bold mb-2 text-white">2023 - Ecossistema</h3>
+                            <p class="text-slate-300 text-sm">Integração total: Personalizados + Tecnologia + Serviços
+                                Digitais.</p>
                         </div>
-                        
-                        <div class="timeline-item mb-12">
-                            <h3 class="text-xl font-bold mb-2">2025 - O Futuro</h3>
-                            <p class="text-slate-300">Continuamos evoluindo para oferecer as melhores soluções 360° para nossos clientes, sempre acompanhando as tendências do mercado.</p>
+                        <div class="timeline-item animate-on-scroll">
+                            <h3 class="text-xl font-bold mb-2 text-orange-300">2025 - O Futuro</h3>
+                            <p class="text-slate-300 text-sm">Continuamos evoluindo com soluções 360° para nossos
+                                clientes.</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="mt-8 bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 text-center">
-                    <p class="text-slate-300 text-lg">Com 20 anos de experiência, continuamos comprometidos em transformar suas ideias em realidade através de soluções completas e personalizadas.</p>
+                <div
+                    class="mt-16 bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20 text-center animate-on-scroll shadow-2xl">
+                    <svg class="w-12 h-12 mx-auto mb-4 text-orange-400 opacity-50" fill="currentColor"
+                        viewBox="0 0 24 24">
+                        <path
+                            d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                    </svg>
+                    <p class="text-white text-xl md:text-2xl italic font-light leading-relaxed">"Comprometidos em fazer
+                        a diferença na sua vida e no seu negócio."</p>
+                    <div class="mt-6 flex items-center justify-center gap-2">
+                        <div class="w-12 h-1 bg-gradient-to-r from-transparent via-orange-400 to-transparent"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Depoimentos (fundo laranja leve) -->
-    <section id="testimonials" class="py-20 bg-plena-orange-wash">
+    <section id="testimonials" class="py-32 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white via-orange-50/30 to-white -z-10">
+        </div>
         <div class="container mx-auto px-6">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 animate-on-scroll font-accent">O Que Nossos Clientes Dizem</h2>
-            
-            <div class="testimonials-carousel relative">
+            <div class="text-center mb-20">
+                <span
+                    class="inline-block text-orange-600 font-bold tracking-wider uppercase text-sm mb-4 px-4 py-2 bg-orange-100 rounded-full">Depoimentos</span>
+                <h2 class="text-4xl md:text-5xl font-black font-accent text-gray-900 leading-tight">
+                    O Que <span
+                        class="bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">Dizem</span>
+                    Sobre Nós
+                </h2>
+            </div>
+
+            <div class="testimonials-carousel relative max-w-6xl mx-auto">
                 <div class="testimonials-track" id="testimonials-track">
-                    <!-- Depoimentos -->
                     <div class="testimonial-card">
-                        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-lg p-8 h-full">
-                            <p class="text-gray-600 italic mb-4">"Eu buscava apenas a regularização do meu IR e saí com um catálogo digital e produtos personalizados para a minha empresa. A Plena enxergou um potencial que nem eu via!"</p>
-                            <p class="font-bold text-right text-orange-500">- Joana Silva</p>
+                        <div
+                            class="bg-white rounded-3xl shadow-xl shadow-orange-500/10 p-10 h-full border border-gray-100 flex flex-col justify-between hover:shadow-2xl hover:shadow-orange-500/20 transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-orange-500/5 rounded-full -mr-12 -mt-12">
+                            </div>
+                            <div>
+                                <div class="text-orange-500 text-5xl mb-4 font-serif leading-none">“</div>
+                                <p class="text-gray-700 italic mb-6 text-base">Eu buscava apenas a regularização do meu
+                                    IR e saí com
+                                    um catálogo digital e produtos personalizados. A Plena enxergou um potencial que nem
+                                    eu
+                                    via!</p>
+                            </div>
+                            <div class="border-t pt-6 border-gray-100 flex items-center gap-3">
+                                <div
+                                    class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                                    J</div>
+                                <p class="font-bold text-gray-900">Joana Silva</p>
+                            </div>
                         </div>
                     </div>
                     <div class="testimonial-card">
-                        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-lg p-8 h-full">
-                            <p class="text-gray-600 italic mb-4">"Precisávamos de uniformes para nossa equipe e o resultado foi impecável. Qualidade da estampa e do tecido, além de um atendimento super atencioso. Recomendo de olhos fechados."</p>
-                            <p class="font-bold text-right text-blue-600">- Marcos Andrade</p>
+                        <div
+                            class="bg-white rounded-3xl shadow-xl shadow-blue-500/10 p-10 h-full border border-gray-100 flex flex-col justify-between hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full -mr-12 -mt-12">
+                            </div>
+                            <div>
+                                <div class="text-blue-500 text-5xl mb-4 font-serif leading-none">“</div>
+                                <p class="text-gray-700 italic mb-6 text-base">Precisávamos de uniformes e o resultado
+                                    foi impecável.
+                                    Qualidade da estampa e do tecido, além de um atendimento super atencioso.</p>
+                            </div>
+                            <div class="border-t pt-6 border-gray-100 flex items-center gap-3">
+                                <div
+                                    class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                                    M</div>
+                                <p class="font-bold text-gray-900">Marcos Andrade</p>
+                            </div>
                         </div>
                     </div>
                     <div class="testimonial-card">
-                        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-lg p-8 h-full">
-                            <p class="text-gray-600 italic mb-4">"Fizeram a criação do meu currículo e a impressão de um presente personalizado para o meu pai. Tudo rápido, com preço justo e um capricho enorme. Virei cliente fiel."</p>
-                            <p class="font-bold text-right text-emerald-500">- Carolina Lima</p>
+                        <div
+                            class="bg-white rounded-3xl shadow-xl shadow-blue-500/10 p-10 h-full border border-gray-100 flex flex-col justify-between hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full -mr-12 -mt-12">
+                            </div>
+                            <div>
+                                <div class="text-emerald-500 text-5xl mb-4 font-serif leading-none">“</div>
+                                <p class="text-gray-700 italic mb-6 text-base">O site que a Plena desenvolveu para minha
+                                    empresa
+                                    aumentou nossas vendas em 40%. Profissionais incríveis!</p>
+                            </div>
+                            <div class="border-t pt-6 border-gray-100 flex items-center gap-3">
+                                <div
+                                    class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                                    R</div>
+                                <p class="font-bold text-gray-900">Ricardo Oliveira</p>
+                            </div>
                         </div>
                     </div>
                     <div class="testimonial-card">
-                        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-lg p-8 h-full">
-                            <p class="text-gray-600 italic mb-4">"O site que a Plena desenvolveu para minha empresa aumentou nossas vendas em 40%. Profissionais incríveis e muito competentes!"</p>
-                            <p class="font-bold text-right text-purple-600">- Ricardo Oliveira</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-lg p-8 h-full">
-                            <p class="text-gray-600 italic mb-4">"Serviço de impressão de alta qualidade e entrega rápida. Já fiz vários pedidos e sempre superam minhas expectativas."</p>
-                            <p class="font-bold text-right text-pink-600">- Ana Paula Santos</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-lg p-8 h-full">
-                            <p class="text-gray-600 italic mb-4">"A assessoria para MEI foi fundamental para regularizar minha situação. Atendimento humanizado e preço justo. Recomendo!"</p>
-                            <p class="font-bold text-right text-indigo-600">- Carlos Mendes</p>
+                        <div
+                            class="bg-white rounded-3xl shadow-xl shadow-blue-500/10 p-10 h-full border border-gray-100 flex flex-col justify-between hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full -mr-12 -mt-12">
+                            </div>
+                            <div>
+                                <div class="text-purple-500 text-5xl mb-4 font-serif leading-none">“</div>
+                                <p class="text-gray-700 italic mb-6 text-base">A assessoria para MEI foi fundamental
+                                    para regularizar
+                                    minha situação. Atendimento humanizado e preço justo.</p>
+                            </div>
+                            <div class="border-t pt-6 border-gray-100 flex items-center gap-3">
+                                <div
+                                    class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                                    C</div>
+                                <p class="font-bold text-gray-900">Carlos Mendes</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Controles -->
-                <button type="button" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-2 shadow-lg transition duration-300 carousel-prev z-10" aria-label="Depoimentos anteriores">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+
+                <button
+                    class="absolute top-1/2 -left-4 md:-left-12 transform -translate-y-1/2 bg-white hover:bg-orange-50 text-gray-800 rounded-full p-4 shadow-xl hover:shadow-2xl transition-all duration-300 carousel-prev z-10 focus:outline-none focus:ring-2 focus:ring-orange-500 hover:scale-110">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7">
+                        </path>
                     </svg>
                 </button>
-                <button type="button" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-2 shadow-lg transition duration-300 carousel-next z-10" aria-label="Próximos depoimentos">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                <button
+                    class="absolute top-1/2 -right-4 md:-right-12 transform -translate-y-1/2 bg-white hover:bg-orange-50 text-gray-800 rounded-full p-4 shadow-xl hover:shadow-2xl transition-all duration-300 carousel-next z-10 focus:outline-none focus:ring-2 focus:ring-orange-500 hover:scale-110">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </button>
             </div>
-            
-            <!-- Indicadores -->
+
             <div class="flex justify-center mt-8 space-x-2" id="carousel-indicators"></div>
         </div>
     </section>
 
-    <footer id="contact" class="bg-gray-900 text-white py-16">
+    <footer id="contact" class="bg-gray-900 text-white py-16 border-t border-gray-800">
         <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-4 gap-8">
+            <div class="grid md:grid-cols-4 gap-12">
                 <div class="md:col-span-2">
-                    <a href="index.html" class="text-2xl font-bold text-white flex items-center mb-6 font-accent">
+                    <a href="#" class="text-2xl font-bold text-white flex items-center mb-6 font-accent">
                         Plena <span class="text-orange-500 ml-1">Informática</span>
                     </a>
-                    <p class="text-slate-400 mb-6 max-w-md">Há 20 anos transformando ideias em realidade. Oferecemos soluções completas em serviços digitais, personalizados e tecnologia.</p>
-                    
-                    <div class="flex items-center space-x-4 mb-6">
-                        <div class="flex items-center bg-green-100 text-green-800 py-1 px-3 rounded-full text-sm font-medium">
-                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    <p class="text-slate-400 mb-6 max-w-sm text-sm leading-relaxed">
+                        Há 20 anos transformando ideias em realidade. Oferecemos soluções completas em serviços
+                        digitais, personalizados e tecnologia.
+                    </p>
+                    <div class="flex items-center space-x-3">
+                        <span
+                            class="bg-green-500/10 text-green-400 border border-green-500/20 py-1 px-3 rounded-full text-xs font-medium flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd"></path>
                             </svg>
                             Site Seguro
-                        </div>
-                        <div class="text-slate-400 text-sm">
-                            Protegido com SSL
-                        </div>
+                        </span>
                     </div>
                 </div>
-                
+
                 <div>
-                    <h3 class="font-bold text-lg mb-6 font-accent">Serviços</h3>
-                    <ul class="space-y-3">
-                        <li><a href="servicos.html" class="text-slate-400 hover:text-white transition duration-300">Serviços Digitais</a></li>
-                        <li><a href="personalizados.html" class="text-slate-400 hover:text-white transition duration-300">Personalizados</a></li>
-                        <li><a href="tecnologia.html" class="text-slate-400 hover:text-white transition duration-300">Tecnologia</a></li>
+                    <h3 class="font-bold text-lg mb-6 font-accent text-white">Nossas Áreas</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="servicos.html" class="text-slate-400 hover:text-orange-400 transition">Serviços
+                                Digitais</a></li>
+                        <li><a href="personalizados.html"
+                                class="text-slate-400 hover:text-blue-400 transition">Personalizados</a></li>
+                        <li><a href="tecnologia.html"
+                                class="text-slate-400 hover:text-emerald-400 transition">Tecnologia</a></li>
                     </ul>
                 </div>
-                
+
                 <div>
-                    <h3 class="font-bold text-lg mb-6 font-accent">Contato</h3>
-                    <ul class="space-y-3 text-slate-400">
+                    <h3 class="font-bold text-lg mb-6 font-accent text-white">Contato</h3>
+                    <ul class="space-y-4 text-sm text-slate-400">
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <svg class="w-5 h-5 mr-3 mt-0.5 text-orange-500" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                             </svg>
                             <span>São José dos Campos, SP</span>
                         </li>
                         <li class="flex items-center">
-                            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                            <svg class="w-5 h-5 mr-3 text-orange-500" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z">
+                                </path>
                             </svg>
                             <span>(12) 98148-8505</span>
                         </li>
                         <li class="flex items-center">
-                            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            <svg class="w-5 h-5 mr-3 text-orange-500" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                </path>
                             </svg>
                             <span>contato@plenainformatica.com.br</span>
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                            </svg>
-                            <span>@plenainf_2025</span>
                         </li>
                     </ul>
                 </div>
             </div>
-            
-            <div class="border-t border-slate-800 mt-12 pt-8">
-                <div class="flex flex-col md:flex-row justify-between items-center">
-                    <div class="text-center md:text-left mb-4 md:mb-0">
-                        <p class="text-lg italic text-slate-400 mb-2">"Tudo posso naquele que me fortalece." - Filipenses 4:13</p>
-                        <p class="text-sm text-slate-500">&copy; 2025 Plena Informática. Todos os direitos reservados.</p>
-                        <p class="text-xs text-slate-600 mt-1">Desenvolvido por Plena Informática</p>
-                    </div>
-                    
-                    <div class="flex space-x-6 text-sm text-slate-400">
-                        <a href="#" class="hover:text-white transition duration-300 open-modal" data-modal="terms">Termos de Uso</a>
-                        <a href="#" class="hover:text-white transition duration-300 open-modal" data-modal="privacy">Política de Privacidade</a>
-                    </div>
+
+            <div
+                class="border-t border-slate-800 mt-12 pt-8 text-center md:text-left flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-sm italic text-slate-500 mb-1">"Tudo posso naquele que me fortalece." - Filipenses
+                        4:13</p>
+                    <p class="text-xs text-slate-600">&copy; 2026 Plena Informática. Todos os direitos reservados.</p>
+                </div>
+                <div class="flex space-x-6 text-xs text-slate-500">
+                    <button class="hover:text-white transition open-modal" data-modal="terms">Termos de Uso</button>
+                    <button class="hover:text-white transition open-modal" data-modal="privacy">Política de
+                        Privacidade</button>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Botão do WhatsApp Pulsante -->
-    <button type="button" class="whatsapp-btn-digital pulse-ring fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg flex items-center justify-center hover:bg-green-600 transition duration-300 z-50" aria-label="Fale conosco no WhatsApp">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z"/>
+    <button type="button"
+        class="whatsapp-btn pulse-ring fixed bottom-6 right-6 bg-gradient-to-br from-green-500 to-green-600 text-white p-5 rounded-full shadow-2xl shadow-green-500/40 flex items-center justify-center hover:from-green-600 hover:to-green-700 transition-all duration-300 z-50 group hover:scale-110"
+        aria-label="WhatsApp">
+        <svg class="w-8 h-8 group-hover:rotate-12 transition-transform duration-300" viewBox="0 0 24 24"
+            fill="currentColor">
+            <path
+                d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
         </svg>
     </button>
 
-    <!-- Modais -->
-    <div id="terms-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="terms-modal-title">
+    <div id="terms-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
         <div class="modal-content">
-            <button type="button" class="modal-close" aria-label="Fechar termos">&times;</button>
-            <h2 id="terms-modal-title" class="text-2xl font-bold mb-4 font-accent">Termos de Uso</h2>
-            <div class="text-slate-700 space-y-4">
-                <p>Ao acessar e utilizar os serviços da Plena Informática, você concorda com os seguintes termos e condições:</p>
-                <h3 class="font-bold text-lg mt-6 mb-2">1. Aceitação dos Termos</h3>
-                <p>O uso deste site e dos serviços oferecidos pela Plena Informática implica na aceitação integral destes Termos de Uso.</p>
-                <h3 class="font-bold text-lg mt-6 mb-2">2. Serviços Oferecidos</h3>
-                <p>A Plena Informática oferece serviços digitais, produtos personalizados e soluções em tecnologia. Todos os serviços estão sujeitos à disponibilidade e podem ser alterados sem aviso prévio.</p>
-                <h3 class="font-bold text-lg mt-6 mb-2">3. Propriedade Intelectual</h3>
-                <p>Todo o conteúdo deste site, incluindo textos, gráficos, logotipos, imagens e software, é propriedade da Plena Informática e protegido por leis de direitos autorais.</p>
-                <h3 class="font-bold text-lg mt-6 mb-2">4. Limitação de Responsabilidade</h3>
-                <p>A Plena Informática não se responsabiliza por danos diretos, indiretos, incidentais ou consequenciais resultantes do uso ou incapacidade de uso dos serviços.</p>
-                <h3 class="font-bold text-lg mt-6 mb-2">5. Alterações nos Termos</h3>
-                <p>Reservamo-nos o direito de modificar estes Termos de Uso a qualquer momento. As alterações entram em vigor imediatamente após sua publicação no site.</p>
-                <p class="mt-6 text-sm text-slate-500">Última atualização: Outubro de 2025</p>
+            <button type="button" class="modal-close" aria-label="Fechar">&times;</button>
+            <h2 class="text-2xl font-bold mb-4 font-accent">Termos de Uso</h2>
+            <div class="text-slate-700 space-y-4 text-sm leading-relaxed">
+                <p>Ao utilizar os serviços da Plena Informática, você concorda com nossos termos de serviço, políticas
+                    de privacidade e condições comerciais.</p>
+                <p>Todo o conteúdo deste site é propriedade intelectual da Plena Informática.</p>
+                <p class="text-xs text-gray-500 mt-4">Atualizado em 2026.</p>
             </div>
         </div>
     </div>
 
-    <div id="privacy-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="privacy-modal-title">
+    <div id="privacy-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
         <div class="modal-content">
-            <button type="button" class="modal-close" aria-label="Fechar política">&times;</button>
-            <h2 id="privacy-modal-title" class="text-2xl font-bold mb-4 font-accent">Política de Privacidade</h2>
-            <div class="text-slate-700 space-y-4">
-                <p>Esta Política de Privacidade descreve como a Plena Informática coleta, usa e protege suas informações pessoais.</p>
-                <h3 class="font-bold text-lg mt-6 mb-2">1. Informações Coletadas</h3>
-                <p>Coletamos informações que você nos fornece voluntariamente, como nome, e-mail, telefone e outras informações necessárias para a prestação de nossos serviços.</p>
-                <h3 class="font-bold text-lg mt-6 mb-2">2. Uso das Informações</h3>
-                <p>Utilizamos suas informações para:
-                <ul class="list-disc pl-5 mt-2">
-                    <li>Prestar os serviços solicitados</li>
-                    <li>Melhorar nossa oferta de produtos e serviços</li>
-                    <li>Enviar comunicações sobre nossos serviços</li>
-                    <li>Cumprir obrigações legais</li>
-                </ul>
-                </p>
-                <h3 class="font-bold text-lg mt-6 mb-2">3. Compartilhamento de Informações</h3>
-                <p>Não vendemos, trocamos ou transferimos suas informações pessoais para terceiros, exceto quando necessário para a prestação de serviços ou por exigência legal.</p>
-                <h3 class="font-bold text-lg mt-6 mb-2">4. Segurança</h3>
-                <p>Implementamos medidas de segurança para proteger suas informações contra acesso não autorizado, alteração, divulgação ou destruição.</p>
-                <h3 class="font-bold text-lg mt-6 mb-2">5. Seus Direitos</h3>
-                <p>Você tem o direito de acessar, corrigir ou excluir suas informações pessoais. Entre em contato conosco para exercer esses direitos.</p>
-                <h3 class="font-bold text-lg mt-6 mb-2">6. Cookies</h3>
-                <p>Utilizamos cookies para melhorar sua experiência em nosso site. Você pode configurar seu navegador para recusar cookies, mas isso pode afetar a funcionalidade do site.</p>
-                <p class="mt-6 text-sm text-slate-500">Última atualização: Outubro de 2025</p>
+            <button type="button" class="modal-close" aria-label="Fechar">&times;</button>
+            <h2 class="text-2xl font-bold mb-4 font-accent">Política de Privacidade</h2>
+            <div class="text-slate-700 space-y-4 text-sm leading-relaxed">
+                <p>Respeitamos sua privacidade. Seus dados (nome, contato) são utilizados exclusivamente para
+                    comunicação sobre nossos serviços e não são compartilhados com terceiros sem consentimento.</p>
+                <p>Utilizamos cookies essenciais para o funcionamento do site.</p>
+                <p class="text-xs text-gray-500 mt-4">Atualizado em 2026.</p>
             </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Menu mobile
+            // --- MENU MOBILE ---
             const menuBtn = document.getElementById('menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
-            
+
+            function toggleMenu() {
+                mobileMenu.classList.toggle('hidden');
+                const isExpanded = !mobileMenu.classList.contains('hidden');
+                menuBtn.setAttribute('aria-expanded', isExpanded);
+            }
+
             if (menuBtn && mobileMenu) {
-                menuBtn.setAttribute('aria-controls', 'mobile-menu');
-                menuBtn.setAttribute('aria-expanded', 'false');
-
-                menuBtn.addEventListener('click', () => {
-                    const isHidden = mobileMenu.classList.toggle('hidden');
-                    menuBtn.setAttribute('aria-expanded', String(!isHidden));
-                });
-
-                // Fechar menu ao clicar em um link
-                mobileMenu.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        mobileMenu.classList.add('hidden');
-                        menuBtn.setAttribute('aria-expanded', 'false');
-                    });
-                });
-
-                document.addEventListener('keydown', (event) => {
-                    if (event.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.classList.add('hidden');
-                        menuBtn.setAttribute('aria-expanded', 'false');
-                        menuBtn.focus();
-                    }
+                menuBtn.addEventListener('click', toggleMenu);
+                // Fechar ao clicar nos links
+                mobileMenu.querySelectorAll('a, button').forEach(el => {
+                    el.addEventListener('click', () => mobileMenu.classList.add('hidden'));
                 });
             }
 
-            // Scroll animation com Intersection Observer
+            // --- SCROLL ANIMATION (Observer) ---
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                    }
-                });
-            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-            const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
-            elementsToAnimate.forEach(el => observer.observe(el));
-
-            // Smooth scroll com offset do header (sem "vazar" hero)
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-              anchor.addEventListener('click', function (event) {
-                const href = this.getAttribute('href');
-                if (!href || href === '#') return;
-
-                const target = document.querySelector(href);
-                if (!target) return;
-
-                event.preventDefault();
-
-                const header = document.querySelector('header');
-                const headerHeight = header ? header.offsetHeight : 0;
-                const extra = 12; // respiro
-                const top = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - extra;
-
-                window.scrollTo({ top, behavior: 'smooth' });
-              });
-            });
-
-            // ========== WHATSAPP CORRIGIDO - FUNÇÃO UNIVERSAL ==========
-            function openWhatsApp(phone, message = null) {
-                const defaultMessage = 'Olá! Gostaria de mais informações sobre os serviços da Plena Informática.';
-                const finalMessage = message || defaultMessage;
-                const mailto = `mailto:contato@plenainformatica.com.br?subject=Contato%20Plena&body=${encodeURIComponent(finalMessage)}`;
-                window.open(mailto, '_blank');
-                const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(finalMessage)}`;
-                window.open(url, '_blank', 'noopener,noreferrer');
-            }
-            function openWhatsAppDigital(message = null) { openWhatsApp('5512981488505', message); }
-            function openWhatsAppPersonalizados(message = null) {
-                const personalizadosMessage = 'Olá! Gostaria de mais informações sobre produtos personalizados.';
-                openWhatsApp('5512992191018', message || personalizadosMessage);
-            }
-            document.querySelectorAll('.whatsapp-btn-digital').forEach(btn => {
-                btn.addEventListener('click', () => openWhatsAppDigital());
-            });
-            document.querySelectorAll('.whatsapp-btn-personalizados').forEach(btn => {
-                btn.addEventListener('click', () => openWhatsAppPersonalizados());
-            });
-            document.querySelectorAll('.whatsapp-btn').forEach(btn => {
-                btn.addEventListener('click', () => openWhatsAppDigital());
-            });
-
-            // Animação de entrada
-            const fadeObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
                         entry.target.classList.add('animate-fade-in-up');
+                        observer.unobserve(entry.target); // Anima só uma vez para performance
                     }
                 });
             }, { threshold: 0.1 });
 
-            document.querySelectorAll('.card-gradient, .timeline-item').forEach((el) => {
-                el.style.opacity = '0';
-                fadeObserver.observe(el);
+            document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+            // --- WHATSAPP FUNCTION ---
+            window.openWhatsApp = function (phone, msg) {
+                const text = msg || 'Olá! Gostaria de mais informações sobre os serviços da Plena Informática.';
+                const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(text)}`;
+                window.open(url, '_blank', 'noopener,noreferrer');
+            };
+
+            document.querySelectorAll('.whatsapp-btn').forEach(btn => {
+                btn.addEventListener('click', () => window.openWhatsApp('5512981488505'));
             });
 
-            // Carrossel de depoimentos
-            const testimonialsTrack = document.getElementById('testimonials-track');
-            const testimonialCards = Array.from(document.querySelectorAll('.testimonial-card'));
-            const carouselIndicators = document.getElementById('carousel-indicators');
-            const prevButton = document.querySelector('.carousel-prev');
-            const nextButton = document.querySelector('.carousel-next');
+            // --- MODAIS ---
+            const modals = {
+                'terms': document.getElementById('terms-modal'),
+                'privacy': document.getElementById('privacy-modal')
+            };
 
-            if (testimonialsTrack && testimonialCards.length) {
-                let currentIndex = 0;
-                let autoPlayInterval = null;
-                let resizeTimeout;
-                const cardCount = testimonialCards.length;
-                let cardsPerView = getCardsPerView();
-                let totalSlides = Math.max(1, Math.ceil(cardCount / cardsPerView));
-                const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-                function getCardsPerView() { return window.innerWidth < 768 ? 1 : 3; }
-                function stopAutoPlay() { if (autoPlayInterval) { clearInterval(autoPlayInterval); autoPlayInterval = null; } }
-                function startAutoPlay() {
-                    if (totalSlides <= 1 || prefersReducedMotion.matches) { stopAutoPlay(); return; }
-                    stopAutoPlay(); autoPlayInterval = setInterval(nextSlide, 5000);
-                }
-                function updateCarousel() {
-                    testimonialsTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
-                    if (carouselIndicators) {
-                        Array.from(carouselIndicators.children).forEach((indicator, index) => {
-                            indicator.classList.toggle('active', index === currentIndex);
-                        });
+            function closeAllModals() {
+                Object.values(modals).forEach(m => {
+                    if (m) {
+                        m.style.display = 'none';
+                        m.setAttribute('aria-hidden', 'true');
                     }
-                }
-                function goToSlide(index) { currentIndex = index; updateCarousel(); }
-                function nextSlide() { currentIndex = (currentIndex + 1) % totalSlides; updateCarousel(); }
-                function prevSlide() { currentIndex = (currentIndex - 1 + totalSlides) % totalSlides; updateCarousel(); }
-                function toggleControls() {
-                    const shouldHide = totalSlides <= 1;
-                    if (prevButton) prevButton.classList.toggle('hidden', shouldHide);
-                    if (nextButton) nextButton.classList.toggle('hidden', shouldHide);
-                    if (carouselIndicators) carouselIndicators.classList.toggle('hidden', shouldHide);
-                }
-                function renderIndicators() {
-                    if (!carouselIndicators) return;
-                    carouselIndicators.innerHTML = '';
-                    for (let i = 0; i < totalSlides; i++) {
-                        const indicator = document.createElement('button');
-                        indicator.type = 'button';
-                        indicator.classList.add('carousel-indicator');
-                        indicator.setAttribute('aria-label', `Ir para depoimento ${i + 1}`);
-                        if (i === currentIndex) indicator.classList.add('active');
-                        indicator.addEventListener('click', () => { stopAutoPlay(); goToSlide(i); startAutoPlay(); });
-                        carouselIndicators.appendChild(indicator);
-                    }
-                    toggleControls();
-                }
-                function handleResize() {
-                    const newCardsPerView = getCardsPerView();
-                    if (newCardsPerView === cardsPerView) return;
-                    cardsPerView = newCardsPerView;
-                    totalSlides = Math.max(1, Math.ceil(cardCount / cardsPerView));
-                    currentIndex = Math.min(currentIndex, totalSlides - 1);
-                    renderIndicators(); updateCarousel();
-                    if (totalSlides <= 1) { stopAutoPlay(); } else { startAutoPlay(); }
-                }
-                function handleMotionPreferenceChange(event) { if (event.matches) stopAutoPlay(); else startAutoPlay(); }
-
-                renderIndicators(); updateCarousel(); startAutoPlay();
-                if (prevButton) prevButton.addEventListener('click', () => { if (totalSlides <= 1) return; stopAutoPlay(); prevSlide(); startAutoPlay(); });
-                if (nextButton) nextButton.addEventListener('click', () => { if (totalSlides <= 1) return; stopAutoPlay(); nextSlide(); startAutoPlay(); });
-
-                testimonialsTrack.addEventListener('mouseenter', stopAutoPlay);
-                testimonialsTrack.addEventListener('mouseleave', startAutoPlay);
-                testimonialsTrack.addEventListener('touchstart', stopAutoPlay);
-                testimonialsTrack.addEventListener('touchend', startAutoPlay);
-
-                if (typeof prefersReducedMotion.addEventListener === 'function') {
-                    prefersReducedMotion.addEventListener('change', handleMotionPreferenceChange);
-                } else if (typeof prefersReducedMotion.addListener === 'function') {
-                    prefersReducedMotion.addListener(handleMotionPreferenceChange);
-                }
-
-                window.addEventListener('resize', () => {
-                    clearTimeout(resizeTimeout);
-                    resizeTimeout = setTimeout(handleResize, 150);
                 });
-            }
-            
-            // Modal
-            const termsModal = document.getElementById('terms-modal');
-            const privacyModal = document.getElementById('privacy-modal');
-            const modalCloseButtons = document.querySelectorAll('.modal-close');
-            const openModalButtons = document.querySelectorAll('.open-modal');
-            const focusableSelector = 'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
-            const modalMap = { terms: termsModal, privacy: privacyModal };
-            let activeModal = null;
-            let lastFocusedElement = null;
-
-            function openModal(modal) {
-                if (!modal) return;
-                if (activeModal && activeModal !== modal) { closeModal(); }
-                lastFocusedElement = document.activeElement;
-                modal.style.display = 'flex';
-                modal.setAttribute('aria-hidden', 'false');
-                activeModal = modal;
-                document.body.style.overflow = 'hidden';
-
-                const focusableElements = Array.from(modal.querySelectorAll(focusableSelector)).filter(el => el.offsetParent !== null);
-                const firstFocusable = focusableElements[0];
-                if (firstFocusable) firstFocusable.focus();
-            }
-
-            function closeModal() {
-                if (!activeModal) return;
-                activeModal.style.display = 'none';
-                activeModal.setAttribute('aria-hidden', 'true');
-                if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') lastFocusedElement.focus();
-                activeModal = null;
                 document.body.style.overflow = '';
             }
 
-            openModalButtons.forEach(button => {
-                button.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    const modalType = button.getAttribute('data-modal');
-                    const modal = modalMap[modalType];
-                    openModal(modal);
+            document.querySelectorAll('.open-modal').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const type = btn.getAttribute('data-modal');
+                    const modal = modals[type];
+                    if (modal) {
+                        closeAllModals();
+                        modal.style.display = 'flex';
+                        modal.setAttribute('aria-hidden', 'false');
+                        document.body.style.overflow = 'hidden';
+                    }
                 });
             });
-            
-            modalCloseButtons.forEach(button => { button.addEventListener('click', closeModal); });
-            window.addEventListener('click', (event) => { if (activeModal && event.target === activeModal) closeModal(); });
-            document.addEventListener('keydown', (event) => {
-                if (event.key === 'Escape' && activeModal) { closeModal(); return; }
-                if (event.key === 'Tab' && activeModal) {
-                    const focusableElements = Array.from(activeModal.querySelectorAll(focusableSelector)).filter(el => el.offsetParent !== null);
-                    if (!focusableElements.length) { event.preventDefault(); return; }
-                    const firstElement = focusableElements[0];
-                    const lastElement  = focusableElements[focusableElements.length - 1];
-                    if (event.shiftKey && document.activeElement === firstElement) { event.preventDefault(); lastElement.focus(); }
-                    else if (!event.shiftKey && document.activeElement === lastElement) { event.preventDefault(); firstElement.focus(); }
-                }
-            });
 
-            const toggleDesktop = document.getElementById('toggle-desktop');
-            const toggleMobile = document.getElementById('toggle-mobile');
-            const servicesDesktop = document.getElementById('services-desktop');
-            const servicesMobile = document.getElementById('services-mobile');
-            function activateDesktop(){
-                if (servicesDesktop) { servicesDesktop.classList.add('md:block'); servicesDesktop.classList.remove('md:hidden'); }
-                if (servicesMobile) { servicesMobile.classList.add('md:hidden'); servicesMobile.classList.remove('md:block'); }
-                if (toggleDesktop) { toggleDesktop.classList.add('bg-orange-500','text-white'); toggleDesktop.classList.remove('bg-slate-200','text-slate-800'); }
-                if (toggleMobile) { toggleMobile.classList.add('bg-slate-200','text-slate-800'); toggleMobile.classList.remove('bg-orange-500','text-white'); }
+            document.querySelectorAll('.modal-close').forEach(btn => btn.addEventListener('click', closeAllModals));
+            window.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) closeAllModals(); });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllModals(); });
+
+            // --- CARROUSEL ---
+            const track = document.getElementById('testimonials-track');
+            const indicatorsContainer = document.getElementById('carousel-indicators');
+            const prevBtn = document.querySelector('.carousel-prev');
+            const nextBtn = document.querySelector('.carousel-next');
+
+            if (track) {
+                const cards = Array.from(document.querySelectorAll('.testimonial-card'));
+                let index = 0;
+                let cardsPerView = window.innerWidth < 768 ? 1 : 3;
+                let totalSlides = Math.ceil(cards.length / cardsPerView);
+
+                function updateView() {
+                    const percent = -(index * 100);
+                    track.style.transform = `translateX(${percent}%)`;
+                    updateIndicators();
+                }
+
+                function updateIndicators() {
+                    indicatorsContainer.innerHTML = '';
+                    for (let i = 0; i < totalSlides; i++) {
+                        const dot = document.createElement('button');
+                        dot.className = `carousel-indicator ${i === index ? 'active' : ''}`;
+                        dot.onclick = () => { index = i; updateView(); };
+                        indicatorsContainer.appendChild(dot);
+                    }
+                }
+
+                nextBtn?.addEventListener('click', () => { index = (index + 1) % totalSlides; updateView(); });
+                prevBtn?.addEventListener('click', () => { index = (index - 1 + totalSlides) % totalSlides; updateView(); });
+
+                window.addEventListener('resize', () => {
+                    const newCardsPerView = window.innerWidth < 768 ? 1 : 3;
+                    if (newCardsPerView !== cardsPerView) {
+                        cardsPerView = newCardsPerView;
+                        totalSlides = Math.ceil(cards.length / cardsPerView);
+                        index = 0;
+                        updateView();
+                    }
+                });
+
+                updateView(); // Init
             }
-            function activateMobile(){
-                if (servicesMobile) { servicesMobile.classList.add('md:block'); servicesMobile.classList.remove('md:hidden'); }
-                if (servicesDesktop) { servicesDesktop.classList.add('md:hidden'); servicesDesktop.classList.remove('md:block'); }
-                if (toggleMobile) { toggleMobile.classList.add('bg-orange-500','text-white'); toggleMobile.classList.remove('bg-slate-200','text-slate-800'); }
-                if (toggleDesktop) { toggleDesktop.classList.add('bg-slate-200','text-slate-800'); toggleDesktop.classList.remove('bg-orange-500','text-white'); }
-            }
-            if (toggleDesktop) { toggleDesktop.addEventListener('click', activateDesktop); }
-            if (toggleMobile) { toggleMobile.addEventListener('click', activateMobile); }
-            activateDesktop();
         });
     </script>
+    <script src="js/bot.js"></script>
 </body>
+
 </html>

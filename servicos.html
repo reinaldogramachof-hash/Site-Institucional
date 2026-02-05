@@ -1,1469 +1,927 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="scroll-smooth">
-  <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Plena Digital | Plataforma de Serviços Digitais</title>
-  
-  <meta name="description" content="Plataforma completa de serviços digitais para MEIs, profissionais e empresas. Currículos, declarações IRPF, assessoria MEI e muito mais.">
-  <meta name="theme-color" content="#ea580c">
 
-  <!-- Tailwind CSS -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serviços Digitais - Plena Informática</title>
+
+  <meta name="description"
+    content="Serviços digitais completos: currículos profissionais, declaração de IR, suporte MEI, documentos e muito mais. Agilidade e qualidade em São José dos Campos.">
+  <meta name="keywords"
+    content="serviços digitais, currículo profissional, declaração IR, suporte MEI, documentos, impressão">
+  <meta name="author" content="Plena Informática">
+  <meta name="theme-color" content="#1e40af">
+
+  <meta property="og:title" content="Serviços Digitais - Plena Informática">
+  <meta property="og:description"
+    content="Currículos profissionais, suporte MEI, declaração de IRPF e soluções documentais com atendimento rápido e confiável.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://plenainformatica.com.br/servicos">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Plena Informática">
+  <link rel="canonical" href="https://plenainformatica.com.br/servicos">
+
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Ícones Phosphor -->
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  <!-- Biblioteca PDF (jspdf) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <!-- Biblioteca Calendar (Flatpickr) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
 
-  <!-- Firebase SDK (Compat) -->
-  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-auth-compat.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
   <style>
     :root {
-      --primary: #ea580c;
-      --primary-dark: #c2410c;
-      --secondary: #1e40af;
+      --primary: #1e40af;
+      --secondary: #ea580c;
       --accent: #059669;
-      --bg-app: #f8fafc;
-    }
-    
-    body { 
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
-      background-color: var(--bg-app); 
-      color: #1e293b; 
-    }
-    .font-heading { font-family: 'Poppins', sans-serif; }
-
-    /* Design System */
-    .gradient-text {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    
-    .gradient-bg {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      --dark: #1e293b;
+      --light: #f8fafc;
+      --plena-orange-wash: #FFF1E8;
     }
 
-    /* UI Elements */
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-      color: white; 
-      font-weight: 600; 
-      border-radius: 10px; 
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 4px 14px 0 rgba(234, 88, 12, 0.39);
-    }
-    .btn-primary:hover { 
-      transform: translateY(-2px); 
-      box-shadow: 0 8px 25px 0 rgba(234, 88, 12, 0.45);
-    }
-    
-    .btn-secondary {
-      background: white;
-      color: #334155;
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      font-weight: 600;
-      transition: all 0.2s;
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-    }
-    .btn-secondary:hover { 
+    body {
+      font-family: 'Inter', sans-serif;
       background: #f8fafc;
-      border-color: #cbd5e1;
-    }
-    
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 2rem;
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-      border: 1px solid #f1f5f9;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .card-hover:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
-      border-color: rgba(234, 88, 12, 0.2);
+      background-image:
+        radial-gradient(60rem 60rem at -10% -20%, rgba(234, 88, 12, .04) 0%, transparent 60%),
+        radial-gradient(40rem 40rem at 120% 120%, rgba(255, 140, 0, .05) 0%, transparent 60%);
     }
 
-    /* Inputs */
-    .input-field {
-      width: 100%; 
-      padding: 12px 16px; 
-      border-radius: 10px; 
-      border: 1px solid #e2e8f0;
-      background-color: #fff; 
-      transition: all 0.2s; 
-      font-size: 0.95rem;
-    }
-    .input-field:focus { 
-      outline: none; 
-      border-color: var(--primary); 
-      box-shadow: 0 0 0 3px rgba(234,88,12,0.1); 
+    .bg-plena-orange-wash {
+      background: var(--plena-orange-wash);
     }
 
-    /* Progress Bar */
-    .progress-bar { 
-      height: 6px; 
-      background-color: #f1f5f9; 
-      border-radius: 3px; 
-      overflow: hidden; 
-    }
-    .progress-fill { 
-      height: 100%; 
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); 
-      transition: width 0.5s ease; 
+    .font-accent {
+      font-family: 'Poppins', sans-serif;
     }
 
-    /* Notification System */
-    .notification {
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      padding: 16px 20px;
+    section[id] {
+      scroll-margin-top: 6.75rem;
+    }
+
+    /* Cards e Gradients */
+    .card-gradient {
+      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .card-gradient:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--secondary) 0%, #ea580c 100%);
+      box-shadow: 0 4px 15px 0 rgba(234, 88, 12, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px 0 rgba(234, 88, 12, 0.4);
+    }
+
+    /* Form Elements */
+    .form-card {
+      background: #fff;
       border-radius: 12px;
-      color: white;
-      font-weight: 500;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-      transform: translateX(400px);
-      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      max-width: 400px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      border: 1px solid #f1f5f9;
     }
-    .notification.show { transform: translateX(0); }
-    .notification.success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-    .notification.error { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
-    .notification.info { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
-    .notification.warning { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+
+    .form-input {
+      width: 100%;
+      padding: .75rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      transition: all .2s;
+      background-color: #f9fafb;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #ea580c;
+      background-color: #fff;
+      box-shadow: 0 0 0 3px rgba(234, 88, 12, .12);
+    }
+
+    .service-option {
+      transition: all .25s ease;
+      cursor: pointer;
+    }
+
+    .service-option.active {
+      background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+      color: #fff;
+      transform: scale(1.02);
+      border-color: transparent;
+    }
 
     /* Animations */
     @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+      from {
+        opacity: 0;
+        transform: translateY(30px)
+      }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    .animate-float { animation: float 3s ease-in-out infinite; }
-
-    /* Feature Grid */
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
     }
 
-    /* Dashboard Elements */
-    .stat-card {
+    .animate-fade-in-up {
+      animation: fadeInUp .8s ease-out forwards;
+    }
+
+    @keyframes pulse-ring {
+      0% {
+        box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.7);
+      }
+
+      70% {
+        box-shadow: 0 0 0 15px rgba(234, 88, 12, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(234, 88, 12, 0);
+      }
+    }
+
+    .pulse-ring-orange {
+      animation: pulse-ring 2s infinite;
+    }
+
+    /* Chat Widget */
+    #chat-container {
+      width: 22rem;
+      max-width: 90vw;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      max-height: min(78vh, 680px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    #chat-header {
+      background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+      color: #fff;
+      border-top-left-radius: 14px;
+      border-top-right-radius: 14px;
+    }
+
+    #chat-messages {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e1 #f1f5f9;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.7);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
       background: white;
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-      border: 1px solid #f1f5f9;
-    }
-
-    /* Mobile Enhancements */
-    @media (max-width: 768px) {
-      .container-mobile { padding-left: 1rem; padding-right: 1rem; }
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
     }
   </style>
 </head>
-<body class="flex flex-col min-h-screen">
 
-  <!-- Header -->
-  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 h-16">
-    <div class="container mx-auto px-6 h-full flex justify-between items-center">
-      <a href="index.html" class="flex items-center gap-2">
-        <div class="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center text-white font-bold">
-          P
-        </div>
-        <span class="font-heading font-bold text-slate-800 text-lg tracking-tight">Plena <span class="text-orange-600">Digital</span></span>
+<body class="text-gray-800 antialiased">
+
+  <header class="bg-white/95 backdrop-blur-md shadow-sm fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+      <a href="index.html" class="text-2xl font-bold text-gray-800 font-accent group">
+        Plena <span class="text-orange-500 group-hover:text-orange-600 transition">Informática</span>
       </a>
 
-      <!-- Desktop Navigation -->
-      <nav class="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-600">
-        <a href="#solucoes" class="hover:text-orange-600 transition">Soluções</a>
-        <a href="#planos" class="hover:text-orange-600 transition">Planos</a>
-        <a href="#ferramentas" class="hover:text-orange-600 transition">Ferramentas</a>
-        <a href="#agendamento" class="hover:text-orange-600 transition">Agendar</a>
-        <div class="h-4 w-px bg-slate-200"></div>
-        <a href="painel.html" id="btn-panel" class="hover:text-orange-600 transition hidden">Painel</a>
-        <button id="btn-login" onclick="toggleLoginModal()" class="text-slate-700 hover:text-orange-600 transition">Entrar</button>
-        <button id="btn-cta" onclick="toggleLoginModal()" class="btn-primary px-5 py-2.5 text-sm">Experimente Grátis</button>
-      </nav>
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="index.html"
+          class="text-sm font-medium text-gray-600 hover:text-orange-500 transition duration-300">Início</a>
+        <a href="servicos.html" class="text-sm font-medium text-orange-500">Serviços</a>
+        <a href="index.html#journey"
+          class="text-sm font-medium text-gray-600 hover:text-orange-500 transition duration-300">Nossa Jornada</a>
+        <a href="index.html#testimonials"
+          class="text-sm font-medium text-gray-600 hover:text-orange-500 transition duration-300">Depoimentos</a>
+        <a href="index.html#contact"
+          class="text-sm font-medium text-gray-600 hover:text-orange-500 transition duration-300">Contato</a>
+        <button type="button"
+          class="whatsapp-btn bg-orange-500 text-white font-bold px-5 py-2 rounded-lg hover:bg-orange-600 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+          Fale Conosco
+        </button>
+      </div>
 
-      <!-- Mobile Menu Button -->
-      <button id="mobile-menu-toggle" class="lg:hidden text-slate-700 text-2xl"><i class="ph ph-list"></i></button>
+      <div class="md:hidden">
+        <button id="menu-btn" class="text-gray-800 p-2 focus:outline-none" aria-label="Menu">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-lg">
+      <div class="flex flex-col p-4 space-y-2">
+        <a href="index.html" class="block py-3 px-4 rounded-lg hover:bg-orange-50 text-gray-700 font-medium">Início</a>
+        <a href="servicos.html" class="block py-3 px-4 rounded-lg bg-orange-50 text-orange-600 font-bold">Serviços</a>
+        <a href="index.html#journey"
+          class="block py-3 px-4 rounded-lg hover:bg-orange-50 text-gray-700 font-medium">Nossa Jornada</a>
+        <a href="index.html#testimonials"
+          class="block py-3 px-4 rounded-lg hover:bg-orange-50 text-gray-700 font-medium">Depoimentos</a>
+        <a href="index.html#contact"
+          class="block py-3 px-4 rounded-lg hover:bg-orange-50 text-gray-700 font-medium">Contato</a>
+        <button type="button"
+          class="whatsapp-btn w-full text-center py-3 px-4 mt-2 font-bold text-white bg-orange-500 rounded-lg hover:bg-orange-600">
+          Fale Conosco
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden fixed top-16 inset-x-0 bg-white border-b border-slate-200 shadow-lg z-40">
-    <div class="container mx-auto px-6 py-4 flex flex-col gap-4 text-base">
-      <a href="#solucoes" class="py-2 text-slate-700 hover:text-orange-600">Soluções</a>
-      <a href="#planos" class="py-2 text-slate-700 hover:text-orange-600">Planos</a>
-      <a href="#ferramentas" class="py-2 text-slate-700 hover:text-orange-600">Ferramentas</a>
-      <a href="#agendamento" class="py-2 text-slate-700 hover:text-orange-600">Agendar</a>
-      <div class="h-px bg-slate-200 my-2"></div>
-      <a href="painel.html" id="mobile-btn-panel" class="py-2 text-slate-700 hover:text-orange-600">Painel</a>
-      <button id="mobile-btn-login" onclick="toggleLoginModal()" class="py-2 text-slate-700 hover:text-orange-600 text-left">Entrar</button>
-      <button id="mobile-btn-cta" onclick="toggleLoginModal()" class="btn-primary px-4 py-3 text-sm">Experimente Grátis</button>
+  <section class="pt-32 pb-20 text-center bg-plena-orange-wash relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+      <div class="absolute top-10 left-10 w-64 h-64 bg-orange-400 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-10 right-10 w-64 h-64 bg-blue-400 rounded-full blur-3xl"></div>
     </div>
-  </div>
 
-  <main class="flex-grow">
-
-    <!-- Hero Section -->
-    <section class="relative pt-24 pb-28 overflow-hidden bg-gradient-to-br from-slate-50 to-white">
-      <div class="container mx-auto px-6 relative z-10">
-        <div class="max-w-4xl mx-auto text-center">
-          <div class="inline-flex items-center gap-2 bg-white border border-orange-100 rounded-full px-4 py-2 mb-8 shadow-sm">
-            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-            <span class="text-sm font-medium text-slate-700">Plataforma Digital • 20 Anos de Experiência</span>
-          </div>
-          
-          <h1 class="text-5xl md:text-7xl font-bold text-slate-900 font-heading mb-6 leading-tight">
-            Tudo que sua <span class="gradient-text">carreira e negócio</span> precisam em um só lugar
-          </h1>
-          
-          <p class="text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed">
-            A primeira plataforma completa para MEIs, profissionais e empresas. 
-            De currículos a declarações fiscais, resolvemos sua burocracia digital.
-          </p>
-          
-          <div class="flex flex-col sm:flex-row justify-center gap-4 mb-16">
-            <a href="#ferramentas" class="btn-primary px-8 py-4 text-lg flex items-center justify-center gap-3">
-              <i class="ph ph-lightning"></i>
-              Começar Agora
-            </a>
-            <a href="#planos" class="bg-white text-slate-700 border border-slate-200 px-8 py-4 rounded-xl font-semibold hover:bg-slate-50 transition flex items-center justify-center gap-3">
-              <i class="ph ph-play-circle"></i>
-              Ver Planos
-            </a>
-          </div>
-
-          <!-- Trust Bar -->
-          <div class="flex flex-wrap justify-center items-center gap-10 text-slate-500">
-            <div class="flex items-center gap-2">
-              <i class="ph ph-check-circle-fill text-green-500"></i>
-              <span class="text-sm font-medium">+5.000 clientes</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <i class="ph ph-check-circle-fill text-green-500"></i>
-              <span class="text-sm font-medium">20 anos no mercado</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <i class="ph ph-check-circle-fill text-green-500"></i>
-              <span class="text-sm font-medium">Suporte humanizado</span>
-            </div>
-          </div>
-        </div>
+    <div class="container mx-auto px-6 relative z-10">
+      <div
+        class="inline-flex items-center bg-orange-100 border border-orange-200 rounded-full px-4 py-1 mb-6 animate-fade-in-up">
+        <span class="text-orange-600 font-semibold text-xs uppercase tracking-wide">Agilidade e Confiança</span>
       </div>
-      
-      <!-- Background Elements -->
-      <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div class="absolute top-10 left-10 w-72 h-72 bg-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float"></div>
-        <div class="absolute bottom-10 right-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" style="animation-delay: 2s;"></div>
-      </div>
-    </section>
-
-    <!-- Soluções -->
-    <section id="solucoes" class="py-20 bg-white">
-      <div class="container mx-auto px-6">
-        <div class="text-center max-w-3xl mx-auto mb-16">
-          <h2 class="text-4xl font-bold text-slate-900 mb-4 font-heading">Soluções completas para sua vida digital</h2>
-          <p class="text-lg text-slate-600">De documentos profissionais a gestão empresarial, temos tudo que você precisa</p>
-        </div>
-
-        <div class="feature-grid">
-          <!-- Currículos -->
-          <div class="card card-hover text-center">
-            <div class="w-14 h-14 gradient-bg rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-4">
-              <i class="ph ph-file-text"></i>
-            </div>
-            <h3 class="text-xl font-bold text-slate-800 mb-3">Currículos Profissionais</h3>
-            <p class="text-slate-600 mb-6">Crie currículos modernos e otimizados em minutos, com templates profissionais.</p>
-            <a href="#ferramentas" class="text-orange-600 font-semibold text-sm flex items-center justify-center gap-1">
-              Experimentar grátis
-              <i class="ph ph-arrow-right"></i>
-            </a>
-          </div>
-          
-          <!-- MEI -->
-          <div class="card card-hover text-center">
-            <div class="w-14 h-14 gradient-bg rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-4">
-              <i class="ph ph-buildings"></i>
-            </div>
-            <h3 class="text-xl font-bold text-slate-800 mb-3">Assessoria MEI</h3>
-            <p class="text-slate-600 mb-6">Abertura, emissão de notas, declarações e regularização do seu negócio.</p>
-            <a href="#planos" class="text-orange-600 font-semibold text-sm flex items-center justify-center gap-1">
-              Ver planos
-              <i class="ph ph-arrow-right"></i>
-            </a>
-          </div>
-          
-          <!-- IRPF -->
-          <div class="card card-hover text-center">
-            <div class="w-14 h-14 gradient-bg rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-4">
-              <i class="ph ph-calculator"></i>
-            </div>
-            <h3 class="text-xl font-bold text-slate-800 mb-3">Declaração IRPF</h3>
-            <p class="text-slate-600 mb-6">Faça sua declaração com segurança e evite a malha fina.</p>
-            <a href="#planos" class="text-orange-600 font-semibold text-sm flex items-center justify-center gap-1">
-              Solicitar orçamento
-              <i class="ph ph-arrow-right"></i>
-            </a>
-          </div>
-          
-          <!-- Documentos -->
-          <div class="card card-hover text-center">
-            <div class="w-14 h-14 gradient-bg rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-4">
-              <i class="ph ph-files"></i>
-            </div>
-            <h3 class="text-xl font-bold text-slate-800 mb-3">Documentos & Impressões</h3>
-            <p class="text-slate-600 mb-6">Digitalização, formatação ABNT, impressões e encadernação.</p>
-            <a href="#agendamento" class="text-orange-600 font-semibold text-sm flex items-center justify-center gap-1">
-              Agendar serviço
-              <i class="ph ph-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Ferramenta Currículo -->
-    <section id="ferramentas" class="py-20 bg-slate-50">
-      <div class="container mx-auto px-6">
-        <div class="flex flex-col lg:flex-row gap-12 items-start">
-          <div class="lg:w-2/5">
-            <h2 class="text-4xl font-bold text-slate-900 mb-4 font-heading">Currículo profissional em 5 minutos</h2>
-            <p class="text-lg text-slate-600 mb-8">
-              Crie um currículo moderno, otimizado para sistemas de seleção e pronto para impressionar.
-            </p>
-            
-            <div class="space-y-6">
-              <div class="flex items-start gap-4">
-                <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-green-600 flex-shrink-0">
-                  <i class="ph ph-check-circle-fill"></i>
-                </div>
-                <div>
-                  <h4 class="font-bold text-slate-800 mb-1">Design profissional</h4>
-                  <p class="text-slate-600 text-sm">Layouts modernos que se destacam</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start gap-4">
-                <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-green-600 flex-shrink-0">
-                  <i class="ph ph-check-circle-fill"></i>
-                </div>
-                <div>
-                  <h4 class="font-bold text-slate-800 mb-1">Otimizado ATS</h4>
-                  <p class="text-slate-600 text-sm">Compatível com sistemas de seleção</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start gap-4">
-                <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-green-600 flex-shrink-0">
-                  <i class="ph ph-check-circle-fill"></i>
-                </div>
-                <div>
-                  <h4 class="font-bold text-slate-800 mb-1">Download instantâneo</h4>
-                  <p class="text-slate-600 text-sm">PDF pronto em segundos</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="lg:w-3/5 w-full">
-            <div class="card">
-              <div class="flex items-center gap-2 mb-6">
-                <div class="w-2 h-2 rounded-full bg-orange-500"></div>
-                <h3 class="font-bold text-slate-800">Criar Currículo</h3>
-              </div>
-              
-              <form id="cv-form" class="space-y-6">
-                <!-- Progress -->
-                <div class="mb-2">
-                  <div class="flex justify-between text-sm text-slate-600 mb-1">
-                    <span>Progresso do formulário</span>
-                    <span id="progress-percent">0%</span>
-                  </div>
-                  <div class="progress-bar">
-                    <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
-                  </div>
-                </div>
-                
-                <!-- Dados Pessoais -->
-                <div>
-                  <h4 class="text-sm font-semibold text-slate-700 mb-3">Dados Pessoais</h4>
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" id="cv-nome" placeholder="Nome Completo" class="input-field" required>
-                    <input type="text" id="cv-cargo" placeholder="Cargo Pretendido" class="input-field" required>
-                    <input type="email" id="cv-email" placeholder="E-mail" class="input-field" required>
-                    <input type="tel" id="cv-tel" placeholder="Telefone / WhatsApp" class="input-field" required>
-                    <input type="text" id="cv-cep" placeholder="CEP" class="input-field" maxlength="9">
-                    <input type="text" id="cv-cidade" placeholder="Cidade - Estado" class="input-field" readonly>
-                  </div>
-                </div>
-
-                <!-- Resumo -->
-                <div>
-                  <h4 class="text-sm font-semibold text-slate-700 mb-3">Resumo Profissional</h4>
-                  <textarea id="cv-resumo" rows="3" placeholder="Descreva suas principais habilidades, experiências e objetivos profissionais..." class="input-field"></textarea>
-                </div>
-
-                <!-- Experiência -->
-                <div>
-                  <h4 class="text-sm font-semibold text-slate-700 mb-3">Experiência Profissional</h4>
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <input type="text" id="cv-empresa" placeholder="Empresa" class="input-field">
-                    <input type="text" id="cv-periodo" placeholder="Período (Ex: 2020 - 2023)" class="input-field">
-                  </div>
-                  <textarea id="cv-atividades" rows="3" placeholder="Descreva suas responsabilidades e conquistas..." class="input-field"></textarea>
-                </div>
-
-                <button id="cv-submit" type="submit" class="w-full btn-primary py-4 text-lg flex justify-center items-center gap-2">
-                  <i class="ph ph-file-pdf"></i>
-                  Gerar e Baixar Currículo
-                </button>
-                
-                <p class="text-center text-slate-500 text-sm">
-                  <i class="ph ph-lock-simple"></i>
-                  Seus dados estão seguros. Não compartilhamos informações.
-                </p>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Planos -->
-    <section id="planos" class="py-20 bg-white">
-      <div class="container mx-auto px-6">
-        <div class="text-center max-w-3xl mx-auto mb-16">
-          <h2 class="text-4xl font-bold text-slate-900 mb-4 font-heading">Planos que crescem com você</h2>
-          <p class="text-lg text-slate-600">Escolha a solução ideal para suas necessidades</p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          <!-- Plano Básico -->
-          <div class="card text-center card-hover">
-            <div class="mb-6">
-              <h3 class="text-xl font-bold text-slate-800 mb-2">Básico</h3>
-              <p class="text-slate-600 text-sm">Para quem precisa de serviços avulsos</p>
-            </div>
-            
-            <div class="text-4xl font-bold text-slate-900 mb-2">R$ 0</div>
-            <p class="text-slate-500 text-sm mb-6">Sempre grátis</p>
-            
-            <ul class="space-y-3 mb-8 text-sm text-slate-600">
-              <li class="flex items-center gap-2">
-                <i class="ph ph-check text-green-500"></i>
-                <span>Currículo grátis</span>
-              </li>
-              <li class="flex items-center gap-2">
-                <i class="ph ph-check text-green-500"></i>
-                <span>Orientação básica</span>
-              </li>
-              <li class="flex items-center gap-2">
-                <i class="ph ph-check text-green-500"></i>
-                <span>Agendamento online</span>
-              </li>
-            </ul>
-            
-            <button class="w-full btn-secondary py-3">Usar Grátis</button>
-          </div>
-          
-          <!-- Plano MEI (Destaque) -->
-          <div class="card text-center card-hover border-2 border-orange-500 relative transform scale-105 shadow-xl">
-            <div class="absolute top-0 inset-x-0 bg-orange-500 text-white text-xs font-bold py-2 text-center uppercase tracking-wider rounded-t-xl">
-              Mais Popular
-            </div>
-            
-            <div class="mt-4 mb-6">
-              <h3 class="text-xl font-bold text-slate-800 mb-2">Assessoria MEI</h3>
-              <p class="text-slate-600 text-sm">Para manter seu negócio em dia</p>
-            </div>
-            
-            <div class="text-4xl font-bold text-slate-900 mb-2">R$ 49,90</div>
-            <p class="text-slate-500 text-sm mb-6">por mês</p>
-            
-            <ul class="space-y-3 mb-8 text-sm text-slate-600">
-              <li class="flex items-center gap-2">
-                <i class="ph ph-check text-green-500"></i>
-                <span>Emissão de DAS</span>
-              </li>
-              <li class="flex items-center gap-2">
-                <i class="ph ph-check text-green-500"></i>
-                <span>Notas Fiscais ilimitadas</span>
-              </li>
-              <li class="flex items-center gap-2">
-                <i class="ph ph-check text-green-500"></i>
-                <span>Declaração Anual inclusa</span>
-              </li>
-              <li class="flex items-center gap-2">
-                <i class="ph ph-check text-green-500"></i>
-                <span>Suporte prioritário</span>
-              </li>
-            </ul>
-            
-            <button onclick="whatsappService('Assinatura MEI')" class="w-full btn-primary py-3 font-bold">Assinar Agora</button>
-          </div>
-          
-          <!-- Plano Premium -->
-          <div class="card text-center card-hover">
-            <div class="mb-6">
-              <h3 class="text-xl font-bold text-slate-800 mb-2">Premium</h3>
-              <p class="text-slate-600 text-sm">Serviços completos sob demanda</p>
-            </div>
-            
-            <div class="text-4xl font-bold text-slate-900 mb-2">R$ 99</div>
-            <p class="text-slate-500 text-sm mb-6">por serviço</p>
-            
-            <ul class="space-y-3 mb-8 text-sm text-slate-600">
-              <li class="flex items-center gap-2">
-                <i class="ph ph-check text-green-500"></i>
-                <span>Declaração IRPF completa</span>
-              </li>
-              <li class="flex items-center gap-2">
-                <i class="ph ph-check text-green-500"></i>
-                <span>Abertura de MEI</span>
-              </li>
-              <li class="flex items-center gap-2">
-                <i class="ph ph-check text-green-500"></i>
-                <span>Consultoria personalizada</span>
-              </li>
-              <li class="flex items-center gap-2">
-                <i class="ph ph-check text-green-500"></i>
-                <span>Certificado Digital</span>
-              </li>
-            </ul>
-            
-            <button onclick="whatsappService('Serviço Premium')" class="w-full btn-secondary py-3">Solicitar Orçamento</button>
-          </div>
-        </div>
-        
-        <!-- Trust Seals -->
-        <div class="flex flex-wrap justify-center gap-8 mt-16 pt-8 border-t border-slate-100">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
-              <i class="ph ph-shield-check"></i>
-            </div>
-            <div>
-              <h4 class="font-bold text-slate-800 text-sm">Pagamento Seguro</h4>
-              <p class="text-slate-500 text-xs">Dados criptografados</p>
-            </div>
-          </div>
-          
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center text-green-600">
-              <i class="ph ph-clock-countdown"></i>
-            </div>
-            <div>
-              <h4 class="font-bold text-slate-800 text-sm">Suporte Rápido</h4>
-              <p class="text-slate-500 text-xs">Resposta em até 2h</p>
-            </div>
-          </div>
-          
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600">
-              <i class="ph ph-medal"></i>
-            </div>
-            <div>
-              <h4 class="font-bold text-slate-800 text-sm">Garantia</h4>
-              <p class="text-slate-500 text-xs">7 dias de satisfação</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Agendamento -->
-    <section id="agendamento" class="py-20 bg-slate-50">
-      <div class="container mx-auto px-6">
-        <div class="flex flex-col lg:flex-row gap-12 items-center">
-          <div class="lg:w-2/5">
-            <h2 class="text-4xl font-bold text-slate-900 mb-4 font-heading">Atendimento presencial quando precisar</h2>
-            <p class="text-lg text-slate-600 mb-8">
-              Agende um horário no nosso escritório para serviços que exigem atendimento pessoal.
-            </p>
-            
-            <div class="space-y-6">
-              <div class="flex items-start gap-4">
-                <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-orange-600 shadow-sm flex-shrink-0">
-                  <i class="ph ph-map-pin"></i>
-                </div>
-                <div>
-                  <h4 class="font-bold text-slate-800 mb-1">Escritório Central</h4>
-                  <p class="text-slate-600">São José dos Campos, SP</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start gap-4">
-                <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-orange-600 shadow-sm flex-shrink-0">
-                  <i class="ph ph-clock"></i>
-                </div>
-                <div>
-                  <h4 class="font-bold text-slate-800 mb-1">Horário de Funcionamento</h4>
-                  <p class="text-slate-600">Segunda a Sexta: 9h às 18h<br>Sábado: 9h às 13h</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start gap-4">
-                <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-orange-600 shadow-sm flex-shrink-0">
-                  <i class="ph ph-whatsapp-logo"></i>
-                </div>
-                <div>
-                  <h4 class="font-bold text-slate-800 mb-1">Atendimento WhatsApp</h4>
-                  <p class="text-slate-600">(12) 98148-8505</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="lg:w-3/5 w-full">
-            <div class="card">
-              <h3 class="text-xl font-bold text-slate-800 mb-2">Agendar Horário</h3>
-              <p class="text-slate-600 mb-6">Selecione data, horário e serviço desejado</p>
-              
-              <form id="booking-form">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Data do Agendamento</label>
-                    <input type="text" id="calendar-input" class="input-field text-center font-medium cursor-pointer" placeholder="Clique para selecionar">
-                  </div>
-                  
-                  <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Horário Preferencial</label>
-                    <select id="booking-time" class="input-field"></select>
-                  </div>
-                </div>
-                
-                <div class="mb-6">
-                  <label class="block text-sm font-medium text-slate-700 mb-2">Serviço Desejado</label>
-                  <select id="booking-service" class="input-field">
-                    <option>Certificado Digital</option>
-                    <option>Consultoria MEI</option>
-                    <option>Declaração IRPF</option>
-                    <option>Impressão/Xerox</option>
-                    <option>Outros Serviços</option>
-                  </select>
-                </div>
-                
-                <div class="mb-6">
-                  <label class="block text-sm font-medium text-slate-700 mb-2">Seu Nome</label>
-                  <input id="booking-name" type="text" class="input-field" placeholder="Nome completo" required>
-                </div>
-                
-                <div class="mb-6">
-                  <label class="block text-sm font-medium text-slate-700 mb-2">Telefone para Contato</label>
-                  <input id="booking-phone" type="tel" class="input-field" placeholder="(12) 99999-9999" required>
-                </div>
-                
-                <button id="booking-submit" type="submit" class="w-full btn-primary py-4 text-lg">Confirmar Agendamento</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Depoimentos -->
-    <section class="py-20 bg-white">
-      <div class="container mx-auto px-6">
-        <div class="text-center max-w-3xl mx-auto mb-16">
-          <h2 class="text-4xl font-bold text-slate-900 mb-4 font-heading">O que nossos clientes dizem</h2>
-          <p class="text-lg text-slate-600">Mais de 5.000 profissionais e empresas confiam na Plena</p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <!-- Depoimento 1 -->
-          <div class="card card-hover">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-bold">
-                M
-              </div>
-              <div>
-                <h4 class="font-bold text-slate-800">Mariana Silva</h4>
-                <p class="text-slate-500 text-sm">Designer Freelancer</p>
-              </div>
-            </div>
-            <p class="text-slate-600 mb-4">
-              "O gerador de currículo é incrível! Consegui um design profissional em minutos e fui contratada na primeira entrevista."
-            </p>
-            <div class="flex text-amber-400">
-              <i class="ph ph-star-fill"></i>
-              <i class="ph ph-star-fill"></i>
-              <i class="ph ph-star-fill"></i>
-              <i class="ph ph-star-fill"></i>
-              <i class="ph ph-star-fill"></i>
-            </div>
-          </div>
-          
-          <!-- Depoimento 2 -->
-          <div class="card card-hover">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
-                R
-              </div>
-              <div>
-                <h4 class="font-bold text-slate-800">Ricardo Oliveira</h4>
-                <p class="text-slate-500 text-sm">MEI - Consultor</p>
-              </div>
-            </div>
-            <p class="text-slate-600 mb-4">
-              "A assessoria MEI me salvou! Agora minhas obrigações fiscais estão sempre em dia sem preocupação."
-            </p>
-            <div class="flex text-amber-400">
-              <i class="ph ph-star-fill"></i>
-              <i class="ph ph-star-fill"></i>
-              <i class="ph ph-star-fill"></i>
-              <i class="ph ph-star-fill"></i>
-              <i class="ph ph-star-fill"></i>
-            </div>
-          </div>
-          
-          <!-- Depoimento 3 -->
-          <div class="card card-hover">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold">
-                A
-              </div>
-              <div>
-                <h4 class="font-bold text-slate-800">Ana Costa</h4>
-                <p class="text-slate-500 text-sm">Advogada</p>
-              </div>
-            </div>
-            <p class="text-slate-600 mb-4">
-              "Finalmente encontrei uma plataforma que resolve todas minhas burocracias em um só lugar. Recomendo!"
-            </p>
-            <div class="flex text-amber-400">
-              <i class="ph ph-star-fill"></i>
-              <i class="ph ph-star-fill"></i>
-              <i class="ph ph-star-fill"></i>
-              <i class="ph ph-star-fill"></i>
-              <i class="ph ph-star-fill"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Login Modal -->
-  <div id="login-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative animate-fade-in-up">
-      <button onclick="toggleLoginModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="ph ph-x text-xl"></i></button>
-      
-      <div class="p-8 text-center">
-        <div class="w-16 h-16 gradient-bg rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-4">
-          <i class="ph ph-user"></i>
-        </div>
-        <div class="flex items-center justify-center gap-3 mb-6">
-          <button id="tab-login" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 font-medium">Entrar</button>
-          <button id="tab-register" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 font-medium">Cadastrar</button>
-          <button id="tab-forgot" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 font-medium">Recuperar</button>
-        </div>
-        <div id="login-pane" class="space-y-4">
-          <h2 class="text-2xl font-bold text-slate-900">Acesse sua conta</h2>
-          <p class="text-slate-500">Entre para gerenciar seus serviços</p>
-          <form id="login-form" class="space-y-4">
-            <input id="login-email" type="email" placeholder="Seu E-mail" class="input-field">
-            <input id="login-password" type="password" placeholder="Sua Senha" class="input-field">
-            <button type="submit" class="w-full btn-primary py-3 font-bold">Entrar na Plataforma</button>
-          </form>
-          <button id="google-login-btn" class="w-full btn-secondary py-3 font-bold flex items-center justify-center gap-2"><i class="ph ph-google-logo"></i> Entrar com Google</button>
-        </div>
-        <div id="register-pane" class="space-y-4 hidden">
-          <h2 class="text-2xl font-bold text-slate-900">Crie sua conta</h2>
-          <p class="text-slate-500">Cadastre-se gratuitamente</p>
-          <form id="register-form" class="space-y-4">
-            <input id="register-name" type="text" placeholder="Seu Nome" class="input-field">
-            <input id="register-email" type="email" placeholder="Seu E-mail" class="input-field">
-            <input id="register-password" type="password" placeholder="Crie uma Senha" class="input-field">
-            <button type="submit" class="w-full btn-primary py-3 font-bold">Criar Conta</button>
-          </form>
-        </div>
-        <div id="forgot-pane" class="space-y-4 hidden">
-          <h2 class="text-2xl font-bold text-slate-900">Recuperar acesso</h2>
-          <p class="text-slate-500">Digite seu e-mail para receber instruções</p>
-          <form id="forgot-form" class="space-y-4">
-            <input id="forgot-email" type="email" placeholder="Seu E-mail" class="input-field">
-            <button type="submit" class="w-full btn-primary py-3 font-bold">Enviar instruções</button>
-          </form>
-        </div>
-        
-        <div class="mt-6 pt-6 border-t border-slate-100">
-          <p class="text-sm text-slate-500">Precisa de ajuda? <a href="#" class="text-orange-600 font-bold">Fale conosco</a></p>
-        </div>
-      </div>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 drop-shadow-sm font-accent mb-6 animate-fade-in-up"
+        style="animation-delay: 100ms;">
+        Serviços Digitais que <br class="hidden md:block"> <span
+          class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-600">Simplificam sua
+          Vida</span>
+      </h1>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto animate-fade-in-up" style="animation-delay: 200ms;">
+        Resolvemos suas pendências burocráticas e documentais. Do currículo ao IRPF, foque no que importa e deixe a
+        papelada conosco.
+      </p>
     </div>
-  </div>
+  </section>
 
-  <!-- Notification Container -->
-  <div id="notification-container"></div>
-
-  <!-- Footer -->
-  <footer class="bg-slate-900 text-white pt-16 pb-8">
+  <section id="curriculo" class="py-20 bg-white">
     <div class="container mx-auto px-6">
-      <div class="grid md:grid-cols-4 gap-8 mb-12">
+      <div class="animate-on-scroll">
+        <h2 class="text-3xl font-bold text-center mb-4 font-accent text-gray-900">Destaque-se no Mercado</h2>
+        <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Um currículo bem elaborado é a porta de entrada
+          para novas oportunidades.</p>
+
+        <div class="max-w-4xl mx-auto form-card relative">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <button id="btn-novo" type="button"
+              class="service-option w-full text-left p-5 rounded-xl border-2 border-orange-500 bg-orange-500 text-white shadow-lg active">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-bold text-lg">Criar do Zero</h3>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+              </div>
+              <p class="text-sm opacity-90">Ideal para primeiro emprego ou reformulação total.</p>
+            </button>
+            <button id="btn-atualizar" type="button"
+              class="service-option w-full text-left p-5 rounded-xl border-2 border-gray-100 bg-gray-50 text-gray-600 hover:border-orange-300">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-bold text-lg">Atualizar Existente</h3>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                  </path>
+                </svg>
+              </div>
+              <p class="text-sm opacity-90">Adicione novas experiências ou cursos.</p>
+            </button>
+          </div>
+
+          <form id="form-curriculo" class="space-y-5">
+            <input type="hidden" id="tipoServico" value="Novo Currículo">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
+                <input type="text" id="nome" class="form-input" required>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+                <input type="email" id="email" class="form-input" required>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Objetivo Profissional</label>
+              <input type="text" id="objetivo" placeholder="Ex: Vendas, Administrativo, Estágio..." class="form-input">
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Resumo de Qualificações</label>
+              <textarea id="experiencias" placeholder="Liste suas principais experiências, cursos e habilidades..."
+                class="form-input" rows="4"></textarea>
+            </div>
+
+            <div id="campo-upload" class="hidden p-4 bg-orange-50 rounded-lg border border-orange-100">
+              <label class="block mb-2 text-sm font-medium text-orange-800">Possui o arquivo atual?</label>
+              <input id="arquivo-cv" type="file" accept=".pdf,.doc,.docx"
+                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200 transition">
+              <textarea id="alteracoes" placeholder="O que precisamos mudar ou adicionar?" class="form-input mt-3"
+                rows="2"></textarea>
+            </div>
+
+            <div class="pt-4">
+              <button type="submit"
+                class="w-full bg-green-500 text-white font-bold px-6 py-4 rounded-xl hover:bg-green-600 transition duration-300 flex items-center justify-center gap-2 shadow-lg shadow-green-500/20">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
+                </svg>
+                Solicitar Orçamento via WhatsApp
+              </button>
+              <p class="text-xs text-center text-gray-400 mt-3">Anexos devem ser enviados diretamente na conversa do
+                WhatsApp.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="max-w-4xl mx-auto mt-16 animate-on-scroll">
+        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-8">
+          <h3 class="text-xl font-bold text-center mb-6 text-gray-800 font-accent">Dicas Rápidas para Entrevista</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h4 class="text-sm font-bold text-green-600 uppercase tracking-wide mb-3 flex items-center"><span
+                  class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>Faça</h4>
+              <ul class="space-y-2 text-sm text-gray-600">
+                <li class="flex items-start"><span class="mr-2">✓</span>Pesquise sobre a empresa antes.</li>
+                <li class="flex items-start"><span class="mr-2">✓</span>Cite exemplos reais de conquistas.</li>
+                <li class="flex items-start"><span class="mr-2">✓</span>Seja pontual e cordial.</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-red-600 uppercase tracking-wide mb-3 flex items-center"><span
+                  class="w-2 h-2 rounded-full bg-red-500 mr-2"></span>Evite</h4>
+              <ul class="space-y-2 text-sm text-gray-600">
+                <li class="flex items-start"><span class="mr-2">✕</span>Falar mal de chefes anteriores.</li>
+                <li class="flex items-start"><span class="mr-2">✕</span>Mentir sobre habilidades.</li>
+                <li class="flex items-start"><span class="mr-2">✕</span>Usar gírias em excesso.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="solucoes" class="py-24 bg-plena-orange-wash">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-16 font-accent text-gray-900">Soluções Especializadas</h2>
+
+      <div class="grid grid-cols-1 gap-20">
+        <div class="grid md:grid-cols-2 gap-12 items-center animate-on-scroll">
+          <div>
+            <div class="w-16 h-16 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center mb-6">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 text-gray-900 font-accent">Imposto de Renda (IRPF)</h3>
+            <p class="text-gray-600 mb-6 leading-relaxed">
+              Evite dores de cabeça com a Receita Federal. Realizamos sua declaração completa, analisamos pendências de
+              anos anteriores e garantimos que você não caia na malha fina.
+            </p>
+            <ul class="space-y-2 mb-6 text-sm text-gray-500">
+              <li>• Declaração Completa ou Simplificada</li>
+              <li>• Análise de Caixa e Bens</li>
+              <li>• Regularização de CPF</li>
+            </ul>
+          </div>
+
+          <div class="form-card">
+            <h4 class="font-bold text-gray-800 mb-4">Solicitar Declaração</h4>
+            <form id="form-irpf" class="space-y-4">
+              <input type="text" id="irpf-nome" placeholder="Seu Nome Completo" class="form-input" required>
+              <input type="text" id="irpf-contato" placeholder="WhatsApp ou E-mail" class="form-input" required>
+
+              <div>
+                <span class="text-xs font-bold text-gray-500 uppercase">Já é cliente?</span>
+                <div class="mt-2 flex gap-4">
+                  <label class="inline-flex items-center text-sm cursor-pointer"><input type="radio" name="irpf-cliente"
+                      value="Sim" class="text-orange-500 focus:ring-orange-500"> <span class="ml-2">Sim</span></label>
+                  <label class="inline-flex items-center text-sm cursor-pointer"><input type="radio" name="irpf-cliente"
+                      value="Não, primeira vez" checked class="text-orange-500 focus:ring-orange-500"> <span
+                      class="ml-2">Não, primeira vez</span></label>
+                </div>
+              </div>
+              <button type="submit"
+                class="whatsapp-btn w-full bg-green-500 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition">Enviar
+                Solicitação</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12 items-center animate-on-scroll">
+          <div class="order-2 md:order-1 form-card">
+            <h4 class="font-bold text-gray-800 mb-4">Suporte Empresarial</h4>
+            <form id="form-mei" class="space-y-4">
+              <input type="text" id="mei-nome" placeholder="Nome Completo" class="form-input" required>
+              <input type="text" id="mei-cnpj" placeholder="CNPJ (se já tiver)" class="form-input">
+              <select id="mei-necessidade" class="form-input text-gray-600">
+                <option value="">O que você precisa?</option>
+                <option value="Abertura de MEI">Abrir meu MEI</option>
+                <option value="Declaração Anual">Declaração Anual (DASN)</option>
+                <option value="Emissão de Notas">Emitir Notas Fiscais</option>
+                <option value="Regularização">Regularizar Débitos</option>
+                <option value="Outros">Outros</option>
+              </select>
+              <button type="submit"
+                class="whatsapp-btn w-full bg-green-500 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition">Falar
+                com Especialista</button>
+            </form>
+          </div>
+          <div class="order-1 md:order-2">
+            <div class="w-16 h-16 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center mb-6">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 text-gray-900 font-accent">Tudo para o seu MEI</h3>
+            <p class="text-gray-600 mb-6 leading-relaxed">
+              Formalize seu negócio ou coloque a casa em ordem. Oferecemos assessoria completa para o Microempreendedor
+              Individual, da abertura ao fechamento anual.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12 items-start animate-on-scroll">
+          <div>
+            <div class="w-16 h-16 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center mb-6">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 text-gray-900 font-accent">Boletos e Documentos</h3>
+            <p class="text-gray-600 mb-6">
+              Serviços rápidos de escritório. Precisa da 2ª via de uma conta? Imprimir um trabalho? Digitalizar
+              documentos importantes?
+            </p>
+            <ul class="space-y-3 text-sm text-gray-600">
+              <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-purple-500 mr-2"></span>2ª Via (Sabesp,
+                EDP, Vivo, etc)</li>
+              <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-purple-500 mr-2"></span>Impressão
+                Colorida e P&B</li>
+              <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-purple-500 mr-2"></span>Digitalização e
+                Xerox</li>
+            </ul>
+          </div>
+
+          <div class="form-card">
+            <form id="form-boletos" class="space-y-4">
+              <div class="flex p-1 bg-gray-100 rounded-lg mb-4">
+                <button type="button"
+                  class="flex-1 py-2 text-sm font-medium rounded-md shadow-sm bg-white text-gray-800 transition"
+                  id="tab-imprimir">Imprimir</button>
+                <button type="button"
+                  class="flex-1 py-2 text-sm font-medium rounded-md text-gray-500 hover:text-gray-800 transition"
+                  id="tab-2via">2ª Via</button>
+              </div>
+
+              <div id="content-imprimir">
+                <p class="text-sm text-gray-500 mb-2">Envie seu arquivo PDF para impressão.</p>
+                <input id="boleto-arquivo" type="file" accept=".pdf,.doc,.jpg"
+                  class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 transition mb-4" />
+              </div>
+
+              <div id="content-2via" class="hidden space-y-3">
+                <select id="boleto-empresa" class="form-input text-sm">
+                  <option value="">Selecione a Conta</option>
+                  <option value="sabesp">Sabesp (Água)</option>
+                  <option value="edp">EDP (Energia)</option>
+                  <option value="outros">Outros</option>
+                </select>
+
+                <div id="boleto-campos-extra" class="hidden space-y-3 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                  <input type="text" id="boleto-titular" placeholder="CPF/CNPJ do Titular" class="form-input text-sm">
+                  <input type="text" id="boleto-codigo" placeholder="Nº Instalação / RGI" class="form-input text-sm">
+                </div>
+              </div>
+
+              <label class="flex items-start gap-2 cursor-pointer">
+                <input type="checkbox" id="boleto-lgpd" class="mt-1 text-purple-600 rounded focus:ring-purple-500">
+                <span class="text-xs text-gray-500">Autorizo o uso dos dados para este serviço (LGPD).</span>
+              </label>
+
+              <button type="submit"
+                class="whatsapp-btn w-full bg-green-500 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition">Solicitar
+                Serviço</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact" class="bg-gray-900 text-white py-16 border-t border-gray-800">
+    <div class="container mx-auto px-6">
+      <div class="grid md:grid-cols-4 gap-12">
         <div class="md:col-span-2">
-          <a href="index.html" class="inline-flex items-center gap-2 mb-6">
-            <div class="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center text-white font-bold">
-              P
-            </div>
-            <span class="font-heading font-bold text-white text-xl">Plena <span class="text-orange-500">Digital</span></span>
+          <a href="index.html" class="text-2xl font-bold text-white flex items-center mb-6 font-accent">
+            Plena <span class="text-orange-500 ml-1">Informática</span>
           </a>
-          <p class="text-slate-400 mb-6 max-w-md">
-            Há 20 anos transformando ideias em realidade. Soluções completas em serviços digitais para profissionais e empresas.
+          <p class="text-slate-400 mb-6 max-w-sm text-sm leading-relaxed">
+            Há 20 anos transformando ideias em realidade. Oferecemos soluções completas em serviços digitais,
+            personalizados e tecnologia.
           </p>
-          <div class="flex items-center space-x-4">
-            <div class="flex items-center bg-green-900/30 text-green-400 py-1 px-3 rounded-full text-sm font-medium">
-              <i class="ph ph-shield-check mr-1"></i>
+          <div class="flex items-center space-x-3">
+            <span
+              class="bg-green-500/10 text-green-400 border border-green-500/20 py-1 px-3 rounded-full text-xs font-medium flex items-center">
+              <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  clip-rule="evenodd"></path>
+              </svg>
               Site Seguro
-            </div>
-            <div class="text-slate-500 text-sm">Protegido com SSL</div>
+            </span>
           </div>
         </div>
 
         <div>
-          <h3 class="font-bold text-lg mb-6 font-heading">Serviços</h3>
-          <ul class="space-y-3">
-            <li><a href="#ferramentas" class="text-slate-400 hover:text-white transition">Currículos</a></li>
-            <li><a href="#planos" class="text-slate-400 hover:text-white transition">Assessoria MEI</a></li>
-            <li><a href="#planos" class="text-slate-400 hover:text-white transition">Declaração IRPF</a></li>
-            <li><a href="#agendamento" class="text-slate-400 hover:text-white transition">Documentos</a></li>
+          <h3 class="font-bold text-lg mb-6 font-accent text-white">Nossas Áreas</h3>
+          <ul class="space-y-3 text-sm">
+            <li><a href="servicos.html" class="text-slate-400 hover:text-orange-400 transition">Serviços Digitais</a>
+            </li>
+            <li><a href="personalizados.html" class="text-slate-400 hover:text-blue-400 transition">Personalizados</a>
+            </li>
+            <li><a href="tecnologia.html" class="text-slate-400 hover:text-emerald-400 transition">Tecnologia</a></li>
           </ul>
         </div>
 
         <div>
-          <h3 class="font-bold text-lg mb-6 font-heading">Contato</h3>
-          <ul class="space-y-3 text-slate-400">
+          <h3 class="font-bold text-lg mb-6 font-accent text-white">Contato</h3>
+          <ul class="space-y-4 text-sm text-slate-400">
             <li class="flex items-start">
-              <i class="ph ph-map-pin w-5 h-5 mr-3 mt-0.5 flex-shrink-0"></i>
+              <svg class="w-5 h-5 mr-3 mt-0.5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
               <span>São José dos Campos, SP</span>
             </li>
             <li class="flex items-center">
-              <i class="ph ph-whatsapp-logo w-5 h-5 mr-3 flex-shrink-0"></i>
+              <svg class="w-5 h-5 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z">
+                </path>
+              </svg>
               <span>(12) 98148-8505</span>
             </li>
             <li class="flex items-center">
-              <i class="ph ph-envelope w-5 h-5 mr-3 flex-shrink-0"></i>
+              <svg class="w-5 h-5 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                </path>
+              </svg>
               <span>contato@plenainformatica.com.br</span>
             </li>
           </ul>
         </div>
       </div>
 
-      <div class="pt-8 border-t border-slate-800">
-        <div class="flex flex-col md:flex-row justify-between items-center">
-          <div class="text-center md:text-left mb-4 md:mb-0">
-            <p class="text-lg italic text-slate-400 mb-2">"Tudo posso naquele que me fortalece." - Filipenses 4:13</p>
-            <p class="text-sm text-slate-500">&copy; 2025 Plena Informática. Todos os direitos reservados.</p>
-          </div>
-          <div class="flex space-x-6 text-sm text-slate-400">
-            <a href="#" class="hover:text-white transition">Termos de Uso</a>
-            <a href="#" class="hover:text-white transition">Política de Privacidade</a>
-          </div>
+      <div
+        class="border-t border-slate-800 mt-12 pt-8 text-center md:text-left flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-4 md:mb-0">
+          <p class="text-sm italic text-slate-500 mb-1">"Tudo posso naquele que me fortalece." - Filipenses 4:13</p>
+          <p class="text-xs text-slate-600">&copy; 2026 Plena Informática. Todos os direitos reservados.</p>
+        </div>
+        <div class="flex space-x-6 text-xs text-slate-500">
+          <button class="hover:text-white transition open-modal" data-modal="terms">Termos de Uso</button>
+          <button class="hover:text-white transition open-modal" data-modal="privacy">Política de Privacidade</button>
         </div>
       </div>
     </div>
   </footer>
 
-  <!-- WhatsApp Float -->
-  <a href="https://api.whatsapp.com/send?phone=5512981488505&text=Olá! Gostaria de mais informações sobre os serviços da Plena." 
-     target="_blank" 
-     class="fixed bottom-6 right-6 z-40 w-14 h-14 gradient-bg rounded-full shadow-lg flex items-center justify-center text-white transition-all hover:scale-110">
-    <i class="ph ph-whatsapp-logo text-2xl"></i>
-  </a>
+  <!-- Chat Widget Removido (Substituído por Bot Global) -->
 
-  <!-- JavaScript -->
+  <button type="button" onclick="openWhatsApp()"
+    class="whatsapp-btn pulse-ring-orange fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-xl flex items-center justify-center hover:bg-green-600 transition duration-300 z-50 group"
+    aria-label="WhatsApp">
+    <svg class="w-8 h-8 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
+      <path
+        d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
+    </svg>
+  </button>
+
+  <div id="terms-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-content">
+      <button type="button" class="modal-close absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+        aria-label="Fechar">&times;</button>
+      <h2 class="text-2xl font-bold mb-4 font-accent">Termos de Uso</h2>
+      <div class="text-slate-700 space-y-4 text-sm leading-relaxed">
+        <p>Nossos serviços digitais são executados com base nas informações fornecidas pelo cliente. A veracidade dos
+          dados é de inteira responsabilidade do solicitante.</p>
+        <p>Prazos e valores são confirmados via WhatsApp antes do início da execução.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="privacy-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-content">
+      <button type="button" class="modal-close absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+        aria-label="Fechar">&times;</button>
+      <h2 class="text-2xl font-bold mb-4 font-accent">Política de Privacidade</h2>
+      <div class="text-slate-700 space-y-4 text-sm leading-relaxed">
+        <p>Seus documentos e dados pessoais (CPF, Renda, Senhas) são utilizados estritamente para a finalidade
+          contratada (Ex: Declaração de IR) e não são armazenados ou compartilhados com terceiros.</p>
+        <p>Respeitamos rigorosamente a LGPD.</p>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Notification System
-    window.showNotification = (message, type = 'info') => {
-      const container = document.getElementById('notification-container');
-      const notification = document.createElement('div');
-      notification.className = `notification ${type}`;
-      
-      // Icon based on type
-      let icon = 'ph-info';
-      if (type === 'success') icon = 'ph-check-circle';
-      if (type === 'error') icon = 'ph-warning-circle';
-      if (type === 'warning') icon = 'ph-warning';
-      
-      notification.innerHTML = `
-        <i class="ph ${icon} text-xl"></i>
-        <span>${message}</span>
-      `;
-      
-      container.appendChild(notification);
-      
-      // Show notification
-      setTimeout(() => notification.classList.add('show'), 10);
-      
-      // Remove after 5 seconds
-      setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => notification.remove(), 400);
-      }, 5000);
-    };
+    document.addEventListener('DOMContentLoaded', () => {
+      // --- MENU MOBILE ---
+      const menuBtn = document.getElementById('menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
 
-    // Toggle Login Modal
-    window.toggleLoginModal = () => {
-      const modal = document.getElementById('login-modal');
-      modal.classList.toggle('hidden');
-    };
-
-    // WhatsApp Service
-    window.whatsappService = (serviceName) => {
-      const msg = `Olá! Tenho interesse no serviço: *${serviceName}*. Gostaria de mais informações.`;
-      window.open(`https://api.whatsapp.com/send?phone=5512981488505&text=${encodeURIComponent(msg)}`, '_blank');
-    };
-
-    // Mobile Menu Toggle
-    document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
-      document.getElementById('mobile-menu').classList.toggle('hidden');
-    });
-
-    // App Init & Helpers
-    document.addEventListener('DOMContentLoaded', function() {
-      try {
-        if (window.firebase && window.FIREBASE_CONFIG && !firebase.apps.length) {
-          firebase.initializeApp(window.FIREBASE_CONFIG)
-        }
-      } catch {}
-
-      async function refreshAccessTokenIfNeeded() {
-        const refreshToken = localStorage.getItem('refreshToken');
-        if (!refreshToken) return false;
-        try {
-          const res = await fetch('/api/auth/refresh-token', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ refreshToken })
-          });
-          if (!res.ok) return false;
-          const data = await res.json();
-          if (data && data.accessToken && data.refreshToken) {
-            localStorage.setItem('accessToken', data.accessToken);
-            localStorage.setItem('refreshToken', data.refreshToken);
-            return true;
-          }
-          return false;
-        } catch { return false; }
-      }
-
-      async function apiFetch(url, options) {
-        const token = localStorage.getItem('accessToken');
-        const opts = Object.assign({ headers: {} }, options || {});
-        if (token) {
-          opts.headers = Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + token });
-        }
-        let res = await fetch(url, opts);
-        if (res.status === 401) {
-          const refreshed = await refreshAccessTokenIfNeeded();
-          if (refreshed) {
-            const newToken = localStorage.getItem('accessToken');
-            const retryOpts = Object.assign({}, opts, { headers: Object.assign({}, opts.headers, { 'Authorization': 'Bearer ' + newToken }) });
-            res = await fetch(url, retryOpts);
-          }
-        }
-        return res;
-      }
-
-      function setButtonLoading(id, text) {
-        const btn = document.getElementById(id);
-        if (!btn) return;
-        btn.disabled = true;
-        btn.dataset.originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> ' + text;
-        btn.classList.add('opacity-70','cursor-not-allowed');
-      }
-
-      function setButtonIdle(id) {
-        const btn = document.getElementById(id);
-        if (!btn) return;
-        btn.disabled = false;
-        const orig = btn.dataset.originalText || btn.innerHTML;
-        btn.innerHTML = orig;
-        btn.classList.remove('opacity-70','cursor-not-allowed');
-      }
-
-      function mapErrorCode(code, fallback) {
-        const dict = {
-          db_unavailable: 'Serviço temporariamente indisponível.',
-          forbidden: 'Você não tem permissão para esta ação.',
-          unauthorized: 'Sessão expirada. Entre novamente.',
-          not_found: 'Registro não encontrado.',
-          conflict: 'Conflito de horário.'
-        };
-        return dict[code] || fallback;
-      }
-
-      function setAuthUI() {
-        const token = localStorage.getItem('accessToken');
-        const btnLogin = document.getElementById('btn-login');
-        const btnCTA = document.getElementById('btn-cta');
-        const btnPanel = document.getElementById('btn-panel');
-        const mBtnLogin = document.getElementById('mobile-btn-login');
-        const mBtnCTA = document.getElementById('mobile-btn-cta');
-        const mBtnPanel = document.getElementById('mobile-btn-panel');
-        function setLogoutBehavior(el) {
-          if (!el) return;
-          el.textContent = 'Sair';
-          el.onclick = function() {
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
-            showNotification('Você saiu da plataforma.', 'info');
-            setAuthUI();
-            loadSlotsForSelectedDate();
-          };
-        }
-        function setLoginBehavior(el, label) {
-          if (!el) return;
-          el.textContent = label;
-          el.onclick = function() { toggleLoginModal(); };
-        }
-        if (token) {
-          setLogoutBehavior(btnLogin);
-          setLogoutBehavior(mBtnLogin);
-          if (btnPanel) btnPanel.classList.remove('hidden');
-          if (mBtnPanel) mBtnPanel.classList.remove('hidden');
-          if (btnCTA) btnCTA.textContent = 'Minha Conta';
-          if (mBtnCTA) mBtnCTA.textContent = 'Minha Conta';
-        } else {
-          setLoginBehavior(btnLogin, 'Entrar');
-          setLoginBehavior(mBtnLogin, 'Entrar');
-          if (btnPanel) btnPanel.classList.add('hidden');
-          if (mBtnPanel) mBtnPanel.classList.add('hidden');
-          if (btnCTA) btnCTA.textContent = 'Experimente Grátis';
-          if (mBtnCTA) mBtnCTA.textContent = 'Experimente Grátis';
-        }
-      }
-
-      const loginForm = document.getElementById('login-form');
-      if (loginForm) {
-        loginForm.addEventListener('submit', async function(e) {
-          e.preventDefault();
-          const email = document.getElementById('login-email').value.trim();
-          const password = document.getElementById('login-password').value.trim();
-          if (!email || !password) { showNotification('Informe e-mail e senha.', 'error'); return; }
-          try {
-            if (window.firebase && firebase.auth) {
-              const userCred = await firebase.auth().signInWithEmailAndPassword(email, password)
-              const idToken = await userCred.user.getIdToken(true)
-              const ex = await fetch('/api/auth/firebase-login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken }) })
-              if (!ex.ok) { const j = await ex.json().catch(()=>({})); throw new Error(j.error || 'Falha ao entrar') }
-              const data = await ex.json()
-              if (data && data.accessToken) {
-                localStorage.setItem('accessToken', data.accessToken)
-                if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken)
-                showNotification('Login realizado com sucesso!', 'success')
-                toggleLoginModal(); setAuthUI(); loadSlotsForSelectedDate();
-              } else { throw new Error('Resposta inválida do servidor') }
-            } else {
-              const res = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) })
-              if (!res.ok) { const j = await res.json().catch(()=>({})); throw new Error(j.error || 'Falha ao entrar') }
-              const data = await res.json();
-              if (data && data.accessToken) {
-                localStorage.setItem('accessToken', data.accessToken);
-                if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken);
-                showNotification('Login realizado com sucesso!', 'success');
-                toggleLoginModal(); setAuthUI(); loadSlotsForSelectedDate();
-              } else { throw new Error('Resposta inválida do servidor') }
-            }
-          } catch (err) {
-            const msg = (err instanceof Error) ? err.message : 'Erro inesperado';
-            showNotification(msg, 'error');
-          }
+      if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        mobileMenu.querySelectorAll('a, button').forEach(el => {
+          el.addEventListener('click', () => mobileMenu.classList.add('hidden'));
         });
       }
 
-      const tabLogin = document.getElementById('tab-login');
-      const tabRegister = document.getElementById('tab-register');
-      const tabForgot = document.getElementById('tab-forgot');
-      const paneLogin = document.getElementById('login-pane');
-      const paneRegister = document.getElementById('register-pane');
-      const paneForgot = document.getElementById('forgot-pane');
-      function setLoginTab(tab) {
-        if (tab === 'login') { paneLogin.classList.remove('hidden'); paneRegister.classList.add('hidden'); paneForgot.classList.add('hidden'); }
-        if (tab === 'register') { paneLogin.classList.add('hidden'); paneRegister.classList.remove('hidden'); paneForgot.classList.add('hidden'); }
-        if (tab === 'forgot') { paneLogin.classList.add('hidden'); paneRegister.classList.add('hidden'); paneForgot.classList.remove('hidden'); }
-      }
-      if (tabLogin) tabLogin.addEventListener('click', function(){ setLoginTab('login'); });
-      if (tabRegister) tabRegister.addEventListener('click', function(){ setLoginTab('register'); });
-      if (tabForgot) tabForgot.addEventListener('click', function(){ setLoginTab('forgot'); });
-      setLoginTab('login');
-
-      const registerForm = document.getElementById('register-form');
-      if (registerForm) {
-        registerForm.addEventListener('submit', async function(e){
-          e.preventDefault();
-          const name = document.getElementById('register-name').value.trim();
-          const email = document.getElementById('register-email').value.trim();
-          const password = document.getElementById('register-password').value.trim();
-          const strong = password.length >= 8 && /[A-Z]/.test(password) && /[a-z]/.test(password) && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password);
-          if (!name || !email || !password) { showNotification('Preencha todos os campos.', 'error'); return; }
-          if (!strong) { showNotification('Senha fraca. Use letras, números e símbolo.', 'error'); return; }
-          try {
-            const res = await fetch('/api/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, password }) })
-            if (!res.ok) { const j = await res.json().catch(()=>({})); throw new Error(j.error || 'Erro no cadastro'); }
-            showNotification('Cadastro realizado! Verifique seu e-mail.', 'success');
-            setLoginTab('login');
-          } catch (err) {
-            const msg = (err instanceof Error) ? err.message : 'Erro inesperado';
-            showNotification(msg, 'error');
+      // --- ANIMATIONS ---
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-in-up');
+            observer.unobserve(entry.target);
           }
         });
-      }
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
 
-      const forgotForm = document.getElementById('forgot-form');
-      if (forgotForm) {
-        forgotForm.addEventListener('submit', async function(e){
-          e.preventDefault();
-          const email = document.getElementById('forgot-email').value.trim();
-          if (!email) { showNotification('Informe seu e-mail.', 'error'); return; }
-          try {
-            const res = await fetch('/api/auth/forgot-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) })
-            if (!res.ok) { const j = await res.json().catch(()=>({})); throw new Error(j.error || 'Falha ao enviar instruções'); }
-            showNotification('Instruções enviadas por e-mail.', 'success');
-            setLoginTab('login');
-          } catch (err) {
-            const msg = (err instanceof Error) ? err.message : 'Erro inesperado';
-            showNotification(msg, 'error');
-          }
-        });
-      }
+      // --- WHATSAPP UTILS ---
+      window.openWhatsApp = function (msg) {
+        const phone = '5512981488505';
+        const text = msg || 'Olá! Gostaria de mais informações sobre os serviços digitais.';
+        const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(text)}`;
+        window.open(url, '_blank', 'noopener,noreferrer');
+      };
 
-      const googleBtn = document.getElementById('google-login-btn');
-      if (googleBtn) {
-        googleBtn.addEventListener('click', async function(){
-          try {
-            if (window.firebase && firebase.auth) {
-              const provider = new firebase.auth.GoogleAuthProvider()
-              const cred = await firebase.auth().signInWithPopup(provider)
-              const idToken = await cred.user.getIdToken(true)
-              const ex = await fetch('/api/auth/firebase-login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken }) })
-              if (!ex.ok) { const j = await ex.json().catch(()=>({})); throw new Error(j.error || 'Falha ao entrar') }
-              const data = await ex.json();
-              if (data && data.accessToken) {
-                localStorage.setItem('accessToken', data.accessToken)
-                if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken)
-                showNotification('Login realizado com sucesso!', 'success')
-                toggleLoginModal(); setAuthUI(); loadSlotsForSelectedDate();
-              } else { throw new Error('Resposta inválida do servidor') }
-            } else {
-              showNotification('Login Google indisponível.', 'error')
-            }
-          } catch (err) {
-            const msg = (err instanceof Error) ? err.message : 'Erro inesperado';
-            showNotification(msg, 'error');
-          }
-        });
-      }
-
-      setAuthUI();
-
-      // Initialize Flatpickr
-      
-      if (typeof (window as any).flatpickr === 'function') {
-        flatpickr("#calendar-input", {
-          locale: "pt",
-          minDate: "today",
-          dateFormat: "d/m/Y",
-          disable: [
-            function(date) {
-              return (date.getDay() === 0);
-            }
-          ],
-          onChange: function() { loadSlotsForSelectedDate(); }
-        });
-      } else {
-        const inp = document.getElementById('calendar-input') as HTMLInputElement
-        if (inp) {
-          inp.type = 'date'
-          inp.addEventListener('change', loadSlotsForSelectedDate)
-        }
-      }
-
-      (function(){
-        const select = document.getElementById('booking-time');
-        if (select && !select.options.length) {
-          ['09:00','10:00','11:00','14:00','15:00','16:00'].forEach(function(t){
-            const opt = document.createElement('option');
-            opt.value = t;
-            opt.textContent = t;
-            select.appendChild(opt);
-          });
-        }
-      })();
-
-      function maskPhoneValue(v) {
-        const d = String(v).replace(/\D/g,'');
-        if (d.length <= 10) {
-          const p1 = d.substring(0,2);
-          const p2 = d.substring(2,6);
-          const p3 = d.substring(6,10);
-          const a = p1 ? '(' + p1 + ') ' : '';
-          const b = p2 ? p2 : '';
-          const c = p3 ? '-' + p3 : '';
-          return a + b + c;
-        } else {
-          const p1 = d.substring(0,2);
-          const p2 = d.substring(2,7);
-          const p3 = d.substring(7,11);
-          const a = p1 ? '(' + p1 + ') ' : '';
-          const b = p2 ? p2 : '';
-          const c = p3 ? '-' + p3 : '';
-          return a + b + c;
-        }
-      }
-
-      const bookingPhone = document.getElementById('booking-phone');
-      if (bookingPhone) bookingPhone.addEventListener('input', function(e){ e.target.value = maskPhoneValue(e.target.value); });
-      const cvPhone = document.getElementById('cv-tel');
-      if (cvPhone) cvPhone.addEventListener('input', function(e){ e.target.value = maskPhoneValue(e.target.value); });
-
-      function saveBookingState() {
-        const dateVal = document.getElementById('calendar-input').value;
-        const timeVal = document.getElementById('booking-time').value;
-        const serviceVal = document.getElementById('booking-service').value;
-        const nameVal = document.getElementById('booking-name').value;
-        const phoneVal = document.getElementById('booking-phone').value;
-        localStorage.setItem('bk_date', dateVal || '');
-        localStorage.setItem('bk_time', timeVal || '');
-        localStorage.setItem('bk_service', serviceVal || '');
-        localStorage.setItem('bk_name', nameVal || '');
-        localStorage.setItem('bk_phone', phoneVal || '');
-      }
-
-      ['calendar-input','booking-time','booking-service','booking-name','booking-phone'].forEach(function(id){
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('change', saveBookingState);
-        if (el) el.addEventListener('input', saveBookingState);
-      });
-
-      (function restoreBookingState(){
-        const d = localStorage.getItem('bk_date');
-        const t = localStorage.getItem('bk_time');
-        const s = localStorage.getItem('bk_service');
-        const n = localStorage.getItem('bk_name');
-        const p = localStorage.getItem('bk_phone');
-        if (d) { document.getElementById('calendar-input').value = d; loadSlotsForSelectedDate(); }
-        if (s) { const sel = document.getElementById('booking-service'); if (sel) sel.value = s; }
-        if (n) { const el = document.getElementById('booking-name'); if (el) el.value = n; }
-        if (p) { const el = document.getElementById('booking-phone'); if (el) el.value = p; }
-        if (t) {
-          const sel = document.getElementById('booking-time');
-          if (sel) sel.value = t;
-        }
-      })();
-
-      // Form Progress Tracker
-      function updateProgress() {
-        const fields = [
-          'cv-nome', 'cv-cargo', 'cv-email', 'cv-tel', 'cv-cidade',
-          'cv-resumo', 'cv-empresa', 'cv-periodo', 'cv-atividades'
-        ];
-        
-        let filled = 0;
-        fields.forEach(fieldId => {
-          const field = document.getElementById(fieldId);
-          if(field && field.value.trim() !== '') {
-            filled++;
-          }
-        });
-        
-        const progress = Math.round((filled / fields.length) * 100);
-        document.getElementById('progress-fill').style.width = `${progress}%`;
-        document.getElementById('progress-percent').textContent = `${progress}%`;
-      }
-
-      // CEP API Integration
-      document.getElementById('cv-cep').addEventListener('input', function(e) {
-        let cep = e.target.value.replace(/\D/g, '');
-        
-        // Format CEP
-        if(cep.length > 5) {
-          cep = cep.substring(0,5) + '-' + cep.substring(5);
-        }
-        e.target.value = cep;
-        
-        // Fetch address when CEP is complete
-        if(cep.length === 9) {
-          fetch(`https://viacep.com.br/ws/${cep.replace('-','')}/json/`)
-            .then(response => response.json())
-            .then(data => {
-              if(!data.erro) {
-                document.getElementById('cv-cidade').value = `${data.localidade} - ${data.uf}`;
-                showNotification('Endereço preenchido automaticamente!', 'success');
-              } else {
-                showNotification('CEP não encontrado.', 'error');
-              }
-            })
-            .catch(error => {
-              console.error('Erro ao buscar CEP:', error);
-              showNotification('Erro ao buscar CEP.', 'error');
-            });
+      document.querySelectorAll('.whatsapp-btn').forEach(btn => {
+        if (!btn.type || btn.type !== 'submit') { // Apenas botões que não são submit
+          btn.addEventListener('click', () => openWhatsApp());
         }
       });
 
-      // Attach event listeners to form fields
-      document.querySelectorAll('#cv-form input, #cv-form textarea').forEach(field => {
-        field.addEventListener('input', updateProgress);
-      });
+      // --- LOGICA CURRÍCULO ---
+      const btnNovo = document.getElementById('btn-novo');
+      const btnAtualizar = document.getElementById('btn-atualizar');
+      const campoUpload = document.getElementById('campo-upload');
+      const tipoServico = document.getElementById('tipoServico');
 
-      // CV Form Submission
-      document.getElementById('cv-form').addEventListener('submit', async function(e) {
+      if (btnNovo && btnAtualizar) {
+        btnNovo.addEventListener('click', () => {
+          tipoServico.value = 'Novo Currículo';
+          campoUpload.classList.add('hidden');
+          btnNovo.classList.add('active', 'bg-orange-500', 'text-white', 'border-orange-500');
+          btnNovo.classList.remove('bg-gray-50', 'text-gray-600', 'border-gray-100');
+          btnAtualizar.classList.remove('active', 'bg-orange-500', 'text-white', 'border-orange-500');
+          btnAtualizar.classList.add('bg-gray-50', 'text-gray-600', 'border-gray-100');
+        });
+
+        btnAtualizar.addEventListener('click', () => {
+          tipoServico.value = 'Atualização';
+          campoUpload.classList.remove('hidden');
+          btnAtualizar.classList.add('active', 'bg-orange-500', 'text-white', 'border-orange-500');
+          btnAtualizar.classList.remove('bg-gray-50', 'text-gray-600', 'border-gray-100');
+          btnNovo.classList.remove('active', 'bg-orange-500', 'text-white', 'border-orange-500');
+          btnNovo.classList.add('bg-gray-50', 'text-gray-600', 'border-gray-100');
+        });
+      }
+
+      document.getElementById('form-curriculo')?.addEventListener('submit', (e) => {
         e.preventDefault();
-        const nome = document.getElementById('cv-nome').value.trim();
-        const cargo = document.getElementById('cv-cargo').value.trim();
-        const email = document.getElementById('cv-email').value.trim();
-        const tel = document.getElementById('cv-tel').value.trim();
-        const cep = document.getElementById('cv-cep').value.trim();
-        const cidade = document.getElementById('cv-cidade').value.trim();
-        const resumo = document.getElementById('cv-resumo').value.trim();
-        const empresa = document.getElementById('cv-empresa').value.trim();
-        const periodo = document.getElementById('cv-periodo').value.trim();
-        const atividades = document.getElementById('cv-atividades').value.trim();
-        if (!nome || !cargo || !email || !tel) { showNotification('Preencha os campos obrigatórios.', 'error'); return; }
-        const token = localStorage.getItem('accessToken');
-        if (!token) { showNotification('Faça login para gerar seu currículo.', 'error'); return; }
-        try {
-          setButtonLoading('cv-submit','Gerando...');
-          showNotification('Gerando seu currículo...', 'info');
-          const createRes = await apiFetch('/api/curricula', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: cargo, template: 'modern', personalInfo: { name: nome, email: email, phone: tel } })
-          });
-          if (!createRes.ok) { const j = await createRes.json().catch(()=>({})); throw new Error(mapErrorCode(j.error,'Erro ao criar currículo')); }
-          const { id } = await createRes.json();
-          const updateRes = await apiFetch('/api/cv/by-curricula/' + id, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ cep, cidade, resumo, empresa, periodo, atividades })
-          });
-          if (!updateRes.ok) { const j = await updateRes.json().catch(()=>({})); throw new Error(mapErrorCode(j.error,'Erro ao salvar dados')); }
-          const genRes = await apiFetch('/api/curricula/' + id + '/generate-pdf', { method: 'POST' });
-          if (!genRes.ok) { const j = await genRes.json().catch(()=>({})); throw new Error(mapErrorCode(j.error,'Erro ao gerar PDF')); }
-          const { url } = await genRes.json();
-          showNotification('Currículo gerado com sucesso!', 'success');
-          if (url) window.open(url, '_blank');
-        } catch (err) {
-          const msg = (err instanceof Error) ? err.message : 'Erro inesperado';
-          showNotification(msg, 'error');
-        } finally { setButtonIdle('cv-submit'); }
+        const nome = document.getElementById('nome').value;
+        const obj = document.getElementById('objetivo').value;
+        const tipo = document.getElementById('tipoServico').value;
+        const msg = `Olá! Preciso de um *${tipo}*.\nNome: ${nome}\nObjetivo: ${obj}`;
+        openWhatsApp(msg);
       });
 
-      function loadSlotsForSelectedDate() {
-        const val = document.getElementById('calendar-input').value;
-        const parts = val.split('/');
-        if (parts.length !== 3) return;
-        const day = parts[2] + '-' + parts[1].padStart(2,'0') + '-' + parts[0].padStart(2,'0');
-        const token = localStorage.getItem('accessToken');
-        const select = document.getElementById('booking-time');
-        select.innerHTML = '';
-        select.disabled = true;
-        const loadingOpt = document.createElement('option');
-        loadingOpt.value = '';
-        loadingOpt.textContent = 'Carregando...';
-        select.appendChild(loadingOpt);
-        if (!token) {
-          ['09:00','10:00','11:00','14:00','15:00','16:00'].forEach(function(t){
-            const opt = document.createElement('option');
-            opt.value = t;
-            opt.textContent = t;
-            select.appendChild(opt);
-          });
-          select.disabled = false;
-          return;
-        }
-        apiFetch('/api/appointments/available-slots?day=' + day + '&duration=60')
-          .then(r => r.ok ? r.json() : Promise.reject(r))
-          .then(data => {
-            if (Array.isArray(data.slots)) {
-              data.slots.forEach(function(iso){
-                const d = new Date(iso);
-                const hh = String(d.getHours()).padStart(2,'0');
-                const mm = String(d.getMinutes()).padStart(2,'0');
-                const opt = document.createElement('option');
-                opt.value = hh + ':' + mm;
-                opt.textContent = hh + ':' + mm;
-                select.appendChild(opt);
-              });
-            }
-            if (!select.options.length) {
-              const opt = document.createElement('option');
-              opt.value = '';
-              opt.textContent = 'Sem horários';
-              select.appendChild(opt);
-            }
-            select.disabled = false;
-          })
-          .catch(function(){
-            ['09:00','10:00','11:00','14:00','15:00','16:00'].forEach(function(t){
-              const opt = document.createElement('option');
-              opt.value = t;
-              opt.textContent = t;
-              select.appendChild(opt);
-            });
-            select.disabled = false;
-          })
+      // --- LOGICA IRPF/MEI ---
+      document.getElementById('form-irpf')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nome = document.getElementById('irpf-nome').value;
+        const cliente = document.querySelector('input[name="irpf-cliente"]:checked').value;
+        const msg = `Olá! Gostaria de fazer minha *Declaração de IR*.\nNome: ${nome}\nJá é cliente? ${cliente}`;
+        openWhatsApp(msg);
+      });
+
+      document.getElementById('form-mei')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nome = document.getElementById('mei-nome').value;
+        const nec = document.getElementById('mei-necessidade').value;
+        const msg = `Olá! Preciso de suporte *MEI*.\nNome: ${nome}\nNecessidade: ${nec}`;
+        openWhatsApp(msg);
+      });
+
+      // --- LOGICA BOLETOS ---
+      const tabImprimir = document.getElementById('tab-imprimir');
+      const tab2via = document.getElementById('tab-2via');
+      const contentImprimir = document.getElementById('content-imprimir');
+      const content2via = document.getElementById('content-2via');
+      const selEmpresa = document.getElementById('boleto-empresa');
+      const camposExtra = document.getElementById('boleto-campos-extra');
+
+      if (tabImprimir && tab2via) {
+        tabImprimir.addEventListener('click', () => {
+          tabImprimir.classList.add('bg-white', 'text-gray-800', 'shadow-sm');
+          tabImprimir.classList.remove('text-gray-500');
+          tab2via.classList.remove('bg-white', 'text-gray-800', 'shadow-sm');
+          tab2via.classList.add('text-gray-500');
+          contentImprimir.classList.remove('hidden');
+          content2via.classList.add('hidden');
+        });
+
+        tab2via.addEventListener('click', () => {
+          tab2via.classList.add('bg-white', 'text-gray-800', 'shadow-sm');
+          tab2via.classList.remove('text-gray-500');
+          tabImprimir.classList.remove('bg-white', 'text-gray-800', 'shadow-sm');
+          tabImprimir.classList.add('text-gray-500');
+          content2via.classList.remove('hidden');
+          contentImprimir.classList.add('hidden');
+        });
+
+        selEmpresa.addEventListener('change', () => {
+          if (selEmpresa.value) camposExtra.classList.remove('hidden');
+          else camposExtra.classList.add('hidden');
+        });
+
+        document.getElementById('form-boletos').addEventListener('submit', (e) => {
+          e.preventDefault();
+          if (!document.getElementById('boleto-lgpd').checked) {
+            alert('Por favor, aceite os termos LGPD.');
+            return;
+          }
+          const modo = contentImprimir.classList.contains('hidden') ? '2ª Via' : 'Impressão';
+          const msg = `Olá! Preciso de serviço de *Boletos* (${modo}).`;
+          openWhatsApp(msg);
+        });
       }
 
-      document.getElementById('booking-form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const dateStr = document.getElementById('calendar-input').value;
-        const time = document.getElementById('booking-time').value;
-        const service = document.getElementById('booking-service').value;
-        const name = document.getElementById('booking-name').value.trim();
-        const phone = document.getElementById('booking-phone').value.trim();
-        if (!dateStr || !time || !service || !name || !phone) { showNotification('Preencha todos os campos.', 'error'); return; }
-        const confirmMsg = 'Confirmar agendamento de ' + service + ' em ' + dateStr + ' às ' + time + '?';
-        if (!window.confirm(confirmMsg)) return;
-        const parts = dateStr.split('/');
-        const day = parts[2] + '-' + parts[1].padStart(2,'0') + '-' + parts[0].padStart(2,'0');
-        const scheduled = new Date(day + 'T' + time + ':00').toISOString();
-        const token = localStorage.getItem('accessToken');
-        if (!token) { showNotification('Faça login para agendar.', 'error'); return; }
-        try {
-          setButtonLoading('booking-submit','Agendando...');
-          const res = await apiFetch('/api/appointments', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ service_type: service, scheduled_date: scheduled, duration: 60, status: 'pending', notes: 'Agendamento via site - ' + name + ' - ' + phone, location_type: 'in_person' })
-          });
-          if (!res.ok) {
-            const j = await res.json().catch(()=>({}));
-            if (res.status === 409) throw new Error('Conflito de horário');
-            throw new Error(mapErrorCode(j.error,'Erro ao agendar'));
-          }
-          showNotification('Agendamento enviado com sucesso!', 'success');
-          document.getElementById('booking-form').reset();
-          saveBookingState();
-        } catch (err) {
-          const msg = (err instanceof Error) ? err.message : 'Erro inesperado';
-          showNotification(msg, 'error');
-        } finally { setButtonIdle('booking-submit'); }
+      // --- MODAIS ---
+      const modals = { 'terms': document.getElementById('terms-modal'), 'privacy': document.getElementById('privacy-modal') };
+      function closeAllModals() {
+        Object.values(modals).forEach(m => { if (m) { m.style.display = 'none'; } });
+        document.body.style.overflow = '';
+      }
+      document.querySelectorAll('.open-modal').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const m = modals[btn.getAttribute('data-modal')];
+          if (m) { closeAllModals(); m.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+        });
       });
+      document.querySelectorAll('.modal-close').forEach(btn => btn.addEventListener('click', closeAllModals));
+      window.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) closeAllModals(); });
+
+      // --- CHATBOT INTELIGENTE ---
+      const chatToggle = document.getElementById('chat-toggle');
+      const chatContainer = document.getElementById('chat-container');
+      const chatClose = document.getElementById('chat-close');
+      const chatInput = document.getElementById('chat-input');
+      const chatSend = document.getElementById('chat-send');
+      const chatMessages = document.getElementById('chat-messages');
+
+      // Estado do Chat
+      let chatState = {
+        step: 'init', // init, waiting_name, done
+        topic: 'Dúvida Geral',
+        buffer: ''
+      };
+
+      function toggleChat() {
+        chatContainer.classList.toggle('hidden');
+        if (!chatContainer.classList.contains('hidden')) {
+          setTimeout(() => chatInput.focus(), 100);
+        }
+      }
+
+      function addMsg(text, sender) {
+        const div = document.createElement('div');
+        div.className = `flex items-start mb-3 ${sender === 'user' ? 'justify-end' : ''} animate-fade-in-up`;
+        div.innerHTML = sender === 'bot'
+          ? `<div class="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center mr-2 flex-shrink-0 text-white text-xs">🤖</div><div class="bg-white p-3 rounded-lg shadow-sm border border-gray-100 text-gray-700 text-sm leading-relaxed"><p>${text}</p></div>`
+          : `<div class="bg-orange-600 text-white p-3 rounded-lg shadow-sm text-sm"><p>${text}</p></div>`;
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      function generateWhatsAppLink(nome, topico, detalhes) {
+        const phone = '5512981488505';
+        const msg = `Olá! Me chamo *${nome}*.\nGostaria de falar sobre: *${topico}*.\n\nDetalhes: ${detalhes || 'Não informado.'}`;
+        return `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`;
+      }
+
+      function processUserMessage(msg) {
+        addMsg(msg, 'user');
+
+        if (chatState.step === 'init') {
+          chatState.buffer = msg;
+          chatState.step = 'waiting_name';
+          setTimeout(() => addMsg("Entendi. Para que eu possa encaminhar sua solicitação para o especialista correto, qual é o seu nome?", 'bot'), 600);
+
+        } else if (chatState.step === 'waiting_name') {
+          const nome = msg;
+          const link = generateWhatsAppLink(nome, chatState.topic, chatState.buffer);
+
+          setTimeout(() => {
+            addMsg(`Obrigado, ${nome}! Já preparei seu atendimento. Clique abaixo para falar com o especialista:`, 'bot');
+
+            const btnDiv = document.createElement('div');
+            btnDiv.className = "flex justify-center mt-3 mb-2 animate-fade-in-up";
+            btnDiv.innerHTML = `<a href="${link}" target="_blank" class="bg-green-500 text-white px-5 py-2.5 rounded-full font-bold shadow-md hover:bg-green-600 hover:scale-105 transition flex items-center gap-2 text-sm"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z"/></svg> Confirmar Atendimento</a>`;
+            chatMessages.appendChild(btnDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            chatState.step = 'done';
+          }, 800);
+        }
+      }
+
+      if (chatToggle) {
+        chatToggle.addEventListener('click', (e) => {
+          e.preventDefault();
+          toggleChat();
+        });
+
+        chatClose.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation(); // Garante que o clique não propague
+          toggleChat();
+        });
+
+        document.querySelectorAll('.quick-question').forEach(btn => {
+          btn.addEventListener('click', function () {
+            const topicMap = {
+              'curriculo': 'Currículos Profissionais',
+              'irpf': 'Declaração de IRPF',
+              'mei': 'Suporte ao MEI',
+              'documentos': 'Impressão e Documentos'
+            };
+
+            const key = this.dataset.question;
+            const userText = this.innerText;
+
+            // Define o tópico e reseta o buffer base
+            chatState.topic = topicMap[key] || userText;
+            chatState.buffer = `Interesse clicado em: ${userText}`;
+            chatState.step = 'waiting_name'; // Pula a fase de explicar o problema, vai direto pro nome
+
+            addMsg(userText, 'user');
+            setTimeout(() => addMsg("Ótimo. Para agilizar seu atendimento, por favor, me informe seu nome:", 'bot'), 600);
+          });
+        });
+
+        chatSend.addEventListener('click', () => {
+          const text = chatInput.value.trim();
+          if (text) {
+            processUserMessage(text);
+            chatInput.value = '';
+          }
+        });
+
+        chatInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') chatSend.click();
+        });
+      }
     });
   </script>
 </body>
+
 </html>

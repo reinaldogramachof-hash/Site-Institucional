@@ -1,6 +1,8 @@
 node_modules
-dist
+npm-debug.log
 .git
 .gitignore
-npm-debug.log
-Dockerfile
+.env
+cloud-app/backend/node_modules
+dist
+.vscode
