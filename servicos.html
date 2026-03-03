@@ -6,50 +6,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Serviços Digitais - Plena Informática</title>
 
+  <!-- SEO -->
   <meta name="description"
-    content="Serviços digitais completos: currículos profissionais, declaração de IR, suporte MEI, documentos e muito mais. Agilidade e qualidade em São José dos Campos.">
+    content="Serviços digitais completos: currículos profissionais, declaração de IRPF, suporte MEI, documentos e muito mais. Agilidade e qualidade em São José dos Campos.">
   <meta name="keywords"
-    content="serviços digitais, currículo profissional, declaração IR, suporte MEI, documentos, impressão">
+    content="serviços digitais, currículo profissional, declaração IR, suporte MEI, documentos, impressão, São José dos Campos">
   <meta name="author" content="Plena Informática">
-  <meta name="theme-color" content="#1e40af">
+  <meta name="theme-color" content="#ea580c">
 
+  <!-- Open Graph -->
   <meta property="og:title" content="Serviços Digitais - Plena Informática">
   <meta property="og:description"
-    content="Currículos profissionais, suporte MEI, declaração de IRPF e soluções documentais com atendimento rápido e confiável.">
+    content="Currículos profissionais, suporte MEI, declaração de IRPF e soluções documentais com atendimento rápido e confiável em SJC.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://plenainformatica.com.br/servicos">
+  <meta property="og:image" content="https://plenainformatica.com.br/plena.jpg">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:site_name" content="Plena Informática">
   <link rel="canonical" href="https://plenainformatica.com.br/servicos">
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ea580c'/><text x='16' y='23' text-anchor='middle' font-size='20' font-weight='bold' font-family='Arial,sans-serif' fill='white'>P</text></svg>">
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Plena Informática",
+    "description": "Serviços digitais completos: currículos, IRPF, suporte MEI e documentos",
+    "url": "https://plenainformatica.com.br/servicos",
+    "telephone": "+5512981488505",
+    "email": "contato@plenainformatica.com.br",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "São José dos Campos",
+      "addressRegion": "SP",
+      "addressCountry": "BR"
+    },
+    "openingHours": "Mo-Fr 13:00-18:00"
+  }
+  </script>
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
 
   <style>
-    :root {
-      --primary: #1e40af;
-      --secondary: #ea580c;
-      --accent: #059669;
-      --dark: #1e293b;
-      --light: #f8fafc;
-      --plena-orange-wash: #FFF1E8;
+    * {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     body {
       font-family: 'Inter', sans-serif;
-      background: #f8fafc;
-      background-image:
-        radial-gradient(60rem 60rem at -10% -20%, rgba(234, 88, 12, .04) 0%, transparent 60%),
-        radial-gradient(40rem 40rem at 120% 120%, rgba(255, 140, 0, .05) 0%, transparent 60%);
-    }
-
-    .bg-plena-orange-wash {
-      background: var(--plena-orange-wash);
+      color: #1e293b;
+      overflow-x: hidden;
     }
 
     .font-accent {
@@ -57,48 +76,128 @@
     }
 
     section[id] {
-      scroll-margin-top: 6.75rem;
+      scroll-margin-top: 5rem;
     }
 
-    /* Cards e Gradients */
-    .card-gradient {
-      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
+    /* ── GRADIENT TEXT ── */
+    .gradient-text {
+      background: linear-gradient(90deg, #84460f, #2b1d0d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    .card-gradient:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    /* ── HERO ── */
+    .hero-services-bg {
+      background: linear-gradient(160deg,
+          #d86646 10%,
+          #e47321 45%,
+          #0c0701 100%);
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, var(--secondary) 0%, #ea580c 100%);
-      box-shadow: 0 4px 15px 0 rgba(234, 88, 12, 0.3);
-      transition: all 0.3s ease;
+    .hero-services-overlay {
+      background: radial-gradient(ellipse at 80% 20%, rgba(234, 88, 12, .18) 0%, transparent 60%),
+        radial-gradient(ellipse at 10% 90%, rgba(59, 130, 246, .12) 0%, transparent 50%);
     }
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px 0 rgba(234, 88, 12, 0.4);
+    /* ── BOUNCE ── */
+    @keyframes bounce-down {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(8px);
+      }
     }
 
-    /* Form Elements */
-    .form-card {
-      background: #fff;
-      border-radius: 12px;
+    .bounce-down {
+      animation: bounce-down 1.6s ease-in-out infinite;
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── MODAL ── */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .6);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
       padding: 2rem;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      border: 1px solid #f1f5f9;
+      max-width: 540px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
     }
 
+    /* ── PULSE RING (FAB) ── */
+    @keyframes pulse-ring {
+      0% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, .6);
+      }
+
+      70% {
+        box-shadow: 0 0 0 14px rgba(34, 197, 94, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+      }
+    }
+
+    .pulse-ring {
+      animation: pulse-ring 2.5s cubic-bezier(.4, 0, .6, 1) infinite;
+    }
+
+    /* ── ANIMATIONS (hero) ── */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-in {
+      animation: fadeInUp .9s cubic-bezier(.4, 0, .2, 1) both;
+    }
+
+    /* ── FORM ELEMENTS ── */
     .form-input {
       width: 100%;
       padding: .75rem 1rem;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
       transition: all .2s;
-      background-color: #f9fafb;
+      background-color: #f8fafc;
+      font-size: .9rem;
+      color: #1e293b;
     }
 
     .form-input:focus {
@@ -108,6 +207,11 @@
       box-shadow: 0 0 0 3px rgba(234, 88, 12, .12);
     }
 
+    .form-input::placeholder {
+      color: #94a3b8;
+    }
+
+    /* ── SERVICE TOGGLE OPTION ── */
     .service-option {
       transition: all .25s ease;
       cursor: pointer;
@@ -116,612 +220,921 @@
     .service-option.active {
       background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
       color: #fff;
-      transform: scale(1.02);
       border-color: transparent;
-    }
-
-    /* Animations */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px)
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0)
-      }
-    }
-
-    .animate-fade-in-up {
-      animation: fadeInUp .8s ease-out forwards;
-    }
-
-    @keyframes pulse-ring {
-      0% {
-        box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.7);
-      }
-
-      70% {
-        box-shadow: 0 0 0 15px rgba(234, 88, 12, 0);
-      }
-
-      100% {
-        box-shadow: 0 0 0 0 rgba(234, 88, 12, 0);
-      }
-    }
-
-    .pulse-ring-orange {
-      animation: pulse-ring 2s infinite;
-    }
-
-    /* Chat Widget */
-    #chat-container {
-      width: 22rem;
-      max-width: 90vw;
-      border: 1px solid #e5e7eb;
-      background: #fff;
-      border-radius: 14px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      max-height: min(78vh, 680px);
-      display: flex;
-      flex-direction: column;
-    }
-
-    #chat-header {
-      background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
-      color: #fff;
-      border-top-left-radius: 14px;
-      border-top-right-radius: 14px;
-    }
-
-    #chat-messages {
-      flex-grow: 1;
-      overflow-y: auto;
-      padding: 1rem;
-      scrollbar-width: thin;
-      scrollbar-color: #cbd5e1 #f1f5f9;
-    }
-
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      background: rgba(0, 0, 0, 0.7);
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal-content {
-      background: white;
-      border-radius: 12px;
-      padding: 2rem;
-      max-width: 600px;
-      width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
+      box-shadow: 0 8px 24px -4px rgba(234, 88, 12, .35);
     }
   </style>
 </head>
 
-<body class="text-gray-800 antialiased">
+<body class="antialiased">
 
-  <header class="bg-white/95 backdrop-blur-md shadow-sm fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-    <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-      <a href="index.html" class="text-2xl font-bold text-gray-800 font-accent group">
-        Plena <span class="text-orange-500 group-hover:text-orange-600 transition">Informática</span>
-      </a>
+  <!-- ══════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════ -->
+  <header class="fixed top-0 left-0 right-0 z-50">
+    <div class="bg-white/80 backdrop-blur-xl border-b border-gray-100/60 shadow-sm transition-all duration-300">
+      <nav class="container mx-auto px-6 h-20 flex items-center justify-between">
 
-      <div class="hidden md:flex items-center space-x-8">
-        <a href="index.html"
-          class="text-sm font-medium text-gray-600 hover:text-orange-500 transition duration-300">Início</a>
-        <a href="servicos.html" class="text-sm font-medium text-orange-500">Serviços</a>
-        <a href="index.html#journey"
-          class="text-sm font-medium text-gray-600 hover:text-orange-500 transition duration-300">Nossa Jornada</a>
-        <a href="index.html#testimonials"
-          class="text-sm font-medium text-gray-600 hover:text-orange-500 transition duration-300">Depoimentos</a>
-        <a href="index.html#contact"
-          class="text-sm font-medium text-gray-600 hover:text-orange-500 transition duration-300">Contato</a>
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-2.5 group flex-shrink-0">
+          <img src="logo-plena.png" alt="Plena Informática"
+            class="h-40 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+        </a>
+
+        <!-- Nav Desktop -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="index.html"
+            class="text-sm font-semibold text-gray-600 hover:text-orange-500 transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-orange-500 hover:after:w-full after:transition-all after:duration-300">Início</a>
+          <a href="#curriculo"
+            class="text-sm font-semibold text-orange-500 transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-orange-500">Currículos</a>
+          <a href="#irpf"
+            class="text-sm font-semibold text-gray-600 hover:text-orange-500 transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-orange-500 hover:after:w-full after:transition-all after:duration-300">IR
+            &amp; MEI</a>
+          <a href="#documentos"
+            class="text-sm font-semibold text-gray-600 hover:text-orange-500 transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-orange-500 hover:after:w-full after:transition-all after:duration-300">Documentos</a>
+        </div>
+
+        <!-- CTA Desktop -->
         <button type="button"
-          class="whatsapp-btn bg-orange-500 text-white font-bold px-5 py-2 rounded-lg hover:bg-orange-600 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+          class="whatsapp-btn hidden md:inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:scale-105 transition-all duration-300">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
+          </svg>
           Fale Conosco
         </button>
-      </div>
 
-      <div class="md:hidden">
-        <button id="menu-btn" class="text-gray-800 p-2 focus:outline-none" aria-label="Menu">
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        <!-- Burger Mobile -->
+        <button id="menu-btn" class="md:hidden p-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
+          aria-label="Menu" aria-expanded="false">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path id="icon-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16" />
+            <path id="icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-      </div>
-    </nav>
 
-    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-lg">
-      <div class="flex flex-col p-4 space-y-2">
-        <a href="index.html" class="block py-3 px-4 rounded-lg hover:bg-orange-50 text-gray-700 font-medium">Início</a>
-        <a href="servicos.html" class="block py-3 px-4 rounded-lg bg-orange-50 text-orange-600 font-bold">Serviços</a>
-        <a href="index.html#journey"
-          class="block py-3 px-4 rounded-lg hover:bg-orange-50 text-gray-700 font-medium">Nossa Jornada</a>
-        <a href="index.html#testimonials"
-          class="block py-3 px-4 rounded-lg hover:bg-orange-50 text-gray-700 font-medium">Depoimentos</a>
-        <a href="index.html#contact"
-          class="block py-3 px-4 rounded-lg hover:bg-orange-50 text-gray-700 font-medium">Contato</a>
+      </nav>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-100 shadow-xl">
+      <div class="container mx-auto px-6 py-4 flex flex-col gap-1">
+        <a href="index.html"
+          class="mobile-link block py-3 px-4 rounded-lg text-gray-700 font-medium hover:bg-orange-50 hover:text-orange-600 transition-colors">Início</a>
+        <a href="#curriculo"
+          class="mobile-link block py-3 px-4 rounded-lg bg-orange-50 text-orange-600 font-semibold">Currículos</a>
+        <a href="#irpf"
+          class="mobile-link block py-3 px-4 rounded-lg text-gray-700 font-medium hover:bg-orange-50 hover:text-orange-600 transition-colors">IR
+          &amp; MEI</a>
+        <a href="#documentos"
+          class="mobile-link block py-3 px-4 rounded-lg text-gray-700 font-medium hover:bg-orange-50 hover:text-orange-600 transition-colors">Documentos</a>
         <button type="button"
-          class="whatsapp-btn w-full text-center py-3 px-4 mt-2 font-bold text-white bg-orange-500 rounded-lg hover:bg-orange-600">
-          Fale Conosco
-        </button>
+          class="whatsapp-btn mobile-link mt-2 w-full py-3 px-4 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition-colors">Fale
+          Conosco via WhatsApp</button>
       </div>
     </div>
   </header>
 
-  <section class="pt-32 pb-20 text-center bg-plena-orange-wash relative overflow-hidden">
-    <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-      <div class="absolute top-10 left-10 w-64 h-64 bg-orange-400 rounded-full blur-3xl"></div>
-      <div class="absolute bottom-10 right-10 w-64 h-64 bg-blue-400 rounded-full blur-3xl"></div>
-    </div>
+  <main>
 
-    <div class="container mx-auto px-6 relative z-10">
-      <div
-        class="inline-flex items-center bg-orange-100 border border-orange-200 rounded-full px-4 py-1 mb-6 animate-fade-in-up">
-        <span class="text-orange-600 font-semibold text-xs uppercase tracking-wide">Agilidade e Confiança</span>
+    <!-- ══════════════════════════════════════════
+         HERO
+    ══════════════════════════════════════════ -->
+    <section class="relative flex items-center justify-center overflow-hidden"
+      style="min-height:68vh;padding-top:5rem;">
+
+      <div class="absolute inset-0 hero-services-bg"></div>
+      <div class="absolute inset-0 hero-services-overlay"></div>
+
+      <!-- Grid pattern -->
+      <div class="absolute inset-0 opacity-[.04]"
+        style="background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(255,255,255,.4) 59px,rgba(255,255,255,.4) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(255,255,255,.4) 59px,rgba(255,255,255,.4) 60px);"
+        aria-hidden="true"></div>
+
+      <div class="relative z-10 container mx-auto px-6 text-center py-20">
+
+        <!-- Badge -->
+        <div
+          class="inline-flex items-center gap-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-6 py-2.5 mb-8 animate-in"
+          style="animation-delay:.1s">
+          <span class="w-2 h-2 rounded-full bg-orange-400 animate-pulse"></span>
+          <span class="text-white/90 text-sm font-semibold tracking-widest uppercase">Serviços Digitais</span>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="font-accent font-black text-white leading-[1.08] mb-6 animate-in"
+          style="font-size:clamp(2.2rem,6vw,4.5rem);animation-delay:.25s;">
+          Resolvemos suas pendências<br>
+          com <span class="gradient-text">agilidade</span> e confiança.
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-white/75 text-lg md:text-xl max-w-2xl mx-auto mb-10 animate-in font-light leading-relaxed"
+          style="animation-delay:.4s;">
+          Do currículo ao IRPF, do MEI a documentos — atendimento humano e<br class="hidden md:block">
+          resultados reais para simplificar a sua vida.
+        </p>
+
+        <!-- CTAs -->
+        <div class="flex flex-col sm:flex-row justify-center gap-4 animate-in" style="animation-delay:.55s;">
+          <a href="#curriculo"
+            class="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold px-9 py-4 rounded-2xl shadow-2xl shadow-orange-500/40 hover:shadow-orange-500/60 hover:-translate-y-1 hover:scale-105 transition-all duration-300">
+            Ver Serviços
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+            </svg>
+          </a>
+          <button type="button"
+            class="whatsapp-btn inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold px-9 py-4 rounded-2xl shadow-2xl shadow-green-500/30 hover:-translate-y-1 transition-all duration-300">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
+            </svg>
+            Falar no WhatsApp
+          </button>
+        </div>
+
       </div>
-      <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 drop-shadow-sm font-accent mb-6 animate-fade-in-up"
-        style="animation-delay: 100ms;">
-        Serviços Digitais que <br class="hidden md:block"> <span
-          class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-600">Simplificam sua
-          Vida</span>
-      </h1>
-      <p class="text-lg text-gray-600 max-w-2xl mx-auto animate-fade-in-up" style="animation-delay: 200ms;">
-        Resolvemos suas pendências burocráticas e documentais. Do currículo ao IRPF, foque no que importa e deixe a
-        papelada conosco.
-      </p>
-    </div>
-  </section>
 
-  <section id="curriculo" class="py-20 bg-white">
-    <div class="container mx-auto px-6">
-      <div class="animate-on-scroll">
-        <h2 class="text-3xl font-bold text-center mb-4 font-accent text-gray-900">Destaque-se no Mercado</h2>
-        <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Um currículo bem elaborado é a porta de entrada
-          para novas oportunidades.</p>
+      <!-- Scroll indicator -->
+      <div class="absolute inset-x-0 bottom-8 flex flex-col items-center gap-1.5 bounce-down pointer-events-none"
+        aria-hidden="true">
+        <span class="text-white/35 text-xs uppercase tracking-widest">Explorar</span>
+        <svg class="w-5 h-5 text-white/35" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
 
-        <div class="max-w-4xl mx-auto form-card relative">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            <button id="btn-novo" type="button"
-              class="service-option w-full text-left p-5 rounded-xl border-2 border-orange-500 bg-orange-500 text-white shadow-lg active">
-              <div class="flex items-center justify-between mb-2">
-                <h3 class="font-bold text-lg">Criar do Zero</h3>
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-              </div>
-              <p class="text-sm opacity-90">Ideal para primeiro emprego ou reformulação total.</p>
-            </button>
-            <button id="btn-atualizar" type="button"
-              class="service-option w-full text-left p-5 rounded-xl border-2 border-gray-100 bg-gray-50 text-gray-600 hover:border-orange-300">
-              <div class="flex items-center justify-between mb-2">
-                <h3 class="font-bold text-lg">Atualizar Existente</h3>
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-                  </path>
-                </svg>
-              </div>
-              <p class="text-sm opacity-90">Adicione novas experiências ou cursos.</p>
-            </button>
-          </div>
+    </section>
 
-          <form id="form-curriculo" class="space-y-5">
-            <input type="hidden" id="tipoServico" value="Novo Currículo">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
-                <input type="text" id="nome" class="form-input" required>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-                <input type="email" id="email" class="form-input" required>
-              </div>
-            </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Objetivo Profissional</label>
-              <input type="text" id="objetivo" placeholder="Ex: Vendas, Administrativo, Estágio..." class="form-input">
-            </div>
+    <!-- ══════════════════════════════════════════
+         CURRÍCULO
+    ══════════════════════════════════════════ -->
+    <section id="curriculo" class="py-24 bg-white">
+      <div class="container mx-auto px-6">
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Resumo de Qualificações</label>
-              <textarea id="experiencias" placeholder="Liste suas principais experiências, cursos e habilidades..."
-                class="form-input" rows="4"></textarea>
-            </div>
+        <!-- Section header -->
+        <div class="text-center mb-14 reveal">
+          <span
+            class="inline-block text-orange-600 font-bold tracking-widest uppercase text-xs px-4 py-2 bg-orange-100 rounded-full mb-4">Currículo
+            Profissional</span>
+          <h2 class="font-accent font-black text-4xl md:text-5xl text-gray-900">
+            Destaque-se no <span class="text-orange-500">Mercado</span>
+          </h2>
+          <p class="text-gray-500 mt-4 max-w-lg mx-auto">Um currículo bem elaborado é a porta de entrada para novas
+            oportunidades. Fazemos para você.</p>
+        </div>
 
-            <div id="campo-upload" class="hidden p-4 bg-orange-50 rounded-lg border border-orange-100">
-              <label class="block mb-2 text-sm font-medium text-orange-800">Possui o arquivo atual?</label>
-              <input id="arquivo-cv" type="file" accept=".pdf,.doc,.docx"
-                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200 transition">
-              <textarea id="alteracoes" placeholder="O que precisamos mudar ou adicionar?" class="form-input mt-3"
-                rows="2"></textarea>
-            </div>
+        <div class="max-w-4xl mx-auto">
 
-            <div class="pt-4">
-              <button type="submit"
-                class="w-full bg-green-500 text-white font-bold px-6 py-4 rounded-xl hover:bg-green-600 transition duration-300 flex items-center justify-center gap-2 shadow-lg shadow-green-500/20">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
-                </svg>
-                Solicitar Orçamento via WhatsApp
+          <!-- Toggle + Form card -->
+          <div class="bg-white rounded-3xl border border-gray-100 shadow-xl shadow-gray-100/80 p-8 md:p-10 reveal">
+
+            <!-- Toggle: Novo / Atualizar -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              <button id="btn-novo" type="button"
+                class="service-option active w-full text-left p-5 rounded-2xl border-2 border-transparent">
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="font-bold text-lg font-accent">Criar do Zero</h3>
+                  <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                  </div>
+                </div>
+                <p class="text-sm opacity-90">Ideal para primeiro emprego ou reformulação total.</p>
               </button>
-              <p class="text-xs text-center text-gray-400 mt-3">Anexos devem ser enviados diretamente na conversa do
-                WhatsApp.</p>
-            </div>
-          </form>
-        </div>
-      </div>
 
-      <div class="max-w-4xl mx-auto mt-16 animate-on-scroll">
-        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-8">
-          <h3 class="text-xl font-bold text-center mb-6 text-gray-800 font-accent">Dicas Rápidas para Entrevista</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h4 class="text-sm font-bold text-green-600 uppercase tracking-wide mb-3 flex items-center"><span
-                  class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>Faça</h4>
-              <ul class="space-y-2 text-sm text-gray-600">
-                <li class="flex items-start"><span class="mr-2">✓</span>Pesquise sobre a empresa antes.</li>
-                <li class="flex items-start"><span class="mr-2">✓</span>Cite exemplos reais de conquistas.</li>
-                <li class="flex items-start"><span class="mr-2">✓</span>Seja pontual e cordial.</li>
-              </ul>
+              <button id="btn-atualizar" type="button"
+                class="service-option w-full text-left p-5 rounded-2xl border-2 border-gray-200 bg-gray-50 text-gray-600 hover:border-orange-300 hover:bg-orange-50">
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="font-bold text-lg font-accent">Atualizar Existente</h3>
+                  <div class="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                  </div>
+                </div>
+                <p class="text-sm opacity-90">Adicione novas experiências ou cursos.</p>
+              </button>
             </div>
-            <div>
-              <h4 class="text-sm font-bold text-red-600 uppercase tracking-wide mb-3 flex items-center"><span
-                  class="w-2 h-2 rounded-full bg-red-500 mr-2"></span>Evite</h4>
-              <ul class="space-y-2 text-sm text-gray-600">
-                <li class="flex items-start"><span class="mr-2">✕</span>Falar mal de chefes anteriores.</li>
-                <li class="flex items-start"><span class="mr-2">✕</span>Mentir sobre habilidades.</li>
-                <li class="flex items-start"><span class="mr-2">✕</span>Usar gírias em excesso.</li>
-              </ul>
+
+            <!-- Form -->
+            <form id="form-curriculo" class="space-y-5">
+              <input type="hidden" id="tipoServico" value="Novo Currículo">
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nome Completo</label>
+                  <input type="text" id="nome" class="form-input" placeholder="Seu nome completo" required>
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-1.5">E-mail</label>
+                  <input type="email" id="email" class="form-input" placeholder="seu@email.com" required>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Objetivo Profissional</label>
+                <input type="text" id="objetivo" placeholder="Ex: Vendas, Administrativo, Estágio..."
+                  class="form-input">
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Resumo de Qualificações</label>
+                <textarea id="experiencias" placeholder="Liste suas principais experiências, cursos e habilidades..."
+                  class="form-input resize-none" rows="4"></textarea>
+              </div>
+
+              <!-- Campo de upload (apenas para Atualização) -->
+              <div id="campo-upload" class="hidden p-5 bg-orange-50 rounded-2xl border border-orange-100">
+                <label class="block mb-2 text-sm font-semibold text-orange-800">Possui o arquivo atual do
+                  currículo?</label>
+                <input id="arquivo-cv" type="file" accept=".pdf,.doc,.docx"
+                  class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200 transition">
+                <textarea id="alteracoes" placeholder="O que precisamos mudar ou adicionar?"
+                  class="form-input mt-3 resize-none" rows="2"></textarea>
+              </div>
+
+              <div class="pt-2">
+                <button type="submit"
+                  class="w-full bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-4 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-green-500/20 hover:shadow-green-500/40 hover:-translate-y-0.5">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
+                  </svg>
+                  Solicitar Orçamento via WhatsApp
+                </button>
+                <p class="text-xs text-center text-gray-400 mt-3">Arquivos podem ser enviados diretamente na conversa do
+                  WhatsApp.</p>
+              </div>
+            </form>
+          </div>
+
+          <!-- Dicas de Entrevista -->
+          <div class="mt-10 bg-gray-50 border border-gray-200 rounded-3xl p-8 reveal">
+            <h3 class="text-lg font-accent font-bold text-center text-gray-800 mb-6">
+              Dicas Rápidas para Entrevista
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <h4 class="text-xs font-bold text-green-600 uppercase tracking-widest mb-3 flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-green-500"></span>Faça
+                </h4>
+                <ul class="space-y-2.5 text-sm text-gray-600">
+                  <li class="flex items-start gap-2"><svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0"
+                      fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                    </svg>Pesquise sobre a empresa antes.</li>
+                  <li class="flex items-start gap-2"><svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0"
+                      fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                    </svg>Cite exemplos reais de conquistas.</li>
+                  <li class="flex items-start gap-2"><svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0"
+                      fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                    </svg>Seja pontual e cordial.</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-red-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-red-500"></span>Evite
+                </h4>
+                <ul class="space-y-2.5 text-sm text-gray-600">
+                  <li class="flex items-start gap-2"><svg class="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0" fill="none"
+                      stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                        d="M6 18L18 6M6 6l12 12" />
+                    </svg>Falar mal de chefes anteriores.</li>
+                  <li class="flex items-start gap-2"><svg class="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0" fill="none"
+                      stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                        d="M6 18L18 6M6 6l12 12" />
+                    </svg>Mentir sobre habilidades.</li>
+                  <li class="flex items-start gap-2"><svg class="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0" fill="none"
+                      stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                        d="M6 18L18 6M6 6l12 12" />
+                    </svg>Usar gírias em excesso.</li>
+                </ul>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="solucoes" class="py-24 bg-plena-orange-wash">
-    <div class="container mx-auto px-6">
-      <h2 class="text-3xl font-bold text-center mb-16 font-accent text-gray-900">Soluções Especializadas</h2>
 
-      <div class="grid grid-cols-1 gap-20">
-        <div class="grid md:grid-cols-2 gap-12 items-center animate-on-scroll">
-          <div>
-            <div class="w-16 h-16 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center mb-6">
-              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <!-- ══════════════════════════════════════════
+         IRPF
+    ══════════════════════════════════════════ -->
+    <section id="irpf" class="py-24 bg-orange-50/60">
+      <div class="container mx-auto px-6">
+
+        <!-- Section header -->
+        <div class="text-center mb-14 reveal">
+          <span
+            class="inline-block text-orange-600 font-bold tracking-widest uppercase text-xs px-4 py-2 bg-orange-100 rounded-full mb-4">Declaração
+            de IR</span>
+          <h2 class="font-accent font-black text-4xl md:text-5xl text-gray-900">
+            Imposto de Renda <span class="text-orange-500">sem Estresse</span>
+          </h2>
+          <p class="text-gray-500 mt-4 max-w-lg mx-auto">Evite dores de cabeça com a Receita Federal. Cuidamos de tudo
+            com precisão e segurança.</p>
+        </div>
+
+        <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+
+          <!-- Info -->
+          <div class="reveal">
+            <div
+              class="w-16 h-16 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center mb-6 shadow-sm">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
-            <h3 class="text-2xl font-bold mb-4 text-gray-900 font-accent">Imposto de Renda (IRPF)</h3>
-            <p class="text-gray-600 mb-6 leading-relaxed">
-              Evite dores de cabeça com a Receita Federal. Realizamos sua declaração completa, analisamos pendências de
-              anos anteriores e garantimos que você não caia na malha fina.
-            </p>
-            <ul class="space-y-2 mb-6 text-sm text-gray-500">
-              <li>• Declaração Completa ou Simplificada</li>
-              <li>• Análise de Caixa e Bens</li>
-              <li>• Regularização de CPF</li>
+            <h3 class="text-2xl font-accent font-bold text-gray-900 mb-4">O que fazemos por você:</h3>
+            <ul class="space-y-3">
+              <li class="flex items-center gap-3 text-gray-600">
+                <span class="w-2 h-2 rounded-full bg-orange-400 flex-shrink-0"></span>
+                Declaração Completa ou Simplificada
+              </li>
+              <li class="flex items-center gap-3 text-gray-600">
+                <span class="w-2 h-2 rounded-full bg-orange-400 flex-shrink-0"></span>
+                Análise de Caixa e Bens
+              </li>
+              <li class="flex items-center gap-3 text-gray-600">
+                <span class="w-2 h-2 rounded-full bg-orange-400 flex-shrink-0"></span>
+                Regularização de CPF
+              </li>
+              <li class="flex items-center gap-3 text-gray-600">
+                <span class="w-2 h-2 rounded-full bg-orange-400 flex-shrink-0"></span>
+                Análise de anos anteriores e pendências
+              </li>
             </ul>
+            <div class="mt-8 p-5 bg-white rounded-2xl border border-orange-100 shadow-sm">
+              <p class="text-sm text-gray-500 italic leading-relaxed">"Garantimos que você não caia na malha fina e
+                fique em dia com a Receita Federal."</p>
+            </div>
           </div>
 
-          <div class="form-card">
-            <h4 class="font-bold text-gray-800 mb-4">Solicitar Declaração</h4>
+          <!-- Form -->
+          <div class="bg-white rounded-3xl border border-gray-100 shadow-xl shadow-gray-100/80 p-8 reveal"
+            style="transition-delay:.1s">
+            <h4 class="font-accent font-bold text-gray-800 mb-6 text-lg">Solicitar Declaração</h4>
             <form id="form-irpf" class="space-y-4">
-              <input type="text" id="irpf-nome" placeholder="Seu Nome Completo" class="form-input" required>
-              <input type="text" id="irpf-contato" placeholder="WhatsApp ou E-mail" class="form-input" required>
-
               <div>
-                <span class="text-xs font-bold text-gray-500 uppercase">Já é cliente?</span>
-                <div class="mt-2 flex gap-4">
-                  <label class="inline-flex items-center text-sm cursor-pointer"><input type="radio" name="irpf-cliente"
-                      value="Sim" class="text-orange-500 focus:ring-orange-500"> <span class="ml-2">Sim</span></label>
-                  <label class="inline-flex items-center text-sm cursor-pointer"><input type="radio" name="irpf-cliente"
-                      value="Não, primeira vez" checked class="text-orange-500 focus:ring-orange-500"> <span
-                      class="ml-2">Não, primeira vez</span></label>
+                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nome Completo</label>
+                <input type="text" id="irpf-nome" class="form-input" placeholder="Seu Nome Completo" required>
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1.5">WhatsApp ou E-mail</label>
+                <input type="text" id="irpf-contato" class="form-input" placeholder="(12) 9xxxx-xxxx" required>
+              </div>
+              <div class="pt-1">
+                <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Já é cliente?</span>
+                <div class="mt-3 flex gap-6">
+                  <label class="inline-flex items-center gap-2 text-sm cursor-pointer text-gray-700">
+                    <input type="radio" name="irpf-cliente" value="Sim"
+                      class="text-orange-500 focus:ring-orange-500 w-4 h-4">
+                    Sim
+                  </label>
+                  <label class="inline-flex items-center gap-2 text-sm cursor-pointer text-gray-700">
+                    <input type="radio" name="irpf-cliente" value="Não, primeira vez" checked
+                      class="text-orange-500 focus:ring-orange-500 w-4 h-4">
+                    Não, primeira vez
+                  </label>
                 </div>
               </div>
               <button type="submit"
-                class="whatsapp-btn w-full bg-green-500 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition">Enviar
-                Solicitação</button>
+                class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3.5 rounded-2xl transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-green-500/20 hover:shadow-green-500/40 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
+                </svg>
+                Enviar Solicitação
+              </button>
             </form>
           </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════
+         MEI
+    ══════════════════════════════════════════ -->
+    <section id="mei" class="py-24 bg-white">
+      <div class="container mx-auto px-6">
+
+        <!-- Section header -->
+        <div class="text-center mb-14 reveal">
+          <span
+            class="inline-block text-blue-600 font-bold tracking-widest uppercase text-xs px-4 py-2 bg-blue-100 rounded-full mb-4">Suporte
+            MEI</span>
+          <h2 class="font-accent font-black text-4xl md:text-5xl text-gray-900">
+            Tudo para o seu <span class="text-blue-500">MEI</span>
+          </h2>
+          <p class="text-gray-500 mt-4 max-w-lg mx-auto">Formalize seu negócio ou coloque a casa em ordem com assessoria
+            completa para o Microempreendedor Individual.</p>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-12 items-center animate-on-scroll">
-          <div class="order-2 md:order-1 form-card">
-            <h4 class="font-bold text-gray-800 mb-4">Suporte Empresarial</h4>
+        <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+
+          <!-- Form (lado esquerdo no desktop) -->
+          <div
+            class="bg-white rounded-3xl border border-gray-100 shadow-xl shadow-gray-100/80 p-8 reveal order-2 md:order-1">
+            <h4 class="font-accent font-bold text-gray-800 mb-6 text-lg">Suporte Empresarial</h4>
             <form id="form-mei" class="space-y-4">
-              <input type="text" id="mei-nome" placeholder="Nome Completo" class="form-input" required>
-              <input type="text" id="mei-cnpj" placeholder="CNPJ (se já tiver)" class="form-input">
-              <select id="mei-necessidade" class="form-input text-gray-600">
-                <option value="">O que você precisa?</option>
-                <option value="Abertura de MEI">Abrir meu MEI</option>
-                <option value="Declaração Anual">Declaração Anual (DASN)</option>
-                <option value="Emissão de Notas">Emitir Notas Fiscais</option>
-                <option value="Regularização">Regularizar Débitos</option>
-                <option value="Outros">Outros</option>
-              </select>
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nome Completo</label>
+                <input type="text" id="mei-nome" class="form-input" placeholder="Nome Completo" required>
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1.5">CNPJ (se já tiver)</label>
+                <input type="text" id="mei-cnpj" class="form-input" placeholder="00.000.000/0001-00">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1.5">O que você precisa?</label>
+                <select id="mei-necessidade" class="form-input text-gray-700">
+                  <option value="">Selecionar...</option>
+                  <option value="Abertura de MEI">Abrir meu MEI</option>
+                  <option value="Declaração Anual">Declaração Anual (DASN)</option>
+                  <option value="Emissão de Notas">Emitir Notas Fiscais</option>
+                  <option value="Regularização">Regularizar Débitos</option>
+                  <option value="Outros">Outros</option>
+                </select>
+              </div>
               <button type="submit"
-                class="whatsapp-btn w-full bg-green-500 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition">Falar
-                com Especialista</button>
+                class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3.5 rounded-2xl transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-green-500/20 hover:shadow-green-500/40 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
+                </svg>
+                Falar com Especialista
+              </button>
             </form>
           </div>
-          <div class="order-1 md:order-2">
-            <div class="w-16 h-16 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center mb-6">
-              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+          <!-- Info (lado direito no desktop) -->
+          <div class="reveal order-1 md:order-2" style="transition-delay:.1s">
+            <div
+              class="w-16 h-16 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center mb-6 shadow-sm">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
               </svg>
             </div>
-            <h3 class="text-2xl font-bold mb-4 text-gray-900 font-accent">Tudo para o seu MEI</h3>
-            <p class="text-gray-600 mb-6 leading-relaxed">
-              Formalize seu negócio ou coloque a casa em ordem. Oferecemos assessoria completa para o Microempreendedor
-              Individual, da abertura ao fechamento anual.
-            </p>
+            <h3 class="text-2xl font-accent font-bold text-gray-900 mb-4">Serviços para o seu negócio:</h3>
+            <ul class="space-y-3">
+              <li class="flex items-center gap-3 text-gray-600">
+                <span class="w-2 h-2 rounded-full bg-blue-400 flex-shrink-0"></span>
+                Abertura e formalização do MEI
+              </li>
+              <li class="flex items-center gap-3 text-gray-600">
+                <span class="w-2 h-2 rounded-full bg-blue-400 flex-shrink-0"></span>
+                Declaração Anual (DASN-SIMEI)
+              </li>
+              <li class="flex items-center gap-3 text-gray-600">
+                <span class="w-2 h-2 rounded-full bg-blue-400 flex-shrink-0"></span>
+                Emissão de Notas Fiscais
+              </li>
+              <li class="flex items-center gap-3 text-gray-600">
+                <span class="w-2 h-2 rounded-full bg-blue-400 flex-shrink-0"></span>
+                Regularização de débitos e pendências
+              </li>
+            </ul>
+            <div class="mt-8 p-5 bg-blue-50 rounded-2xl border border-blue-100">
+              <p class="text-sm text-gray-500 italic leading-relaxed">"Da abertura ao fechamento anual, estamos do seu
+                lado em cada etapa."</p>
+            </div>
           </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════
+         BOLETOS E DOCUMENTOS
+    ══════════════════════════════════════════ -->
+    <section id="documentos" class="py-24 bg-slate-50">
+      <div class="container mx-auto px-6">
+
+        <!-- Section header -->
+        <div class="text-center mb-14 reveal">
+          <span
+            class="inline-block text-purple-600 font-bold tracking-widest uppercase text-xs px-4 py-2 bg-purple-100 rounded-full mb-4">Documentos</span>
+          <h2 class="font-accent font-black text-4xl md:text-5xl text-gray-900">
+            Boletos e <span class="text-purple-500">Documentos</span>
+          </h2>
+          <p class="text-gray-500 mt-4 max-w-lg mx-auto">Serviços rápidos de escritório — impressões, 2ª via de contas e
+            digitalização de documentos.</p>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-12 items-start animate-on-scroll">
-          <div>
-            <div class="w-16 h-16 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center mb-6">
-              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-start">
+
+          <!-- Info -->
+          <div class="reveal">
+            <div
+              class="w-16 h-16 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center mb-6 shadow-sm">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <h3 class="text-2xl font-bold mb-4 text-gray-900 font-accent">Boletos e Documentos</h3>
-            <p class="text-gray-600 mb-6">
-              Serviços rápidos de escritório. Precisa da 2ª via de uma conta? Imprimir um trabalho? Digitalizar
-              documentos importantes?
-            </p>
-            <ul class="space-y-3 text-sm text-gray-600">
-              <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-purple-500 mr-2"></span>2ª Via (Sabesp,
-                EDP, Vivo, etc)</li>
-              <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-purple-500 mr-2"></span>Impressão
-                Colorida e P&B</li>
-              <li class="flex items-center"><span class="w-2 h-2 rounded-full bg-purple-500 mr-2"></span>Digitalização e
-                Xerox</li>
+            <h3 class="text-2xl font-accent font-bold text-gray-900 mb-4">O que oferecemos:</h3>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center gap-3 text-gray-600">
+                <span class="w-2 h-2 rounded-full bg-purple-400 flex-shrink-0"></span>
+                2ª Via — Sabesp, EDP, Vivo e outros
+              </li>
+              <li class="flex items-center gap-3 text-gray-600">
+                <span class="w-2 h-2 rounded-full bg-purple-400 flex-shrink-0"></span>
+                Impressão Colorida e Preto &amp; Branco
+              </li>
+              <li class="flex items-center gap-3 text-gray-600">
+                <span class="w-2 h-2 rounded-full bg-purple-400 flex-shrink-0"></span>
+                Digitalização e Xerox de Documentos
+              </li>
+              <li class="flex items-center gap-3 text-gray-600">
+                <span class="w-2 h-2 rounded-full bg-purple-400 flex-shrink-0"></span>
+                Impressão de Trabalhos e Arquivos PDF
+              </li>
             </ul>
+
+            <!-- Quick contact for documents -->
+            <div class="p-5 bg-purple-50 rounded-2xl border border-purple-100">
+              <p class="text-sm font-semibold text-purple-800 mb-2">Atendimento rápido</p>
+              <p class="text-sm text-gray-600">Para serviços simples como impressão ou 2ª via, entre em contato
+                diretamente pelo WhatsApp para agilizar.</p>
+              <button type="button"
+                class="whatsapp-btn mt-4 inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition-all duration-300 shadow-md shadow-green-500/20 hover:-translate-y-0.5">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
+                </svg>
+                Chamar no WhatsApp
+              </button>
+            </div>
           </div>
 
-          <div class="form-card">
-            <form id="form-boletos" class="space-y-4">
-              <div class="flex p-1 bg-gray-100 rounded-lg mb-4">
+          <!-- Form -->
+          <div class="bg-white rounded-3xl border border-gray-100 shadow-xl shadow-gray-100/80 p-8 reveal"
+            style="transition-delay:.1s">
+            <form id="form-boletos" class="space-y-5">
+
+              <!-- Tabs -->
+              <div class="flex p-1 bg-gray-100 rounded-xl mb-2">
                 <button type="button"
-                  class="flex-1 py-2 text-sm font-medium rounded-md shadow-sm bg-white text-gray-800 transition"
-                  id="tab-imprimir">Imprimir</button>
+                  class="flex-1 py-2.5 text-sm font-semibold rounded-lg shadow-sm bg-white text-gray-800 transition-all duration-200"
+                  id="tab-imprimir">Imprimir Arquivo</button>
                 <button type="button"
-                  class="flex-1 py-2 text-sm font-medium rounded-md text-gray-500 hover:text-gray-800 transition"
-                  id="tab-2via">2ª Via</button>
+                  class="flex-1 py-2.5 text-sm font-semibold rounded-lg text-gray-500 hover:text-gray-800 transition-all duration-200"
+                  id="tab-2via">2ª Via de Conta</button>
               </div>
 
+              <!-- Conteúdo: Imprimir -->
               <div id="content-imprimir">
-                <p class="text-sm text-gray-500 mb-2">Envie seu arquivo PDF para impressão.</p>
+                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Envie seu arquivo para impressão</label>
+                <p class="text-xs text-gray-400 mb-3">Formatos aceitos: PDF, DOC, JPG</p>
                 <input id="boleto-arquivo" type="file" accept=".pdf,.doc,.jpg"
-                  class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 transition mb-4" />
+                  class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 transition">
               </div>
 
-              <div id="content-2via" class="hidden space-y-3">
-                <select id="boleto-empresa" class="form-input text-sm">
-                  <option value="">Selecione a Conta</option>
-                  <option value="sabesp">Sabesp (Água)</option>
-                  <option value="edp">EDP (Energia)</option>
-                  <option value="outros">Outros</option>
-                </select>
+              <!-- Conteúdo: 2ª Via -->
+              <div id="content-2via" class="hidden space-y-4">
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-1.5">Selecione a Conta</label>
+                  <select id="boleto-empresa" class="form-input text-gray-700">
+                    <option value="">Qual concessionária?</option>
+                    <option value="sabesp">Sabesp (Água)</option>
+                    <option value="edp">EDP (Energia)</option>
+                    <option value="outros">Outros</option>
+                  </select>
+                </div>
 
-                <div id="boleto-campos-extra" class="hidden space-y-3 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                <div id="boleto-campos-extra"
+                  class="hidden space-y-3 p-4 bg-gray-50 rounded-2xl border border-gray-100">
                   <input type="text" id="boleto-titular" placeholder="CPF/CNPJ do Titular" class="form-input text-sm">
                   <input type="text" id="boleto-codigo" placeholder="Nº Instalação / RGI" class="form-input text-sm">
                 </div>
               </div>
 
-              <label class="flex items-start gap-2 cursor-pointer">
-                <input type="checkbox" id="boleto-lgpd" class="mt-1 text-purple-600 rounded focus:ring-purple-500">
-                <span class="text-xs text-gray-500">Autorizo o uso dos dados para este serviço (LGPD).</span>
+              <!-- LGPD -->
+              <label class="flex items-start gap-3 cursor-pointer">
+                <input type="checkbox" id="boleto-lgpd"
+                  class="mt-0.5 w-4 h-4 text-purple-600 rounded focus:ring-purple-500 flex-shrink-0">
+                <span class="text-xs text-gray-500 leading-relaxed">Autorizo o uso dos meus dados exclusivamente para
+                  execução deste serviço (LGPD).</span>
               </label>
 
               <button type="submit"
-                class="whatsapp-btn w-full bg-green-500 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition">Solicitar
-                Serviço</button>
+                class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3.5 rounded-2xl transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-green-500/20 hover:shadow-green-500/40 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
+                </svg>
+                Solicitar Serviço
+              </button>
             </form>
           </div>
+
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <footer id="contact" class="bg-gray-900 text-white py-16 border-t border-gray-800">
+
+    <!-- ══════════════════════════════════════════
+         CTA BANNER
+    ══════════════════════════════════════════ -->
+    <section class="py-24 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 relative overflow-hidden">
+      <div class="absolute -top-20 -right-20 w-72 h-72 bg-white/5 rounded-full pointer-events-none" aria-hidden="true">
+      </div>
+      <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-white/5 rounded-full pointer-events-none"
+        aria-hidden="true"></div>
+
+      <div class="container mx-auto px-6 text-center relative z-10">
+        <h2 class="font-accent font-black text-4xl md:text-5xl text-white mb-4 leading-tight reveal">
+          Pronto para dar o próximo passo?
+        </h2>
+        <p class="text-white/75 text-lg max-w-xl mx-auto mb-10 reveal">
+          Fale com a gente pelo WhatsApp e receba uma proposta em minutos.<br class="hidden md:block">
+          Sem enrolação, sem burocracia.
+        </p>
+        <button type="button"
+          class="whatsapp-btn reveal inline-flex items-center gap-3 bg-white text-orange-600 font-black px-10 py-4 rounded-2xl text-lg hover:bg-orange-50 transition-all duration-300 shadow-2xl hover:scale-105 hover:-translate-y-1">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
+          </svg>
+          Abrir WhatsApp agora
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ══════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════ -->
+  <footer id="contact" class="bg-gray-950 text-white pt-16 pb-8">
     <div class="container mx-auto px-6">
-      <div class="grid md:grid-cols-4 gap-12">
-        <div class="md:col-span-2">
-          <a href="index.html" class="text-2xl font-bold text-white flex items-center mb-6 font-accent">
-            Plena <span class="text-orange-500 ml-1">Informática</span>
-          </a>
-          <p class="text-slate-400 mb-6 max-w-sm text-sm leading-relaxed">
-            Há 20 anos transformando ideias em realidade. Oferecemos soluções completas em serviços digitais,
-            personalizados e tecnologia.
+
+      <div class="grid md:grid-cols-3 gap-12 pb-12 border-b border-white/5">
+
+        <div>
+          <div class="flex items-center gap-2.5 mb-5">
+            <div class="w-9 h-9 bg-orange-500 rounded-lg flex items-center justify-center">
+              <span class="text-white font-black text-lg font-accent leading-none">P</span>
+            </div>
+            <span class="font-accent font-bold text-xl">Plena <span class="text-orange-400">Informática</span></span>
+          </div>
+          <p class="text-gray-500 text-sm leading-relaxed max-w-xs">
+            Há 20 anos transformando ideias em realidade. Tecnologia, personalizados e serviços digitais em São José dos
+            Campos.
           </p>
-          <div class="flex items-center space-x-3">
-            <span
-              class="bg-green-500/10 text-green-400 border border-green-500/20 py-1 px-3 rounded-full text-xs font-medium flex items-center">
-              <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                  clip-rule="evenodd"></path>
-              </svg>
-              Site Seguro
-            </span>
+          <div
+            class="mt-6 inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-medium py-1.5 px-3 rounded-full">
+            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+            Site Seguro
           </div>
         </div>
 
         <div>
-          <h3 class="font-bold text-lg mb-6 font-accent text-white">Nossas Áreas</h3>
+          <h3 class="font-accent font-bold text-white mb-5 text-sm uppercase tracking-wider">Nossas Áreas</h3>
           <ul class="space-y-3 text-sm">
-            <li><a href="servicos.html" class="text-slate-400 hover:text-orange-400 transition">Serviços Digitais</a>
+            <li>
+              <a href="servicos.html" class="text-orange-400 flex items-center gap-2 group">
+                <span class="w-1 h-1 rounded-full bg-orange-400"></span>Serviços Digitais
+              </a>
             </li>
-            <li><a href="personalizados.html" class="text-slate-400 hover:text-blue-400 transition">Personalizados</a>
+            <li>
+              <a href="personalizados.html"
+                class="text-gray-500 hover:text-blue-400 transition-colors flex items-center gap-2 group">
+                <span
+                  class="w-1 h-1 rounded-full bg-gray-700 group-hover:bg-blue-400 transition-colors"></span>Personalizados
+              </a>
             </li>
-            <li><a href="tecnologia.html" class="text-slate-400 hover:text-emerald-400 transition">Tecnologia</a></li>
+            <li>
+              <a href="tecnologia.html"
+                class="text-gray-500 hover:text-emerald-400 transition-colors flex items-center gap-2 group">
+                <span
+                  class="w-1 h-1 rounded-full bg-gray-700 group-hover:bg-emerald-400 transition-colors"></span>Tecnologia
+                Web
+              </a>
+            </li>
           </ul>
         </div>
 
         <div>
-          <h3 class="font-bold text-lg mb-6 font-accent text-white">Contato</h3>
-          <ul class="space-y-4 text-sm text-slate-400">
-            <li class="flex items-start">
-              <svg class="w-5 h-5 mr-3 mt-0.5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <h3 class="font-accent font-bold text-white mb-5 text-sm uppercase tracking-wider">Contato</h3>
+          <ul class="space-y-4 text-sm">
+            <li class="flex items-start gap-3">
+              <svg class="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <span>São José dos Campos, SP</span>
+              <span class="text-gray-500">São José dos Campos, SP</span>
             </li>
-            <li class="flex items-center">
-              <svg class="w-5 h-5 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <li class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-orange-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z">
-                </path>
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
-              <span>(12) 98148-8505</span>
+              <a href="tel:+5512981488505" class="text-gray-500 hover:text-white transition-colors">(12) 98148-8505</a>
             </li>
-            <li class="flex items-center">
-              <svg class="w-5 h-5 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <li class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-orange-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-                </path>
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              <span>contato@plenainformatica.com.br</span>
+              <a href="mailto:contato@plenainformatica.com.br"
+                class="text-gray-500 hover:text-white transition-colors">contato@plenainformatica.com.br</a>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="text-gray-500">Seg–Sex: 13h–18h.</span>
             </li>
           </ul>
         </div>
+
       </div>
 
-      <div
-        class="border-t border-slate-800 mt-12 pt-8 text-center md:text-left flex flex-col md:flex-row justify-between items-center">
-        <div class="mb-4 md:mb-0">
-          <p class="text-sm italic text-slate-500 mb-1">"Tudo posso naquele que me fortalece." - Filipenses 4:13</p>
-          <p class="text-xs text-slate-600">&copy; 2026 Plena Informática. Todos os direitos reservados.</p>
+      <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+          <p class="text-xs italic text-gray-600 mb-1">"Tudo posso naquele que me fortalece." — Filipenses 4:13</p>
+          <p class="text-xs text-gray-700">&copy; 2026 Plena Informática. Todos os direitos reservados.</p>
         </div>
-        <div class="flex space-x-6 text-xs text-slate-500">
-          <button class="hover:text-white transition open-modal" data-modal="terms">Termos de Uso</button>
-          <button class="hover:text-white transition open-modal" data-modal="privacy">Política de Privacidade</button>
+        <div class="flex gap-6 text-xs text-gray-600">
+          <button type="button" class="open-modal hover:text-gray-400 transition-colors" data-modal="terms">Termos de
+            Uso</button>
+          <button type="button" class="open-modal hover:text-gray-400 transition-colors" data-modal="privacy">Política
+            de Privacidade</button>
         </div>
       </div>
+
     </div>
   </footer>
 
-  <!-- Chat Widget Removido (Substituído por Bot Global) -->
 
-  <button type="button" onclick="openWhatsApp()"
-    class="whatsapp-btn pulse-ring-orange fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-xl flex items-center justify-center hover:bg-green-600 transition duration-300 z-50 group"
-    aria-label="WhatsApp">
-    <svg class="w-8 h-8 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
-      <path
-        d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
-    </svg>
-  </button>
-
-  <div id="terms-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <!-- ══════════════════════════════════════════
+       MODALS
+  ══════════════════════════════════════════ -->
+  <div id="terms-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="terms-title">
     <div class="modal-content">
-      <button type="button" class="modal-close absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+      <button type="button"
+        class="modal-close absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl leading-none transition-colors"
         aria-label="Fechar">&times;</button>
-      <h2 class="text-2xl font-bold mb-4 font-accent">Termos de Uso</h2>
-      <div class="text-slate-700 space-y-4 text-sm leading-relaxed">
-        <p>Nossos serviços digitais são executados com base nas informações fornecidas pelo cliente. A veracidade dos
-          dados é de inteira responsabilidade do solicitante.</p>
-        <p>Prazos e valores são confirmados via WhatsApp antes do início da execução.</p>
+      <h2 id="terms-title" class="font-accent text-2xl font-bold mb-4">Termos de Uso</h2>
+      <div class="text-gray-600 space-y-3 text-sm leading-relaxed">
+        <p><strong>1. Aceitação.</strong> Ao utilizar os serviços da Plena Informática, você declara ter lido e
+          concordado integralmente com estes Termos de Uso e com nossa Política de Privacidade.</p>
+        <p><strong>2. Serviços.</strong> Nossos serviços digitais (currículo, declaração de IR, suporte MEI, impressão
+          de documentos) e produtos personalizados são executados com base nas informações fornecidas pelo cliente. A
+          veracidade dos dados é de inteira responsabilidade do solicitante.</p>
+        <p><strong>3. Prazos e Valores.</strong> Prazos de entrega e valores são confirmados via WhatsApp antes do
+          início da execução. Uma vez aprovado o orçamento, o cancelamento fica sujeito às condições informadas no
+          momento da contratação.</p>
+        <p><strong>4. Propriedade Intelectual.</strong> Todo o conteúdo deste site — textos, imagens, logotipos e design
+          — é propriedade intelectual da Plena Informática e não pode ser reproduzido, copiado ou distribuído sem
+          autorização prévia por escrito.</p>
+        <p><strong>5. Limitação de Responsabilidade.</strong> A Plena Informática não se responsabiliza por informações
+          incorretas fornecidas pelo cliente, nem por atrasos decorrentes de fatores alheios ao nosso controle.</p>
+        <p><strong>6. Recusa de Serviço.</strong> Reservamo-nos o direito de recusar serviços que violem a legislação
+          vigente ou que sejam incompatíveis com nossos valores.</p>
+        <p><strong>7. Alterações.</strong> Estes termos podem ser atualizados a qualquer momento. A versão vigente
+          estará sempre disponível nesta página.</p>
+        <p class="text-xs text-gray-400 pt-2">Última atualização: março de 2026.</p>
       </div>
     </div>
   </div>
 
-  <div id="privacy-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div id="privacy-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"
+    aria-labelledby="privacy-title">
     <div class="modal-content">
-      <button type="button" class="modal-close absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+      <button type="button"
+        class="modal-close absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl leading-none transition-colors"
         aria-label="Fechar">&times;</button>
-      <h2 class="text-2xl font-bold mb-4 font-accent">Política de Privacidade</h2>
-      <div class="text-slate-700 space-y-4 text-sm leading-relaxed">
-        <p>Seus documentos e dados pessoais (CPF, Renda, Senhas) são utilizados estritamente para a finalidade
-          contratada (Ex: Declaração de IR) e não são armazenados ou compartilhados com terceiros.</p>
-        <p>Respeitamos rigorosamente a LGPD.</p>
+      <h2 id="privacy-title" class="font-accent text-2xl font-bold mb-4">Política de Privacidade</h2>
+      <div class="text-gray-600 space-y-3 text-sm leading-relaxed">
+        <p><strong>1. Compromisso.</strong> A Plena Informática respeita sua privacidade e está comprometida com a
+          proteção dos seus dados pessoais, em conformidade com a Lei Geral de Proteção de Dados (LGPD — Lei nº
+          13.709/2018).</p>
+        <p><strong>2. Dados Coletados.</strong> Coletamos apenas dados fornecidos voluntariamente por você (nome,
+          e-mail, telefone, documentos para serviços contratados) e dados técnicos de navegação (cookies essenciais).
+        </p>
+        <p><strong>3. Finalidade.</strong> Seus dados pessoais são utilizados exclusivamente para: (a) executar o
+          serviço contratado; (b) comunicação sobre andamento e conclusão dos serviços; (c) melhoria da experiência de
+          navegação.</p>
+        <p><strong>4. Documentos Sigilosos.</strong> Dados sensíveis fornecidos para serviços específicos (CPF, renda,
+          senhas de portais governamentais para Declaração de IR) são utilizados estritamente para a finalidade
+          contratada e <strong>não são armazenados</strong> após a conclusão do serviço.</p>
+        <p><strong>5. Compartilhamento.</strong> Não compartilhamos, vendemos ou cedemos seus dados a terceiros sem seu
+          consentimento explícito.</p>
+        <p><strong>6. Cookies.</strong> Utilizamos apenas cookies essenciais para o funcionamento básico do site e para
+          lembrar suas preferências (ex: consentimento de cookies). Não utilizamos cookies de rastreamento ou
+          publicidade.</p>
+        <p><strong>7. Seus Direitos.</strong> Você pode, a qualquer momento, solicitar acesso, correção ou exclusão dos
+          seus dados pessoais pelo e-mail <a href="mailto:contato@plenainformatica.com.br"
+            class="text-orange-600 underline">contato@plenainformatica.com.br</a>.</p>
+        <p><strong>8. Alterações.</strong> Esta política pode ser atualizada periodicamente. A versão vigente estará
+          sempre disponível nesta página.</p>
+        <p class="text-xs text-gray-400 pt-2">Última atualização: março de 2026.</p>
       </div>
     </div>
   </div>
 
+
+  <!-- ══════════════════════════════════════════
+       SCRIPTS
+  ══════════════════════════════════════════ -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // --- MENU MOBILE ---
+
+      // ── HEADER: burger menu ──
       const menuBtn = document.getElementById('menu-btn');
       const mobileMenu = document.getElementById('mobile-menu');
+      const iconOpen = document.getElementById('icon-open');
+      const iconClose = document.getElementById('icon-close');
 
       if (menuBtn && mobileMenu) {
-        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-        mobileMenu.querySelectorAll('a, button').forEach(el => {
-          el.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        menuBtn.addEventListener('click', () => {
+          const isOpen = !mobileMenu.classList.contains('hidden');
+          mobileMenu.classList.toggle('hidden');
+          iconOpen.classList.toggle('hidden', !isOpen);
+          iconClose.classList.toggle('hidden', isOpen);
+          menuBtn.setAttribute('aria-expanded', String(!isOpen));
+        });
+        mobileMenu.querySelectorAll('.mobile-link').forEach(el => {
+          el.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            iconOpen.classList.remove('hidden');
+            iconClose.classList.add('hidden');
+            menuBtn.setAttribute('aria-expanded', 'false');
+          });
         });
       }
 
-      // --- ANIMATIONS ---
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-in-up');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1 });
-      document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
-
-      // --- WHATSAPP UTILS ---
+      // ── WHATSAPP ──
       window.openWhatsApp = function (msg) {
         const phone = '5512981488505';
         const text = msg || 'Olá! Gostaria de mais informações sobre os serviços digitais.';
-        const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(text)}`;
-        window.open(url, '_blank', 'noopener,noreferrer');
+        window.open('https://api.whatsapp.com/send?phone=' + phone + '&text=' + encodeURIComponent(text), '_blank', 'noopener,noreferrer');
       };
 
       document.querySelectorAll('.whatsapp-btn').forEach(btn => {
-        if (!btn.type || btn.type !== 'submit') { // Apenas botões que não são submit
+        if (btn.type !== 'submit') {
           btn.addEventListener('click', () => openWhatsApp());
         }
       });
 
-      // --- LOGICA CURRÍCULO ---
+      // ── SCROLL REVEAL ──
+      const revealObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+      // ── CURRÍCULO: toggle Novo / Atualizar ──
       const btnNovo = document.getElementById('btn-novo');
       const btnAtualizar = document.getElementById('btn-atualizar');
       const campoUpload = document.getElementById('campo-upload');
       const tipoServico = document.getElementById('tipoServico');
 
-      if (btnNovo && btnAtualizar) {
-        btnNovo.addEventListener('click', () => {
-          tipoServico.value = 'Novo Currículo';
-          campoUpload.classList.add('hidden');
-          btnNovo.classList.add('active', 'bg-orange-500', 'text-white', 'border-orange-500');
-          btnNovo.classList.remove('bg-gray-50', 'text-gray-600', 'border-gray-100');
-          btnAtualizar.classList.remove('active', 'bg-orange-500', 'text-white', 'border-orange-500');
-          btnAtualizar.classList.add('bg-gray-50', 'text-gray-600', 'border-gray-100');
-        });
+      function setToggle(active, inactive, tipo, showUpload) {
+        active.classList.add('active');
+        active.classList.remove('border-gray-200', 'bg-gray-50', 'text-gray-600');
+        inactive.classList.remove('active');
+        inactive.classList.add('border-gray-200', 'bg-gray-50', 'text-gray-600');
+        tipoServico.value = tipo;
+        campoUpload.classList.toggle('hidden', !showUpload);
+      }
 
-        btnAtualizar.addEventListener('click', () => {
-          tipoServico.value = 'Atualização';
-          campoUpload.classList.remove('hidden');
-          btnAtualizar.classList.add('active', 'bg-orange-500', 'text-white', 'border-orange-500');
-          btnAtualizar.classList.remove('bg-gray-50', 'text-gray-600', 'border-gray-100');
-          btnNovo.classList.remove('active', 'bg-orange-500', 'text-white', 'border-orange-500');
-          btnNovo.classList.add('bg-gray-50', 'text-gray-600', 'border-gray-100');
-        });
+      if (btnNovo && btnAtualizar) {
+        btnNovo.addEventListener('click', () => setToggle(btnNovo, btnAtualizar, 'Novo Currículo', false));
+        btnAtualizar.addEventListener('click', () => setToggle(btnAtualizar, btnNovo, 'Atualização de Currículo', true));
       }
 
       document.getElementById('form-curriculo')?.addEventListener('submit', (e) => {
@@ -729,28 +1142,26 @@
         const nome = document.getElementById('nome').value;
         const obj = document.getElementById('objetivo').value;
         const tipo = document.getElementById('tipoServico').value;
-        const msg = `Olá! Preciso de um *${tipo}*.\nNome: ${nome}\nObjetivo: ${obj}`;
-        openWhatsApp(msg);
+        openWhatsApp('Olá! Preciso de um *' + tipo + '*.\nNome: ' + nome + '\nObjetivo: ' + obj);
       });
 
-      // --- LOGICA IRPF/MEI ---
+      // ── IRPF form ──
       document.getElementById('form-irpf')?.addEventListener('submit', (e) => {
         e.preventDefault();
         const nome = document.getElementById('irpf-nome').value;
         const cliente = document.querySelector('input[name="irpf-cliente"]:checked').value;
-        const msg = `Olá! Gostaria de fazer minha *Declaração de IR*.\nNome: ${nome}\nJá é cliente? ${cliente}`;
-        openWhatsApp(msg);
+        openWhatsApp('Olá! Gostaria de fazer minha *Declaração de IR*.\nNome: ' + nome + '\nJá é cliente? ' + cliente);
       });
 
+      // ── MEI form ──
       document.getElementById('form-mei')?.addEventListener('submit', (e) => {
         e.preventDefault();
         const nome = document.getElementById('mei-nome').value;
-        const nec = document.getElementById('mei-necessidade').value;
-        const msg = `Olá! Preciso de suporte *MEI*.\nNome: ${nome}\nNecessidade: ${nec}`;
-        openWhatsApp(msg);
+        const nec = document.getElementById('mei-necessidade').value || 'Não informado';
+        openWhatsApp('Olá! Preciso de suporte *MEI*.\nNome: ' + nome + '\nNecessidade: ' + nec);
       });
 
-      // --- LOGICA BOLETOS ---
+      // ── BOLETOS: tabs ──
       const tabImprimir = document.getElementById('tab-imprimir');
       const tab2via = document.getElementById('tab-2via');
       const contentImprimir = document.getElementById('content-imprimir');
@@ -758,170 +1169,70 @@
       const selEmpresa = document.getElementById('boleto-empresa');
       const camposExtra = document.getElementById('boleto-campos-extra');
 
+      function switchTab(showImprimir) {
+        tabImprimir.classList.toggle('bg-white', showImprimir);
+        tabImprimir.classList.toggle('text-gray-800', showImprimir);
+        tabImprimir.classList.toggle('shadow-sm', showImprimir);
+        tabImprimir.classList.toggle('text-gray-500', !showImprimir);
+        tab2via.classList.toggle('bg-white', !showImprimir);
+        tab2via.classList.toggle('text-gray-800', !showImprimir);
+        tab2via.classList.toggle('shadow-sm', !showImprimir);
+        tab2via.classList.toggle('text-gray-500', showImprimir);
+        contentImprimir.classList.toggle('hidden', !showImprimir);
+        content2via.classList.toggle('hidden', showImprimir);
+      }
+
       if (tabImprimir && tab2via) {
-        tabImprimir.addEventListener('click', () => {
-          tabImprimir.classList.add('bg-white', 'text-gray-800', 'shadow-sm');
-          tabImprimir.classList.remove('text-gray-500');
-          tab2via.classList.remove('bg-white', 'text-gray-800', 'shadow-sm');
-          tab2via.classList.add('text-gray-500');
-          contentImprimir.classList.remove('hidden');
-          content2via.classList.add('hidden');
-        });
-
-        tab2via.addEventListener('click', () => {
-          tab2via.classList.add('bg-white', 'text-gray-800', 'shadow-sm');
-          tab2via.classList.remove('text-gray-500');
-          tabImprimir.classList.remove('bg-white', 'text-gray-800', 'shadow-sm');
-          tabImprimir.classList.add('text-gray-500');
-          content2via.classList.remove('hidden');
-          contentImprimir.classList.add('hidden');
-        });
-
+        tabImprimir.addEventListener('click', () => switchTab(true));
+        tab2via.addEventListener('click', () => switchTab(false));
         selEmpresa.addEventListener('change', () => {
-          if (selEmpresa.value) camposExtra.classList.remove('hidden');
-          else camposExtra.classList.add('hidden');
+          camposExtra.classList.toggle('hidden', !selEmpresa.value);
         });
 
         document.getElementById('form-boletos').addEventListener('submit', (e) => {
           e.preventDefault();
           if (!document.getElementById('boleto-lgpd').checked) {
-            alert('Por favor, aceite os termos LGPD.');
+            alert('Por favor, aceite os termos LGPD para continuar.');
             return;
           }
-          const modo = contentImprimir.classList.contains('hidden') ? '2ª Via' : 'Impressão';
-          const msg = `Olá! Preciso de serviço de *Boletos* (${modo}).`;
-          openWhatsApp(msg);
+          const modo = content2via.classList.contains('hidden') ? 'Impressão' : '2ª Via';
+          openWhatsApp('Olá! Preciso de serviço de *Boletos/Documentos* (' + modo + ').');
         });
       }
 
-      // --- MODAIS ---
-      const modals = { 'terms': document.getElementById('terms-modal'), 'privacy': document.getElementById('privacy-modal') };
+      // ── MODALS ──
+      const modalEls = {
+        terms: document.getElementById('terms-modal'),
+        privacy: document.getElementById('privacy-modal')
+      };
+
       function closeAllModals() {
-        Object.values(modals).forEach(m => { if (m) { m.style.display = 'none'; } });
+        Object.values(modalEls).forEach(m => {
+          if (m) { m.style.display = 'none'; m.setAttribute('aria-hidden', 'true'); }
+        });
         document.body.style.overflow = '';
       }
+
       document.querySelectorAll('.open-modal').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
-          const m = modals[btn.getAttribute('data-modal')];
-          if (m) { closeAllModals(); m.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
-        });
-      });
-      document.querySelectorAll('.modal-close').forEach(btn => btn.addEventListener('click', closeAllModals));
-      window.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) closeAllModals(); });
-
-      // --- CHATBOT INTELIGENTE ---
-      const chatToggle = document.getElementById('chat-toggle');
-      const chatContainer = document.getElementById('chat-container');
-      const chatClose = document.getElementById('chat-close');
-      const chatInput = document.getElementById('chat-input');
-      const chatSend = document.getElementById('chat-send');
-      const chatMessages = document.getElementById('chat-messages');
-
-      // Estado do Chat
-      let chatState = {
-        step: 'init', // init, waiting_name, done
-        topic: 'Dúvida Geral',
-        buffer: ''
-      };
-
-      function toggleChat() {
-        chatContainer.classList.toggle('hidden');
-        if (!chatContainer.classList.contains('hidden')) {
-          setTimeout(() => chatInput.focus(), 100);
-        }
-      }
-
-      function addMsg(text, sender) {
-        const div = document.createElement('div');
-        div.className = `flex items-start mb-3 ${sender === 'user' ? 'justify-end' : ''} animate-fade-in-up`;
-        div.innerHTML = sender === 'bot'
-          ? `<div class="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center mr-2 flex-shrink-0 text-white text-xs">🤖</div><div class="bg-white p-3 rounded-lg shadow-sm border border-gray-100 text-gray-700 text-sm leading-relaxed"><p>${text}</p></div>`
-          : `<div class="bg-orange-600 text-white p-3 rounded-lg shadow-sm text-sm"><p>${text}</p></div>`;
-        chatMessages.appendChild(div);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
-
-      function generateWhatsAppLink(nome, topico, detalhes) {
-        const phone = '5512981488505';
-        const msg = `Olá! Me chamo *${nome}*.\nGostaria de falar sobre: *${topico}*.\n\nDetalhes: ${detalhes || 'Não informado.'}`;
-        return `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`;
-      }
-
-      function processUserMessage(msg) {
-        addMsg(msg, 'user');
-
-        if (chatState.step === 'init') {
-          chatState.buffer = msg;
-          chatState.step = 'waiting_name';
-          setTimeout(() => addMsg("Entendi. Para que eu possa encaminhar sua solicitação para o especialista correto, qual é o seu nome?", 'bot'), 600);
-
-        } else if (chatState.step === 'waiting_name') {
-          const nome = msg;
-          const link = generateWhatsAppLink(nome, chatState.topic, chatState.buffer);
-
-          setTimeout(() => {
-            addMsg(`Obrigado, ${nome}! Já preparei seu atendimento. Clique abaixo para falar com o especialista:`, 'bot');
-
-            const btnDiv = document.createElement('div');
-            btnDiv.className = "flex justify-center mt-3 mb-2 animate-fade-in-up";
-            btnDiv.innerHTML = `<a href="${link}" target="_blank" class="bg-green-500 text-white px-5 py-2.5 rounded-full font-bold shadow-md hover:bg-green-600 hover:scale-105 transition flex items-center gap-2 text-sm"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z"/></svg> Confirmar Atendimento</a>`;
-            chatMessages.appendChild(btnDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            chatState.step = 'done';
-          }, 800);
-        }
-      }
-
-      if (chatToggle) {
-        chatToggle.addEventListener('click', (e) => {
-          e.preventDefault();
-          toggleChat();
-        });
-
-        chatClose.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation(); // Garante que o clique não propague
-          toggleChat();
-        });
-
-        document.querySelectorAll('.quick-question').forEach(btn => {
-          btn.addEventListener('click', function () {
-            const topicMap = {
-              'curriculo': 'Currículos Profissionais',
-              'irpf': 'Declaração de IRPF',
-              'mei': 'Suporte ao MEI',
-              'documentos': 'Impressão e Documentos'
-            };
-
-            const key = this.dataset.question;
-            const userText = this.innerText;
-
-            // Define o tópico e reseta o buffer base
-            chatState.topic = topicMap[key] || userText;
-            chatState.buffer = `Interesse clicado em: ${userText}`;
-            chatState.step = 'waiting_name'; // Pula a fase de explicar o problema, vai direto pro nome
-
-            addMsg(userText, 'user');
-            setTimeout(() => addMsg("Ótimo. Para agilizar seu atendimento, por favor, me informe seu nome:", 'bot'), 600);
-          });
-        });
-
-        chatSend.addEventListener('click', () => {
-          const text = chatInput.value.trim();
-          if (text) {
-            processUserMessage(text);
-            chatInput.value = '';
+          const m = modalEls[btn.getAttribute('data-modal')];
+          if (m) {
+            closeAllModals();
+            m.style.display = 'flex';
+            m.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
           }
         });
+      });
 
-        chatInput.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') chatSend.click();
-        });
-      }
+      document.querySelectorAll('.modal-close').forEach(btn => btn.addEventListener('click', closeAllModals));
+      window.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) closeAllModals(); });
+      window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllModals(); });
+
     });
   </script>
+
 </body>
 
 </html>

@@ -2,115 +2,173 @@
 <html lang="pt-BR" class="scroll-smooth">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plena Personalizados | Crie Produtos Únicos e Exclusivos</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalizados - Plena Informática</title>
 
-  <!-- Meta SEO -->
+  <!-- SEO -->
   <meta name="description"
-    content="Personalize camisetas, canecas, brindes corporativos e decoração com a Plena Informática. Qualidade premium, entrega rápida e descontos para atacado em SJC." />
+    content="Personalize camisetas, canecas, brindes corporativos e decoração com a Plena Informática. Qualidade premium, entrega rápida e descontos para atacado em SJC.">
   <meta name="keywords"
-    content="personalizados, brindes corporativos, camisetas personalizadas, canecas, são josé dos campos, brindes sjc" />
-  <meta name="author" content="Plena Informática" />
-  <meta name="theme-color" content="#1e40af" />
+    content="personalizados, brindes corporativos, camisetas personalizadas, canecas, são josé dos campos, brindes sjc, moletom, mousepad">
+  <meta name="author" content="Plena Informática">
+  <meta name="theme-color" content="#ea580c">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Plena Personalizados - Transforme ideias em realidade" />
+  <meta property="og:title" content="Personalizados - Plena Informática">
   <meta property="og:description"
-    content="Do varejo ao atacado: Camisetas, Canecas e Brindes com qualidade inigualável." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://plenainformatica.com.br/personalizados" />
-  <meta property="og:image" content="images/social-share-personalizados.jpg" />
+    content="Do varejo ao atacado: camisetas, canecas e brindes com qualidade inigualável em São José dos Campos.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://plenainformatica.com.br/personalizados">
+  <meta property="og:image" content="https://plenainformatica.com.br/plena.jpg">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Plena Informática">
+  <link rel="canonical" href="https://plenainformatica.com.br/personalizados">
 
-  <!-- Fonts & Tailwind -->
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ea580c'/><text x='16' y='23' text-anchor='middle' font-size='20' font-weight='bold' font-family='Arial,sans-serif' fill='white'>P</text></svg>">
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Plena Informática",
+    "description": "Produtos personalizados: camisetas, canecas, brindes corporativos e decoração",
+    "url": "https://plenainformatica.com.br/personalizados",
+    "telephone": "+5512981488505",
+    "email": "contato@plenainformatica.com.br",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "São José dos Campos",
+      "addressRegion": "SP",
+      "addressCountry": "BR"
+    },
+    "openingHours": "Mo-Fr 13:00-18:00"
+  }
+  </script>
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet" />
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
 
   <style>
-    :root {
-      --primary: #1e40af;
-      /* Azul Institucional */
-      --secondary: #2563eb;
-      /* Azul Claro */
-      --brand-orange: #2563eb;
-      /* Laranja Ação */
-      --accent: #059669;
-      /* Verde Sucesso */
-      --dark: #0f172a;
-      --light: #f8fafc;
+    * {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     body {
       font-family: 'Inter', sans-serif;
-      color: #1f2937;
-      background-color: var(--light);
+      color: #1e293b;
       overflow-x: hidden;
     }
 
-    h1,
-    h2,
-    h3,
-    h4,
-    .font-heading {
+    .font-accent {
       font-family: 'Poppins', sans-serif;
     }
 
-    /* Header Glass */
-    .header-blur {
-      backdrop-filter: saturate(180%) blur(12px);
-      background: rgba(255, 255, 255, 0.95);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    section[id] {
+      scroll-margin-top: 5rem;
     }
 
-    /* Hero Pattern */
-    .hero-section {
-      background: radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 90% 80%, rgba(37, 99, 235, 0.06) 0%, transparent 50%);
+    /* ── GRADIENT TEXT ── */
+    .gradient-text {
+      background: linear-gradient(90deg, #fb923c, #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    /* Botões */
-    .btn-cta {
-      background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
-      box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.3);
-      transition: all 0.3s ease;
+    /* ── HERO ── */
+    .hero-personalizados-bg {
+      background: linear-gradient(160deg,
+          #020b21 0%,
+          #062db9 50%,
+          #4a70ad 100%);
     }
 
-    .btn-cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    .hero-personalizados-overlay {
+      background: radial-gradient(ellipse at 90% 10%, rgba(53, 12, 234, 0.22) 0%, transparent 55%),
+        radial-gradient(ellipse at 5% 95%, rgba(39, 57, 216, 0.1) 0%, transparent 50%);
     }
 
-    /* Filtros */
-    .filter-btn {
-      transition: all 0.25s ease;
+    /* ── BOUNCE ── */
+    @keyframes bounce-down {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(8px);
+      }
     }
 
-    .filter-btn.active {
-      background-color: var(--brand-orange);
-      color: white;
-      border-color: var(--brand-orange);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    .bounce-down {
+      animation: bounce-down 1.6s ease-in-out infinite;
     }
 
-    /* Galeria */
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── ANIMATIONS (hero) ── */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-in {
+      animation: fadeInUp .9s cubic-bezier(.4, 0, .2, 1) both;
+    }
+
+    /* ── GALLERY ── */
     .gallery-item {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all .3s cubic-bezier(.4, 0, .2, 1);
     }
 
     .gallery-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px -8px rgba(0, 0, 0, .12);
     }
 
-    .overlay-text {
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+    /* ── FILTER BUTTONS ── */
+    .filter-btn {
+      transition: all .2s ease;
     }
 
-    /* Accordion FAQ */
+    .filter-btn.active {
+      background-color: #0c1eea;
+      color: white;
+      border-color: #0c1eea;
+      box-shadow: 0 4px 12px rgba(12, 30, 234, .3);
+    }
+
+    /* ── FAQ ACCORDION ── */
     details>summary {
       list-style: none;
     }
@@ -124,481 +182,654 @@
     }
 
     @keyframes sweep {
-      0% {
+      from {
         opacity: 0;
-        transform: translateY(-10px)
+        transform: translateY(-8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── FORM ELEMENTS ── */
+    .form-input {
+      width: 100%;
+      padding: .75rem 1rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      transition: all .2s;
+      background-color: #f8fafc;
+      font-size: .9rem;
+      color: #21314a;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #111b87;
+      background-color: #fff;
+      box-shadow: 0 0 0 3px rgba(12, 30, 234, .12);
+    }
+
+    .form-input::placeholder {
+      color: #94a3b8;
+    }
+
+    /* ── PULSE RING (FAB) ── */
+    @keyframes pulse-ring {
+      0% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, .6);
+      }
+
+      70% {
+        box-shadow: 0 0 0 14px rgba(34, 197, 94, 0);
       }
 
       100% {
-        opacity: 1;
-        transform: translateY(0)
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
       }
     }
 
-    /* Drag & Drop */
-    .drag-area.active {
-      border-color: var(--brand-orange);
-      background-color: #eff6ff;
+    .pulse-ring {
+      animation: pulse-ring 2.5s cubic-bezier(.4, 0, .6, 1) infinite;
     }
 
-    /* Acessibilidade */
-    .focus-ring:focus-visible {
-      outline: 2px solid var(--brand-orange);
-      outline-offset: 2px;
+    /* ── MODAL ── */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .6);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 560px;
+      width: 90%;
+      max-height: 82vh;
+      overflow-y: auto;
+      position: relative;
     }
   </style>
 </head>
 
-<body>
+<body class="antialiased">
 
-  <!-- Header Unificado -->
-  <header class="header-blur fixed top-0 left-0 right-0 z-50 h-20 flex items-center transition-all duration-300">
-    <nav class="container mx-auto px-6 flex justify-between items-center relative">
-      <a href="#" class="text-2xl font-bold text-gray-800 font-heading group">
-        Plena <span class="text-blue-700 group-hover:text-blue-600 transition">Informática</span>
-      </a>
+  <!-- ══════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════ -->
+  <header class="fixed top-0 left-0 right-0 z-50">
+    <div class="bg-white/80 backdrop-blur-xl border-b border-gray-100/60 shadow-sm transition-all duration-300">
+      <nav class="container mx-auto px-6 h-20 flex items-center justify-between">
 
-      <div class="hidden md:flex items-center space-x-8 absolute left-1/2 -translate-x-1/2">
-        <a href="index.html" class="text-gray-600 hover:text-blue-700 font-medium transition">Início</a>
-        <a href="#catalogo" class="text-gray-600 hover:text-blue-700 font-medium transition">Catálogo</a>
-        <a href="#orcamento" class="text-gray-600 hover:text-blue-700 font-medium transition">Orçamento</a>
-      </div>
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-2.5 group flex-shrink-0">
+          <img src="logo-plena.png" alt="Plena Informática"
+            class="h-40 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+        </a>
 
-      <div class="hidden md:flex items-center">
+        <!-- Nav Desktop -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="index.html"
+            class="text-sm font-semibold text-gray-600 hover:text-blue-500 transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-blue-500 hover:after:w-full after:transition-all after:duration-300">Início</a>
+          <a href="#catalogo"
+            class="text-sm font-semibold text-blue-500 transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-500">Catálogo</a>
+          <a href="#como-funciona"
+            class="text-sm font-semibold text-gray-600 hover:text-blue-500 transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-blue-500 hover:after:w-full after:transition-all after:duration-300">Como
+            Funciona</a>
+          <a href="#orcamento"
+            class="text-sm font-semibold text-gray-600 hover:text-blue-500 transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-blue-500 hover:after:w-full after:transition-all after:duration-300">Orçamento</a>
+        </div>
+
+        <!-- CTA Desktop -->
         <button type="button"
-          class="bg-blue-100 text-blue-700 font-bold px-5 py-2.5 rounded-lg hover:bg-blue-200 transition focus-ring"
-          data-whatsapp-phone="5512992191018"
-          data-whatsapp-message="Olá, estou visitando a página de Personalizados da Plena e gostaria de mais informações.">
+          class="whatsapp-btn hidden md:inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-105 transition-all duration-300">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
+          </svg>
           Fale Conosco
         </button>
-      </div>
 
-      <!-- Menu Mobile Button -->
-      <button id="menu-btn" class="md:hidden p-2 text-gray-700 focus-ring rounded-lg">
-        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-    </nav>
-
-    <!-- Menu Mobile Overlay -->
-    <div id="mobile-menu"
-      class="hidden md:hidden fixed top-20 inset-x-0 bg-white border-b border-gray-200 shadow-lg z-40">
-      <div class="container mx-auto px-6 py-4 flex flex-col gap-2">
-        <a href="index.html" class="block py-3 px-2 text-gray-800">Início</a>
-        <a href="#catalogo" class="block py-3 px-2 text-gray-800 mobile-link">Catálogo</a>
-        <a href="#orcamento" class="block py-3 px-2 text-gray-800 mobile-link">Orçamento</a>
-        <button class="mt-2 bg-blue-700 text-white font-bold py-3 rounded-lg text-base shadow-lg"
-          data-whatsapp-phone="5512992191018" data-whatsapp-context="mobile_contact"
-          data-whatsapp-message="Olá, estou visitando a página de Personalizados da Plena e gostaria de mais informações.">
-          Fale Conosco
+        <!-- Burger Mobile -->
+        <button id="menu-btn" class="md:hidden p-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
+          aria-label="Menu" aria-expanded="false">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path id="icon-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16" />
+            <path id="icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
+
+      </nav>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-100 shadow-xl">
+      <div class="container mx-auto px-6 py-4 flex flex-col gap-1">
+        <a href="index.html"
+          class="mobile-link block py-3 px-4 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors">Início</a>
+        <a href="#catalogo"
+          class="mobile-link block py-3 px-4 rounded-lg bg-blue-50 text-blue-500 hover:bg-blue-100 hover:text-blue-600 font-semibold">Catálogo</a>
+        <a href="#como-funciona"
+          class="mobile-link block py-3 px-4 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors">Como
+          Funciona</a>
+        <a href="#orcamento"
+          class="mobile-link block py-3 px-4 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors">Orçamento</a>
+        <button type="button"
+          class="whatsapp-btn mobile-link mt-2 w-full py-3 px-4 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-600 transition-colors">Fale
+          Conosco via WhatsApp</button>
       </div>
     </div>
   </header>
 
   <main>
-    <!-- Hero Section: Foco em Vendas -->
-    <section class="hero-section pt-32 pb-20 md:pt-40 md:pb-28 px-6">
-      <div class="container mx-auto grid md:grid-cols-2 gap-12 items-center">
-        <div class="animate-fade-in-up">
-          <div
-            class="inline-block px-4 py-1.5 bg-blue-100 text-blue-700 font-bold text-sm rounded-full mb-6 tracking-wide uppercase">
-            Do Varejo ao Atacado
-          </div>
-          <h1 class="text-4xl md:text-6xl font-bold text-gray-900 leading-tight mb-6">
-            Transforme Ideias em <span
-              class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">Presentes
-              Inesquecíveis</span>
-          </h1>
-          <p class="text-lg text-gray-600 mb-8 leading-relaxed max-w-lg">
-            A qualidade que sua marca merece. Personalizamos camisetas, canecas e brindes com tecnologia de ponta e
-            durabilidade garantida.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4">
-            <a href="#orcamento" class="btn-cta text-white text-center font-bold px-8 py-4 rounded-xl text-lg">
-              Pedir Orçamento Grátis
-            </a>
-            <a href="#catalogo"
-              class="bg-white text-gray-700 border border-gray-300 text-center font-bold px-8 py-4 rounded-xl text-lg hover:bg-gray-50 transition shadow-sm">
-              Ver Catálogo
-            </a>
+
+    <!-- ══════════════════════════════════════════
+         HERO
+    ══════════════════════════════════════════ -->
+    <section class="relative overflow-hidden" style="min-height:72vh;padding-top:5rem;">
+
+      <div class="absolute inset-0 hero-personalizados-bg"></div>
+      <div class="absolute inset-0 hero-personalizados-overlay"></div>
+      <div class="absolute inset-0 opacity-[.04]"
+        style="background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(255,255,255,.4) 59px,rgba(255,255,255,.4) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(255,255,255,.4) 59px,rgba(255,255,255,.4) 60px);"
+        aria-hidden="true"></div>
+
+      <div class="relative z-10 container mx-auto px-6 py-20">
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+
+          <!-- Texto -->
+          <div>
+            <!-- Badge -->
+            <div
+              class="inline-flex items-center gap-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-6 py-2.5 mb-8 animate-in"
+              style="animation-delay:.1s">
+              <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+              <span class="text-white/90 text-sm font-semibold tracking-widest uppercase">Do Varejo ao Atacado</span>
+            </div>
+
+            <h1 class="font-accent font-black text-white leading-[1.08] mb-6 animate-in"
+              style="font-size:clamp(2.2rem,5.5vw,4rem);animation-delay:.25s;">
+              Transforme ideias em<br>
+              <span class="gradient-text">presentes inesquecíveis.</span>
+            </h1>
+
+            <p class="text-white/75 text-lg max-w-lg mb-8 animate-in font-light leading-relaxed"
+              style="animation-delay:.4s;">
+              A qualidade que sua marca merece. Personalizamos camisetas, canecas e brindes com tecnologia de ponta e
+              durabilidade garantida.
+            </p>
+
+            <!-- CTAs -->
+            <div class="flex flex-col sm:flex-row gap-4 animate-in mb-10" style="animation-delay:.55s;">
+              <a href="#orcamento"
+                class="inline-flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-bold px-9 py-4 rounded-2xl shadow-2xl shadow-blue-500/40 hover:shadow-blue-500/60 hover:-translate-y-1 hover:scale-105 transition-all duration-300">
+                Pedir Orçamento Grátis
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
+              <a href="#catalogo"
+                class="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-md border border-white/25 hover:bg-white/20 text-white font-bold px-9 py-4 rounded-2xl transition-all duration-300">
+                Ver Catálogo
+              </a>
+            </div>
+
+            <!-- Trust markers -->
+            <div class="flex flex-wrap gap-5 animate-in" style="animation-delay:.65s;">
+              <div class="flex items-center gap-2 text-white/70 text-sm">
+                <svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                </svg>
+                Entrega Rápida
+              </div>
+              <div class="flex items-center gap-2 text-white/70 text-sm">
+                <svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                </svg>
+                Sem Pedido Mínimo*
+              </div>
+              <div class="flex items-center gap-2 text-white/70 text-sm">
+                <svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                </svg>
+                Alta Durabilidade
+              </div>
+            </div>
           </div>
 
-          <!-- Trust Markers -->
-          <div class="mt-10 flex items-center gap-6 text-sm text-gray-500 font-medium">
-            <div class="flex items-center gap-2">
-              <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              Entrega Rápida
-            </div>
-            <div class="flex items-center gap-2">
-              <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              Sem Pedido Mínimo*
-            </div>
-            <div class="flex items-center gap-2">
-              <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              Alta Durabilidade
-            </div>
-          </div>
-          <div class="block md:hidden mt-8">
-            <div class="grid grid-cols-2 gap-3 relative z-10">
+          <!-- Produto images grid (desktop) -->
+          <div class="relative hidden md:block animate-in" style="animation-delay:.35s;">
+            <div class="grid grid-cols-2 gap-4">
               <img src="images/camiseta capa.jpg" alt="Camiseta Personalizada"
-                class="rounded-2xl shadow-2xl object-cover h-36 w-full"
-                onerror="this.src='https://via.placeholder.com/600x400/1e40af/ffffff?text=Camiseta'">
+                class="rounded-2xl shadow-2xl object-cover h-60 w-full transform translate-y-4 hover:-translate-y-2 transition-all duration-500"
+                loading="eager">
               <img src="images/caneca capa.jpg" alt="Caneca Personalizada"
-                class="rounded-2xl shadow-2xl object-cover h-36 w-full"
-                onerror="this.src='https://via.placeholder.com/600x400/1e40af/ffffff?text=Caneca'">
-              <img src="images/azulejo capa.jpg" alt="Decoração"
-                class="rounded-2xl shadow-2xl object-cover h-40 w-full col-span-2"
-                onerror="this.src='https://via.placeholder.com/600x400/1e40af/ffffff?text=Decora%C3%A7%C3%A3o'">
+                class="rounded-2xl shadow-2xl object-cover h-60 w-full transform -translate-y-4 hover:translate-y-2 transition-all duration-500"
+                loading="eager">
+              <img src="images/azulejo capa.jpg" alt="Produto Personalizado"
+                class="rounded-2xl shadow-2xl object-cover h-44 w-full col-span-2 hover:scale-[1.02] transition-all duration-500"
+                loading="eager">
+            </div>
+            <!-- Glow -->
+            <div
+              class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] bg-gradient-to-tr from-orange-500/20 to-transparent rounded-full blur-3xl -z-10 pointer-events-none">
             </div>
           </div>
-        </div>
 
-        <div class="relative hidden md:block">
-          <!-- Abstract Mockup Composition -->
-          <div class="relative z-10 grid grid-cols-2 gap-4">
-            <img src="images/camiseta capa.jpg" alt="Camiseta Personalizada"
-              class="rounded-2xl shadow-2xl transform translate-y-4 hover:-translate-y-2 transition duration-500 object-cover h-64 w-full"
-              onerror="this.src='https://via.placeholder.com/600x400/1e40af/ffffff?text=Camiseta'">
-            <img src="images/caneca capa.jpg" alt="Caneca Personalizada"
-              class="rounded-2xl shadow-2xl transform -translate-y-4 hover:translate-y-2 transition duration-500 object-cover h-64 w-full"
-              onerror="this.src='https://via.placeholder.com/600x400/1e40af/ffffff?text=Caneca'">
-            <img src="images/azulejo capa.jpg" alt="Decoração"
-              class="rounded-2xl shadow-2xl object-cover h-48 w-full col-span-2"
-              onerror="this.src='https://via.placeholder.com/600x400/1e40af/ffffff?text=Decora%C3%A7%C3%A3o'">
+          <!-- Mobile product grid -->
+          <div class="block md:hidden animate-in mt-2" style="animation-delay:.5s;">
+            <div class="grid grid-cols-2 gap-3">
+              <img src="images/camiseta capa.jpg" alt="Camiseta Personalizada"
+                class="rounded-2xl shadow-xl object-cover h-36 w-full" loading="eager">
+              <img src="images/caneca capa.jpg" alt="Caneca Personalizada"
+                class="rounded-2xl shadow-xl object-cover h-36 w-full" loading="eager">
+              <img src="images/azulejo capa.jpg" alt="Produto Personalizado"
+                class="rounded-2xl shadow-xl object-cover h-40 w-full col-span-2" loading="eager">
+            </div>
           </div>
-          <!-- Decorative Blob -->
-          <div
-            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-blue-100 to-blue-50 rounded-full blur-3xl -z-10 opacity-70">
-          </div>
+
         </div>
       </div>
+
+      <!-- Scroll indicator -->
+      <div class="absolute inset-x-0 bottom-8 flex flex-col items-center gap-1.5 bounce-down pointer-events-none"
+        aria-hidden="true">
+        <span class="text-white/35 text-xs uppercase tracking-widest">Explorar</span>
+        <svg class="w-5 h-5 text-white/35" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+
     </section>
 
-    <!-- Como Funciona (Processo) -->
-    <section class="py-16 bg-white border-y border-gray-100">
+
+    <!-- ══════════════════════════════════════════
+         COMO FUNCIONA
+    ══════════════════════════════════════════ -->
+    <section id="como-funciona" class="py-20 bg-white border-b border-gray-100">
       <div class="container mx-auto px-6">
-        <div class="text-center mb-12">
-          <span class="text-blue-700 font-bold text-sm tracking-widest uppercase">Simples e Rápido</span>
-          <h2 class="text-3xl font-bold text-gray-900 mt-2">Como criar seu personalizado</h2>
+
+        <div class="text-center mb-14 reveal">
+          <span
+            class="inline-block text-blue-600 font-bold tracking-widest uppercase text-xs px-4 py-2 bg-blue-100 rounded-full mb-4">Simples
+            e Rápido</span>
+          <h2 class="font-accent font-black text-4xl text-gray-900">Como criar seu personalizado</h2>
+          <p class="text-gray-500 mt-3 max-w-md mx-auto">Do pedido à entrega, cuidamos de cada etapa com atenção e
+            qualidade.</p>
         </div>
 
-        <div class="grid md:grid-cols-4 gap-8 relative">
+        <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 relative">
+
           <!-- Linha conectora (desktop) -->
-          <div class="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-gray-100 -z-10"></div>
+          <div
+            class="hidden md:block absolute top-10 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-blue-100 via-blue-300 to-blue-100"
+            aria-hidden="true"></div>
 
           <!-- Passo 1 -->
-          <div class="text-center bg-white p-4">
+          <div class="text-center reveal">
             <div
-              class="w-24 h-24 mx-auto bg-blue-50 rounded-full flex items-center justify-center mb-4 border-4 border-white shadow-sm">
-              <span class="text-3xl font-bold text-blue-600">1</span>
+              class="w-20 h-20 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4 relative z-10 border-4 border-white shadow-md">
+              <span class="text-2xl font-black text-blue-500 font-accent">1</span>
             </div>
-            <h3 class="font-bold text-lg mb-2">Escolha o Produto</h3>
-            <p class="text-gray-500 text-sm">Navegue pelo nosso catálogo e selecione o item ideal.</p>
+            <h3 class="font-accent font-bold text-gray-800 mb-2">Escolha o Produto</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Navegue pelo catálogo e selecione o item ideal.</p>
           </div>
 
           <!-- Passo 2 -->
-          <div class="text-center bg-white p-4">
+          <div class="text-center reveal" style="transition-delay:.1s">
             <div
-              class="w-24 h-24 mx-auto bg-blue-50 rounded-full flex items-center justify-center mb-4 border-4 border-white shadow-sm">
-              <span class="text-3xl font-bold text-blue-600">2</span>
+              class="w-20 h-20 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4 relative z-10 border-4 border-white shadow-md">
+              <span class="text-2xl font-black text-blue-500 font-accent">2</span>
             </div>
-            <h3 class="font-bold text-lg mb-2">Envie sua Ideia</h3>
-            <p class="text-gray-500 text-sm">Use nosso formulário para enviar sua arte, foto ou logo.</p>
+            <h3 class="font-accent font-bold text-gray-800 mb-2">Envie sua Ideia</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Use o formulário para enviar sua arte, foto ou logo.</p>
           </div>
 
           <!-- Passo 3 -->
-          <div class="text-center bg-white p-4">
+          <div class="text-center reveal" style="transition-delay:.2s">
             <div
-              class="w-24 h-24 mx-auto bg-blue-50 rounded-full flex items-center justify-center mb-4 border-4 border-white shadow-sm">
-              <span class="text-3xl font-bold text-blue-600">3</span>
+              class="w-20 h-20 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4 relative z-10 border-4 border-white shadow-md">
+              <span class="text-2xl font-black text-blue-500 font-accent">3</span>
             </div>
-            <h3 class="font-bold text-lg mb-2">Aprovação</h3>
-            <p class="text-gray-500 text-sm">Receba um orçamento e uma prévia digital para aprovar.</p>
+            <h3 class="font-accent font-bold text-gray-800 mb-2">Aprovação</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Receba um orçamento e uma prévia digital para aprovar.</p>
           </div>
 
           <!-- Passo 4 -->
-          <div class="text-center bg-white p-4">
+          <div class="text-center reveal" style="transition-delay:.3s">
             <div
-              class="w-24 h-24 mx-auto bg-green-50 rounded-full flex items-center justify-center mb-4 border-4 border-white shadow-sm">
-              <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              class="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4 relative z-10 border-4 border-white shadow-md">
+              <svg class="w-9 h-9 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h3 class="font-bold text-lg mb-2">Entrega Rápida</h3>
-            <p class="text-gray-500 text-sm">Produzimos com carinho e você retira ou recebe em casa.</p>
+            <h3 class="font-accent font-bold text-gray-800 mb-2">Entrega Rápida</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Produzimos com carinho. Você retira ou recebe em casa.</p>
           </div>
+
         </div>
       </div>
     </section>
 
-    <!-- Catálogo / Galeria -->
-    <section id="catalogo" class="py-20 bg-slate-50">
+
+    <!-- ══════════════════════════════════════════
+         CATÁLOGO / GALERIA
+    ══════════════════════════════════════════ -->
+    <section id="catalogo" class="py-24 bg-slate-50">
       <div class="container mx-auto px-6">
-        <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
+
+        <!-- Header + Filtros -->
+        <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-6 reveal">
           <div>
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Nossos Produtos</h2>
-            <p class="text-gray-600 mt-2">Explore as categorias mais pedidas pelos nossos clientes.</p>
+            <span
+              class="inline-block text-blue-600 font-bold tracking-widest uppercase text-xs px-4 py-2 bg-blue-100 rounded-full mb-3">Produtos</span>
+            <h2 class="font-accent font-black text-4xl md:text-5xl text-gray-900">Nosso Catálogo</h2>
+            <p class="text-gray-500 mt-2">Explore as categorias mais pedidas pelos nossos clientes.</p>
           </div>
 
           <!-- Filtros -->
           <div class="flex flex-wrap gap-2" id="filters">
             <button
-              class="filter-btn active px-4 py-2 rounded-full border border-gray-200 bg-white text-gray-600 font-medium text-sm hover:bg-gray-50 focus-ring"
+              class="filter-btn active px-5 py-2 rounded-full border border-gray-200 bg-white text-gray-600 font-semibold text-sm"
               data-filter="all">Todos</button>
             <button
-              class="filter-btn px-4 py-2 rounded-full border border-gray-200 bg-white text-gray-600 font-medium text-sm hover:bg-gray-50 focus-ring"
+              class="filter-btn px-5 py-2 rounded-full border border-gray-200 bg-white text-gray-600 font-semibold text-sm hover:border-blue-300 transition-colors"
               data-filter="vestuario">Vestuário</button>
             <button
-              class="filter-btn px-4 py-2 rounded-full border border-gray-200 bg-white text-gray-600 font-medium text-sm hover:bg-gray-50 focus-ring"
+              class="filter-btn px-5 py-2 rounded-full border border-gray-200 bg-white text-gray-600 font-semibold text-sm hover:border-blue-300 transition-colors"
               data-filter="canecas">Canecas</button>
             <button
-              class="filter-btn px-4 py-2 rounded-full border border-gray-200 bg-white text-gray-600 font-medium text-sm hover:bg-gray-50 focus-ring"
+              class="filter-btn px-5 py-2 rounded-full border border-gray-200 bg-white text-gray-600 font-semibold text-sm hover:border-orange-300 transition-colors"
               data-filter="corporativo">Corporativo</button>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6" id="gallery-grid">
-          <div class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer"
+        <!-- Grid de produtos -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5" id="gallery-grid">
+
+          <div
+            class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer border border-gray-100 hover:border-blue-200 transition-colors"
             data-category="vestuario">
-            <div class="relative aspect-square overflow-hidden">
+            <div class="relative aspect-square overflow-hidden bg-gray-100">
               <img src="images/camiseta capa.jpg" alt="Camiseta Premium"
-                class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy"
-                onerror="this.src='https://via.placeholder.com/600x600/1e40af/ffffff?text=Camiseta%20Premium'">
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">
             </div>
             <div class="p-4">
-              <h3 class="font-bold text-gray-800">Camiseta Premium</h3>
-              <p class="text-sm text-gray-500 mt-1">A partir de R$ 45,00</p>
+              <h3 class="font-accent font-bold text-gray-800">Camiseta Premium</h3>
+              <p class="text-sm text-blue-500 font-semibold mt-1">A partir de R$ 45,00</p>
             </div>
           </div>
-          <div class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer"
+
+          <div
+            class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer border border-gray-100 hover:border-blue-200 transition-colors"
             data-category="canecas">
-            <div class="relative aspect-square overflow-hidden">
+            <div class="relative aspect-square overflow-hidden bg-gray-100">
               <img src="images/caneca capa.jpg" alt="Caneca Cerâmica"
-                class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy"
-                onerror="this.src='https://via.placeholder.com/600x600/1e40af/ffffff?text=Caneca%20Cer%C3%A2mica'">
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">
             </div>
             <div class="p-4">
-              <h3 class="font-bold text-gray-800">Caneca Cerâmica</h3>
-              <p class="text-sm text-gray-500 mt-1">A partir de R$ 35,00 (consulte modelos)</p>
+              <h3 class="font-accent font-bold text-gray-800">Caneca Cerâmica</h3>
+              <p class="text-sm text-blue-500 font-semibold mt-1">A partir de R$ 35,00</p>
             </div>
           </div>
-          <div class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer"
+
+          <div
+            class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer border border-gray-100 hover:border-blue-200 transition-colors"
             data-category="corporativo">
-            <div class="relative aspect-square overflow-hidden">
+            <div class="relative aspect-square overflow-hidden bg-gray-100">
               <img src="images/mousepad capa.jpg" alt="Mousepad Corporativo"
-                class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy"
-                onerror="this.src='https://via.placeholder.com/600x600/1e40af/ffffff?text=Mousepad%20Corporativo'">
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">
             </div>
             <div class="p-4">
-              <h3 class="font-bold text-gray-800">Mousepad Corporativo</h3>
-              <p class="text-sm text-gray-500 mt-1">A partir de R$ 29,90</p>
+              <h3 class="font-accent font-bold text-gray-800">Mousepad Corporativo</h3>
+              <p class="text-sm text-blue-500 font-semibold mt-1">A partir de R$ 29,90</p>
             </div>
           </div>
-          <div class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer"
+
+          <div
+            class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer border border-gray-100 hover:border-blue-200 transition-colors"
             data-category="vestuario">
-            <div class="relative aspect-square overflow-hidden">
+            <div class="relative aspect-square overflow-hidden bg-gray-100">
               <img src="images/moletom capa.jpg" alt="Moletom Estampado"
-                class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy"
-                onerror="this.src='https://via.placeholder.com/600x600/1e40af/ffffff?text=Moletom%20Estampado'">
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">
             </div>
             <div class="p-4">
-              <h3 class="font-bold text-gray-800">Moletom Estampado</h3>
-              <p class="text-sm text-gray-500 mt-1">A partir de R$ 169,90</p>
+              <h3 class="font-accent font-bold text-gray-800">Moletom Estampado</h3>
+              <p class="text-sm text-blue-500 font-semibold mt-1">A partir de R$ 169,90</p>
             </div>
           </div>
-          <div class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer"
+
+          <div
+            class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer border border-gray-100 hover:border-blue-200 transition-colors"
             data-category="canecas">
-            <div class="relative aspect-square overflow-hidden">
+            <div class="relative aspect-square overflow-hidden bg-gray-100">
               <img src="images/chopp capa.jpg" alt="Caneca de Chopp"
-                class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy"
-                onerror="this.src='https://via.placeholder.com/600x600/1e40af/ffffff?text=Caneca%20de%20Chopp'">
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">
             </div>
             <div class="p-4">
-              <h3 class="font-bold text-gray-800">Caneca de Chopp</h3>
-              <p class="text-sm text-gray-500 mt-1">A partir de R$ 59,90</p>
+              <h3 class="font-accent font-bold text-gray-800">Caneca de Chopp</h3>
+              <p class="text-sm text-blue-500 font-semibold mt-1">A partir de R$ 59,90</p>
             </div>
           </div>
-          <div class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer"
+
+          <div
+            class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer border border-gray-100 hover:border-blue-200 transition-colors"
             data-category="corporativo">
-            <div class="relative aspect-square overflow-hidden">
+            <div class="relative aspect-square overflow-hidden bg-gray-100">
               <img src="images/ecobag capa.jpg" alt="Ecobag Sustentável"
-                class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy"
-                onerror="this.src='https://via.placeholder.com/600x600/1e40af/ffffff?text=Ecobag%20Sustent%C3%A1vel'">
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">
             </div>
             <div class="p-4">
-              <h3 class="font-bold text-gray-800">Ecobag Sustentável</h3>
-              <p class="text-sm text-gray-500 mt-1">A partir de R$ 19,90</p>
+              <h3 class="font-accent font-bold text-gray-800">Ecobag Sustentável</h3>
+              <p class="text-sm text-blue-500 font-semibold mt-1">A partir de R$ 19,90</p>
             </div>
           </div>
-          <div class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer"
+
+          <div
+            class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer border border-gray-100 hover:border-blue-200 transition-colors"
             data-category="vestuario">
-            <div class="relative aspect-square overflow-hidden">
+            <div class="relative aspect-square overflow-hidden bg-gray-100">
               <img src="images/uniforme capa.jpg" alt="Uniforme Completo"
-                class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy"
-                onerror="this.src='https://via.placeholder.com/600x600/1e40af/ffffff?text=Uniforme%20Completo'">
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">
             </div>
             <div class="p-4">
-              <h3 class="font-bold text-gray-800">Uniforme Completo</h3>
-              <p class="text-sm text-gray-500 mt-1">A partir de R$ 34,90 (consulte condições)</p>
+              <h3 class="font-accent font-bold text-gray-800">Uniforme Completo</h3>
+              <p class="text-sm text-blue-500 font-semibold mt-1">A partir de R$ 34,90</p>
             </div>
           </div>
-          <div class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer"
+
+          <div
+            class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer border border-gray-100 hover:border-blue-200 transition-colors"
             data-category="vestuario">
-            <div class="relative aspect-square overflow-hidden">
+            <div class="relative aspect-square overflow-hidden bg-gray-100">
               <img src="images/bone capa.jpg" alt="Boné Estampado"
-                class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy"
-                onerror="this.src='https://via.placeholder.com/600x600/1e40af/ffffff?text=Bon%C3%A9%20Estampado'">
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">
             </div>
             <div class="p-4">
-              <h3 class="font-bold text-gray-800">Boné Estampado</h3>
-              <p class="text-sm text-gray-500 mt-1">A partir de R$ 39,90</p>
+              <h3 class="font-accent font-bold text-gray-800">Boné Estampado</h3>
+              <p class="text-sm text-blue-500 font-semibold mt-1">A partir de R$ 39,90</p>
             </div>
           </div>
-          <div class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer"
+
+          <div
+            class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer border border-gray-100 hover:border-blue-200 transition-colors"
             data-category="canecas">
-            <div class="relative aspect-square overflow-hidden">
+            <div class="relative aspect-square overflow-hidden bg-gray-100">
               <img src="images/copo capa.jpg" alt="Copo Personalizado"
-                class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy"
-                onerror="this.src='https://via.placeholder.com/600x600/1e40af/ffffff?text=Copo%20Personalizado'">
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">
             </div>
             <div class="p-4">
-              <h3 class="font-bold text-gray-800">Copo Personalizado</h3>
-              <p class="text-sm text-gray-500 mt-1">A partir de R$ 39,90</p>
+              <h3 class="font-accent font-bold text-gray-800">Copo Personalizado</h3>
+              <p class="text-sm text-blue-500 font-semibold mt-1">A partir de R$ 39,90</p>
             </div>
           </div>
-          <div class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer"
+
+          <div
+            class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer border border-gray-100 hover:border-blue-200 transition-colors"
             data-category="corporativo">
-            <div class="relative aspect-square overflow-hidden">
+            <div class="relative aspect-square overflow-hidden bg-gray-100">
               <img src="images/chaveiro capa.jpg" alt="Chaveiro Resinado"
-                class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy"
-                onerror="this.src='https://via.placeholder.com/600x600/1e40af/ffffff?text=Chaveiro%20Resinado'">
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">
             </div>
             <div class="p-4">
-              <h3 class="font-bold text-gray-800">Chaveiro Resinado</h3>
-              <p class="text-sm text-gray-500 mt-1">A partir de R$ 12,90</p>
+              <h3 class="font-accent font-bold text-gray-800">Chaveiro Resinado</h3>
+              <p class="text-sm text-blue-500 font-semibold mt-1">A partir de R$ 12,90</p>
             </div>
           </div>
-          <div class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer"
+
+          <div
+            class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer border border-gray-100 hover:border-blue-200 transition-colors"
             data-category="corporativo">
-            <div class="relative aspect-square overflow-hidden">
+            <div class="relative aspect-square overflow-hidden bg-gray-100">
               <img src="images/azulejo capa.jpg" alt="Azulejo Decorativo"
-                class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy"
-                onerror="this.src='https://via.placeholder.com/600x600/1e40af/ffffff?text=Azulejo%20Decorativo'">
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">
             </div>
             <div class="p-4">
-              <h3 class="font-bold text-gray-800">Azulejo Decorativo</h3>
-              <p class="text-sm text-gray-500 mt-1">A partir de R$ 32,90</p>
+              <h3 class="font-accent font-bold text-gray-800">Azulejo Decorativo</h3>
+              <p class="text-sm text-blue-500 font-semibold mt-1">A partir de R$ 32,90</p>
             </div>
           </div>
-          <div class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer"
+
+          <div
+            class="gallery-item bg-white rounded-2xl shadow-sm overflow-hidden group cursor-pointer border border-gray-100 hover:border-blue-200 transition-colors"
             data-category="corporativo">
-            <div class="relative aspect-square overflow-hidden">
+            <div class="relative aspect-square overflow-hidden bg-gray-100">
               <img src="images/almofada capa.jpg" alt="Almofada Estampada"
-                class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy"
-                onerror="this.src='https://via.placeholder.com/600x600/1e40af/ffffff?text=Almofada%20Estampada'">
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy">
             </div>
             <div class="p-4">
-              <h3 class="font-bold text-gray-800">Almofada Estampada</h3>
-              <p class="text-sm text-gray-500 mt-1">A partir de R$ 51,90</p>
+              <h3 class="font-accent font-bold text-gray-800">Almofada Estampada</h3>
+              <p class="text-sm text-blue-500 font-semibold mt-1">A partir de R$ 51,90</p>
             </div>
           </div>
+
         </div>
 
-        <div class="text-center mt-12">
-          <p class="text-gray-500 mb-4">Não achou o que procurava?</p>
-          <button class="text-blue-600 font-bold underline hover:text-blue-800 focus-ring"
-            data-whatsapp-phone="5512992191018" data-whatsapp-context="catalog"
-            data-whatsapp-message="Olá, estou visitando a página de Personalizados e tenho interesse em ver o catálogo completo de produtos. Pode enviar?">
+        <!-- Catalogo CTA -->
+        <div class="text-center mt-12 reveal">
+          <p class="text-gray-500 mb-4 text-sm">Não achou o que procurava?</p>
+          <button type="button"
+            class="whatsapp-catalog inline-flex items-center gap-2 text-blue-600 font-bold hover:text-blue-700 transition-colors underline underline-offset-2">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
+            </svg>
             Consulte nosso catálogo completo no WhatsApp
           </button>
         </div>
+
       </div>
     </section>
 
-    <!-- Formulário de Orçamento (Assistente de Criação Evoluído) -->
-    <section id="orcamento" class="py-20 relative bg-blue-900 overflow-hidden">
-      <!-- Background Elements -->
-      <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
-        <div class="absolute -top-20 -right-20 w-96 h-96 bg-blue-600 rounded-full blur-3xl opacity-30"></div>
-        <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/40 to-transparent"></div>
-      </div>
+
+    <!-- ══════════════════════════════════════════
+         ORÇAMENTO
+    ══════════════════════════════════════════ -->
+    <section id="orcamento" class="py-24 bg-slate-900 relative overflow-hidden">
+      <div class="absolute -top-32 -right-32 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"
+        aria-hidden="true"></div>
+      <div
+        class="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-blue-500/05 rounded-full blur-3xl pointer-events-none"
+        aria-hidden="true"></div>
 
       <div class="container mx-auto px-6 relative z-10">
-        <div class="grid lg:grid-cols-5 gap-12">
-          <!-- Texto de Vendas -->
-          <div class="lg:col-span-2 text-white flex flex-col justify-center">
-            <h2 class="text-3xl md:text-4xl font-bold mb-6">Vamos criar algo incrível juntos?</h2>
-            <p class="text-blue-100 text-lg mb-8">
-              Preencha o formulário ao lado para receber um orçamento personalizado. Nossa equipe analisa sua arte e
-              sugere as melhores técnicas.
+        <div class="grid lg:grid-cols-5 gap-12 items-center">
+
+          <!-- Texto de vendas -->
+          <div class="lg:col-span-2 text-white reveal">
+            <span
+              class="inline-block text-blue-400 font-bold tracking-widest uppercase text-xs px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full mb-6">Orçamento</span>
+            <h2 class="font-accent font-black text-3xl md:text-4xl mb-6 leading-tight">
+              Vamos criar algo<br><span class="gradient-text">incrível juntos?</span>
+            </h2>
+            <p class="text-slate-400 text-base mb-10 leading-relaxed">
+              Preencha o formulário e nossa equipe analisa sua arte e sugere as melhores técnicas para seu projeto.
             </p>
 
             <div class="space-y-6">
               <div class="flex items-start gap-4">
-                <div class="w-12 h-12 bg-blue-800 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div
+                  class="w-11 h-11 bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
                 <div>
-                  <h4 class="font-bold text-lg">Orçamento sem Compromisso</h4>
-                  <p class="text-blue-200 text-sm">Receba valores e prazos em até 24h úteis.</p>
+                  <h4 class="font-accent font-bold text-white">Orçamento sem Compromisso</h4>
+                  <p class="text-slate-500 text-sm mt-1">Receba valores e prazos em até 24h úteis.</p>
                 </div>
               </div>
 
               <div class="flex items-start gap-4">
-                <div class="w-12 h-12 bg-blue-800 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div
+                  class="w-11 h-11 bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
                 <div>
-                  <h4 class="font-bold text-lg">Garantia de Qualidade</h4>
-                  <p class="text-blue-200 text-sm">Conferimos sua arte antes de produzir para evitar erros.</p>
+                  <h4 class="font-accent font-bold text-white">Garantia de Qualidade</h4>
+                  <p class="text-slate-500 text-sm mt-1">Conferimos sua arte antes de produzir para evitar erros.</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4">
+                <div
+                  class="w-11 h-11 bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="font-accent font-bold text-white">Criação de Arte Inclusa</h4>
+                  <p class="text-slate-500 text-sm mt-1">Sem arte? Nossa equipe cria para você.</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Formulário Card -->
-          <div class="lg:col-span-3">
-            <div class="bg-white rounded-2xl shadow-2xl p-6 md:p-8">
-              <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                <span class="bg-blue-100 text-blue-700 text-sm py-1 px-3 rounded-full">Passo Final</span>
-                Solicite seu Orçamento
-              </h3>
+          <!-- Form card -->
+          <div class="lg:col-span-3 reveal" style="transition-delay:.15s">
+            <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-10">
+              <div class="flex items-center gap-3 mb-7">
+                <span class="bg-blue-100 text-blue-600 text-xs font-bold py-1 px-3 rounded-full">Passo Final</span>
+                <h3 class="font-accent font-bold text-gray-800 text-xl">Solicite seu Orçamento</h3>
+              </div>
 
               <form id="budget-form" class="space-y-5">
                 <div class="grid md:grid-cols-2 gap-5">
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Seu Nome</label>
-                    <input type="text" id="nome"
-                      class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition outline-none text-base"
-                      placeholder="Ex: Maria Silva" required>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Seu Nome</label>
+                    <input type="text" id="orcamento-nome" class="form-input" placeholder="Ex: Maria Silva" required>
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">WhatsApp / Contato</label>
-                    <input type="text" id="contato"
-                      class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition outline-none text-base"
-                      placeholder="(12) 99999-9999" required>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">WhatsApp / Contato</label>
+                    <input type="text" id="orcamento-contato" class="form-input" placeholder="(12) 99999-9999" required>
                   </div>
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-5">
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Produto de Interesse</label>
-                    <select id="produto"
-                      class="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition outline-none text-base">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Produto de Interesse</label>
+                    <select id="orcamento-produto" class="form-input text-gray-700">
                       <option value="" disabled selected>Selecione...</option>
                       <option value="Camiseta">Camiseta Personalizada</option>
                       <option value="Caneca">Caneca de Cerâmica</option>
@@ -609,91 +840,102 @@
                     </select>
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Quantidade Estimada</label>
-                    <input type="number" id="qtd"
-                      class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition outline-none text-base"
-                      placeholder="Ex: 10" min="1">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Quantidade Estimada</label>
+                    <input type="number" id="orcamento-qtd" class="form-input" placeholder="Ex: 10" min="1">
                   </div>
                 </div>
 
-                <!-- Arte/Logo: indicação de envio posterior -->
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Arte/Logo</label>
-                  <label class="inline-flex items-center gap-2 text-sm text-gray-600">
-                    <input type="checkbox" id="arte-depois" class="rounded border-gray-300">
+                  <label class="block text-sm font-semibold text-gray-700 mb-2">Arte / Logo</label>
+                  <label class="inline-flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                    <input type="checkbox" id="arte-depois"
+                      class="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500">
                     Enviarei a arte após o contato
                   </label>
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Detalhes do Pedido</label>
-                  <textarea id="detalhes" rows="3"
-                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition outline-none text-base"
+                  <label class="block text-sm font-semibold text-gray-700 mb-1.5">Detalhes do Pedido</label>
+                  <textarea id="orcamento-detalhes" rows="3" class="form-input resize-none"
                     placeholder="Descreva como você quer a personalização (cores, frases, posição da estampa)..."></textarea>
                 </div>
 
                 <button type="submit"
-                  class="w-full bg-blue-700 text-white font-bold py-4 rounded-xl text-lg hover:bg-blue-800 transition shadow-lg transform hover:-translate-y-1 flex items-center justify-center gap-2">
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 rounded-2xl text-base transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 flex items-center justify-center gap-2">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path
                       d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
                   </svg>
                   Enviar Pedido no WhatsApp
                 </button>
-                <p class="text-xs text-center text-gray-500">Seus dados estão seguros. Retornamos rapidamente.</p>
+                <p class="text-xs text-center text-gray-400">Seus dados estão seguros. Retornamos rapidamente.</p>
               </form>
             </div>
           </div>
+
         </div>
       </div>
     </section>
 
-    <!-- FAQ: Perguntas Frequentes -->
-    <section class="py-16 bg-white">
-      <div class="container mx-auto px-6 max-w-3xl">
-        <h2 class="text-3xl font-bold text-center text-gray-900 mb-10">Dúvidas Frequentes</h2>
 
-        <div class="space-y-4">
+    <!-- ══════════════════════════════════════════
+         FAQ
+    ══════════════════════════════════════════ -->
+    <section class="py-24 bg-white">
+      <div class="container mx-auto px-6 max-w-3xl">
+
+        <div class="text-center mb-14 reveal">
+          <span
+            class="inline-block text-blue-600 font-bold tracking-widest uppercase text-xs px-4 py-2 bg-blue-100 rounded-full mb-4">FAQ</span>
+          <h2 class="font-accent font-black text-4xl text-gray-900">Dúvidas Frequentes</h2>
+          <p class="text-gray-500 mt-3">Tudo o que você precisa saber antes de fazer seu pedido.</p>
+        </div>
+
+        <div class="space-y-3 reveal">
+
           <details
-            class="group bg-gray-50 rounded-lg p-4 cursor-pointer open:bg-blue-50 transition border border-transparent open:border-blue-100">
-            <summary class="font-bold text-gray-800 flex justify-between items-center">
+            class="group bg-gray-50 rounded-2xl border border-gray-200 hover:border-blue-200 transition-colors overflow-hidden">
+            <summary
+              class="flex justify-between items-center p-5 cursor-pointer font-accent font-bold text-gray-800 select-none">
               Qual a quantidade mínima para encomendar?
-              <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform duration-300 flex-shrink-0"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </summary>
-            <p class="text-gray-600 mt-3 text-sm leading-relaxed">
+            <p class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
               Para a maioria dos itens como canecas e camisetas avulsas, não exigimos quantidade mínima! Fazemos a
               partir de 1 unidade. Para brindes corporativos e preços de atacado, consulte condições especiais.
             </p>
           </details>
 
           <details
-            class="group bg-gray-50 rounded-lg p-4 cursor-pointer open:bg-blue-50 transition border border-transparent open:border-blue-100">
-            <summary class="font-bold text-gray-800 flex justify-between items-center">
+            class="group bg-gray-50 rounded-2xl border border-gray-200 hover:border-blue-200 transition-colors overflow-hidden">
+            <summary
+              class="flex justify-between items-center p-5 cursor-pointer font-accent font-bold text-gray-800 select-none">
               Qual o prazo de produção?
-              <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform duration-300 flex-shrink-0"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </summary>
-            <p class="text-gray-600 mt-3 text-sm leading-relaxed">
+            <p class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
               Itens unitários geralmente ficam prontos em 2 a 3 dias úteis após a aprovação da arte. Grandes pedidos
               podem variar entre 7 a 15 dias. Sempre informamos o prazo exato no orçamento.
             </p>
           </details>
 
           <details
-            class="group bg-gray-50 rounded-lg p-4 cursor-pointer open:bg-blue-50 transition border border-transparent open:border-blue-100">
-            <summary class="font-bold text-gray-800 flex justify-between items-center">
+            class="group bg-gray-50 rounded-2xl border border-gray-200 hover:border-blue-200 transition-colors overflow-hidden">
+            <summary
+              class="flex justify-between items-center p-5 cursor-pointer font-accent font-bold text-gray-800 select-none">
               Vocês criam a arte para mim?
-              <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform duration-300 flex-shrink-0"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </summary>
-            <p class="text-gray-600 mt-3 text-sm leading-relaxed">
+            <p class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
               Sim! Temos um time de criação. Se você não tiver a arte pronta, basta nos enviar a ideia, fotos ou
               referências que montamos um layout exclusivo para você (sujeito a pequena taxa de criação dependendo da
               complexidade).
@@ -701,283 +943,365 @@
           </details>
 
           <details
-            class="group bg-gray-50 rounded-lg p-4 cursor-pointer open:bg-blue-50 transition border border-transparent open:border-blue-100">
-            <summary class="font-bold text-gray-800 flex justify-between items-center">
+            class="group bg-gray-50 rounded-2xl border border-gray-200 hover:border-blue-200 transition-colors overflow-hidden">
+            <summary
+              class="flex justify-between items-center p-5 cursor-pointer font-accent font-bold text-gray-800 select-none">
               Quais formatos de arquivo vocês aceitam?
-              <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform duration-300 flex-shrink-0"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </summary>
-            <p class="text-gray-600 mt-3 text-sm leading-relaxed">
+            <p class="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
               Preferimos arquivos em PDF, CorelDraw (CDR), Illustrator (AI) ou PNG com fundo transparente em alta
               resolução (300dpi). Imagens de WhatsApp costumam ter baixa qualidade, mas nossa equipe avalia se é
               possível utilizar.
             </p>
           </details>
+
         </div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════
+         CTA BANNER
+    ══════════════════════════════════════════ -->
+    <section class="py-24 bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 relative overflow-hidden">
+      <div class="absolute -top-20 -right-20 w-72 h-72 bg-white/5 rounded-full pointer-events-none" aria-hidden="true">
+      </div>
+      <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-white/5 rounded-full pointer-events-none"
+        aria-hidden="true"></div>
+
+      <div class="container mx-auto px-6 text-center relative z-10">
+        <h2 class="font-accent font-black text-4xl md:text-5xl text-white mb-4 leading-tight reveal">
+          Pronto para dar o próximo passo?
+        </h2>
+        <p class="text-white/75 text-lg max-w-xl mx-auto mb-10 reveal">
+          Fale com a gente pelo WhatsApp e receba uma proposta em minutos.<br class="hidden md:block">
+          Sem enrolação, sem burocracia.
+        </p>
+        <button type="button"
+          class="whatsapp-btn reveal inline-flex items-center gap-3 bg-white text-blue-600 font-black px-10 py-4 rounded-2xl text-lg hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:scale-105 hover:-translate-y-1">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
+          </svg>
+          Abrir WhatsApp agora
+        </button>
       </div>
     </section>
 
   </main>
 
-  <!-- Footer Padrão -->
-  <footer class="bg-gray-900 text-white py-16">
+
+  <!-- ══════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════ -->
+  <footer id="contact" class="bg-gray-950 text-white pt-16 pb-8">
     <div class="container mx-auto px-6">
-      <div class="grid md:grid-cols-4 gap-8">
-        <div class="md:col-span-2">
-          <a href="index.html" class="text-2xl font-bold text-white flex items-center mb-6">
-            Plena <span class="text-blue-700 ml-1">Informática</span>
-          </a>
-          <p class="text-slate-400 mb-6 max-w-md">Há 20 anos transformando ideias em realidade. Oferecemos soluções
-            completas em serviços digitais, personalizados e tecnologia.</p>
-          <div class="flex items-center space-x-4 mb-2">
-            <div class="flex items-center bg-green-100 text-green-800 py-1 px-3 rounded-full text-sm font-medium">
-              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                  clip-rule="evenodd" />
-              </svg>
-              Site Seguro
+
+      <div class="grid md:grid-cols-3 gap-12 pb-12 border-b border-white/5">
+
+        <div>
+          <div class="flex items-center gap-2.5 mb-5">
+            <div class="w-9 h-9 bg-blue-500 rounded-lg flex items-center justify-center">
+              <span class="text-white font-black text-lg font-accent leading-none">P</span>
             </div>
-            <div class="text-slate-400 text-sm">Protegido com SSL</div>
+            <span class="font-accent font-bold text-xl">Plena <span class="text-blue-400">Informática</span></span>
+          </div>
+          <p class="text-gray-500 text-sm leading-relaxed max-w-xs">
+            Há 20 anos transformando ideias em realidade. Tecnologia, personalizados e serviços digitais em São José dos
+            Campos.
+          </p>
+          <div
+            class="mt-6 inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-medium py-1.5 px-3 rounded-full">
+            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+            Site Seguro
           </div>
         </div>
+
         <div>
-          <h3 class="font-bold text-lg mb-6">Links Rápidos</h3>
-          <ul class="space-y-3 text-slate-400 text-sm">
-            <li><a href="index.html" class="hover:text-blue-700 transition">Início</a></li>
-            <li><a href="servicos.html" class="hover:text-blue-700 transition">Serviços Digitais</a></li>
-            <li><a href="personalizados.html" class="hover:text-blue-700 transition">Personalizados</a></li>
-            <li><a href="tecnologia.html" class="hover:text-blue-700 transition">Tecnologia</a></li>
+          <h3 class="font-accent font-bold text-white mb-5 text-sm uppercase tracking-wider">Nossas Áreas</h3>
+          <ul class="space-y-3 text-sm">
+            <li>
+              <a href="servicos.html"
+                class="text-gray-500 hover:text-orange-400 transition-colors flex items-center gap-2 group">
+                <span
+                  class="w-1 h-1 rounded-full bg-gray-700 group-hover:bg-orange-400 transition-colors"></span>Serviços
+                Digitais
+              </a>
+            </li>
+            <li>
+              <a href="personalizados.html" class="text-blue-400 flex items-center gap-2 group">
+                <span class="w-1 h-1 rounded-full bg-blue-400"></span>Personalizados
+              </a>
+            </li>
+            <li>
+              <a href="tecnologia.html"
+                class="text-gray-500 hover:text-emerald-400 transition-colors flex items-center gap-2 group">
+                <span
+                  class="w-1 h-1 rounded-full bg-gray-700 group-hover:bg-emerald-400 transition-colors"></span>Tecnologia
+                Web
+              </a>
+            </li>
           </ul>
         </div>
+
         <div>
-          <h3 class="font-bold text-lg mb-6">Contato</h3>
-          <ul class="space-y-3 text-slate-400 text-sm">
-            <li class="flex items-start"><svg class="w-5 h-5 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
+          <h3 class="font-accent font-bold text-white mb-5 text-sm uppercase tracking-wider">Contato</h3>
+          <ul class="space-y-4 text-sm">
+            <li class="flex items-start gap-3">
+              <svg class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg><span>São José dos Campos, SP</span></li>
-            <li class="flex items-center"><svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
+              </svg>
+              <span class="text-gray-500">São José dos Campos, SP</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg><span>(12) 99219-1018</span></li>
-            <li class="flex items-center"><svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
+              </svg>
+              <a href="tel:+5512981488505" class="text-gray-500 hover:text-white transition-colors">(12) 98148-8505</a>
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg><span>contato@plenainformatica.com.br</span></li>
+              </svg>
+              <a href="mailto:contato@plenainformatica.com.br"
+                class="text-gray-500 hover:text-white transition-colors">contato@plenainformatica.com.br</a>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="text-gray-500">Seg–Sex: 13h–18h.</span>
+            </li>
           </ul>
         </div>
+
       </div>
-      <div class="border-t border-slate-800 mt-12 pt-8">
-        <div class="flex flex-col md:flex-row justify-between items-center">
-          <div class="text-center md:text-left mb-4 md:mb-0">
-            <p class="text-lg italic text-slate-400 mb-2">"Tudo posso naquele que me fortalece." - Filipenses 4:13</p>
-            <p class="text-sm text-slate-500">&copy; 2026 Plena Informática. Todos os direitos reservados.</p>
-            <p class="text-xs text-slate-600 mt-1">Desenvolvido por Plena Informática</p>
-          </div>
-          <div class="flex space-x-6 text-sm text-slate-400">
-            <a href="#" class="hover:text-white transition duration-300 open-modal" data-modal="terms">Termos de Uso</a>
-            <a href="#" class="hover:text-white transition duration-300 open-modal" data-modal="privacy">Política de
-              Privacidade</a>
-          </div>
+
+      <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+          <p class="text-xs italic text-gray-600 mb-1">"Tudo posso naquele que me fortalece." — Filipenses 4:13</p>
+          <p class="text-xs text-gray-700">&copy; 2026 Plena Informática. Todos os direitos reservados.</p>
+        </div>
+        <div class="flex gap-6 text-xs text-gray-600">
+          <button type="button" class="open-modal hover:text-gray-400 transition-colors" data-modal="terms">Termos de
+            Uso</button>
+          <button type="button" class="open-modal hover:text-gray-400 transition-colors" data-modal="privacy">Política
+            de Privacidade</button>
         </div>
       </div>
+
     </div>
   </footer>
-  <div id="terms-modal" class="hidden fixed inset-0 bg-black/70 z-[60] items-center justify-center">
-    <div class="bg-white rounded-lg p-6 max-w-xl w-[90%] relative">
-      <button type="button" class="modal-close absolute top-3 right-3 text-gray-400 hover:text-gray-600"
-        aria-label="Fechar termos">&times;</button>
-      <h2 class="text-2xl font-bold mb-4">Termos de Uso – Personalizados</h2>
-      <div class="text-slate-700 space-y-4">
-        <p>Ao utilizar os serviços de personalizados da Plena Informática, você concorda com estes termos e condições.
-        </p>
-        <h3 class="font-bold text-lg mt-4 mb-2">Serviços</h3>
-        <p>Produção de itens personalizados como camisetas, canecas, brindes corporativos e decoração, conforme arte
-          aprovada.</p>
-        <h3 class="font-bold text-lg mt-4 mb-2">Arte e Aprovação</h3>
-        <p>O cliente é responsável pela conferência e aprovação da arte digital enviada antes da produção. Ajustes podem
-          ser solicitados.</p>
-        <h3 class="font-bold text-lg mt-4 mb-2">Prazos</h3>
-        <p>Os prazos variam conforme item e quantidade. O prazo exato é informado no orçamento após a aprovação da arte.
-        </p>
-        <h3 class="font-bold text-lg mt-4 mb-2">Garantia</h3>
-        <p>Garantimos qualidade de impressão/acabamento conforme especificado. Em caso de divergência, aplicam-se
-          políticas de refação ou crédito.</p>
-        <p class="mt-4 text-sm text-slate-500">Última atualização: Novembro de 2025</p>
-      </div>
-    </div>
-  </div>
-  <div id="privacy-modal" class="hidden fixed inset-0 bg-black/70 z-[60] items-center justify-center">
-    <div class="bg-white rounded-lg p-6 max-w-xl w-[90%] relative">
-      <button type="button" class="modal-close absolute top-3 right-3 text-gray-400 hover:text-gray-600"
-        aria-label="Fechar política">&times;</button>
-      <h2 class="text-2xl font-bold mb-4">Política de Privacidade – Personalizados</h2>
-      <div class="text-slate-700 space-y-4">
-        <p>Descreve como coletamos, usamos e protegemos seus dados nos pedidos de personalizados.</p>
-        <h3 class="font-bold text-lg mt-4 mb-2">Dados Coletados</h3>
-        <p>Nome, contato, informações do produto e arquivos de arte enviados.</p>
-        <h3 class="font-bold text-lg mt-4 mb-2">Uso</h3>
-        <p>Elaboração de orçamento, ajuste de arte, produção e comunicação com o cliente.</p>
-        <h3 class="font-bold text-lg mt-4 mb-2">Proteção</h3>
-        <p>Medidas de segurança para evitar acesso não autorizado, alteração ou divulgação indevida.</p>
-        <p class="mt-4 text-sm text-slate-500">Última atualização: Novembro de 2025</p>
+
+
+
+  <!-- ══════════════════════════════════════════
+       MODALS
+  ══════════════════════════════════════════ -->
+  <div id="terms-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="terms-title">
+    <div class="modal-content">
+      <button type="button"
+        class="modal-close absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl leading-none transition-colors"
+        aria-label="Fechar">&times;</button>
+      <h2 id="terms-title" class="font-accent text-2xl font-bold mb-4">Termos de Uso</h2>
+      <div class="text-gray-600 space-y-3 text-sm leading-relaxed">
+        <p><strong>1. Aceitação.</strong> Ao utilizar os serviços da Plena Informática, você declara ter lido e
+          concordado integralmente com estes Termos de Uso e com nossa Política de Privacidade.</p>
+        <p><strong>2. Serviços.</strong> Nossos serviços digitais (currículo, declaração de IR, suporte MEI, impressão
+          de documentos) e produtos personalizados são executados com base nas informações fornecidas pelo cliente. A
+          veracidade dos dados é de inteira responsabilidade do solicitante.</p>
+        <p><strong>3. Prazos e Valores.</strong> Prazos de entrega e valores são confirmados via WhatsApp antes do
+          início da execução. Uma vez aprovado o orçamento, o cancelamento fica sujeito às condições informadas no
+          momento da contratação.</p>
+        <p><strong>4. Propriedade Intelectual.</strong> Todo o conteúdo deste site — textos, imagens, logotipos e design
+          — é propriedade intelectual da Plena Informática e não pode ser reproduzido, copiado ou distribuído sem
+          autorização prévia por escrito.</p>
+        <p><strong>5. Limitação de Responsabilidade.</strong> A Plena Informática não se responsabiliza por informações
+          incorretas fornecidas pelo cliente, nem por atrasos decorrentes de fatores alheios ao nosso controle.</p>
+        <p><strong>6. Recusa de Serviço.</strong> Reservamo-nos o direito de recusar serviços que violem a legislação
+          vigente ou que sejam incompatíveis com nossos valores.</p>
+        <p><strong>7. Alterações.</strong> Estes termos podem ser atualizados a qualquer momento. A versão vigente
+          estará sempre disponível nesta página.</p>
+        <p class="text-xs text-gray-400 pt-2">Última atualização: março de 2026.</p>
       </div>
     </div>
   </div>
 
-  <!-- Botão Flutuante WhatsApp -->
-  <a href="#" target="_blank"
-    class="fixed bottom-6 right-6 bg-blue-700 text-white p-4 rounded-full shadow-xl hover:bg-blue-800 transition z-50 animate-bounce"
-    data-whatsapp-phone="5512992191018" data-whatsapp-context="floating" aria-label="Fale conosco no WhatsApp">
-    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-      <path
-        d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.88 6.223l-1.078 3.948 4.035-1.052z" />
-    </svg>
-  </a>
+  <div id="privacy-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"
+    aria-labelledby="privacy-title">
+    <div class="modal-content">
+      <button type="button"
+        class="modal-close absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl leading-none transition-colors"
+        aria-label="Fechar">&times;</button>
+      <h2 id="privacy-title" class="font-accent text-2xl font-bold mb-4">Política de Privacidade</h2>
+      <div class="text-gray-600 space-y-3 text-sm leading-relaxed">
+        <p><strong>1. Compromisso.</strong> A Plena Informática respeita sua privacidade e está comprometida com a
+          proteção dos seus dados pessoais, em conformidade com a Lei Geral de Proteção de Dados (LGPD — Lei nº
+          13.709/2018).</p>
+        <p><strong>2. Dados Coletados.</strong> Coletamos apenas dados fornecidos voluntariamente por você (nome,
+          e-mail, telefone, documentos para serviços contratados) e dados técnicos de navegação (cookies essenciais).
+        </p>
+        <p><strong>3. Finalidade.</strong> Seus dados pessoais são utilizados exclusivamente para: (a) executar o
+          serviço contratado; (b) comunicação sobre andamento e conclusão dos serviços; (c) melhoria da experiência de
+          navegação.</p>
+        <p><strong>4. Documentos Sigilosos.</strong> Dados sensíveis fornecidos para serviços específicos (CPF, renda,
+          senhas de portais governamentais para Declaração de IR) são utilizados estritamente para a finalidade
+          contratada e <strong>não são armazenados</strong> após a conclusão do serviço.</p>
+        <p><strong>5. Compartilhamento.</strong> Não compartilhamos, vendemos ou cedemos seus dados a terceiros sem seu
+          consentimento explícito.</p>
+        <p><strong>6. Cookies.</strong> Utilizamos apenas cookies essenciais para o funcionamento básico do site e para
+          lembrar suas preferências (ex: consentimento de cookies). Não utilizamos cookies de rastreamento ou
+          publicidade.</p>
+        <p><strong>7. Seus Direitos.</strong> Você pode, a qualquer momento, solicitar acesso, correção ou exclusão dos
+          seus dados pessoais pelo e-mail <a href="mailto:contato@plenainformatica.com.br"
+            class="text-orange-600 underline">contato@plenainformatica.com.br</a>.</p>
+        <p><strong>8. Alterações.</strong> Esta política pode ser atualizada periodicamente. A versão vigente estará
+          sempre disponível nesta página.</p>
+        <p class="text-xs text-gray-400 pt-2">Última atualização: março de 2026.</p>
+      </div>
+    </div>
+  </div>
 
+
+
+  <!-- ══════════════════════════════════════════
+       SCRIPTS
+  ══════════════════════════════════════════ -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
 
-      // Menu Mobile
+      // ── HEADER: burger menu ──
       const menuBtn = document.getElementById('menu-btn');
       const mobileMenu = document.getElementById('mobile-menu');
-      const mobileLinks = document.querySelectorAll('.mobile-link');
+      const iconOpen = document.getElementById('icon-open');
+      const iconClose = document.getElementById('icon-close');
 
-      function toggleMenu() {
-        const isHidden = mobileMenu.classList.contains('hidden');
-        if (isHidden) {
-          mobileMenu.classList.remove('hidden');
-        } else {
-          mobileMenu.classList.add('hidden');
-        }
+      if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => {
+          const isOpen = !mobileMenu.classList.contains('hidden');
+          mobileMenu.classList.toggle('hidden');
+          iconOpen.classList.toggle('hidden', !isOpen);
+          iconClose.classList.toggle('hidden', isOpen);
+          menuBtn.setAttribute('aria-expanded', String(!isOpen));
+        });
+        mobileMenu.querySelectorAll('.mobile-link').forEach(el => {
+          el.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            iconOpen.classList.remove('hidden');
+            iconClose.classList.add('hidden');
+            menuBtn.setAttribute('aria-expanded', 'false');
+          });
+        });
       }
 
-      menuBtn.addEventListener('click', toggleMenu);
-      mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
-      document.addEventListener('click', (e) => {
-        const isOpen = !mobileMenu.classList.contains('hidden');
-        if (!isOpen) return;
-        const clickInsideMenu = mobileMenu.contains(e.target);
-        const clickOnBtn = menuBtn.contains(e.target);
-        if (!clickInsideMenu && !clickOnBtn) toggleMenu();
+      // ── WHATSAPP ──
+      const PHONE = '5512981488505';
+      window.openWhatsApp = function (msg) {
+        const text = msg || 'Olá! Gostaria de mais informações sobre os produtos personalizados da Plena Informática.';
+        window.open('https://api.whatsapp.com/send?phone=' + PHONE + '&text=' + encodeURIComponent(text), '_blank', 'noopener,noreferrer');
+      };
+
+      document.querySelectorAll('.whatsapp-btn').forEach(btn => {
+        if (btn.type !== 'submit') btn.addEventListener('click', () => openWhatsApp());
       });
 
-      // Filtros da Galeria
-      const filters = document.querySelectorAll('.filter-btn');
-      const items = document.querySelectorAll('.gallery-item');
+      // ── SCROLL REVEAL ──
+      const revealObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
-      filters.forEach(btn => {
+      // ── GALLERY: filtros ──
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const galleryItems = document.querySelectorAll('.gallery-item');
+
+      filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-          // Visual do botão
-          filters.forEach(b => b.classList.remove('active'));
+          filterBtns.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
 
-          // Lógica de filtro
-          const filterValue = btn.getAttribute('data-filter');
-          items.forEach(item => {
-            const match = filterValue === 'all' || item.getAttribute('data-category') === filterValue;
-            item.style.display = match ? 'block' : 'none';
-            if (match) {
-              item.animate([{ opacity: 0, transform: 'scale(0.9)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 300 });
-            }
+          const val = btn.getAttribute('data-filter');
+          galleryItems.forEach(item => {
+            const match = val === 'all' || item.getAttribute('data-category') === val;
+            item.style.display = match ? '' : 'none';
+            if (match) item.animate([{ opacity: 0, transform: 'scale(.95)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 280 });
           });
         });
       });
 
-      // Arte/Logo (indicador de envio posterior)
-      const arteDepoisEl = document.getElementById('arte-depois');
-
-      // Envio do Formulário para WhatsApp
-      const form = document.getElementById('budget-form');
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        const nome = document.getElementById('nome').value;
-        const contato = document.getElementById('contato').value;
-        const produto = document.getElementById('produto').value;
-        const qtd = document.getElementById('qtd').value;
-        const detalhes = document.getElementById('detalhes').value;
-        const file = arteDepoisEl && arteDepoisEl.checked ? "Sim (enviarei após o contato)" : "Não";
-
-        if (!nome || !contato) {
-          alert("Por favor, preencha pelo menos seu nome e contato.");
-          return;
-        }
-
-        const message = `*Novo Pedido de Orçamento - Site* 🎨\n\n` +
-          `👤 *Nome:* ${nome}\n` +
-          `📱 *Contato:* ${contato}\n` +
-          `📦 *Produto:* ${produto || 'Não informado'}\n` +
-          `🔢 *Qtd:* ${qtd || '1'}\n` +
-          `📎 *Tem arte?* ${file}\n` +
-          `📝 *Detalhes:* ${detalhes}`;
-
-        const url = `https://api.whatsapp.com/send?phone=5512992191018&text=${encodeURIComponent(message)}`;
-        window.open(url, '_blank');
+      // ── GALLERY: rastrear produto selecionado para mensagem WA ──
+      let lastProduct = null;
+      galleryItems.forEach(item => {
+        item.addEventListener('click', () => {
+          lastProduct = item.querySelector('h3')?.innerText || null;
+        });
       });
 
-      document.querySelectorAll('[data-whatsapp-phone]').forEach(btn => {
+      // ── CATÁLOGO: link no WhatsApp ──
+      document.querySelector('.whatsapp-catalog')?.addEventListener('click', () => {
+        openWhatsApp('Olá! Gostaria de ver o catálogo completo de produtos personalizados da Plena Informática.');
+      });
+
+      // ── ORÇAMENTO: form submit ──
+      document.getElementById('budget-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nome = document.getElementById('orcamento-nome').value;
+        const contato = document.getElementById('orcamento-contato').value;
+        const produto = document.getElementById('orcamento-produto').value || 'Não informado';
+        const qtd = document.getElementById('orcamento-qtd').value || '1';
+        const detalhes = document.getElementById('orcamento-detalhes').value;
+        const temArte = document.getElementById('arte-depois').checked ? 'Sim (enviarei após contato)' : 'Não';
+
+        if (!nome || !contato) { alert('Por favor, preencha seu nome e contato.'); return; }
+
+        const msg = '*Novo Pedido de Orçamento - Personalizados* 🎨\n\n' +
+          '👤 *Nome:* ' + nome + '\n' +
+          '📱 *Contato:* ' + contato + '\n' +
+          '📦 *Produto:* ' + (lastProduct || produto) + '\n' +
+          '🔢 *Qtd:* ' + qtd + '\n' +
+          '📎 *Tem arte?* ' + temArte + '\n' +
+          '📝 *Detalhes:* ' + (detalhes || 'Não informado');
+
+        window.open('https://api.whatsapp.com/send?phone=' + PHONE + '&text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
+      });
+
+      // ── MODALS ──
+      const modalEls = {
+        terms: document.getElementById('terms-modal'),
+        privacy: document.getElementById('privacy-modal')
+      };
+      function closeAllModals() {
+        Object.values(modalEls).forEach(m => { if (m) { m.style.display = 'none'; m.setAttribute('aria-hidden', 'true'); } });
+        document.body.style.overflow = '';
+      }
+      document.querySelectorAll('.open-modal').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
-          const phone = btn.getAttribute('data-whatsapp-phone');
-          const ctx = btn.getAttribute('data-whatsapp-context') || 'contact';
-          const explicit = btn.getAttribute('data-whatsapp-message');
-          const text = explicit && explicit.trim() ? explicit : composeWhatsAppMessage(ctx);
-          window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(text)}`, '_blank');
+          const m = modalEls[btn.getAttribute('data-modal')];
+          if (m) { closeAllModals(); m.style.display = 'flex'; m.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
         });
       });
-    });
-  </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      window.lastSelectedProduct = null;
-      document.querySelectorAll('.gallery-item').forEach(item => {
-        item.addEventListener('click', () => {
-          const t = item.querySelector('h3')?.innerText || '';
-          const c = item.getAttribute('data-category') || '';
-          window.lastSelectedProduct = { title: t, category: c };
-        });
-      });
+      document.querySelectorAll('.modal-close').forEach(btn => btn.addEventListener('click', closeAllModals));
+      window.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) closeAllModals(); });
+      window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllModals(); });
 
-      window.composeWhatsAppMessage = function (ctx) {
-        const base = '*Olá, Plena Personalizados!*';
-        const page = 'Página: Personalizados';
-        const map = { contact: 'Ação: Fale Conosco', mobile_contact: 'Ação: Fale Conosco (Mobile)', catalog: 'Ação: Consulta de Catálogo', floating: 'Ação: Botão Flutuante' };
-        const action = map[ctx] || 'Ação: Contato';
-        const lines = [base + ' \uD83D\uDCAC', '', action, page];
-        const p = window.lastSelectedProduct;
-        if (p && p.title) {
-          lines.push('');
-          lines.push('🧩 Produto: ' + p.title);
-          if (p.category) lines.push('📂 Categoria: ' + p.category);
-        }
-        lines.push('');
-        lines.push('Pode me ajudar?');
-        return lines.join('\n');
-      };
     });
   </script>
-  <script>
-    const tm = document.getElementById('terms-modal');
-    const pm = document.getElementById('privacy-modal');
-    const modalByType = { terms: tm, privacy: pm };
-    let currentModal = null;
-    document.querySelectorAll('.open-modal').forEach(a => {
-      a.addEventListener('click', e => { e.preventDefault(); const t = a.getAttribute('data-modal'); const m = modalByType[t]; if (!m) return; m.classList.remove('hidden'); m.classList.add('flex'); m.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; currentModal = m; })
-    });
-    document.querySelectorAll('.modal-close').forEach(b => b.addEventListener('click', () => { if (!currentModal) return; currentModal.classList.add('hidden'); currentModal.classList.remove('flex'); currentModal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; currentModal = null; }));
-    window.addEventListener('click', e => { if (currentModal && e.target === currentModal) { currentModal.classList.add('hidden'); currentModal.classList.remove('flex'); currentModal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; currentModal = null; } });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape' && currentModal) { currentModal.classList.add('hidden'); currentModal.classList.remove('flex'); currentModal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; currentModal = null; } });
-  </script>
-  <script src="js/bot.js"></script>
+
 </body>
 
 </html>
