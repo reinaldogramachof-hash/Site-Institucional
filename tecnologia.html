@@ -42,7 +42,7 @@
       position: fixed;
       inset: 0;
       z-index: -2;
-      opacity: 0.04;
+      opacity: 0.4;
       pointer-events: none;
     }
 
@@ -71,7 +71,7 @@
 
     .glass-wet {
       position: relative;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.1) 100%);
       border: 1px solid rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(16px) saturate(180%);
       border-radius: 1rem;
@@ -289,6 +289,33 @@
         display: none;
       }
     }
+
+    /* ── MODAL TERMOS / PRIVACIDADE ── */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .65);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.is-open {
+      display: flex;
+    }
+
+    .modal .modal-content {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 540px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
   </style>
 </head>
 
@@ -297,39 +324,43 @@
   <canvas id="matrix-canvas"></canvas>
 
   <!-- Navbar -->
-  <header
-    class="fixed w-full top-0 z-50 transition-all duration-300 border-b border-white/5 bg-black/50 backdrop-blur-md">
-    <div class="container mx-auto px-6 py-4 relative flex justify-between items-center">
-      <a href="#" class="text-xl font-bold tracking-tighter text-white flex items-center gap-2">
-        <i class="ph ph-code text-emerald-400 text-2xl"></i>
-        PLENA <span class="text-emerald-400">TECNOLOGIA</span>
-      </a>
+  <header class="fixed top-0 left-0 right-0 z-50">
+    <div class="bg-black/0 backdrop-blur-xl border-b border-gray-100/60 shadow-sm transition-all duration-300">
+      <nav class="container mx-auto px-6 h-20 flex items-center justify-between">
 
-      <nav class="hidden md:flex gap-8 text-sm font-medium text-gray-300">
-        <a href="index.html" class="hover:text-emerald-400 transition-colors">Início</a>
-        <a href="#solucoes" class="hover:text-emerald-400 transition-colors">Soluções</a>
-        <a href="#planos" class="hover:text-emerald-400 transition-colors">Planos</a>
-        <a href="#orcamento" class="hover:text-emerald-400 transition-colors">Calculadora</a>
-      </nav>
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-2.5 group flex-shrink-0">
+          <img src="logo-plena.png" alt="Plena Informática"
+            class="h-40 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+        </a>
 
-      <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20estou%20visitando%20a%20p%C3%A1gina%20de%20tecnologia%20da%20Plena%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es."
-        target="_blank" class="hidden md:inline-flex btn btn-primary text-xs py-2 px-4">
-        <i class="ph ph-whatsapp-logo text-lg"></i>
-        <span class="hidden sm:inline">Falar com Especialista</span>
-      </a>
-      <button id="mobile-menu-toggle" class="md:hidden btn btn-ghost text-xs py-2 px-3" aria-expanded="false"
-        aria-controls="mobile-menu"><i class="ph ph-list text-lg"></i></button>
+        <nav class="hidden md:flex gap-8 text-sm font-medium text-gray-300">
+          <a href="index.html" class="hover:text-emerald-400 transition-colors">Início</a>
+          <a href="#solucoes" class="hover:text-emerald-400 transition-colors">Soluções Web</a>
+          <a href="#sistemas" class="hover:text-emerald-400 transition-colors">Sistemas de Gestão</a>
+          <a href="#planos" class="hover:text-emerald-400 transition-colors">Planos</a>
+          <a href="#orcamento" class="hover:text-emerald-400 transition-colors">Orçamento</a>
+        </nav>
+
+        <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20estou%20visitando%20a%20p%C3%A1gina%20de%20tecnologia%20da%20Plena%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es."
+          target="_blank" class="hidden md:inline-flex btn btn-primary text-xs py-2 px-4">
+          <i class="ph ph-whatsapp-logo text-lg"></i>
+          <span class="hidden sm:inline">Falar com Especialista</span>
+        </a>
+        <button id="mobile-menu-toggle" class="md:hidden btn btn-ghost text-xs py-2 px-3" aria-expanded="false"
+          aria-controls="mobile-menu"><i class="ph ph-list text-lg"></i></button>
     </div>
   </header>
   <div id="mobile-menu"
     class="hidden fixed top-16 left-4 right-4 z-50 rounded-xl border border-white/10 bg-black/90 backdrop-blur-md p-4">
     <div class="flex flex-col gap-3 text-sm">
       <a href="index.html" class="px-3 py-3 rounded hover:bg-white/5">Início</a>
-      <a href="#solucoes" class="px-3 py-3 rounded hover:bg-white/5">Soluções</a>
+      <a href="#solucoes" class="px-3 py-3 rounded hover:bg-white/5">Soluções Web</a>
+      <a href="#sistemas" class="px-3 py-3 rounded hover:bg-white/5">Sistemas de Gestão</a>
       <a href="#planos" class="px-3 py-2 rounded hover:bg-white/5">Planos</a>
-      <a href="#orcamento" class="px-3 py-2 rounded hover:bg-white/5">Calculadora</a>
-      <a href="https://wa.me/5512992191018?text=Ol%C3%A1,%20estou%20visitando%20a%20p%C3%A1gina%20de%20tecnologia%20da%20Plena%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es."
-        target="_blank" class="btn btn-primary w-full text-xs py-2">Falar com Especialista</a>
+      <a href="#orcamento" class="px-3 py-2 rounded hover:bg-white/5">Orçamento</a>
+      <a href="https://wa.me/5512992191018?text=Ol%C3%A1%2C+quero+saber+mais+sobre+os+sistemas." target="_blank"
+        class="btn btn-primary w-full text-xs py-2">Falar com Especialista</a>
     </div>
   </div>
   <main class="pt-24">
@@ -344,25 +375,72 @@
         <div
           class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-900/20 text-emerald-400 text-xs font-mono uppercase">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          Software House Local
+          Software House • São José dos Campos
         </div>
 
         <h1 class="text-3xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight tracking-tight">
-          Seu negócio merece<br />
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-emerald-400">Inteligência
-            Digital.</span>
+          Soluções Digitais<br /><span
+            class="text-transparent bg-clip-text bg-gradient-to-r from-white to-emerald-400">para o seu negócio.</span>
         </h1>
 
         <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
-          De cardápios digitais a sistemas de gestão completos.
-          Criamos ferramentas que organizam sua empresa e vendem por você.
+          Soluções digitais completas, entregues com suporte local e preço justo.
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <a href="#solucoes" class="btn btn-primary w-full sm:w-auto">Explorar Soluções</a>
-          <a href="#orcamento" class="btn btn-ghost w-full sm:w-auto group">
-            <i class="ph ph-calculator text-lg"></i> Simular Custo
-          </a>
+          <a href="#sistemas" class="btn btn-primary w-full sm:w-auto"><i class="ph ph-app-window text-lg"></i> Ver
+            Sistemas de Gestão</a>
+          <a href="#solucoes" class="btn btn-ghost w-full sm:w-auto"><i class="ph ph-globe text-lg"></i> Soluções
+            Web</a>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- DIFERENCIAIS -->
+    <section class="py-10 md:py-16 border-t border-white/5 bg-black/20">
+      <div class="container mx-auto px-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+          <div class="text-center">
+            <div class="text-4xl font-bold text-emerald-400 mb-1" data-count="+50">0</div>
+            <div class="text-xs text-gray-400 uppercase tracking-widest">Sistemas Prontos</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold text-emerald-400 mb-1" data-count="+10">0</div>
+            <div class="text-xs text-gray-400 uppercase tracking-widest">Segmentos Cobertos</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold text-emerald-400 mb-1">100%</div>
+            <div class="text-xs text-gray-400 uppercase tracking-widest">Suporte Local SJC</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold text-emerald-400 mb-1">PWA</div>
+            <div class="text-xs text-gray-400 uppercase tracking-widest">Mobile-First</div>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div class="glass-wet p-5 text-center"><i
+              class="ph ph-rocket-launch text-3xl text-emerald-400 mb-3 block"></i>
+            <h3 class="font-bold text-white text-base mb-1">Entrega Rápida</h3>
+            <p class="text-xs text-gray-400">Sistemas prontos, implantados em dias, não meses.</p>
+          </div>
+          <div class="glass-wet p-5 text-center"><i class="ph ph-lock-key text-3xl text-emerald-400 mb-3 block"></i>
+            <h3 class="font-bold text-white text-base mb-1">Licença Vitalícia</h3>
+            <p class="text-xs text-gray-400">Pague uma vez. Sem mensalidade surpresa.</p>
+          </div>
+          <div class="glass-wet p-5 text-center"><i class="ph ph-headset text-3xl text-emerald-400 mb-3 block"></i>
+            <h3 class="font-bold text-white text-base mb-1">Suporte Humano</h3>
+            <p class="text-xs text-gray-400">Não sumimos após a entrega. Time real, local.</p>
+          </div>
+          <div class="glass-wet p-5 text-center"><i
+              class="ph ph-device-mobile text-3xl text-emerald-400 mb-3 block"></i>
+            <h3 class="font-bold text-white text-base mb-1">Mobile-First</h3>
+            <p class="text-xs text-gray-400">Todos os sistemas funcionam no celular, sem app store.</p>
+          </div>
+          <div class="glass-wet p-5 text-center"><i class="ph ph-puzzle-piece text-3xl text-emerald-400 mb-3 block"></i>
+            <h3 class="font-bold text-white text-base mb-1">Personalizável</h3>
+            <p class="text-xs text-gray-400">Ajustamos o sistema ao seu fluxo de trabalho.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -372,181 +450,268 @@
       <div class="container mx-auto px-6">
         <div class="mb-12 flex flex-col md:flex-row justify-between items-end gap-4">
           <div>
-            <span class="text-emerald-400 font-mono text-xs tracking-widest uppercase">Ecossistema Completo</span>
-            <h2 class="text-3xl font-bold text-white mt-2">Soluções para cada etapa</h2>
+            <span class="text-emerald-400 font-mono text-xs tracking-widest uppercase">Desenvolvimento Web
+              Premium</span>
+            <h2 class="text-3xl font-bold text-white mt-2">Soluções Web sob medida</h2>
           </div>
-          <div class="text-sm text-gray-400">Do cartão de visita ao sistema de gestão.</div>
+          <div class="text-sm text-gray-400">Do cartão digital ao e-commerce completo. Projetos personalizados.</div>
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
 
           <!-- 1. Landing Page -->
           <div class="glass-wet p-6 hover:border-purple-500/30 group cursor-pointer" onclick="openDemo('express')">
-            <div class="flex justify-between items-start mb-4">
+            <div class="flex justify-between items-start mb-3">
               <div class="w-10 h-10 bg-purple-500/20 rounded flex items-center justify-center text-purple-400"><i
-                  class="ph ph-rocket-launch text-xl"></i></div>
-              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Vendas</span>
+                  class="ph ph-rocket-launch text-xl"></i></div><span
+                class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Vendas</span>
             </div>
-            <h3 class="text-lg font-bold text-white mb-2">Página de Alta Conversão</h3>
-            <p class="text-sm text-gray-400 mb-4">Site de página única focado em captar leads no Google e Instagram.</p>
+            <h3 class="text-lg font-bold text-white mb-1">Página de Alta Conversão</h3>
+            <div class="text-emerald-400 text-xs font-bold mb-3">a partir de R$ 890</div>
+            <ul class="text-xs text-gray-400 space-y-1 mb-4">
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-purple-500"></i>Design focado em captura de
+                leads</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-purple-500"></i>Integração WhatsApp + Google
+                Ads</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-purple-500"></i>Entrega em até 7 dias úteis
+              </li>
+            </ul>
             <span
               class="text-purple-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
               Demo <i class="ph ph-arrow-right"></i></span>
           </div>
-
-          <!-- Desenvolvimento de Sites: Linha Extra (6 cards) -->
+          <!-- 2. One-page -->
           <div class="glass-wet p-6 hover:border-teal-500/30 group cursor-pointer"
             onclick="openDemo('site','basico','onepage')">
-            <div class="flex justify-between items-start mb-4">
+            <div class="flex justify-between items-start mb-3">
               <div class="w-10 h-10 bg-teal-500/20 rounded flex items-center justify-center text-teal-400"><i
-                  class="ph ph-browser text-xl"></i></div>
-              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
+                  class="ph ph-browser text-xl"></i></div><span
+                class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
             </div>
-            <h3 class="text-lg font-bold text-white mb-2">Site One-page</h3>
-            <p class="text-sm text-gray-400 mb-4">Apresentação simples com CTA. Ideal para campanhas.</p>
+            <h3 class="text-lg font-bold text-white mb-1">Site One-page Profissional</h3>
+            <div class="text-emerald-400 text-xs font-bold mb-3">a partir de R$ 1.200</div>
+            <ul class="text-xs text-gray-400 space-y-1 mb-4">
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-teal-500"></i>Design responsivo e moderno
+              </li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-teal-500"></i>Hero, serviços, depoimentos,
+                contato</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-teal-500"></i>Hospedagem + domínio (1 ano)
+              </li>
+            </ul>
             <span
               class="text-teal-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
               Demo <i class="ph ph-arrow-right"></i></span>
           </div>
-
+          <!-- 3. Portfólio -->
           <div class="glass-wet p-6 hover:border-sky-500/30 group cursor-pointer"
             onclick="openDemo('site','basico','portfolio')">
-            <div class="flex justify-between items-start mb-4">
+            <div class="flex justify-between items-start mb-3">
               <div class="w-10 h-10 bg-sky-500/20 rounded flex items-center justify-center text-sky-400"><i
-                  class="ph ph-layout text-xl"></i></div>
-              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
+                  class="ph ph-layout text-xl"></i></div><span
+                class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
             </div>
-            <h3 class="text-lg font-bold text-white mb-2">Site Portfólio</h3>
-            <p class="text-sm text-gray-400 mb-4">Exiba projetos e depoimentos. Foco em credibilidade.</p>
+            <h3 class="text-lg font-bold text-white mb-1">Site Portfólio Premium</h3>
+            <div class="text-emerald-400 text-xs font-bold mb-3">a partir de R$ 1.500</div>
+            <ul class="text-xs text-gray-400 space-y-1 mb-4">
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-sky-500"></i>Galeria de projetos animada
+              </li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-sky-500"></i>Depoimentos e cases de sucesso
+              </li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-sky-500"></i>SEO básico + Google Analytics
+              </li>
+            </ul>
             <span
               class="text-sky-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
               Demo <i class="ph ph-arrow-right"></i></span>
           </div>
-
+          <!-- 4. Institucional -->
           <div class="glass-wet p-6 hover:border-indigo-500/30 group cursor-pointer"
             onclick="openDemo('site','medio','institucional')">
-            <div class="flex justify-between items-start mb-4">
+            <div class="flex justify-between items-start mb-3">
               <div class="w-10 h-10 bg-indigo-500/20 rounded flex items-center justify-center text-indigo-400"><i
-                  class="ph ph-buildings text-xl"></i></div>
-              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
+                  class="ph ph-buildings text-xl"></i></div><span
+                class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
             </div>
-            <h3 class="text-lg font-bold text-white mb-2">Site Institucional</h3>
-            <p class="text-sm text-gray-400 mb-4">Múltiplas páginas, blog e formulários personalizados.</p>
+            <h3 class="text-lg font-bold text-white mb-1">Site Institucional Completo</h3>
+            <div class="text-emerald-400 text-xs font-bold mb-3">a partir de R$ 2.400</div>
+            <ul class="text-xs text-gray-400 space-y-1 mb-4">
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-indigo-500"></i>Múltiplas páginas + blog
+                integrado</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-indigo-500"></i>Formulários e painel
+                administrativo</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-indigo-500"></i>Google Meu Negócio + SEO
+                on-page</li>
+            </ul>
             <span
               class="text-indigo-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
               Demo <i class="ph ph-arrow-right"></i></span>
           </div>
-
-          <div class="glass-wet p-6 hover:border-violet-500/30 group cursor-pointer"
-            onclick="openDemo('site','medio','blog')">
-            <div class="flex justify-between items-start mb-4">
-              <div class="w-10 h-10 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
-                  class="ph ph-newspaper text-xl"></i></div>
-              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Sites</span>
-            </div>
-            <h3 class="text-lg font-bold text-white mb-2">Site com Blog</h3>
-            <p class="text-sm text-gray-400 mb-4">Publicações otimizadas para SEO e compartilhamento.</p>
-            <span
-              class="text-violet-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
-              Demo <i class="ph ph-arrow-right"></i></span>
-          </div>
-
-          <div class="glass-wet p-6 hover:border-rose-500/30 group cursor-pointer"
-            onclick="openDemo('site','avancado','loja')">
-            <div class="flex justify-between items-start mb-4">
-              <div class="w-10 h-10 bg-rose-500/20 rounded flex items-center justify-center text-rose-400"><i
-                  class="ph ph-storefront text-xl"></i></div>
-              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">E‑commerce</span>
-            </div>
-            <h3 class="text-lg font-bold text-white mb-2">Loja Online</h3>
-            <p class="text-sm text-gray-400 mb-4">Catálogo, carrinho e integração com pagamentos.</p>
-            <span
-              class="text-rose-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
-              Demo <i class="ph ph-arrow-right"></i></span>
-          </div>
-
-          <div class="glass-wet p-6 hover:border-emerald-500/30 group cursor-pointer"
-            onclick="openDemo('site','avancado','corporativo')">
-            <div class="flex justify-between items-start mb-4">
-              <div class="w-10 h-10 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
-                  class="ph ph-seal-check text-xl"></i></div>
-              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Premium</span>
-            </div>
-            <h3 class="text-lg font-bold text-white mb-2">Site Corporativo Premium</h3>
-            <p class="text-sm text-gray-400 mb-4">Design exclusivo, animações e integrações avançadas.</p>
-            <span
-              class="text-emerald-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
-              Demo <i class="ph ph-arrow-right"></i></span>
-          </div>
-          <!-- 2. Cardápio Digital -->
+          <!-- 5. Cardápio -->
           <div class="glass-wet p-6 hover:border-orange-500/30 group cursor-pointer" onclick="openDemo('cardapio')">
-            <div class="flex justify-between items-start mb-4">
+            <div class="flex justify-between items-start mb-3">
               <div class="w-10 h-10 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i
-                  class="ph ph-pizza text-xl"></i></div>
-              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Food</span>
+                  class="ph ph-pizza text-xl"></i></div><span
+                class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Food</span>
             </div>
-            <h3 class="text-lg font-bold text-white mb-2">Cardápio Digital PWA</h3>
-            <p class="text-sm text-gray-400 mb-4">Seu cliente pede pelo celular e o pedido chega pronto no WhatsApp. Sem
-              taxas.</p>
+            <h3 class="text-lg font-bold text-white mb-1">Cardápio Digital PWA</h3>
+            <div class="text-emerald-400 text-xs font-bold mb-3">a partir de R$ 1.500</div>
+            <ul class="text-xs text-gray-400 space-y-1 mb-4">
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-orange-500"></i>Pedidos direto no WhatsApp —
+                sem taxas</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-orange-500"></i>QR Code para mesa + link
+                compartilhável</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-orange-500"></i>PWA — instala no celular sem
+                app store</li>
+            </ul>
             <span
               class="text-orange-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
               Demo <i class="ph ph-arrow-right"></i></span>
           </div>
-
-          <!-- 3. Agendamento -->
+          <!-- 6. Agendamento -->
           <div class="glass-wet p-6 hover:border-blue-500/30 group cursor-pointer" onclick="openDemo('agenda')">
-            <div class="flex justify-between items-start mb-4">
+            <div class="flex justify-between items-start mb-3">
               <div class="w-10 h-10 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
-                  class="ph ph-calendar-check text-xl"></i></div>
-              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Serviços</span>
+                  class="ph ph-calendar-check text-xl"></i></div><span
+                class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Serviços</span>
             </div>
-            <h3 class="text-lg font-bold text-white mb-2">Agendamento Online</h3>
-            <p class="text-sm text-gray-400 mb-4">Para barbearias e clínicas. Agenda automática 24h por dia.</p>
+            <h3 class="text-lg font-bold text-white mb-1">Agenda Online Inteligente</h3>
+            <div class="text-emerald-400 text-xs font-bold mb-3">a partir de R$ 2.000</div>
+            <ul class="text-xs text-gray-400 space-y-1 mb-4">
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-blue-500"></i>Agendamento 24h sem
+                telefonemas</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-blue-500"></i>Confirmação automática via
+                WhatsApp</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-blue-500"></i>Ideal para barbearias, salões
+                e clínicas</li>
+            </ul>
             <span
               class="text-blue-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
               Demo <i class="ph ph-arrow-right"></i></span>
           </div>
-
-          <!-- 4. Cartão Interativo -->
+          <!-- 7. Bio Link -->
           <div class="glass-wet p-6 hover:border-pink-500/30 group cursor-pointer" onclick="openDemo('bio')">
-            <div class="flex justify-between items-start mb-4">
+            <div class="flex justify-between items-start mb-3">
               <div class="w-10 h-10 bg-pink-500/20 rounded flex items-center justify-center text-pink-400"><i
-                  class="ph ph-identification-card text-xl"></i></div>
-              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Networking</span>
+                  class="ph ph-identification-card text-xl"></i></div><span
+                class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Networking</span>
             </div>
-            <h3 class="text-lg font-bold text-white mb-2">Bio Link / Cartão Digital</h3>
-            <p class="text-sm text-gray-400 mb-4">Centralize seus links, PIX e contatos em um cartão virtual elegante.
-            </p>
+            <h3 class="text-lg font-bold text-white mb-1">Bio Link / Cartão Digital NFC</h3>
+            <div class="text-emerald-400 text-xs font-bold mb-3">a partir de R$ 450</div>
+            <ul class="text-xs text-gray-400 space-y-1 mb-4">
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-pink-500"></i>Links, PIX e contatos em um só
+                lugar</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-pink-500"></i>Compartilhamento via QR Code
+                ou NFC</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-pink-500"></i>Design com sua identidade
+                visual</li>
+            </ul>
             <span
               class="text-pink-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
               Demo <i class="ph ph-arrow-right"></i></span>
           </div>
-
-          <!-- 5. Gestão de OS -->
-          <div class="glass-wet p-6 hover:border-yellow-500/30 group cursor-pointer" onclick="openDemo('os')">
-            <div class="flex justify-between items-start mb-4">
-              <div class="w-10 h-10 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
-                  class="ph ph-wrench text-xl"></i></div>
-              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Técnico</span>
+          <!-- 8. Loja Online -->
+          <div class="glass-wet p-6 hover:border-rose-500/30 group cursor-pointer"
+            onclick="openDemo('site','avancado','loja')">
+            <div class="flex justify-between items-start mb-3">
+              <div class="w-10 h-10 bg-rose-500/20 rounded flex items-center justify-center text-rose-400"><i
+                  class="ph ph-storefront text-xl"></i></div><span
+                class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">E-commerce</span>
             </div>
-            <h3 class="text-lg font-bold text-white mb-2">Sistema de Ordens (OS)</h3>
-            <p class="text-sm text-gray-400 mb-4">Controle de entrada e saída de equipamentos com status para o cliente.
-            </p>
+            <h3 class="text-lg font-bold text-white mb-1">Loja Online Completa</h3>
+            <div class="text-emerald-400 text-xs font-bold mb-3">a partir de R$ 3.500</div>
+            <ul class="text-xs text-gray-400 space-y-1 mb-4">
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-rose-500"></i>Catálogo + carrinho + checkout
+              </li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-rose-500"></i>Pix, cartão e boleto via
+                gateway</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-rose-500"></i>Painel de pedidos e estoque
+              </li>
+            </ul>
+            <span
+              class="text-rose-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
+              Demo <i class="ph ph-arrow-right"></i></span>
+          </div>
+          <!-- 9. Ordens de Serviço -->
+          <div class="glass-wet p-6 hover:border-yellow-500/30 group cursor-pointer" onclick="openDemo('os')">
+            <div class="flex justify-between items-start mb-3">
+              <div class="w-10 h-10 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
+                  class="ph ph-wrench text-xl"></i></div><span
+                class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Técnico</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-1">Sistema de Ordens de Serviço</h3>
+            <div class="text-emerald-400 text-xs font-bold mb-3">a partir de R$ 2.500</div>
+            <ul class="text-xs text-gray-400 space-y-1 mb-4">
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-yellow-500"></i>Controle de equipamentos por
+                status</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-yellow-500"></i>Notificação de pronto via
+                WhatsApp</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-yellow-500"></i>Relatórios e histórico de
+                clientes</li>
+            </ul>
             <span
               class="text-yellow-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
               Demo <i class="ph ph-arrow-right"></i></span>
           </div>
-
-          <!-- 6. ERP Business -->
-          <div class="glass-wet p-6 hover:border-emerald-500/30 group cursor-pointer" onclick="openDemo('business')">
-            <div class="flex justify-between items-start mb-4">
-              <div class="w-10 h-10 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
-                  class="ph ph-chart-line-up text-xl"></i></div>
-              <span class="text-xs bg-white/5 px-2 py-1 rounded text-gray-400">Gestão</span>
+          <!-- 10. Site Corporativo -->
+          <div class="glass-wet p-6 hover:border-violet-500/30 group cursor-pointer"
+            onclick="openDemo('site','avancado','corporativo')">
+            <div class="flex justify-between items-start mb-3">
+              <div class="w-10 h-10 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
+                  class="ph ph-seal-check text-xl"></i></div><span
+                class="text-xs bg-violet-500/10 px-2 py-1 rounded text-violet-300">Premium</span>
             </div>
-            <h3 class="text-lg font-bold text-white mb-2">Painel Business Pro</h3>
-            <p class="text-sm text-gray-400 mb-4">Substitua planilhas. Estoque, financeiro e clientes em um sistema
-              seguro.</p>
+            <h3 class="text-lg font-bold text-white mb-1">Site Corporativo Premium</h3>
+            <div class="text-emerald-400 text-xs font-bold mb-3">a partir de R$ 4.800</div>
+            <ul class="text-xs text-gray-400 space-y-1 mb-4">
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-violet-500"></i>Design exclusivo com
+                animações avançadas</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-violet-500"></i>Integrações API (CRM, ERP,
+                WhatsApp)</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-violet-500"></i>Painel admin + área de
+                clientes</li>
+            </ul>
+            <span
+              class="text-violet-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
+              Demo <i class="ph ph-arrow-right"></i></span>
+          </div>
+          <!-- 11. Web App -->
+          <div class="glass-wet p-6 hover:border-cyan-500/30 group cursor-pointer" onclick="openDemo('business')">
+            <div class="flex justify-between items-start mb-3">
+              <div class="w-10 h-10 bg-cyan-500/20 rounded flex items-center justify-center text-cyan-400"><i
+                  class="ph ph-code-block text-xl"></i></div><span
+                class="text-xs bg-cyan-500/10 px-2 py-1 rounded text-cyan-300">Web App</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-1">Web App / Sistema SaaS</h3>
+            <div class="text-emerald-400 text-xs font-bold mb-3">a partir de R$ 4.500</div>
+            <ul class="text-xs text-gray-400 space-y-1 mb-4">
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-cyan-500"></i>Lógica de negócio 100%
+                personalizada</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-cyan-500"></i>Login, permissões e banco de
+                dados</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-cyan-500"></i>Dashboard com relatórios em
+                tempo real</li>
+            </ul>
+            <span
+              class="text-cyan-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
+              Demo <i class="ph ph-arrow-right"></i></span>
+          </div>
+          <!-- 12. Automação Chatbot -->
+          <div class="glass-wet p-6 hover:border-emerald-500/30 group cursor-pointer" onclick="openDemo('express')">
+            <div class="flex justify-between items-start mb-3">
+              <div class="w-10 h-10 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
+                  class="ph ph-robot text-xl"></i></div><span
+                class="text-xs bg-emerald-500/10 px-2 py-1 rounded text-emerald-300">Automação</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-1">Automação &amp; Chatbot IA</h3>
+            <div class="text-emerald-400 text-xs font-bold mb-3">a partir de R$ 2.000</div>
+            <ul class="text-xs text-gray-400 space-y-1 mb-4">
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i>Atendimento 24h no
+                WhatsApp/Instagram</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i>Qualificação de leads
+                automática</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i>Integração com agenda e CRM
+              </li>
+            </ul>
             <span
               class="text-emerald-400 text-xs font-bold flex items-center gap-2 group-hover:translate-x-2 transition-transform">Ver
               Demo <i class="ph ph-arrow-right"></i></span>
@@ -556,6 +721,483 @@
       </div>
     </section>
 
+
+    <!-- SISTEMAS DE GESTÃO -->
+    <section id="sistemas" class="py-14 md:py-24 bg-black/30 border-t border-white/5">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-10">
+          <span class="text-emerald-400 font-mono text-xs tracking-widest uppercase">Software House — Soluções
+            Prontas</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-white mt-2">Sistemas de Gestão por Nicho</h2>
+          <p class="text-gray-400 mt-3 max-w-xl mx-auto text-sm">+ de 50 sistemas PWA prontos para o seu segmento.
+            Licença
+            vitalícia, suporte local e demo disponível agora mesmo.</p>
+        </div>
+        <!-- Filtros -->
+        <div id="cat-filters" class="flex flex-wrap gap-2 justify-center mb-8">
+          <button data-cat="todos"
+            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-emerald-500 text-emerald-400 bg-emerald-500/10 transition-all">Todos
+          </button>
+          <button data-cat="food"
+            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-orange-500/50 hover:text-orange-400 transition-all">🍕
+            Food &amp; Delivery</button>
+          <button data-cat="saude"
+            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-pink-500/50 hover:text-pink-400 transition-all">💆
+            Saúde &amp; Bem-estar</button>
+          <button data-cat="servicos"
+            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-yellow-500/50 hover:text-yellow-400 transition-all">🔧
+            Serviços</button>
+          <button data-cat="logistica"
+            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-blue-500/50 hover:text-blue-400 transition-all">🚚
+            Logística</button>
+          <button data-cat="financas"
+            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-emerald-500/50 hover:text-emerald-400 transition-all">💰
+            Finanças</button>
+          <button data-cat="varejo"
+            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-violet-500/50 hover:text-violet-400 transition-all">🏪
+            Varejo</button>
+        </div>
+        <!-- Carousel -->
+        <!-- Setas de navegação -->
+        <div class="relative">
+          <button id="carousel-prev" aria-label="Anterior" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-3
+                   w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white/70
+                   hover:text-emerald-400 hover:border-emerald-500/40 transition-all flex items-center justify-center
+                   backdrop-blur-sm shadow-lg">
+            <i class="ph ph-caret-left text-lg"></i>
+          </button>
+          <button id="carousel-next" aria-label="Próximo" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-3
+                   w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white/70
+                   hover:text-emerald-400 hover:border-emerald-500/40 transition-all flex items-center justify-center
+                   backdrop-blur-sm shadow-lg">
+            <i class="ph ph-caret-right text-lg"></i>
+          </button>
+
+          <div id="sistemas-carousel" class="overflow-hidden" style="mask-image:linear-gradient(90deg,transparent 0%,black 5%,black 95%,transparent 100%);
+                   -webkit-mask-image:linear-gradient(90deg,transparent 0%,black 5%,black 95%,transparent 100%);">
+            <div id="sistemas-track" class="flex gap-5 transition-none" style="width:max-content">
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="food"
+                onclick="openSistemaDemo('Gestão Hamburgueria','Hamburguerias e lanchonetes','Sistemas_Gestão/gestao-hamburgueria/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i
+                      class="ph ph-hamburger text-xl"></i></div><span
+                    class="text-xs bg-orange-500/10 px-2 py-0.5 rounded text-orange-300">Food</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Hamburgueria</h3>
+                <p class="text-xs text-gray-400 mb-3">Pedidos, estoque, financeiro e relatórios.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-orange-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="food"
+                onclick="openSistemaDemo('Gestão Pizzaria','Pizzarias e restaurantes','Sistemas_Gestão/gestao-pizzaria/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i
+                      class="ph ph-pizza text-lg"></i></div><span
+                    class="text-xs bg-orange-500/10 px-2 py-0.5 rounded text-orange-300">Food</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Pizzaria</h3>
+                <p class="text-xs text-gray-400 mb-3">Comanda digital, filas e controle de produção.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-orange-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="food"
+                onclick="openSistemaDemo('Gestão Sorveteria','Sorveterias e açaí','Sistemas_Gestão/gestao-sorveteria/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-blue-400/20 rounded flex items-center justify-center text-blue-300"><i
+                      class="ph ph-ice-cream text-lg"></i></div><span
+                    class="text-xs bg-orange-500/10 px-2 py-0.5 rounded text-orange-300">Food</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Sorveteria</h3>
+                <p class="text-xs text-gray-400 mb-3">Sabores, estoque e vendas no balcão.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-blue-300 text-xs group-hover:translate-x-1 transition-transform">Demo
+                    →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="food"
+                onclick="openSistemaDemo('Gestão Marmita','Marmitarias e quentinhas','Sistemas_Gestão/gestao-marmita/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i
+                      class="ph ph-bowl-food text-lg"></i></div><span
+                    class="text-xs bg-orange-500/10 px-2 py-0.5 rounded text-orange-300">Food</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Marmita</h3>
+                <p class="text-xs text-gray-400 mb-3">Pedidos diários, assinaturas e rotas.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-orange-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="food"
+                onclick="openSistemaDemo('Gestão Delivery','Delivery e dark kitchen','Sistemas_Gestão/gestao-delivery/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i
+                      class="ph ph-motorcycle text-lg"></i></div><span
+                    class="text-xs bg-orange-500/10 px-2 py-0.5 rounded text-orange-300">Food</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Delivery</h3>
+                <p class="text-xs text-gray-400 mb-3">Pedidos, entregadores e rastreio.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-orange-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
+                onclick="openSistemaDemo('Gestão Barbearia','Barbearias e salões masculinos','Sistemas_Gestão/gestao-barbearia/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-pink-500/20 rounded flex items-center justify-center text-pink-400"><i
+                      class="ph ph-scissors text-lg"></i></div><span
+                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Barbearia</h3>
+                <p class="text-xs text-gray-400 mb-3">Agenda, clientes, serviços e financeiro.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-pink-400 text-xs group-hover:translate-x-1 transition-transform">Demo
+                    →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
+                onclick="openSistemaDemo('Gestão Beleza','Salões e estúdios de beleza','Sistemas_Gestão/gestao-beleza/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-pink-500/20 rounded flex items-center justify-center text-pink-400"><i
+                      class="ph ph-sparkle text-lg"></i></div><span
+                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Beleza</h3>
+                <p class="text-xs text-gray-400 mb-3">Agendamentos, comissões e fidelidade.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-pink-400 text-xs group-hover:translate-x-1 transition-transform">Demo
+                    →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
+                onclick="openSistemaDemo('Gestão Fit','Academias e studios de treino','Sistemas_Gestão/gestao-fit/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-pink-500/20 rounded flex items-center justify-center text-pink-400"><i
+                      class="ph ph-barbell text-lg"></i></div><span
+                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Fit</h3>
+                <p class="text-xs text-gray-400 mb-3">Alunos, treinos, planos e mensalidades.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-pink-400 text-xs group-hover:translate-x-1 transition-transform">Demo
+                    →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
+                onclick="openSistemaDemo('Gestão Nutri','Nutricionistas e clínicas','Sistemas_Gestão/gestao-nutri/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-green-500/20 rounded flex items-center justify-center text-green-400"><i
+                      class="ph ph-leaf text-lg"></i></div><span
+                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Nutri</h3>
+                <p class="text-xs text-gray-400 mb-3">Pacientes, planos alimentares e consultas.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-green-400 text-xs group-hover:translate-x-1 transition-transform">Demo
+                    →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
+                onclick="openSistemaDemo('Gestão Odonto','Clínicas odontológicas','Sistemas_Gestão/gestao-odonto/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
+                      class="ph ph-tooth text-lg"></i></div><span
+                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Odonto</h3>
+                <p class="text-xs text-gray-400 mb-3">Prontuários, agenda e orçamentos.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo
+                    →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
+                onclick="openSistemaDemo('Gestão Terapia','Terapeutas e psicólogos','Sistemas_Gestão/gestao-terapia/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-purple-500/20 rounded flex items-center justify-center text-purple-400"><i
+                      class="ph ph-brain text-lg"></i></div><span
+                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Terapia</h3>
+                <p class="text-xs text-gray-400 mb-3">Sessões, prontuários e cobranças.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-purple-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
+                onclick="openSistemaDemo('Gestão Assistência','Assistências técnicas e consertos','Sistemas_Gestão/gestao-assistencia/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
+                      class="ph ph-wrench text-lg"></i></div><span
+                    class="text-xs bg-yellow-500/10 px-2 py-0.5 rounded text-yellow-300">Serviços</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Assistência</h3>
+                <p class="text-xs text-gray-400 mb-3">Ordens de serviço, peças e clientes.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-yellow-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
+                onclick="openSistemaDemo('Gestão Checklist','Inspeções e auditorias','Sistemas_Gestão/gestao-checklist/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
+                      class="ph ph-check-square text-lg"></i></div><span
+                    class="text-xs bg-yellow-500/10 px-2 py-0.5 rounded text-yellow-300">Serviços</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Checklist</h3>
+                <p class="text-xs text-gray-400 mb-3">Listas de verificação, relatórios e aprovações.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-yellow-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
+                onclick="openSistemaDemo('Gestão Orçamentos','Prestadores de serviços','Sistemas_Gestão/gestao-orcamentos/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
+                      class="ph ph-file-text text-lg"></i></div><span
+                    class="text-xs bg-yellow-500/10 px-2 py-0.5 rounded text-yellow-300">Serviços</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Orçamentos</h3>
+                <p class="text-xs text-gray-400 mb-3">Propostas, aprovações e controle de projetos.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-yellow-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
+                onclick="openSistemaDemo('Gestão Obras','Construtoras e pedreiros','Sistemas_Gestão/gestao-obras/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-amber-500/20 rounded flex items-center justify-center text-amber-400"><i
+                      class="ph ph-hard-hat text-lg"></i></div><span
+                    class="text-xs bg-yellow-500/10 px-2 py-0.5 rounded text-yellow-300">Serviços</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Obras</h3>
+                <p class="text-xs text-gray-400 mb-3">Etapas, materiais, mão de obra e cronogramas.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-amber-400 text-xs group-hover:translate-x-1 transition-transform">Demo
+                    →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
+                onclick="openSistemaDemo('Gestão Controle','Controle geral de processos','Sistemas_Gestão/gestao-controle/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
+                      class="ph ph-sliders text-lg"></i></div><span
+                    class="text-xs bg-yellow-500/10 px-2 py-0.5 rounded text-yellow-300">Serviços</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Controle</h3>
+                <p class="text-xs text-gray-400 mb-3">Tarefas, prazos e equipes em um painel.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-yellow-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
+                onclick="openSistemaDemo('Gestão Driver','Motoristas e transporte particular','Sistemas_Gestão/gestao-driver/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
+                      class="ph ph-steering-wheel text-lg"></i></div><span
+                    class="text-xs bg-blue-500/10 px-2 py-0.5 rounded text-blue-300">Logística</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Driver</h3>
+                <p class="text-xs text-gray-400 mb-3">Corridas, pagamentos e histórico de viagens.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo
+                    →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
+                onclick="openSistemaDemo('Gestão Entregas','Empresas de entregas locais','Sistemas_Gestão/gestao-entregas/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
+                      class="ph ph-package text-lg"></i></div><span
+                    class="text-xs bg-blue-500/10 px-2 py-0.5 rounded text-blue-300">Logística</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Entregas</h3>
+                <p class="text-xs text-gray-400 mb-3">Romaneios, rotas e confirmação de entrega.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo
+                    →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
+                onclick="openSistemaDemo('Gestão Frota','Frotas e transportadoras','Sistemas_Gestão/gestao-frota/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
+                      class="ph ph-truck text-lg"></i></div><span
+                    class="text-xs bg-blue-500/10 px-2 py-0.5 rounded text-blue-300">Logística</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Frota</h3>
+                <p class="text-xs text-gray-400 mb-3">Veículos, manutenções, abastecimentos e KPIs.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo
+                    →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
+                onclick="openSistemaDemo('Gestão Motoboy','Motoboys e small delivery','Sistemas_Gestão/gestao-motoboy/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
+                      class="ph ph-motorcycle text-lg"></i></div><span
+                    class="text-xs bg-blue-500/10 px-2 py-0.5 rounded text-blue-300">Logística</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Motoboy</h3>
+                <p class="text-xs text-gray-400 mb-3">Corridas, pontos e comissões de motoboys.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo
+                    →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
+                onclick="openSistemaDemo('Gestão Motorista','Motoristas autônomos','Sistemas_Gestão/gestao-motorista/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
+                      class="ph ph-car text-lg"></i></div><span
+                    class="text-xs bg-blue-500/10 px-2 py-0.5 rounded text-blue-300">Logística</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Motorista</h3>
+                <p class="text-xs text-gray-400 mb-3">Viagens, despesas, lucro e desempenho.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo
+                    →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="financas"
+                onclick="openSistemaDemo('Gestão Finanças','Controle financeiro empresarial','Sistemas_Gestão/gestao-financas/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
+                      class="ph ph-chart-line-up text-lg"></i></div><span
+                    class="text-xs bg-emerald-500/10 px-2 py-0.5 rounded text-emerald-300">Finanças</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Finanças</h3>
+                <p class="text-xs text-gray-400 mb-3">Fluxo de caixa, DRE e contas a pagar/receber.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-emerald-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="financas"
+                onclick="openSistemaDemo('Gestão PDV','Ponto de venda e caixa','Sistemas_Gestão/gestao-pdv/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
+                      class="ph ph-cash-register text-lg"></i></div><span
+                    class="text-xs bg-emerald-500/10 px-2 py-0.5 rounded text-emerald-300">Finanças</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão PDV</h3>
+                <p class="text-xs text-gray-400 mb-3">Caixa, vendas, sangria e fechamento diário.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-emerald-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="financas"
+                onclick="openSistemaDemo('Gestão Card','Controle de despesas em cartão','Sistemas_Gestão/gestao-card/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
+                      class="ph ph-credit-card text-lg"></i></div><span
+                    class="text-xs bg-emerald-500/10 px-2 py-0.5 rounded text-emerald-300">Finanças</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Card</h3>
+                <p class="text-xs text-gray-400 mb-3">Controle de gastos em cartão por categoria.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-emerald-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
+                onclick="openSistemaDemo('Gestão Estoque','Comércio e depósitos','Sistemas_Gestão/gestao-estoque/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
+                      class="ph ph-warehouse text-lg"></i></div><span
+                    class="text-xs bg-violet-500/10 px-2 py-0.5 rounded text-violet-300">Varejo</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Estoque</h3>
+                <p class="text-xs text-gray-400 mb-3">Entradas, saídas, alertas e inventário.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
+                onclick="openSistemaDemo('Gestão Distribuidora','Distribuidoras e atacados','Sistemas_Gestão/gestao-distribuidora/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
+                      class="ph ph-buildings text-lg"></i></div><span
+                    class="text-xs bg-violet-500/10 px-2 py-0.5 rounded text-violet-300">Varejo</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Distribuidora</h3>
+                <p class="text-xs text-gray-400 mb-3">Pedidos, rotas de entrega e clientes.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
+                onclick="openSistemaDemo('Gestão Feirante','Feirantes e vendedores ambulantes','Sistemas_Gestão/gestao-feirante/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
+                      class="ph ph-basket text-lg"></i></div><span
+                    class="text-xs bg-violet-500/10 px-2 py-0.5 rounded text-violet-300">Varejo</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Feirante</h3>
+                <p class="text-xs text-gray-400 mb-3">Vendas no ato, troco e fechamento de dia.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
+                onclick="openSistemaDemo('Gestão Artesanato','Artesãos e produção manual','Sistemas_Gestão/gestao-artesanato/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
+                      class="ph ph-palette text-lg"></i></div><span
+                    class="text-xs bg-violet-500/10 px-2 py-0.5 rounded text-violet-300">Varejo</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Artesanato</h3>
+                <p class="text-xs text-gray-400 mb-3">Produção, materiais, encomendas e vendas.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
+                onclick="openSistemaDemo('Gestão Aluguéis','Imóveis e locação em geral','Sistemas_Gestão/gestao-alugueis/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
+                      class="ph ph-house-line text-lg"></i></div><span
+                    class="text-xs bg-violet-500/10 px-2 py-0.5 rounded text-violet-300">Varejo</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Aluguéis</h3>
+                <p class="text-xs text-gray-400 mb-3">Contratos, vencimentos e recibos de aluguel.</p>
+                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
+                    licença</span><span
+                    class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
+              </div>
+            </div><!-- fim sistemas-track -->
+          </div><!-- fim sistemas-carousel -->
+        </div><!-- fim relative wrapper -->
+        <div class="text-center mt-10">
+          <a href="https://wa.me/5512992191018?text=Ol%C3%A1!%20Quero%20licenciar%20um%20sistema%20de%20gest%C3%A3o%20por%20R%24%2097.%20Pode%20me%20ajudar?"
+            target="_blank" class="btn btn-primary text-sm">
+            <i class="ph ph-whatsapp-logo text-lg"></i> Quero meu sistema agora — R$ 97
+          </a>
+          <p class="text-xs text-gray-500 mt-3">Licença vitalícia • Link de acesso imediato • Suporte incluso</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODAL SISTEMA -->
+    <div id="sistema-modal" class="modal-backdrop" onclick="closeSistemaDemo(event)">
+      <div class="modal-content" style="max-width:90vw;width:1100px;">
+        <div
+          style="background:#0d0d14;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;flex-shrink:0">
+          <div>
+            <div id="sistema-modal-nome" class="text-white text-sm font-bold"></div>
+            <div id="sistema-modal-nicho" class="text-gray-400 text-xs"></div>
+          </div>
+          <div class="flex items-center gap-3"><a id="sistema-modal-cta" href="#" target="_blank"
+              class="btn btn-primary text-xs py-1.5 px-4"><i class="ph ph-whatsapp-logo"></i> Contratar — R$
+              97</a><button onclick="closeSistemaDemo(event)" class="text-gray-500 hover:text-white"><i
+                class="ph ph-x text-lg"></i></button></div>
+        </div>
+        <div class="flex-grow bg-gray-800 overflow-hidden" style="height:85vh"><iframe id="sistema-frame"
+            src="about:blank" class="w-full h-full border-0"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe></div>
+      </div>
+    </div>
+
     <!-- PLANOS -->
     <section id="planos" class="py-12 md:py-20 bg-black/30 border-t border-white/5">
       <div class="container mx-auto px-6">
@@ -564,7 +1206,25 @@
           <p class="text-gray-400">Sem custos ocultos. Você sabe exatamente o que está comprando.</p>
         </div>
 
-        <div class="grid lg:grid-cols-3 gap-8">
+        <div class="grid lg:grid-cols-4 gap-6">
+          <!-- Plano Gestão -->
+          <div class="glass-wet p-8 border-t-4 border-t-emerald-500 bg-emerald-900/5">
+            <span class="badge-pulse bg-emerald-500/20 text-emerald-300">Gestão PWA</span>
+            <h3 class="text-2xl font-bold text-white mt-4">Licença de Sistema</h3>
+            <div class="mt-2 mb-6 text-3xl font-bold text-emerald-400">R$ 97 <span
+                class="text-sm text-gray-500 font-normal">/vitalício</span></div>
+            <ul class="space-y-3 text-sm text-gray-300 mb-8">
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> 1 sistema do seu nicho
+              </li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Link de acesso imediato
+              </li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Licença vitalícia</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Treinamento incluso</li>
+              <li class="flex gap-2"><i class="ph-fill ph-check-circle text-emerald-500"></i> Suporte via WhatsApp</li>
+            </ul>
+            <a href="https://wa.me/5512992191018?text=Ol%C3%A1!%20Quero%20adquirir%20um%20sistema%20de%20gest%C3%A3o%20por%20R%24%2097.%20Pode%20me%20ajudar?"
+              target="_blank" class="btn btn-primary w-full">Adquirir Sistema</a>
+          </div>
           <!-- Plano 1 -->
           <div class="glass-wet p-8 border-t-4 border-t-gray-600">
             <span class="badge-pulse">Entrada</span>
@@ -824,93 +1484,188 @@
 
   </main>
 
-  <!-- FOOTER -->
-  <footer class="bg-gray-900 text-white py-16 border-t border-white/5 relative z-10">
+  <!-- ══════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════ -->
+  <footer id="contact" class="bg-gray-950 text-white pt-16 pb-8">
     <div class="container mx-auto px-6">
-      <div class="grid md:grid-cols-4 gap-8">
-        <div class="md:col-span-2">
-          <a href="index.html" class="text-2xl font-bold text-white flex items-center mb-6">Plena <span
-              class="text-emerald-400 ml-1">Informática</span></a>
-          <p class="text-slate-400 mb-6 max-w-md">Soluções em serviços digitais, personalizados e tecnologia <i
-              class="ph ph-code text-emerald-400 text-2xl align-middle"></i> do essencial ao sob medida.</p>
-          <div class="flex items-center space-x-4 mb-6">
-            <div
-              class="flex items-center bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 py-1 px-3 rounded-full text-sm font-medium">
-              <i class="ph-fill ph-shield-check mr-2"></i> Site Seguro
+
+      <div class="grid md:grid-cols-3 gap-12 pb-12 border-b border-white/5">
+
+        <div>
+          <div class="flex items-center gap-2.5 mb-5">
+            <div class="w-9 h-9 bg-green-500 rounded-lg flex items-center justify-center">
+              <span class="text-white font-black text-lg font-accent leading-none">P</span>
             </div>
-            <div class="text-slate-400 text-sm">Protegido com SSL</div>
+            <span class="font-accent font-bold text-xl">Plena <span class="text-green-400">Informática</span></span>
+          </div>
+          <p class="text-gray-500 text-sm leading-relaxed max-w-xs">
+            Há 20 anos transformando ideias em realidade. Tecnologia, personalizados e serviços digitais em
+            São José dos
+            Campos.
+          </p>
+          <div
+            class="mt-6 inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-medium py-1.5 px-3 rounded-full">
+            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+            Site Seguro
           </div>
         </div>
+
         <div>
-          <h3 class="font-bold text-lg mb-6 text-white">Serviços</h3>
-          <ul class="space-y-3">
-            <li><a href="index.html" class="text-slate-400 hover:text-white transition">Início</a></li>
-            <li><a href="servicos.html" class="text-slate-400 hover:text-white transition">Serviços Digitais</a></li>
-            <li><a href="personalizados.html" class="text-slate-400 hover:text-white transition">Personalizados</a></li>
-            <li><a href="tecnologia.html" class="text-slate-400 hover:text-white transition">Tecnologia</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="font-bold text-lg mb-6 text-white">Contato</h3>
-          <ul class="space-y-3 text-slate-400">
-            <li class="flex items-start"><i class="ph ph-map-pin w-5 h-5 mr-3 mt-1"></i> São José dos Campos, SP</li>
-            <li class="flex items-center"><i class="ph ph-whatsapp-logo w-5 h-5 mr-3"></i> (12) 99219-1018</li>
-            <li class="flex items-center"><i class="ph ph-envelope w-5 h-5 mr-3"></i> tecnologia@plenainformatica.com.br
+          <h3 class="font-accent font-bold text-white mb-5 text-sm uppercase tracking-wider">Nossas Áreas</h3>
+          <ul class="space-y-3 text-sm">
+            <li>
+              <a href="servicos.html"
+                class="text-gray-500 hover:text-orange-400 transition-colors flex items-center gap-2 group">
+                <span
+                  class="w-1 h-1 rounded-full bg-gray-700 group-hover:bg-orange-400 transition-colors"></span>Serviços
+                Digitais
+              </a>
+            </li>
+            <li>
+              <a href="personalizados.html"
+                class="text-gray-500 hover:text-blue-400 transition-colors flex items-center gap-2 group">
+                <span
+                  class="w-1 h-1 rounded-full bg-gray-700 group-hover:bg-blue-400 transition-colors"></span>Personalizados
+              </a>
+            </li>
+            <li>
+              <a href="tecnologia.html"
+                class="text-gray-500 hover:text-emerald-400 transition-colors flex items-center gap-2 group">
+                <span
+                  class="w-1 h-1 rounded-full bg-gray-700 group-hover:bg-emerald-400 transition-colors"></span>Tecnologia
+                Web
+              </a>
             </li>
           </ul>
         </div>
+
+        <div>
+          <h3 class="font-accent font-bold text-white mb-5 text-sm uppercase tracking-wider">Contato</h3>
+          <ul class="space-y-4 text-sm">
+            <li class="flex items-start gap-3">
+              <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span class="text-gray-500">São José dos Campos, SP</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              <a href="tel:+5512981488505" class="text-gray-500 hover:text-white transition-colors">(12)
+                98148-8505</a>
+            </li>
+            <li class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <a href="mailto:tecnologia@plenainformatica.com.br"
+                class="text-gray-500 hover:text-white transition-colors">tecnologia@plenainformatica.com.br</a>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="text-gray-500">Seg–Sex: 13h–18h.</span>
+            </li>
+          </ul>
+        </div>
+
       </div>
-      <div class="mt-12 pt-8 border-t border-slate-800">
-        <div class="flex flex-col md:flex-row justify-between items-center">
-          <div class="text-center md:text-left mb-4 md:mb-0">
-            <p class="text-lg italic text-slate-400 mb-2">"Tudo posso naquele que me fortalece." - Filipenses 4:13</p>
-            <p class="text-sm text-slate-500">&copy; 2026 Plena Informática. Todos os direitos reservados.</p>
-            <p class="text-xs text-slate-600 mt-1">Desenvolvido por Plena Informática</p>
-          </div>
-          <div class="flex space-x-6 text-sm text-slate-400">
-            <a href="#" class="hover:text-white transition duration-300 open-modal" data-modal="terms">Termos de Uso</a>
-            <a href="#" class="hover:text-white transition duration-300 open-modal" data-modal="privacy">Política de
-              Privacidade</a>
-          </div>
+
+      <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+          <p class="text-xs italic text-gray-600 mb-1">"Tudo posso naquele que me fortalece." — Filipenses
+            4:13</p>
+          <p class="text-xs text-gray-700">&copy; 2026 Plena Informática. Todos os direitos reservados.</p>
+        </div>
+        <div class="flex gap-6 text-xs text-gray-600">
+          <button type="button" class="open-modal hover:text-gray-400 transition-colors" data-modal="terms">Termos de
+            Uso</button>
+          <button type="button" class="open-modal hover:text-gray-400 transition-colors" data-modal="privacy">Política
+            de Privacidade</button>
         </div>
       </div>
+
     </div>
   </footer>
 
-  <div id="terms-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4" role="dialog"
-    aria-modal="true" aria-hidden="true" aria-labelledby="terms-modal-title">
-    <div class="bg-white p-8 rounded-lg shadow-2xl max-w-2xl w-full relative">
-      <button type="button" class="modal-close text-gray-500 hover:text-gray-700 absolute top-4 right-4"
-        aria-label="Fechar termos">&times;</button>
-      <h2 id="terms-modal-title" class="text-2xl font-bold mb-4">Termos de Uso – Tecnologia</h2>
-      <div class="text-slate-700 space-y-4">
-        <p>Ao utilizar os serviços de tecnologia da Plena Informática, você concorda com estes termos.</p>
-        <h3 class="font-bold text-lg mt-6 mb-2">Serviços</h3>
-        <p>Desenvolvimento de sites, sistemas web, integrações e automações.</p>
-        <h3 class="font-bold text-lg mt-6 mb-2">Responsabilidades</h3>
-        <p>Fornecer informações corretas e aprovar materiais em tempo hábil.</p>
-        <h3 class="font-bold text-lg mt-6 mb-2">Prazos</h3>
-        <p>Variam conforme escopo e dependem de aprovações do cliente.</p>
-        <p class="mt-6 text-sm text-slate-500">Última atualização: Outubro de 2025</p>
+
+  <!-- MODAL TERMOS DE USO -->
+  <div id="terms-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="terms-title">
+    <div class="modal-content">
+      <button type="button"
+        class="modal-close absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl leading-none transition-colors"
+        aria-label="Fechar">&times;</button>
+      <h2 id="terms-title" class="font-accent text-2xl font-bold mb-4">Termos de Uso</h2>
+      <div class="text-gray-600 space-y-3 text-sm leading-relaxed">
+        <p><strong>1. Aceitação.</strong> Ao utilizar os serviços da Plena Informática, você declara ter lido e
+          concordado integralmente com estes Termos de Uso e com nossa Política de Privacidade.</p>
+        <p><strong>2. Serviços.</strong> Nossos serviços de tecnologia (desenvolvimento de sites, sistemas web,
+          aplicativos, automações, sistemas de gestão e licenciamento de software) são executados com base nas
+          informações fornecidas pelo cliente. A veracidade dos dados é de inteira responsabilidade do solicitante.</p>
+        <p><strong>3. Licença de Software.</strong> Os sistemas de gestão são fornecidos em licença vitalícia de
+          uso individual. A licença não autoriza revenda, redistribuição ou engenharia reversa do software.</p>
+        <p><strong>4. Prazos e Valores.</strong> Prazos de entrega e valores são confirmados via WhatsApp antes do
+          início da execução. Uma vez aprovado o orçamento, o cancelamento fica sujeito às condições informadas no
+          momento da contratação.</p>
+        <p><strong>5. Propriedade Intelectual.</strong> Todo o conteúdo deste site — textos, imagens, logotipos e
+          design — é propriedade intelectual da Plena Informática e não pode ser reproduzido, copiado ou distribuído
+          sem autorização prévia por escrito.</p>
+        <p><strong>6. Limitação de Responsabilidade.</strong> A Plena Informática não se responsabiliza por
+          informações incorretas fornecidas pelo cliente, nem por atrasos decorrentes de fatores alheios ao nosso
+          controle.</p>
+        <p><strong>7. Recusa de Serviço.</strong> Reservamo-nos o direito de recusar serviços que violem a legislação
+          vigente ou que sejam incompatíveis com nossos valores.</p>
+        <p><strong>8. Alterações.</strong> Estes termos podem ser atualizados a qualquer momento. A versão vigente
+          estará sempre disponível nesta página.</p>
+        <p class="text-xs text-gray-400 pt-2">Última atualização: março de 2026.</p>
       </div>
     </div>
   </div>
 
-  <div id="privacy-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4" role="dialog"
-    aria-modal="true" aria-hidden="true" aria-labelledby="privacy-modal-title">
-    <div class="bg-white p-8 rounded-lg shadow-2xl max-w-2xl w-full relative">
-      <button type="button" class="modal-close text-gray-500 hover:text-gray-700 absolute top-4 right-4"
-        aria-label="Fechar política">&times;</button>
-      <h2 id="privacy-modal-title" class="text-2xl font-bold mb-4">Política de Privacidade – Tecnologia</h2>
-      <div class="text-slate-700 space-y-4">
-        <p>Descreve como coletamos e usamos dados para projetos de tecnologia.</p>
-        <h3 class="font-bold text-lg mt-6 mb-2">Dados Coletados</h3>
-        <p>Nome, contato e informações do projeto fornecidas voluntariamente.</p>
-        <h3 class="font-bold text-lg mt-6 mb-2">Uso</h3>
-        <p>Elaboração de propostas, execução do projeto e comunicação.</p>
-        <h3 class="font-bold text-lg mt-6 mb-2">Proteção</h3>
-        <p>Medidas de segurança para proteger seus dados.</p>
-        <p class="mt-6 text-sm text-slate-500">Última atualização: Outubro de 2025</p>
+  <!-- MODAL POLÍTICA DE PRIVACIDADE -->
+  <div id="privacy-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"
+    aria-labelledby="privacy-title">
+    <div class="modal-content">
+      <button type="button"
+        class="modal-close absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl leading-none transition-colors"
+        aria-label="Fechar">&times;</button>
+      <h2 id="privacy-title" class="font-accent text-2xl font-bold mb-4">Política de Privacidade</h2>
+      <div class="text-gray-600 space-y-3 text-sm leading-relaxed">
+        <p><strong>1. Compromisso.</strong> A Plena Informática respeita sua privacidade e está comprometida com a
+          proteção dos seus dados pessoais, em conformidade com a Lei Geral de Proteção de Dados (LGPD — Lei nº
+          13.709/2018).</p>
+        <p><strong>2. Dados Coletados.</strong> Coletamos apenas dados fornecidos voluntariamente por você (nome,
+          e-mail, telefone, documentos para serviços contratados) e dados técnicos de navegação (cookies essenciais).
+        </p>
+        <p><strong>3. Finalidade.</strong> Seus dados pessoais são utilizados exclusivamente para: (a) executar o
+          serviço contratado; (b) comunicação sobre andamento e conclusão dos serviços; (c) melhoria da experiência de
+          navegação.</p>
+        <p><strong>4. Licenças de Software.</strong> Dados fornecidos para ativação de sistemas de gestão (e-mail,
+          nome) são utilizados estritamente para geração da licença de acesso e <strong>não são compartilhados</strong>
+          com terceiros.</p>
+        <p><strong>5. Compartilhamento.</strong> Não compartilhamos, vendemos ou cedemos seus dados a terceiros sem
+          seu consentimento explícito.</p>
+        <p><strong>6. Cookies.</strong> Utilizamos apenas cookies essenciais para o funcionamento básico do site e
+          para lembrar suas preferências. Não utilizamos cookies de rastreamento ou publicidade.</p>
+        <p><strong>7. Seus Direitos.</strong> Você pode, a qualquer momento, solicitar acesso, correção ou exclusão
+          dos seus dados pessoais pelo e-mail <a href="mailto:contato@plenainformatica.com.br"
+            class="text-emerald-600 underline">contato@plenainformatica.com.br</a>.</p>
+        <p><strong>8. Alterações.</strong> Esta política pode ser atualizada periodicamente. A versão vigente estará
+          sempre disponível nesta página.</p>
+        <p class="text-xs text-gray-400 pt-2">Última atualização: março de 2026.</p>
       </div>
     </div>
   </div>
@@ -1072,11 +1827,8 @@
         ctx.fillText(text, i * 14, drops[i] * 14);
         if (drops[i] * 14 > height && Math.random() > 0.98) drops[i] = 0; drops[i]++;
       }
-      if (window.innerWidth <= 768) {
-        setTimeout(() => requestAnimationFrame(draw), 1000);
-        return;
-      }
-      requestAnimationFrame(draw);
+      // Mobile: ultra-lento (1s); Desktop: suave e lento (~12fps)
+      setTimeout(() => requestAnimationFrame(draw), window.innerWidth <= 768 ? 1000 : 80);
     }
     draw(); window.addEventListener('resize', resize);
 
@@ -1552,6 +2304,138 @@
       });
     })();
   </script>
+
+  <script>
+    // ═══════════════════════════════════════════════
+    // CARROSSEL INFINITO — Sistemas de Gestão
+    // ═══════════════════════════════════════════════
+    (function () {
+      const track = document.getElementById('sistemas-track');
+      const carousel = document.getElementById('sistemas-carousel');
+      const prevBtn = document.getElementById('carousel-prev');
+      const nextBtn = document.getElementById('carousel-next');
+
+      let currentOffset = 0;   // px deslocados manualmente
+      let autoOffset = 0;   // px do auto-scroll acumulado
+      let isPaused = false;
+      let isManual = false;
+      const AUTO_SPEED = 0.8; // px por frame (~30fps do maxtrix bg)
+      const CARD_STEP = 296; // w-72 (288) + gap (20) ≈ 308, arredonda p/ 296
+
+      // Duplica os cards para loop infinito
+      function cloneCards() {
+        const originals = Array.from(track.children);
+        originals.forEach(card => {
+          const clone = card.cloneNode(true);
+          clone.setAttribute('aria-hidden', 'true');
+          // Copia o onclick do original
+          const origCard = card;
+          const onclickAttr = origCard.getAttribute('onclick');
+          if (onclickAttr) clone.setAttribute('onclick', onclickAttr);
+          track.appendChild(clone);
+        });
+      }
+      cloneCards();
+
+      const totalOriginal = track.children.length / 2;
+      const loopWidth = () => totalOriginal * CARD_STEP;
+
+      function applyTransform() {
+        const total = autoOffset + currentOffset;
+        track.style.transform = `translateX(${-total}px)`;
+        // Reset loop infinito
+        if (autoOffset >= loopWidth()) autoOffset -= loopWidth();
+        if (autoOffset < 0) autoOffset += loopWidth();
+      }
+
+      // Auto-scroll suave
+      let raf;
+      function autoScroll() {
+        if (!isPaused) autoOffset += AUTO_SPEED;
+        applyTransform();
+        raf = requestAnimationFrame(autoScroll);
+      }
+      autoScroll();
+
+      // Pausar ao hover
+      carousel.addEventListener('mouseenter', () => isPaused = true);
+      carousel.addEventListener('mouseleave', () => {
+        isPaused = false;
+        if (isManual) { isManual = false; }
+      });
+
+      // Setas
+      prevBtn.addEventListener('click', () => {
+        currentOffset -= CARD_STEP;
+        if (currentOffset < -loopWidth()) currentOffset += loopWidth();
+        applyTransform();
+      });
+      nextBtn.addEventListener('click', () => {
+        currentOffset += CARD_STEP;
+        if (currentOffset > loopWidth()) currentOffset -= loopWidth();
+        applyTransform();
+      });
+    })();
+
+    // ═══════════════════════════════════════════════
+    // FILTRO DE CATEGORIAS
+    // ═══════════════════════════════════════════════
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const cat = this.dataset.cat;
+        document.querySelectorAll('.cat-btn').forEach(b => {
+          b.classList.remove('border-emerald-500', 'text-emerald-400', 'bg-emerald-500/10');
+          b.classList.add('border-white/10', 'text-gray-400');
+        });
+        this.classList.add('border-emerald-500', 'text-emerald-400', 'bg-emerald-500/10');
+        this.classList.remove('border-white/10', 'text-gray-400');
+        // Mostra/oculta (inclui clones)
+        document.querySelectorAll('.sistema-card').forEach(card => {
+          card.style.display = (cat === 'todos' || card.dataset.cat === cat) ? '' : 'none';
+        });
+      });
+    });
+
+    // ═══════════════════════════════════════════════
+    // MODAL DE DEMO
+    // ═══════════════════════════════════════════════
+    function openSistemaDemo(nome, nicho, src) {
+      document.getElementById('sistema-modal-nome').textContent = nome;
+      document.getElementById('sistema-modal-nicho').textContent = nicho;
+      document.getElementById('sistema-frame').src = src;
+      const msg = encodeURIComponent('Olá! Quero adquirir o ' + nome + ' por R$ 97. Pode me ajudar?');
+      document.getElementById('sistema-modal-cta').href = 'https://wa.me/5512992191018?text=' + msg;
+      document.getElementById('sistema-modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeSistemaDemo(e) {
+      if (e && !e.target.classList.contains('modal-backdrop') && !e.target.closest('button')) return;
+      document.getElementById('sistema-modal').classList.remove('active');
+      document.getElementById('sistema-frame').src = 'about:blank';
+      document.body.style.overflow = '';
+    }
+
+    // --- CONTADORES ANIMADOS ---
+    function animateCounters() {
+      document.querySelectorAll('[data-count]').forEach(el => {
+        const target = parseInt(el.dataset.count);
+        let cur = 0;
+        const step = Math.ceil(target / 30);
+        const timer = setInterval(() => {
+          cur = Math.min(cur + step, target);
+          el.textContent = cur + '+';
+          if (cur >= target) clearInterval(timer);
+        }, 40);
+      });
+    }
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { animateCounters(); observer.disconnect(); } });
+    }, { threshold: 0.3 });
+    const counterEl = document.querySelector('[data-count]');
+    if (counterEl) observer.observe(counterEl);
+  </script>
+
+
 </body>
 
 </html>

@@ -1,0 +1,3707 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Plena Academia - Gestão Profissional</title>
+
+    <!-- PWA Meta Tags Padronizadas -->
+    <meta name="theme-color" content="#2563EB">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Sistema de gestão completo para academias - Plena Aplicativos">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        plena: {
+                            blue: '#6366F1',
+                            dark: '#4F46E5',
+                            black: '#0f172a',
+                            orange: '#f59e0b',
+                            gray: '#334155',
+                            lightblue: '#818CF8'
+                        },
+                        fitness: {
+                            light: '#F1F5F9',
+                            soft: '#E2E8F0'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s infinite',
+                        'slide-in': 'slideIn 0.3s ease-out',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
+
+    <style>
+        /* CSS Otimizado Padronizado */
+        :root {
+            --plena-blue: #6366F1;
+            --plena-dark: #4F46E5;
+            --plena-black: #0f172a;
+            --plena-orange: #f59e0b;
+            --fitness-light: #F1F5F9;
+            --fitness-soft: #E2E8F0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #F8FAFC;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-10px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s ease;
+        }
+
+        /* Sidebar Mobile Toggle */
+        .sidebar.open {
+            transform: translateX(0) !important;
+        }
+
+        /* Print Optimization V4 */
+        @media print {
+            @page {
+                margin: 1cm;
+                size: A4;
+            }
+
+            body {
+                background: white;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .sidebar,
+            .no-print,
+            button,
+            .modal-backdrop,
+            header,
+            .hide {
+                display: none !important;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+
+            .view-section {
+                display: none !important;
+            }
+
+            /* Show specific sections only when printing */
+            #view-reports,
+            #view-finance {
+                display: block !important;
+            }
+        }
+
+        /* Enhanced Print Styles */
+        @media print {
+            #report-result {
+                display: block !important;
+                visibility: visible !important;
+            }
+
+            #report-result .grid {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 1rem !important;
+            }
+
+            #report-result button {
+                display: none !important;
+            }
+
+            /* Finance Table Formatting */
+            #view-finance table {
+                width: 100% !important;
+                font-size: 10pt !important;
+                border-collapse: collapse !important;
+            }
+
+            #view-finance th,
+            #view-finance td {
+                border: 1px solid #e2e8f0 !important;
+                padding: 8px !important;
+                color: black !important;
+            }
+
+            /* Hide Actions column in print */
+            #view-finance th:last-child,
+            #view-finance td:last-child {
+                display: none !important;
+            }
+
+            /* Hide inputs and filters */
+            #view-finance input,
+            #view-finance select,
+            #view-finance .flex.gap-2 {
+                display: none !important;
+            }
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-pending {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        .badge-done {
+            background-color: #DCFCE7;
+            color: #166534;
+        }
+
+        .badge-canceled {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+
+        /* Status Colors */
+        .status-pending {
+            background-color: #FEF3C7;
+            border-color: #F59E0B;
+            color: #92400E;
+        }
+
+        .status-done {
+            background-color: #DCFCE7;
+            border-color: #10B981;
+            color: #166534;
+        }
+
+        .status-canceled {
+            background-color: #FEE2E2;
+            border-color: #EF4444;
+            color: #991B1B;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        /* Agenda Time Slot */
+        .time-slot {
+            transition: all 0.2s ease;
+        }
+
+        .time-slot:hover {
+            background-color: #E2E8F0 !important;
+        }
+
+        /* Service Card Gradient */
+        .service-gradient {
+            background: linear-gradient(135deg, #60A5FA 0%, #2563EB 100%);
+        }
+
+        /* Estilos para Manual Interativo */
+        .step-number {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .checklist-item input[type="checkbox"]:checked+span {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2563EB 0%, #60A5FA 100%);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 antialiased">
+
+    <!-- Overlay para sidebar mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar Padronizada -->
+    <aside id="sidebar"
+        class="sidebar bg-plena-black text-white fixed top-0 left-0 z-40 w-64 h-screen transition-transform transform -translate-x-full lg:translate-x-0 duration-300 flex flex-col shadow-2xl">
+        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-plena-blue to-plena-dark">
+            <i data-lucide="dumbbell" class="w-8 h-8 mr-3"></i>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight">PLENA FIT</h1>
+                <p class="text-xs text-white/90 font-medium">Gestão de Academia</p>
+            </div>
+        </div>
+
+        <nav class="p-4 space-y-2 flex-1 overflow-y-auto">
+            <button onclick="router('dashboard')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group active-nav"
+                id="nav-dashboard">
+                <i data-lucide="calendar" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Check-in Diário
+            </button>
+            <button onclick="router('team')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-team">
+                <i data-lucide="award" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Instrutores
+            </button>
+            <button onclick="router('services')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-services">
+                <i data-lucide="activity" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Treinos e Planos
+            </button>
+            <button onclick="router('finance')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-finance">
+                <i data-lucide="wallet" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Mensalidades
+            </button>
+            <button onclick="router('clients')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-clients">
+                <i data-lucide="users" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Alunos
+            </button>
+            <button onclick="router('reports')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-reports">
+                <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Relatórios
+            </button>
+            <button onclick="router('settings')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-settings">
+                <i data-lucide="settings" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Configurações
+            </button>
+            <button onclick="router('instructions')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-instructions">
+                <i data-lucide="book-open" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Manual de Uso
+            </button>
+            <button onclick="router('about')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-about">
+                <i data-lucide="info" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Sobre a Plena
+            </button>
+        </nav>
+
+        <div class="p-6 border-t border-white/10 text-center">
+            <p class="text-xs text-gray-500">Todos os Direitos Reservados &copy; 2026</p>
+            <a href="https://www.plenaaplicativos.com.br" target="_blank"
+                class="text-[10px] text-gray-600 hover:text-plena-blue transition-colors mt-1 block decoration-0">
+                Plena Soluções Digitais LTDA
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content min-h-screen flex flex-col lg:ml-64 transition-all duration-300">
+        <!-- Header -->
+        <header
+            class="bg-white h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-slate-100">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg text-slate-600">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <h2 id="page-title" class="text-xl font-bold text-slate-800 hidden sm:block">Check-in Diário</h2>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-green-500/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                    </div>
+                    <button onclick="openClosingModal()"
+                        class="relative flex items-center px-4 py-2.5 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-black transition-all shadow-sm active:scale-95">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 sm:mr-2"></i>
+                        <span class="hidden sm:inline">Fechar Caixa</span>
+                        <span class="sm:hidden">Fechar</span>
+                    </button>
+                </div>
+
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-plena-blue/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                    </div>
+                    <button onclick="openApptModal()"
+                        class="relative flex items-center px-4 py-2.5 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-all shadow-lg shadow-blue-200 active:scale-95">
+                        <i data-lucide="plus" class="w-5 h-5 sm:mr-2"></i>
+                        <span class="hidden sm:inline">Check-in / Avaliação</span>
+                        <span class="sm:hidden">Novo</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="p-4 lg:p-8 flex-1 overflow-y-auto">
+
+            <!-- Dashboard View -->
+            <section id="view-dashboard" class="view-section fade-in">
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Check-ins
+                                    (Hoje)</p>
+                                <h3 id="dash-appt-today" class="text-3xl font-bold text-slate-900">0</h3>
+                                <p class="text-xs text-slate-500 mt-1">Alunos presentes</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-plena-blue/10 flex items-center justify-center">
+                                <i data-lucide="calendar" class="w-6 h-6 text-plena-blue"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Faturamento
+                                    (Hoje)</p>
+                                <h3 id="dash-rev-today" class="text-2xl font-bold text-green-600">R$ 0,00</h3>
+                                <p class="text-xs text-slate-500 mt-1">
+                                    <span id="rev-growth" class="text-green-500">+0%</span> vs ontem
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Comissões a
+                                    Pagar</p>
+                                <h3 id="dash-comm-pending" class="text-2xl font-bold text-plena-blue">R$ 0,00</h3>
+                                <p class="text-xs text-slate-500 mt-1">Total pendente</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i data-lucide="dollar-sign" class="w-6 h-6 text-plena-blue"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Check-ins do Dia -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-slate-800 flex items-center">
+                            <i data-lucide="calendar" class="mr-2 w-5 h-5"></i> Check-ins do Dia
+                        </h3>
+                        <div class="flex items-center gap-3">
+                            <input type="date" id="agenda-date" onchange="renderDashboard()"
+                                class="border rounded-lg p-2 text-sm bg-white">
+                            <button onclick="openApptModal()"
+                                class="flex items-center gap-2 px-3 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold">
+                                <i data-lucide="plus" class="w-4 h-4"></i> Novo Check-in
+                            </button>
+                        </div>
+                    </div>
+                    <div id="agenda-list" class="space-y-3"></div>
+                </div>
+
+                <!-- Próximas Avaliações -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-slate-800">Próximas Avaliações</h3>
+                        <button onclick="router('dashboard')"
+                            class="text-sm text-plena-blue hover:text-plena-dark font-medium">
+                            Ver agenda completa →
+                        </button>
+                    </div>
+                    <div id="upcoming-appts" class="space-y-3">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Team View (Instrutores) -->
+            <section id="view-team" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Instrutores</h2>
+                        <p class="text-sm text-slate-600">Gerencie sua equipe de professores</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openTeamModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                            <i data-lucide="user-plus" class="w-4 h-4"></i>
+                            Novo Instrutor
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Team Grid -->
+                <div id="team-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </section>
+
+            <!-- Services View (Treinos e Planos) -->
+            <section id="view-services" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Treinos e Planos</h2>
+                        <p class="text-sm text-slate-600">Gerencie modalidades e mensalidades</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openServiceModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                            Novo Plano
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Services Grid -->
+                <div id="services-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </section>
+
+            <!-- Finance View -->
+            <section id="view-finance" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Financeiro</h2>
+                        <p class="text-sm text-slate-600">Controle de caixa e comissões</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openExpenseModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                            Novo Lançamento
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                        <p class="text-xs text-slate-500 uppercase font-bold mb-1">Faturamento (Mês)</p>
+                        <p id="fin-income" class="text-lg font-bold text-green-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                        <p class="text-xs text-slate-500 uppercase font-bold mb-1">Despesas (Mês)</p>
+                        <p id="fin-expense" class="text-lg font-bold text-red-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <p class="text-xs text-slate-500 uppercase font-bold mb-1">Comissões (Mês)</p>
+                        <p id="fin-commission" class="text-lg font-bold text-blue-700">R$ 0,00</p>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-6">
+                    <div class="p-4 bg-slate-50 grid grid-cols-1 md:grid-cols-4 gap-3 border-b border-slate-200">
+                        <div class="relative">
+                            <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-slate-400"></i>
+                            <input type="text" id="search-term" onkeyup="renderFinance()" placeholder="Buscar..."
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-plena-blue outline-none text-sm">
+                        </div>
+                        <div>
+                            <input type="date" id="filter-start" onchange="renderFinance()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div>
+                            <input type="date" id="filter-end" onchange="renderFinance()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div class="flex gap-2">
+                            <select id="filter-type" onchange="renderFinance()"
+                                class="flex-1 px-4 py-2 rounded-lg border border-slate-300 text-sm bg-white outline-none">
+                                <option value="all">Todos</option>
+                                <option value="income">Entradas</option>
+                                <option value="expense">Saídas</option>
+                            </select>
+                            <button onclick="clearFinanceFilters()"
+                                class="px-3 py-2 bg-slate-200 hover:bg-slate-300 rounded-lg text-sm transition-colors">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Transactions Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+                                <tr>
+                                    <th class="px-6 py-3">Data</th>
+                                    <th class="px-6 py-3">Descrição</th>
+                                    <th class="px-6 py-3">Instrutor</th>
+                                    <th class="px-6 py-3">Tipo</th>
+                                    <th class="px-6 py-3 text-right">Valor</th>
+                                    <th class="px-6 py-3 text-right">Comissão</th>
+                                    <th class="px-6 py-3 text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trans-list" class="divide-y divide-slate-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                    <div id="empty-msg" class="hidden p-8 text-center text-slate-400">
+                        <i data-lucide="file-text" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
+                        <p>Nenhuma transação encontrada.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Clients View (Alunos) -->
+            <section id="view-clients" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Alunos</h2>
+                        <p class="text-sm text-slate-600">Gerencie sua base de alunos</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openClientModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                            <i data-lucide="user-plus" class="w-4 h-4"></i>
+                            Novo Aluno
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Clients Table -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+                                <tr>
+                                    <th class="px-6 py-3">Nome</th>
+                                    <th class="px-6 py-3">Telefone</th>
+                                    <th class="px-6 py-3">Último Check-in</th>
+                                    <th class="px-6 py-3">Total Gasto</th>
+                                    <th class="px-6 py-3 text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clients-list" class="divide-y divide-slate-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports View -->
+            <section id="view-reports" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-slate-800 mb-2">Relatórios</h2>
+                    <p class="text-sm text-slate-600">Análise completa do seu negócio</p>
+                </div>
+
+                <!-- Report Filters -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-6">
+                    <h3 class="font-bold text-slate-800 mb-4">Configurar Período</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase">Data Inicial</label>
+                            <input type="date" id="rep-start" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase">Data Final</label>
+                            <input type="date" id="rep-end" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="generateReport()"
+                                class="flex-1 bg-plena-blue text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                                Gerar Relatório
+                            </button>
+                            <button onclick="generateMonthReport()"
+                                class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm transition-colors"
+                                title="Relatório do Mês">
+                                <i data-lucide="calendar" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Results -->
+                <div id="report-result" class="hide space-y-6">
+                    <!-- Summary Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-green-50 p-6 rounded-xl text-center border border-green-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                            <p class="text-xs text-slate-500 uppercase font-bold">Faturamento</p>
+                            <p id="rep-inc" class="text-2xl font-bold text-green-700 mt-2">R$ 0,00</p>
+                        </div>
+                        <div class="bg-red-50 p-6 rounded-xl text-center border border-red-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="trending-down" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                            <p class="text-xs text-slate-500 uppercase font-bold">Despesas</p>
+                            <p id="rep-exp" class="text-2xl font-bold text-red-700 mt-2">R$ 0,00</p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-xl text-center border border-blue-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="users" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                            <p class="text-xs text-slate-500 uppercase font-bold">Comissões</p>
+                            <p id="rep-com" class="text-2xl font-bold text-blue-700 mt-2">R$ 0,00</p>
+                        </div>
+                    </div>
+
+                    <!-- Top Services -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h3 class="font-bold text-slate-800 mb-4">Planos Mais Vendidos</h3>
+                        <div id="top-services" class="space-y-4"></div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-center">
+                        <button onclick="shareReport()"
+                            class="bg-[#25D366] text-white py-3 px-8 rounded-xl font-bold hover:bg-[#128C7E] flex justify-center items-center gap-2">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i> Compartilhar no WhatsApp
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings View -->
+            <section id="view-settings" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-slate-800 mb-2">Configurações</h2>
+                    <p class="text-sm text-slate-600">Personalize o sistema</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Business Info -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h3 class="font-bold text-slate-800 mb-4">Informações da Academia</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-xs font-bold text-slate-500 uppercase">Nome da Academia</label>
+                                <input type="text" id="biz-name" class="w-full border p-2 rounded-lg text-sm"
+                                    placeholder="Ex: Academia Fit Center">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-500 uppercase">Nome do Responsável</label>
+                                <input type="text" id="biz-owner" class="w-full border p-2 rounded-lg text-sm"
+                                    placeholder="Ex: João Silva">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-500 uppercase">CPF / CNPJ do
+                                    Responsável</label>
+                                <input type="text" id="biz-doc" class="w-full border p-2 rounded-lg text-sm"
+                                    placeholder="000.000.000-00">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-500 uppercase">Horário de
+                                    Funcionamento</label>
+                                <input type="text" id="biz-hours" class="w-full border p-2 rounded-lg text-sm"
+                                    placeholder="Ex: 06:00 às 22:00">
+                            </div>
+                            <button onclick="saveBusinessInfo()"
+                                class="w-full bg-slate-800 text-white py-2.5 rounded-lg text-sm font-bold hover:bg-black">
+                                Salvar Informações
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Data Management -->
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                            <h3 class="font-bold text-slate-800 mb-4 flex items-center">
+                                <i data-lucide="shield-alert" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                                Segurança de Dados
+                            </h3>
+
+                            <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg text-sm text-blue-800 mb-6">
+                                <p class="font-bold mb-2">⚠️ Importante</p>
+                                <p>Seus dados ficam salvos 100% no navegador. Faça backup regularmente!</p>
+                            </div>
+
+                            <div class="space-y-3">
+                                <button onclick="downloadBackup()"
+                                    class="w-full border border-slate-300 py-3 rounded-lg text-sm font-medium hover:bg-slate-50 flex justify-center items-center gap-2">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    Baixar Backup Completo (.json)
+                                </button>
+
+                                <div class="relative">
+                                    <button
+                                        class="w-full bg-slate-800 text-white py-3 rounded-lg text-sm font-medium flex justify-center items-center gap-2">
+                                        <i data-lucide="upload" class="w-4 h-4"></i>
+                                        Restaurar Backup
+                                    </button>
+                                    <input type="file" onchange="restoreBackup(this)" accept=".json"
+                                        class="absolute inset-0 opacity-0 cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Danger Zone -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                            <h3 class="font-bold text-slate-800 mb-4 flex items-center text-red-600">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
+                                Zona de Perigo
+                            </h3>
+
+                            <div class="bg-red-50 p-4 rounded-lg border border-red-100 mb-4">
+                                <p class="text-sm text-red-600"><strong>Atenção:</strong> Estas ações são irreversíveis.
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="clearAllData()"
+                                    class="py-2.5 border border-red-300 text-red-600 rounded-lg text-sm hover:bg-red-50 transition-colors">
+                                    Limpar Todos os Dados
+                                </button>
+                                <button onclick="factoryReset()"
+                                    class="py-2.5 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition-colors">
+                                    Resetar Sistema
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Instructions View - MANUAL COMPLETO PADRONIZADO -->
+            <section id="view-instructions" class="view-section hide fade-in">
+                <div class="max-w-6xl mx-auto pb-12">
+                    <!-- Cabeçalho Hero -->
+                    <div class="text-center mb-10 pt-4">
+                        <div
+                            class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-plena-blue to-plena-dark rounded-2xl mb-4 shadow-lg">
+                            <i data-lucide="dumbbell" class="w-12 h-12 text-white"
+                                aria-label="Ícone de Halter - Manual de Uso"></i>
+                        </div>
+                        <h1 class="text-3xl font-bold text-gray-800 mb-2">Manual Completo de Uso</h1>
+                        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Guia passo a passo para proprietários e
+                            gestores de academias</p>
+                        <div class="mt-4 flex flex-wrap justify-center gap-2">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">✓ Para
+                                Iniciantes</span>
+                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">📱 Mobile e
+                                Desktop</span>
+                            <span class="px-3 py-1 bg-blue-100 text-plena-blue rounded-full text-xs font-bold">⚡ Rápido
+                                e Prático</span>
+                        </div>
+                    </div>
+
+                    <!-- Barra de Progresso do Tutorial -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
+                        <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                            <i data-lucide="compass" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                            Seu Progresso no Aprendizado
+                        </h3>
+                        <div class="mb-4">
+                            <div class="progress-bar">
+                                <div id="tutorial-progress" class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-500 mt-2">
+                                <span>0% Concluído</span>
+                                <span id="completed-steps">0/7 etapas</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-7 gap-2">
+                            <button onclick="scrollToSection('instalacao')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                1. Instalação
+                            </button>
+                            <button onclick="scrollToSection('primeiro-cadastro')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                2. Configuração
+                            </button>
+                            <button onclick="scrollToSection('agendamentos')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                3. Check-ins
+                            </button>
+                            <button onclick="scrollToSection('relatorios')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                4. Relatórios
+                            </button>
+                            <button onclick="scrollToSection('backup')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                5. Backup
+                            </button>
+                            <button onclick="scrollToSection('duvidas')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                6. Dúvidas
+                            </button>
+                            <button onclick="scrollToSection('checklist')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                7. Checklist
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Seção 1: Instalação -->
+                    <div id="instalacao"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">1
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Instalação do Sistema</h3>
+                            </div>
+                            <button onclick="markSectionComplete('instalacao')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="bg-gray-900 rounded-2xl p-6 text-white shadow-lg mb-6">
+                            <h4 class="font-bold text-lg mb-4 flex items-center">
+                                <i data-lucide="download" class="w-5 h-5 mr-2 text-green-400"></i>
+                                Torne o App Disponível OFFLINE
+                            </h4>
+                            <p class="text-gray-300 mb-4">Instale no celular para usar sem internet, igual um app
+                                normal:</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                                <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+                                    <div class="font-bold text-white mb-3 flex items-center">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center mr-2">
+                                            <i data-lucide="smartphone" class="w-4 h-4"></i>
+                                        </div>
+                                        Android (Chrome)
+                                    </div>
+                                    <ol class="list-decimal pl-5 space-y-3 text-gray-300">
+                                        <li class="flex items-start">
+                                            <span class="mr-2">1.</span>
+                                            <div>
+                                                <strong>Abra esta página no Chrome</strong>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="mr-2">2.</span>
+                                            <div>
+                                                <strong>Toque nos 3 pontinhos ☰</strong>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="mr-2">3.</span>
+                                            <div>
+                                                <strong>Toque em "Instalar app"</strong>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                                <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+                                    <div class="font-bold text-white mb-3 flex items-center">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-blue-800 flex items-center justify-center mr-2">
+                                            <i data-lucide="monitor" class="w-4 h-4"></i>
+                                        </div>
+                                        Windows (Chrome)
+                                    </div>
+                                    <ol class="list-decimal pl-5 space-y-3 text-gray-300">
+                                        <li class="flex items-start">
+                                            <span class="mr-2">1.</span>
+                                            <div>
+                                                <strong>Clique no ícone (+) na barra de endereço</strong>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="mr-2">2.</span>
+                                            <div>
+                                                <strong>Clique em "Instalar"</strong>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 2: Configuração Inicial -->
+                    <div id="primeiro-cadastro"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">2
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Configuração Inicial (10 Minutos)</h3>
+                            </div>
+                            <button onclick="markSectionComplete('primeiro-cadastro')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div class="bg-blue-50 p-5 rounded-xl border border-blue-100">
+                                    <h4 class="font-bold text-blue-700 mb-3 flex items-center">
+                                        <i data-lucide="building" class="w-5 h-5 mr-2"></i>
+                                        PASSO 1: Dados da Academia
+                                    </h4>
+                                    <ol class="space-y-3 text-sm">
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                A</div>
+                                            <div>
+                                                <strong>Clique em "Configurações"</strong>
+                                                <p class="text-gray-600 text-xs">Ícone da engrenagem</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                B</div>
+                                            <div>
+                                                <strong>Nome da Academia</strong>
+                                                <p class="text-gray-600 text-xs">Ex: "Academia Fit Center"</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                C</div>
+                                            <div>
+                                                <strong>Horário de Funcionamento</strong>
+                                                <p class="text-gray-600 text-xs">Para exibir na agenda</p>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+
+                                <div class="bg-green-50 p-5 rounded-xl border border-green-100">
+                                    <h4 class="font-bold text-green-700 mb-3 flex items-center">
+                                        <i data-lucide="calendar" class="w-5 h-5 mr-2"></i>
+                                        PASSO 2: Primeiro Check-in
+                                    </h4>
+                                    <ol class="space-y-3 text-sm">
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                A</div>
+                                            <div>
+                                                <strong>Volte ao Dashboard</strong>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                B</div>
+                                            <div>
+                                                <strong>Clique em "Novo Check-in"</strong>
+                                                <p class="text-gray-600 text-xs">Botão azul no topo</p>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="bg-purple-50 p-5 rounded-xl border border-purple-100">
+                                    <h4 class="font-bold text-plena-blue mb-3 flex items-center">
+                                        <i data-lucide="users" class="w-5 h-5 mr-2"></i>
+                                        PASSO 3: Cadastrar Instrutor
+                                    </h4>
+                                    <div class="space-y-2 text-sm">
+                                        <div class="flex items-start">
+                                            <i data-lucide="check" class="w-4 h-4 text-green-500 mt-0.5 mr-2"></i>
+                                            <span><strong>Nome completo</strong></span>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <i data-lucide="check" class="w-4 h-4 text-green-500 mt-0.5 mr-2"></i>
+                                            <span><strong>Porcentagem de comissão</strong> (ex: 30%)</span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                        <p class="text-xs text-yellow-800">
+                                            <strong>💡 Dica:</strong> A comissão é calculada automaticamente ao
+                                            finalizar cada aula personalizada!
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 p-5 rounded-xl">
+                                    <h4 class="font-bold text-gray-800 mb-2 flex items-center">
+                                        <i data-lucide="zap" class="w-5 h-5 mr-2 text-green-600"></i>
+                                        Configuração Concluída!
+                                    </h4>
+                                    <p class="text-sm text-gray-700">Seu sistema já está pronto para uso!</p>
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
+                                        <div class="bg-white p-3 rounded-lg border text-center">
+                                            <i data-lucide="calendar" class="w-6 h-6 text-plena-blue mx-auto mb-1"></i>
+                                            <p class="text-xs font-bold">Ver Check-ins</p>
+                                        </div>
+                                        <div class="bg-white p-3 rounded-lg border text-center">
+                                            <i data-lucide="users" class="w-6 h-6 text-plena-blue mx-auto mb-1"></i>
+                                            <p class="text-xs font-bold">Instrutores</p>
+                                        </div>
+                                        <div class="bg-white p-3 rounded-lg border text-center">
+                                            <i data-lucide="activity" class="w-6 h-6 text-plena-blue mx-auto mb-1"></i>
+                                            <p class="text-xs font-bold">Planos</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 3: Gestão de Check-ins -->
+                    <div id="agendamentos"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">3
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Gestão de Check-ins e Comissões</h3>
+                            </div>
+                            <button onclick="markSectionComplete('agendamentos')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div
+                            class="bg-gradient-to-r from-blue-50 to-purple-50 p-5 rounded-xl border border-blue-200 mb-6">
+                            <h4 class="font-bold text-gray-800 mb-3 flex items-center">
+                                <i data-lucide="calendar-check" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                                Fluxo do Check-in
+                            </h4>
+                            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs">
+                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                                        <span class="font-bold text-blue-700">1</span>
+                                    </div>
+                                    <p class="font-bold text-gray-800">Check-in</p>
+                                    <p class="text-gray-600">Aluno chegou</p>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+                                        <span class="font-bold text-green-700">2</span>
+                                    </div>
+                                    <p class="font-bold text-gray-800">Avaliação</p>
+                                    <p class="text-gray-600">Medidas/testes</p>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-2">
+                                        <span class="font-bold text-yellow-700">3</span>
+                                    </div>
+                                    <p class="font-bold text-gray-800">Treino</p>
+                                    <p class="text-gray-600">Em andamento</p>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
+                                        <span class="font-bold text-purple-700">4</span>
+                                    </div>
+                                    <p class="font-bold text-gray-800">Finalizado</p>
+                                    <p class="text-gray-600">Treino completo</p>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+                                        <span class="font-bold text-green-700">✓</span>
+                                    </div>
+                                    <p class="font-bold text-gray-800">Registrado</p>
+                                    <p class="text-gray-600">Sistema + Comissão</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                                <h5 class="font-bold text-blue-700 mb-2 flex items-center text-sm">
+                                    <i data-lucide="calendar" class="w-4 h-4 mr-2"></i>
+                                    Dicas para Check-ins
+                                </h5>
+                                <ul class="space-y-1 text-xs text-gray-700">
+                                    <li class="flex items-start">
+                                        <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+                                        <span>Registre frequência dos alunos</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+                                        <span>Monitore planos vencidos</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+                                        <span>Agende avaliações periódicas</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                                <h5 class="font-bold text-green-700 mb-2 flex items-center text-sm">
+                                    <i data-lucide="dollar-sign" class="w-4 h-4 mr-2"></i>
+                                    Como Funciona a Comissão
+                                </h5>
+                                <ul class="space-y-1 text-xs text-gray-700">
+                                    <li class="flex items-start">
+                                        <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+                                        <span>Calculada automaticamente nas aulas personalizadas</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+                                        <span>Baseada no % definido no cadastro do instrutor</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i data-lucide="check" class="w-3 h-3 text-green-500 mr-2 mt-0.5"></i>
+                                        <span>Relatório detalhado disponível na aba Financeiro</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 4: Relatórios -->
+                    <div id="relatorios"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">4
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Relatórios e Análise de Performance</h3>
+                            </div>
+                            <button onclick="markSectionComplete('relatorios')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div
+                                class="bg-gradient-to-br from-blue-50 to-white p-5 rounded-xl border border-blue-100 shadow-sm">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mb-3">
+                                    <i data-lucide="calendar" class="w-5 h-5 text-blue-600"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 mb-2">Resumo Mensal</h4>
+                                <p class="text-xs text-gray-600">Visão geral de check-ins, faturamento bruto e
+                                    líquido do mês</p>
+                            </div>
+
+                            <div
+                                class="bg-gradient-to-br from-green-50 to-white p-5 rounded-xl border border-green-100 shadow-sm">
+                                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mb-3">
+                                    <i data-lucide="users" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 mb-2">Performance da Equipe</h4>
+                                <p class="text-xs text-gray-600">Ranking de instrutores e total de aulas por
+                                    profissional</p>
+                            </div>
+
+                            <div
+                                class="bg-gradient-to-br from-purple-50 to-white p-5 rounded-xl border border-purple-100 shadow-sm">
+                                <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mb-3">
+                                    <i data-lucide="dollar-sign" class="w-5 h-5 text-purple-600"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 mb-2">Controle de Comissões</h4>
+                                <p class="text-xs text-gray-600">Acompanhamento de valores pagos e pendentes para a
+                                    equipe</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 5: Backup e Segurança -->
+                    <div id="backup"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">5
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Backup e Segurança dos Dados</h3>
+                            </div>
+                            <button onclick="markSectionComplete('backup')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-xl mb-6 shadow-sm">
+                            <h4 class="font-bold text-red-800 mb-3 flex items-center">
+                                <i data-lucide="alert-octagon" class="w-5 h-5 mr-2"></i>
+                                ATENÇÃO: Seus dados são locais!
+                            </h4>
+                            <div class="text-sm text-red-800 space-y-2">
+                                <p>📱 <strong>Os dados ficam APENAS no seu dispositivo atual.</strong></p>
+                                <p>🔄 <strong>Se você perder o celular ou formatar o computador, perderá TUDO.</strong>
+                                </p>
+                                <p>💾 <strong>O backup é SUA única garantia.</strong> Faça toda semana!</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-green-50 p-5 rounded-xl border border-green-200">
+                                <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                    <i data-lucide="download" class="w-5 h-5 mr-2 text-green-600"></i>
+                                    Como Fazer Backup
+                                </h4>
+                                <ol class="space-y-3 text-sm">
+                                    <li class="flex items-start">
+                                        <div
+                                            class="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center mr-2 text-xs font-bold mt-0.5">
+                                            1</div>
+                                        <div>
+                                            <strong>Vá em Configurações</strong>
+                                            <p class="text-gray-600 text-xs">Menu lateral → Engrenagem</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div
+                                            class="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center mr-2 text-xs font-bold mt-0.5">
+                                            2</div>
+                                        <div>
+                                            <strong>Clique em "Baixar Backup"</strong>
+                                            <p class="text-gray-600 text-xs">Isso gerará um arquivo .json</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div
+                                            class="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center mr-2 text-xs font-bold mt-0.5">
+                                            3</div>
+                                        <div>
+                                            <strong>Guarde em local seguro</strong>
+                                            <p class="text-gray-600 text-xs">Envie para seu e-mail ou WhatsApp</p>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+
+                            <div class="bg-blue-50 p-5 rounded-xl border border-blue-200">
+                                <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                    <i data-lucide="refresh-cw" class="w-5 h-5 mr-2 text-blue-600"></i>
+                                    Restaurar Backup
+                                </h4>
+                                <ol class="space-y-3 text-sm">
+                                    <li class="flex items-start">
+                                        <div
+                                            class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center mr-2 text-xs font-bold mt-0.5">
+                                            1</div>
+                                        <div>
+                                            <strong>Tenha o arquivo .json em mãos</strong>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div
+                                            class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center mr-2 text-xs font-bold mt-0.5">
+                                            2</div>
+                                        <div>
+                                            <strong>Acesse as Configurações</strong>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div
+                                            class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center mr-2 text-xs font-bold mt-0.5">
+                                            3</div>
+                                        <div>
+                                            <strong>Clique em "Restaurar Backup"</strong>
+                                            <p class="text-gray-600 text-xs">Selecione o arquivo e confirme</p>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 6: Dúvidas Frequentes -->
+                    <div id="duvidas"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">6
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Dúvidas Frequentes (FAQ)</h3>
+                            </div>
+                            <button onclick="markSectionComplete('duvidas')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <details
+                                class="group bg-gray-50 border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                                <summary
+                                    class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 transition-colors select-none">
+                                    <div class="flex items-center gap-3 font-bold text-gray-700">
+                                        <i data-lucide="help-circle" class="w-5 h-5 text-blue-600"></i>
+                                        Como faço para trocar de dispositivo?
+                                    </div>
+                                    <i data-lucide="chevron-down"
+                                        class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform"></i>
+                                </summary>
+                                <div class="p-4 pt-0 border-t border-gray-100">
+                                    <p class="text-sm text-gray-600 mt-3">Para usar em outro aparelho, basta fazer o
+                                        backup no dispositivo antigo, enviar o arquivo para o novo e usar a função
+                                        "Restaurar Backup" nas configurações.</p>
+                                </div>
+                            </details>
+
+                            <details
+                                class="group bg-gray-50 border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                                <summary
+                                    class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 transition-colors select-none">
+                                    <div class="flex items-center gap-3 font-bold text-gray-700">
+                                        <i data-lucide="smartphone" class="w-5 h-5 text-green-600"></i>
+                                        Funciona sem internet?
+                                    </div>
+                                    <i data-lucide="chevron-down"
+                                        class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform"></i>
+                                </summary>
+                                <div class="p-4 pt-0 border-t border-gray-100">
+                                    <p class="text-sm text-gray-600 mt-3">Sim! O Plena Fit foi projetado para
+                                        funcionar 100% offline após a instalação. Você só precisa de internet para fazer
+                                        backup na nuvem ou enviar mensagens via WhatsApp.</p>
+                                </div>
+                            </details>
+
+                            <details
+                                class="group bg-gray-50 border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                                <summary
+                                    class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 transition-colors select-none">
+                                    <div class="flex items-center gap-3 font-bold text-gray-700">
+                                        <i data-lucide="users" class="w-5 h-5 text-purple-600"></i>
+                                        Como cadastrar novos instrutores?
+                                    </div>
+                                    <i data-lucide="chevron-down"
+                                        class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform"></i>
+                                </summary>
+                                <div class="p-4 pt-0 border-t border-gray-100">
+                                    <p class="text-sm text-gray-600 mt-3">Acesse a aba "Instrutores", clique no botão
+                                        "Novo
+                                        Instrutor" e preencha o nome e a porcentagem de comissão dele.</p>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+
+                    <!-- Seção 7: Checklist Interativo -->
+                    <div id="checklist"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">7
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Checklist de Rotina da Academia</h3>
+                            </div>
+                            <button onclick="markSectionComplete('checklist')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div
+                            class="bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-6 text-white mb-6 shadow-md">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="font-bold text-lg">Progresso da Rotina</h4>
+                                <div class="text-right">
+                                    <div class="text-2xl font-bold text-blue-400" id="checklist-percent">0%</div>
+                                    <div class="text-xs text-gray-400"><span id="checklist-completed">0</span>/<span
+                                            id="checklist-total">0</span> tarefas</div>
+                                </div>
+                            </div>
+                            <div class="progress-bar mb-4 bg-white/10">
+                                <div id="checklist-progress" class="progress-fill bg-blue-500" style="width: 0%"></div>
+                            </div>
+                            <div id="next-tasks" class="space-y-2 text-sm">
+                                <!-- Preenchido via JS -->
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-blue-50 p-5 rounded-xl border border-blue-100">
+                                <h5 class="font-bold text-blue-700 mb-4 flex items-center">
+                                    <i data-lucide="calendar" class="w-4 h-4 mr-2"></i>
+                                    Rotina Diária
+                                </h5>
+                                <div class="space-y-3">
+                                    <div class="checklist-item flex items-center gap-3">
+                                        <input type="checkbox" id="c1" onchange="updateChecklist()"
+                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                        <span class="text-sm text-gray-700">Verificar check-ins do dia</span>
+                                    </div>
+                                    <div class="checklist-item flex items-center gap-3">
+                                        <input type="checkbox" id="c2" onchange="updateChecklist()"
+                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                        <span class="text-sm text-gray-700">Registrar mensalidades pagas</span>
+                                    </div>
+                                    <div class="checklist-item flex items-center gap-3">
+                                        <input type="checkbox" id="c3" onchange="updateChecklist()"
+                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                        <span class="text-sm text-gray-700">Verificar equipamentos</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-green-50 p-5 rounded-xl border border-green-100">
+                                <h5 class="font-bold text-green-700 mb-4 flex items-center">
+                                    <i data-lucide="shield-check" class="w-4 h-4 mr-2"></i>
+                                    Rotina Semanal
+                                </h5>
+                                <div class="space-y-3">
+                                    <div class="checklist-item flex items-center gap-3">
+                                        <input type="checkbox" id="c4" onchange="updateChecklist()"
+                                            class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-500">
+                                        <span class="text-sm text-gray-700">Realizar Backup dos dados (.json)</span>
+                                    </div>
+                                    <div class="checklist-item flex items-center gap-3">
+                                        <input type="checkbox" id="c5" onchange="updateChecklist()"
+                                            class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-500">
+                                        <span class="text-sm text-gray-700">Conferir comissões da equipe</span>
+                                    </div>
+                                    <div class="checklist-item flex items-center gap-3">
+                                        <input type="checkbox" id="c6" onchange="updateChecklist()"
+                                            class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-500">
+                                        <span class="text-sm text-gray-700">Gerar relatório de faturamento</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Rodapé do Manual -->
+                    <div class="mt-10 bg-white border border-gray-200 rounded-2xl p-8 text-center shadow-sm">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Dúvidas Técnicas?</h3>
+                        <p class="text-gray-500 text-sm mb-6">
+                            Nossa equipe de suporte responde em até 24h úteis.
+                        </p>
+                        <a href="mailto:tecnologia@plenaaplicativos.com.br"
+                            class="inline-flex items-center text-plena-blue font-bold hover:underline">
+                            <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+                            tecnologia@plenaaplicativos.com.br
+                        </a>
+                    </div>
+
+                    <div class="text-center mt-8">
+                        <p class="text-[10px] text-gray-400">Versão 4.1 Pro • Plena Soluções Digitais</p>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- About View (V4 Standard) -->
+            <section id="view-about" class="view-section hide fade-in">
+                <div class="max-w-4xl mx-auto pb-12">
+
+                    <!-- 1. Header Institucional -->
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-8 text-center">
+                        <div
+                            class="w-20 h-20 rounded-full bg-gradient-to-r from-plena-blue to-plena-dark flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-200">
+                            <i data-lucide="shield-check" class="w-10 h-10 text-white"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-slate-800 mb-1">Central de Segurança e Legalidade</h2>
+                        <p class="text-slate-500 font-medium">Plena Soluções Digitais • Transparência Total</p>
+                    </div>
+
+                    <!-- 2. Grid de Políticas -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <!-- Termos de Uso -->
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 hover:shadow-md transition-shadow">
+                            <h3 class="font-bold text-slate-800 mb-3 flex items-center text-lg">
+                                <div class="p-2 bg-blue-50 rounded-lg mr-3">
+                                    <i data-lucide="file-text" class="w-5 h-5 text-plena-blue"></i>
+                                </div>
+                                Termos de Uso
+                            </h3>
+                            <p class="text-sm text-slate-600 leading-relaxed text-justify">
+                                A licença concedida é <strong>pessoal, intransferível e não exclusiva</strong>. O
+                                software é
+                                fornecido "no estado em que se encontra" (as-is). É estritamente proibida a revenda,
+                                cópia,
+                                distribuição não autorizada ou engenharia reversa do código-fonte, sob pena das sanções
+                                previstas na Lei de Propriedade Intelectual (9.610/98).
+                            </p>
+                        </div>
+
+                        <!-- Privacidade e LGPD -->
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 hover:shadow-md transition-shadow">
+                            <h3 class="font-bold text-slate-800 mb-3 flex items-center text-lg">
+                                <div class="p-2 bg-green-50 rounded-lg mr-3">
+                                    <i data-lucide="lock" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                                Privacidade (LGPD)
+                            </h3>
+                            <p class="text-sm text-slate-600 leading-relaxed text-justify">
+                                Adotamos a arquitetura <strong>Privacy by Design (Local-First)</strong>. Seus dados
+                                financeiros e de alunos ficam salvos <strong>exclusivamente no seu
+                                    dispositivo</strong>.
+                                A Plena não coleta, não armazena e não tem acesso a nenhuma informação inserida no
+                                sistema.
+                                Sua privacidade é absoluta.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 3. Responsabilidade do Usuário (Crítico) -->
+                    <div class="bg-red-50 border border-red-100 p-8 rounded-2xl mb-8 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <i data-lucide="alert-octagon" class="w-32 h-32 text-red-900"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <h3 class="font-bold text-red-800 mb-4 flex items-center text-lg">
+                                <i data-lucide="alert-triangle" class="w-6 h-6 mr-3"></i>
+                                IMPORTANTE: Sua Responsabilidade sobre os Dados
+                            </h3>
+                            <div class="space-y-4 text-sm text-red-900/80 text-justify font-medium">
+                                <p>
+                                    <strong>1. Backup é Obrigatório:</strong> Como não temos acesso aos seus dados,
+                                    <strong>não podemos recuperá-los</strong> em caso de perda, roubo ou dano ao seu
+                                    dispositivo. A realização de cópias de segurança (Backup) é de responsabilidade
+                                    única e
+                                    exclusiva do usuário.
+                                </p>
+                                <p>
+                                    <strong>2. Isenção de Responsabilidade Técnica:</strong> A Plena exime-se de
+                                    qualquer
+                                    responsabilidade por prejuízos decorrentes de falhas de hardware, vírus no
+                                    dispositivo
+                                    do usuário, ou uso incorreto dos cálculos financeiros do sistema. Verifique sempre
+                                    as
+                                    taxas configuradas.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Suporte e SLA -->
+                    <div
+                        class="bg-gradient-to-br from-slate-900 to-plena-dark text-white p-8 rounded-2xl mb-12 shadow-xl">
+                        <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                            <div class="flex-1">
+                                <h3 class="font-bold text-xl mb-2 flex items-center">
+                                    <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-plena-blue"></i>
+                                    Suporte Premium Especializado
+                                </h3>
+                                <p class="text-slate-300 text-sm mb-6 leading-relaxed">
+                                    Precisa de ajuda ou encontrou alguma inconsistência? Nossa equipe técnica está
+                                    pronta
+                                    para atender você com prioridade. Garantimos a qualidade e a segurança da nossa
+                                    marca.
+                                </p>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                        <p class="text-xs text-slate-400 uppercase font-bold">Canal Oficial</p>
+                                        <p class="font-bold text-white">E-mail</p>
+                                    </div>
+                                    <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                        <p class="text-xs text-slate-400 uppercase font-bold">Tempo de Resposta (SLA)
+                                        </p>
+                                        <p class="font-bold text-plena-blue">Até 24h Úteis</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <a href="mailto:tecnologia@plenaaplicativos.com.br"
+                                    class="inline-flex items-center justify-center bg-white text-plena-dark px-8 py-4 rounded-xl font-bold hover:bg-slate-100 transition-transform transform hover:scale-105 shadow-lg">
+                                    <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+                                    Falar com Suporte
+                                </a>
+                                <p class="text-xs text-center text-slate-400 mt-3">tecnologia@plenaaplicativos.com.br
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Confirmação e Aceite (Travamento) -->
+                    <div class="mt-8 mb-12" id="terms-action-container">
+                        <div class="bg-slate-50 border border-slate-200 p-6 rounded-2xl flex flex-col items-center text-center transition-all duration-300"
+                            id="terms-box">
+                            <i data-lucide="check-circle-2" class="w-12 h-12 text-slate-300 mb-3" id="terms-icon"></i>
+                            <h3 class="font-bold text-slate-800 text-lg mb-2" id="terms-title">Confirmação de Leitura
+                            </h3>
+                            <p class="text-sm text-slate-500 mb-6 max-w-lg" id="terms-desc">
+                                Para prosseguir com segurança, confirme que você leu e compreendeu os Termos de Uso, a
+                                Política de Privacidade e sua responsabilidade sobre os backups.
+                            </p>
+
+                            <button onclick="confirmTerms()" id="btn-confirm-terms"
+                                class="bg-plena-blue hover:bg-plena-dark text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-200 transform hover:scale-105 transition-all flex items-center gap-2 group">
+                                <span>Li, Compreendi e Concordo</span>
+                                <i data-lucide="arrow-right"
+                                    class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+
+                            <div id="terms-accepted-badge"
+                                class="hidden flex flex-col items-center animate-in fade-in zoom-in duration-300">
+                                <span
+                                    class="bg-green-100 text-green-700 font-bold px-6 py-2 rounded-full text-sm border border-green-200 flex items-center gap-2 mb-2">
+                                    <i data-lucide="lock" class="w-4 h-4"></i>
+                                    Termos Aceitos e Registrados
+                                </span>
+                                <p class="text-xs text-slate-400 font-mono" id="terms-date">Carregando data...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. Rodapé Legal -->
+                    <div class="text-center border-t border-slate-200 pt-8">
+                        <p class="text-sm font-bold text-slate-800">Plena Soluções Digitais LTDA</p>
+                        <p class="text-xs text-slate-500 mt-1">CNPJ: 17.347.919/0001-59 • Todos os direitos reservados
+                        </p>
+                        <p class="text-[10px] text-slate-400 mt-4">
+                            Versão 4.1 Pro • Build 2026.01.07
+                        </p>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Appointment Modal -->
+    <div id="apptModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-slate-800">Novo Check-in / Avaliação</h3>
+                <button onclick="closeModal('apptModal')" class="text-slate-400 hover:text-slate-600">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <form onsubmit="submitAppt(event)" class="space-y-4">
+                <input type="hidden" id="ap-id">
+
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Aluno</label>
+                    <input type="text" id="ap-client" required
+                        class="w-full border p-2 rounded-lg text-sm focus:border-plena-blue outline-none"
+                        placeholder="Nome do aluno">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Data</label>
+                        <input type="date" id="ap-date" required
+                            class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Horário</label>
+                        <input type="time" id="ap-time" required
+                            class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Plano / Serviço</label>
+                    <select id="ap-service" required class="w-full border p-2 rounded-lg text-sm bg-white outline-none"
+                        onchange="updateApptValue()">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Instrutor</label>
+                    <select id="ap-pro" required class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-lg flex justify-between items-center font-bold">
+                    <span class="text-slate-500">Valor Total:</span>
+                    <span id="ap-display-val" class="text-xl text-slate-800">R$ 0,00</span>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-plena-blue text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-plena-dark transition-all mt-2">
+                    Confirmar Check-in
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Team Modal -->
+    <div id="teamModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-slate-800">Novo Instrutor</h3>
+                <button onclick="closeModal('teamModal')" class="text-slate-400">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form onsubmit="submitTeam(event)" class="space-y-4">
+                <input type="hidden" id="tm-id">
+                <input type="text" id="tm-name" required placeholder="Nome do Instrutor"
+                    class="w-full border p-2 rounded-lg">
+                <div class="bg-blue-50 border border-blue-200 p-3 rounded-lg">
+                    <label class="text-xs font-bold text-blue-800 uppercase mb-1 block">Comissão Padrão (%)</label>
+                    <input type="number" id="tm-comm" required class="w-full border p-2 rounded-lg" placeholder="Ex: 30"
+                        min="0" max="100" step="1">
+                </div>
+                <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Service Modal -->
+    <div id="serviceModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-slate-800">Novo Plano</h3>
+                <button onclick="closeModal('serviceModal')" class="text-slate-400">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form onsubmit="submitService(event)" class="space-y-4">
+                <input type="hidden" id="svc-id">
+                <input type="text" id="svc-name" required placeholder="Nome (Ex: Mensalidade Musculação)"
+                    class="w-full border p-2 rounded-lg">
+                <input type="number" step="0.01" id="svc-price" required placeholder="Preço R$"
+                    class="w-full border p-2 rounded-lg" min="0">
+                <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Expense Modal -->
+    <div id="expenseModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-slate-800">Lançar Movimentação</h3>
+                <button onclick="closeModal('expenseModal')" class="text-slate-400">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form onsubmit="submitExpense(event)" class="space-y-4">
+                <input type="hidden" id="exp-id">
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Tipo</label>
+                    <select id="exp-type" class="w-full border p-2 rounded-lg mt-1 font-bold">
+                        <option value="expense">🔴 Saída (Despesa)</option>
+                        <option value="income">🟢 Entrada (Receita)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Descrição</label>
+                    <input type="text" id="exp-desc" required placeholder="Ex: Conta de Luz / Mensalidade"
+                        class="w-full border p-2 rounded-lg mt-1">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Valor (R$)</label>
+                    <input type="number" id="exp-amount" required step="0.01" min="0" placeholder="0,00"
+                        class="w-full border p-2 rounded-lg mt-1 text-lg font-bold">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Data</label>
+                    <input type="date" id="exp-date" required class="w-full border p-2 rounded-lg mt-1">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Categoria</label>
+                    <select id="exp-category" class="w-full border p-2 rounded-lg mt-1">
+                        <option value="mensalidade">Mensalidade</option>
+                        <option value="personal">Personal Trainer</option>
+                        <option value="avaliacao">Avaliação Física</option>
+                        <option value="aluguel">Aluguel</option>
+                        <option value="contas">Contas (Água/Luz/Net)</option>
+                        <option value="manutencao">Manutenção Equipamentos</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="suplementos">Suplementos</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold">
+                    Salvar Lançamento
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Client Modal -->
+    <div id="clientModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-slate-800">Novo Aluno</h3>
+                <button onclick="closeModal('clientModal')" class="text-slate-400">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form onsubmit="submitClient(event)" class="space-y-4">
+                <input type="hidden" id="cli-id">
+                <input type="text" id="cli-name" required placeholder="Nome completo"
+                    class="w-full border p-2 rounded-lg">
+                <input type="tel" id="cli-phone" placeholder="Telefone (WhatsApp)" class="w-full border p-2 rounded-lg">
+                <input type="email" id="cli-email" placeholder="E-mail" class="w-full border p-2 rounded-lg">
+                <textarea id="cli-notes" placeholder="Observações (Plano, Restrições, etc.)"
+                    class="w-full border p-2 rounded-lg" rows="3"></textarea>
+                <button type="submit" class="w-full bg-plena-blue text-white py-3 rounded-lg font-bold">Salvar
+                    Aluno</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Closing Modal -->
+    <div id="closingModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+            <div class="bg-gradient-to-r from-plena-blue to-plena-dark p-6 text-center text-white">
+                <h3 class="font-bold text-lg">Fechamento do Dia</h3>
+                <p id="close-date" class="text-sm text-white/90 mt-1">Hoje</p>
+                <p id="close-time" class="text-xs text-white/70 mt-0">--:--</p>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4 mb-6">
+                    <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg border border-green-100">
+                        <div class="flex items-center">
+                            <i data-lucide="trending-up" class="w-4 h-4 text-green-600 mr-2"></i>
+                            <span class="text-sm">Faturamento</span>
+                        </div>
+                        <span id="close-inc" class="font-bold text-green-700">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg border border-red-100">
+                        <div class="flex items-center">
+                            <i data-lucide="trending-down" class="w-4 h-4 text-red-600 mr-2"></i>
+                            <span class="text-sm">Despesas</span>
+                        </div>
+                        <span id="close-exp" class="font-bold text-red-700">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg border border-blue-100">
+                        <div class="flex items-center">
+                            <i data-lucide="users" class="w-4 h-4 text-blue-600 mr-2"></i>
+                            <span class="text-sm">Comissões</span>
+                        </div>
+                        <span id="close-com" class="font-bold text-blue-700">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-4 border-t">
+                        <span class="font-bold text-slate-800">Saldo Final</span>
+                        <span id="close-bal" class="font-bold text-2xl text-slate-900">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <button onclick="shareClosing()"
+                        class="bg-[#25D366] text-white py-2.5 rounded-lg font-bold text-sm hover:bg-[#128C7E] flex justify-center items-center gap-2">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
+                    </button>
+                    <button onclick="printClosing()"
+                        class="bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 flex justify-center items-center gap-2">
+                        <i data-lucide="printer" class="w-4 h-4"></i> Imprimir
+                    </button>
+                </div>
+
+                <button onclick="closeModal('closingModal')"
+                    class="w-full bg-slate-100 text-slate-700 py-3 rounded-lg font-bold text-sm hover:bg-slate-200 transition-colors flex justify-center items-center gap-2">
+                    Concluir Fechamento
+                </button>
+
+                <div class="mt-4 pt-4 border-t border-slate-100 text-center">
+                    <a href="https://www.plenaaplicativos.com.br" target="_blank"
+                        class="text-[10px] text-slate-400 hover:text-plena-blue no-underline">
+                        Plena Soluções Digitais &copy; 2026
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Commission Modal -->
+    <div id="commissionModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+            <div class="bg-gradient-to-r from-plena-blue to-plena-dark p-6 text-center text-white">
+                <h3 class="font-bold text-lg">Pagamento de Comissão</h3>
+                <p class="text-xs text-white/80 mt-1">Confirmação de Pagamento</p>
+            </div>
+            <div class="p-6">
+                <div class="text-center mb-6">
+                    <p class="text-sm text-slate-500">Valor a pagar para</p>
+                    <h3 id="comm-pro-name" class="font-bold text-xl text-slate-800 my-2">--</h3>
+                    <div class="bg-green-50 text-green-700 font-bold text-2xl py-3 rounded-xl border border-green-100">
+                        <span id="comm-value">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <button onclick="shareCommissionWhatsApp()"
+                        class="bg-[#25D366] text-white py-2.5 rounded-lg font-bold text-sm hover:bg-[#128C7E] flex justify-center items-center gap-2">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
+                    </button>
+                    <button onclick="printCommissionReceipt()"
+                        class="bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 flex justify-center items-center gap-2">
+                        <i data-lucide="printer" class="w-4 h-4"></i> Recibo
+                    </button>
+                </div>
+
+                <button onclick="confirmCommissionPayment()"
+                    class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold text-sm hover:bg-black transition-colors flex justify-center items-center gap-2">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+                    Confirmar Pagamento
+                </button>
+
+                <button onclick="closeModal('commissionModal')"
+                    class="w-full mt-3 text-slate-500 text-xs font-bold hover:text-red-500">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Container (Hidden) -->
+    <div id="print-area" class="hidden"></div>
+
+    <!-- JavaScript -->
+    <script>
+        // 🔒 DADOS DA LICENÇA (INSTRUÇÕES PARA O GERADOR)
+        // O Gerador de Licenças deve localizar esta constante e preencher os dados abaixo:
+        const LICENSE_DATA = {
+            active: false,      // ALTERAR PARA true PARA ATIVAR A LICENÇA
+            businessName: "",   // NOME DA ACADEMIA (Ex: Academia Fit Center)
+            ownerName: "",      // NOME DO RESPONSÁVEL (Ex: João Silva)
+            ownerDoc: ""        // CPF OU CNPJ (Ex: 123.456.789-00)
+        };
+        // Protege contra modificações em tempo de execução via Console
+        Object.freeze(LICENSE_DATA);
+
+        // ESTADO GLOBAL
+        const DB_KEY = 'plena_fit_pro_v1';
+        const defaultDB = {
+            appointments: [],
+            team: [
+                { id: 'adm', name: 'Instrutor Chefe', commission: 0 }
+            ],
+            services: [
+                { id: 's1', name: 'Mensalidade Musculação', price: 90.00 },
+                { id: 's2', name: 'Mensalidade Crossfit', price: 150.00 },
+                { id: 's3', name: 'Aula de Pilates', price: 45.00 },
+                { id: 's4', name: 'Avaliação Nutricional', price: 80.00 },
+                { id: 's5', name: 'Personal Trainer (Hora)', price: 120.00 },
+                { id: 's6', name: 'Mensalidade Kids', price: 70.00 }
+            ],
+            clients: [],
+            transactions: [],
+            settings: {
+                businessName: '',
+                businessHours: '06:00 às 22:00',
+                theme: 'indigo',
+                termsAccepted: false,
+                termsAcceptedAt: null
+            },
+            tutorial: {
+                completedSteps: [],
+                checklistState: {}
+            }
+        };
+
+        let db = JSON.parse(localStorage.getItem(DB_KEY)) || defaultDB;
+
+        // UTILITÁRIOS
+        const sanitizeHTML = (str) => {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        };
+
+        const save = () => {
+            localStorage.setItem(DB_KEY, JSON.stringify(db));
+            updateDataStatus();
+        };
+
+        const fmtMoney = (v) => {
+            return v.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        };
+
+        const fmtDate = (d) => {
+            if (!d) return '--/--/--';
+            const date = new Date(d);
+            return date.toLocaleDateString('pt-BR');
+        };
+
+        const fmtDateInput = (d) => {
+            return new Date(d).toISOString().split('T')[0];
+        };
+
+        const getID = () => {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        };
+
+        const calculatePercentage = (current, previous) => {
+            if (previous === 0) return current > 0 ? 100 : 0;
+            return ((current - previous) / previous * 100).toFixed(1);
+        };
+
+        // INICIALIZAÇÃO
+        function init() {
+            lucide.createIcons();
+
+            // Configurar datas padrão
+            const today = new Date().toISOString().split('T')[0];
+            const firstDay = new Date();
+            firstDay.setDate(1);
+            const firstDayStr = firstDay.toISOString().split('T')[0];
+
+            // Configurar inputs de data
+            document.getElementById('ap-date').value = today;
+            document.getElementById('agenda-date').value = today;
+            document.getElementById('exp-date').value = today;
+            document.getElementById('rep-start').value = firstDayStr;
+            document.getElementById('rep-end').value = today;
+            document.getElementById('filter-start').value = firstDayStr;
+            document.getElementById('filter-end').value = today;
+
+            // Configurar business info
+            document.getElementById('biz-name').value = db.settings.businessName || '';
+            document.getElementById('biz-owner').value = db.settings.businessOwner || '';
+            document.getElementById('biz-doc').value = db.settings.businessDoc || '';
+            document.getElementById('biz-hours').value = db.settings.businessHours || '';
+
+            // 🔐 VERIFICAÇÃO DE LICENÇA (Hook V4)
+            if (typeof LICENSE_DATA !== 'undefined' && LICENSE_DATA.active) {
+                // 0. Forçar dados no DB
+                // Se o gerador fornecer um nome de academia, ele será aplicado. Caso contrário, mantém-se a personalização.
+                if (LICENSE_DATA.businessName && LICENSE_DATA.businessName.trim() !== "") {
+                    db.settings.businessName = LICENSE_DATA.businessName;
+                }
+                db.settings.businessOwner = LICENSE_DATA.ownerName;
+                db.settings.businessDoc = LICENSE_DATA.ownerDoc;
+
+                // 1. Preencher e Travar Dados
+                const nameInput = document.getElementById('biz-name');
+                const ownerInput = document.getElementById('biz-owner');
+                const docInput = document.getElementById('biz-doc');
+                const hoursInput = document.getElementById('biz-hours');
+
+                if (nameInput && LICENSE_DATA.businessName && LICENSE_DATA.businessName.trim() !== "") {
+                    nameInput.value = LICENSE_DATA.businessName;
+                    nameInput.disabled = true;
+                    nameInput.classList.add('bg-slate-100', 'cursor-not-allowed');
+                }
+
+                if (ownerInput) {
+                    ownerInput.value = LICENSE_DATA.ownerName;
+                    ownerInput.disabled = true;
+                    ownerInput.classList.add('bg-slate-100', 'cursor-not-allowed');
+                }
+
+                if (docInput) {
+                    docInput.value = LICENSE_DATA.ownerDoc;
+                    docInput.disabled = true;
+                    docInput.classList.add('bg-slate-100', 'cursor-not-allowed');
+
+                    // Adicionar indicador visual de licença
+                    if (!docInput.parentElement.querySelector('.lock-icon')) {
+                        docInput.parentElement.insertAdjacentHTML('beforeend',
+                            `<span class="lock-icon text-[10px] text-plena-blue font-bold flex items-center mt-1"><i data-lucide="lock" class="w-3 h-3 mr-1"></i> Licença Vitalícia Ativa</span>`
+                        );
+                    }
+                }
+
+                // 2. Marca D'água Sidebar (Rodapé)
+                const sidebarFooter = document.querySelector('aside .border-t');
+                if (sidebarFooter && !sidebarFooter.querySelector('.license-watermark')) {
+                    const licenseDiv = document.createElement('div');
+                    licenseDiv.className = 'license-watermark mt-2 pt-2 border-t border-white/5 text-[10px] text-white/50 font-mono';
+                    licenseDiv.innerHTML = `Licenciado para:<br><strong class="text-white/80">${sanitizeHTML(LICENSE_DATA.ownerName)}</strong><br>CPF/CNPJ: ${sanitizeHTML(LICENSE_DATA.ownerDoc)}`;
+                    sidebarFooter.appendChild(licenseDiv);
+                }
+            }
+
+            // Renderizar dados iniciais
+            renderDashboard();
+            updateDataStatus();
+            if (typeof updateTermsVisuals === 'function') updateTermsVisuals();
+
+            // Configurar periodicidade para salvar
+            setInterval(save, 30000); // Salva a cada 30 segundos
+        }
+
+        // ROTEAMENTO E NAVEGAÇÃO
+        function router(view) {
+            // Esconder todas as views
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hide'));
+
+            // Remover classe active de todos os nav items
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('bg-white/10', 'text-white');
+                el.classList.add('text-slate-400');
+            });
+
+            // Mostrar view selecionada
+            const viewElement = document.getElementById(`view-${view}`);
+            if (viewElement) {
+                viewElement.classList.remove('hide');
+                viewElement.classList.add('fade-in');
+            }
+
+            // Ativar nav item selecionado
+            const navElement = document.getElementById(`nav-${view}`);
+            if (navElement) {
+                navElement.classList.add('bg-white/10', 'text-white');
+                navElement.classList.remove('text-slate-400');
+            }
+
+            // Atualizar título da página
+            const titles = {
+                dashboard: 'Check-in Diário',
+                team: 'Instrutores',
+                services: 'Treinos e Planos',
+                finance: 'Mensalidades',
+                clients: 'Alunos',
+                reports: 'Relatórios',
+                settings: 'Configurações',
+                instructions: 'Manual de Uso',
+                about: 'Sobre a Plena'
+            };
+
+            document.getElementById('page-title').innerText = titles[view] || 'Plena Fit';
+
+            // Fechar sidebar no mobile
+            if (window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+
+            // Renderizar dados específicos da view
+            if (view === 'dashboard') {
+                renderDashboard();
+            } else if (view === 'team') {
+                renderTeam();
+            } else if (view === 'services') {
+                renderServices();
+            } else if (view === 'finance') {
+                renderFinance();
+            } else if (view === 'clients') {
+                renderClients();
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('hidden');
+
+            // Bloquear scroll do body quando sidebar aberta
+            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+        }
+
+        // DASHBOARD
+        function renderDashboard() {
+            const date = document.getElementById('agenda-date').value;
+            const todayAppts = db.appointments
+                .filter(a => a.date === date)
+                .sort((a, b) => a.time.localeCompare(b.time));
+
+            // Calcular estatísticas
+            const todayStr = new Date().toISOString().split('T')[0];
+            const todayTrans = db.transactions.filter(t => t.date === todayStr);
+
+            const incomeToday = todayTrans
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+
+            const expenseToday = todayTrans
+                .filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+
+            const commissionPending = db.transactions
+                .filter(t => t.type === 'income' && !t.commissionPaid)
+                .reduce((sum, t) => sum + (t.commission || 0), 0);
+
+            // Atualizar KPI cards
+            document.getElementById('dash-appt-today').innerText = db.appointments
+                .filter(a => a.date === todayStr && a.status === 'pending').length;
+            document.getElementById('dash-rev-today').innerText = fmtMoney(incomeToday);
+            document.getElementById('dash-comm-pending').innerText = fmtMoney(commissionPending);
+
+            // Calcular crescimento vs ontem
+            const yesterdayStr = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+            const yesterdayIncome = db.transactions
+                .filter(t => t.date === yesterdayStr && t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+
+            const growth = calculatePercentage(incomeToday, yesterdayIncome);
+            document.getElementById('rev-growth').innerText = `${growth}%`;
+
+            // Renderizar check-ins
+            const agendaList = document.getElementById('agenda-list');
+            if (todayAppts.length === 0) {
+                agendaList.innerHTML = `
+                    <div class="text-center py-8">
+                        <i data-lucide="calendar-x" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
+                        <p class="text-slate-400">Nenhum check-in para esta data</p>
+                    </div>
+                `;
+            } else {
+                agendaList.innerHTML = todayAppts.map(appt => `
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex justify-between items-center ${appt.status === 'canceled' ? 'opacity-60' : ''}">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white px-3 py-2 rounded-lg border text-center min-w-[70px]">
+                                <span class="block font-bold text-lg text-slate-800">${appt.time}</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">${sanitizeHTML(appt.client)}</h4>
+                                <p class="text-xs text-slate-500">
+                                    ${sanitizeHTML(appt.serviceName)} com <strong>${sanitizeHTML(appt.proName)}</strong>
+                                </p>
+                                <span class="inline-block mt-1 px-2 py-1 text-xs rounded-full ${appt.status === 'pending' ? 'badge-pending' : appt.status === 'done' ? 'badge-done' : 'badge-canceled'}">
+                                    ${appt.status === 'pending' ? 'Pendente' : appt.status === 'done' ? 'Concluído' : 'Cancelado'}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            ${appt.status === 'pending' ? `
+                                <button onclick="cancelAppt('${appt.id}')" class="p-2 text-slate-400 hover:text-red-500" title="Cancelar">
+                                    <i data-lucide="x" class="w-5 h-5"></i>
+                                </button>
+                                <button onclick="finishAppt('${appt.id}')" class="p-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200" title="Finalizar">
+                                    <i data-lucide="check" class="w-5 h-5"></i>
+                                </button>
+                            ` : ''}
+                            ${appt.status === 'done' ? `
+                                <span class="text-green-600 text-sm font-bold">${fmtMoney(appt.price)}</span>
+                            ` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Renderizar próximas avaliações
+            const upcoming = db.appointments
+                .filter(a => a.status === 'pending' && a.date >= todayStr)
+                .sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time))
+                .slice(0, 3);
+
+            const upcomingList = document.getElementById('upcoming-appts');
+            if (upcoming.length === 0) {
+                upcomingList.innerHTML = '<p class="text-center text-slate-400 py-4">Nenhuma avaliação agendada</p>';
+            } else {
+                upcomingList.innerHTML = upcoming.map(appt => `
+                    <div class="flex items-center justify-between p-3 hover:bg-slate-50 rounded-lg border border-slate-100">
+                        <div>
+                            <p class="text-sm font-medium text-slate-800">${sanitizeHTML(appt.client)}</p>
+                            <p class="text-xs text-slate-500">${fmtDate(appt.date)} às ${appt.time}</p>
+                        </div>
+                        <span class="text-sm text-plena-blue font-bold">${sanitizeHTML(appt.serviceName)}</span>
+                    </div>
+                `).join('');
+            }
+
+            lucide.createIcons();
+        }
+
+        // TEAM MANAGEMENT
+        function renderTeam() {
+            const container = document.getElementById('team-list');
+
+            if (db.team.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <i data-lucide="users" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
+                        <p class="text-slate-400">Nenhum instrutor cadastrado</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = db.team.map(pro => {
+                const pendingCommissions = db.transactions
+                    .filter(t => t.proId === pro.id && t.type === 'income' && !t.commissionPaid)
+                    .reduce((sum, t) => sum + (t.commission || 0), 0);
+
+                const completedServices = db.transactions
+                    .filter(t => t.proId === pro.id && t.type === 'income')
+                    .length;
+
+                return `
+                    <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm card-hover">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="bg-blue-50 p-3 rounded-full text-plena-blue">
+                                <i data-lucide="user" class="w-6 h-6"></i>
+                            </div>
+                            <span class="text-xs font-bold bg-slate-100 px-2 py-1 rounded">
+                                Comissão: ${pro.commission}%
+                            </span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-800 mb-2">${sanitizeHTML(pro.name)}</h3>
+                        
+                        <div class="mt-4 space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-500">Aulas realizadas:</span>
+                                <span class="font-bold">${completedServices}</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-500">Comissões pendentes:</span>
+                                <span class="font-bold text-plena-blue">${fmtMoney(pendingCommissions)}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
+                            <button onclick="payCommission('${pro.id}')" 
+                                    class="text-sm font-bold text-plena-blue hover:text-blue-800 ${pendingCommissions === 0 ? 'opacity-50 cursor-not-allowed' : ''}"
+                                    ${pendingCommissions === 0 ? 'disabled' : ''}>
+                                Pagar Comissão
+                            </button>
+                            <button onclick="editTeam('${pro.id}')" 
+                                    class="text-slate-400 hover:text-slate-600">
+                                <i data-lucide="edit" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // SERVICES MANAGEMENT
+        function renderServices() {
+            const container = document.getElementById('services-list');
+
+            if (db.services.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <i data-lucide="activity" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
+                        <p class="text-slate-400">Nenhum plano cadastrado</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = db.services.map(service => {
+                const serviceCount = db.transactions
+                    .filter(t => t.serviceId === service.id)
+                    .length;
+
+                return `
+                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center card-hover">
+                        <div>
+                            <span class="font-bold text-slate-800">${service.name}</span>
+                            <p class="text-xs text-slate-500 mt-1">${serviceCount} vendidos</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="font-bold text-plena-blue">${fmtMoney(service.price)}</span>
+                            <button onclick="editService('${service.id}')" 
+                                    class="text-slate-400 hover:text-slate-600">
+                                <i data-lucide="edit" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // FINANCE MANAGEMENT
+        function renderFinance() {
+            const term = document.getElementById('search-term').value.toLowerCase();
+            const filter = document.getElementById('filter-type').value;
+            const start = document.getElementById('filter-start').value;
+            const end = document.getElementById('filter-end').value;
+
+            // Filtrar transações
+            let filtered = db.transactions.filter(t => {
+                const matchesTerm = t.description.toLowerCase().includes(term) ||
+                    (t.proName && t.proName.toLowerCase().includes(term));
+                const matchesType = filter === 'all' || t.type === filter;
+                const matchesDate = (!start || t.date >= start) && (!end || t.date <= end);
+
+                return matchesTerm && matchesType && matchesDate;
+            });
+
+            // Ordenar por data (mais recente primeiro)
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            // Atualizar estatísticas
+            const monthTrans = db.transactions.filter(t => {
+                const today = new Date();
+                const transDate = new Date(t.date);
+                return transDate.getMonth() === today.getMonth() &&
+                    transDate.getFullYear() === today.getFullYear();
+            });
+
+            const incomeMonth = monthTrans
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+
+            const expenseMonth = monthTrans
+                .filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+
+            const commissionMonth = monthTrans
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + (t.commission || 0), 0);
+
+            document.getElementById('fin-income').textContent = fmtMoney(incomeMonth);
+            document.getElementById('fin-expense').textContent = fmtMoney(expenseMonth);
+            document.getElementById('fin-commission').textContent = fmtMoney(commissionMonth);
+
+            // Atualizar tabela
+            const tbody = document.getElementById('trans-list');
+            const emptyMsg = document.getElementById('empty-msg');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
+                return;
+            }
+
+            emptyMsg.classList.add('hidden');
+
+            tbody.innerHTML = filtered.map(t => {
+                const isIncome = t.type === 'income';
+
+                return `
+                    <tr class="hover:bg-slate-50 group border-b border-slate-100">
+                        <td class="px-6 py-4 text-slate-500 whitespace-nowrap">${fmtDate(t.date)}</td>
+                        <td class="px-6 py-4">
+                            <div class="font-medium text-slate-800">${sanitizeHTML(t.description)}</div>
+                        ${t.category ? `<div class="text-xs text-slate-400">${sanitizeHTML(t.category)}</div>` : ''}
+                    </td>
+                    <td class="px-6 py-4">${t.proName ? sanitizeHTML(t.proName) : '-'}</td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${isIncome ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                ${isIncome ? 'Entrada' : 'Saída'}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-right font-bold ${isIncome ? 'text-green-600' : 'text-red-600'}">
+                            ${isIncome ? '+' : '-'} ${fmtMoney(t.amount)}
+                        </td>
+                        <td class="px-6 py-4 text-right text-sm text-slate-500">
+                            ${t.commission ? fmtMoney(t.commission) : '-'}
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="editTransaction('${t.id}')" class="text-slate-400 hover:text-blue-600 transition-colors">
+                                <i data-lucide="edit-2" class="w-4 h-4"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // CLIENTS MANAGEMENT
+        function renderClients() {
+            const container = document.getElementById('clients-list');
+
+            if (db.clients.length === 0) {
+                container.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="px-6 py-8 text-center text-slate-400">
+                            <i data-lucide="user" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
+                            <p>Nenhum aluno cadastrado</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            container.innerHTML = db.clients.map(client => {
+                const clientTrans = db.transactions
+                    .filter(t => t.clientId === client.id && t.type === 'income');
+
+                const totalSpent = clientTrans.reduce((sum, t) => sum + t.amount, 0);
+                const lastVisit = clientTrans.length > 0
+                    ? clientTrans.sort((a, b) => new Date(b.date) - new Date(a.date))[0].date
+                    : null;
+
+                return `
+                    <tr class="hover:bg-slate-50">
+                        <td class="px-6 py-4 font-medium text-slate-800">${sanitizeHTML(client.name)}</td>
+                        <td class="px-6 py-4 text-slate-600">${client.phone ? sanitizeHTML(client.phone) : '-'}</td>
+                        <td class="px-6 py-4 text-slate-500">${lastVisit ? fmtDate(lastVisit) : 'Nunca'}</td>
+                        <td class="px-6 py-4 font-bold text-plena-blue">${fmtMoney(totalSpent)}</td>
+                        <td class="px-6 py-4 text-center">
+                            <button onclick="editClient('${client.id}')" 
+                                    class="text-slate-400 hover:text-plena-blue">
+                                <i data-lucide="edit" class="w-4 h-4"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // MODAIS E FORMULÁRIOS
+        function openApptModal() {
+            // Carregar Planos
+            const svcSelect = document.getElementById('ap-service');
+            svcSelect.innerHTML = '<option value="">Selecione o Plano...</option>';
+            db.services.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.id;
+                opt.text = `${s.name} - ${fmtMoney(s.price)}`;
+                opt.dataset.price = s.price;
+                svcSelect.appendChild(opt);
+            });
+
+            // Carregar Instrutores
+            const proSelect = document.getElementById('ap-pro');
+            proSelect.innerHTML = '<option value="">Selecione o Instrutor...</option>';
+            db.team.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.id;
+                opt.text = p.name;
+                proSelect.appendChild(opt);
+            });
+
+            // Resetar campos
+            document.getElementById('ap-id').value = '';
+            document.getElementById('ap-client').value = '';
+            document.getElementById('ap-time').value = '';
+            document.getElementById('ap-display-val').textContent = 'R$ 0,00';
+
+            document.getElementById('apptModal').classList.remove('hidden');
+        }
+
+        function updateApptValue() {
+            const svcSelect = document.getElementById('ap-service');
+            const price = svcSelect.options[svcSelect.selectedIndex].dataset.price || 0;
+            document.getElementById('ap-display-val').textContent = fmtMoney(parseFloat(price));
+        }
+
+        function openTeamModal(professional = null) {
+            if (professional) {
+                document.getElementById('tm-id').value = professional.id;
+                document.getElementById('tm-name').value = professional.name;
+                document.getElementById('tm-comm').value = professional.commission;
+            } else {
+                document.querySelector('#teamModal form').reset();
+                document.getElementById('tm-id').value = '';
+            }
+            document.getElementById('teamModal').classList.remove('hidden');
+        }
+
+        function openServiceModal(service = null) {
+            if (service) {
+                document.getElementById('svc-id').value = service.id;
+                document.getElementById('svc-name').value = service.name;
+                document.getElementById('svc-price').value = service.price;
+            } else {
+                document.querySelector('#serviceModal form').reset();
+                document.getElementById('svc-id').value = '';
+            }
+            document.getElementById('serviceModal').classList.remove('hidden');
+        }
+
+        function openExpenseModal() {
+            document.querySelector('#expenseModal form').reset();
+            document.getElementById('exp-id').value = '';
+            document.getElementById('exp-date').value = new Date().toISOString().split('T')[0];
+            document.querySelector('#expenseModal h3').textContent = 'Lançar Movimentação';
+            document.querySelector('#expenseModal button[type="submit"]').textContent = 'Salvar Lançamento';
+            document.getElementById('expenseModal').classList.remove('hidden');
+        }
+
+        function editTransaction(id) {
+            const transaction = db.transactions.find(t => t.id === id);
+            if (!transaction) return;
+
+            document.getElementById('exp-id').value = transaction.id;
+            document.getElementById('exp-type').value = transaction.type;
+            document.getElementById('exp-desc').value = transaction.description;
+            document.getElementById('exp-amount').value = transaction.amount;
+            document.getElementById('exp-date').value = transaction.date;
+            document.getElementById('exp-category').value = transaction.category || 'outros';
+
+            document.querySelector('#expenseModal h3').textContent = 'Editar Movimentação';
+            document.querySelector('#expenseModal button[type="submit"]').textContent = 'Atualizar Lançamento';
+
+            document.getElementById('expenseModal').classList.remove('hidden');
+        }
+
+        function openClientModal(client = null) {
+            if (client) {
+                document.getElementById('cli-id').value = client.id;
+                document.getElementById('cli-name').value = client.name;
+                document.getElementById('cli-phone').value = client.phone || '';
+                document.getElementById('cli-email').value = client.email || '';
+                document.getElementById('cli-notes').value = client.notes || '';
+            } else {
+                document.querySelector('#clientModal form').reset();
+                document.getElementById('cli-id').value = '';
+            }
+            document.getElementById('clientModal').classList.remove('hidden');
+        }
+
+        function openClosingModal() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayTrans = db.transactions.filter(t => t.date === today);
+
+            const incomeToday = todayTrans
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+
+            const expenseToday = todayTrans
+                .filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+
+            const commissionToday = todayTrans
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + (t.commission || 0), 0);
+
+            const balanceToday = incomeToday - expenseToday - commissionToday;
+
+            document.getElementById('close-inc').textContent = fmtMoney(incomeToday);
+            document.getElementById('close-exp').textContent = fmtMoney(expenseToday);
+            document.getElementById('close-com').textContent = fmtMoney(commissionToday);
+            document.getElementById('close-bal').textContent = fmtMoney(balanceToday);
+            document.getElementById('close-date').textContent = fmtDate(today);
+            document.getElementById('close-time').textContent = new Date().toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            document.getElementById('closingModal').classList.remove('hidden');
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function updateApptValue() {
+            const sel = document.getElementById('ap-service');
+            const price = parseFloat(sel.options[sel.selectedIndex]?.getAttribute('data-price')) || 0;
+            document.getElementById('ap-display-val').innerText = fmtMoney(price);
+        }
+
+        // CRUD OPERATIONS
+        function submitAppt(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('ap-id').value;
+            const client = document.getElementById('ap-client').value.trim();
+            const date = document.getElementById('ap-date').value;
+            const time = document.getElementById('ap-time').value;
+            const serviceId = document.getElementById('ap-service').value;
+            const proId = document.getElementById('ap-pro').value;
+
+            const service = db.services.find(s => s.id === serviceId);
+            const professional = db.team.find(t => t.id === proId);
+
+            if (!client || !service || !professional) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            const appointment = {
+                id: id || getID(),
+                client,
+                date,
+                time,
+                serviceId,
+                serviceName: service.name,
+                proId,
+                proName: professional.name,
+                price: service.price,
+                status: 'pending',
+                commissionPct: professional.commission,
+                commissionVal: service.price * (professional.commission / 100)
+            };
+
+            if (id) {
+                // Editar
+                const index = db.appointments.findIndex(a => a.id === id);
+                if (index !== -1) {
+                    db.appointments[index] = appointment;
+                }
+            } else {
+                // Adicionar
+                db.appointments.push(appointment);
+            }
+
+            save();
+            closeModal('apptModal');
+            renderDashboard();
+            showNotification('Check-in salvo com sucesso!', 'success');
+        }
+
+        function submitTeam(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('tm-id').value;
+            const name = document.getElementById('tm-name').value.trim();
+            const commission = parseFloat(document.getElementById('tm-comm').value) || 0;
+
+            if (!name) {
+                alert('Por favor, insira o nome do instrutor.');
+                return;
+            }
+
+            const professional = {
+                id: id || getID(),
+                name,
+                commission
+            };
+
+            if (id) {
+                const index = db.team.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    db.team[index] = professional;
+                }
+            } else {
+                db.team.push(professional);
+            }
+
+            save();
+            closeModal('teamModal');
+            renderTeam();
+            showNotification('Instrutor salvo com sucesso!', 'success');
+        }
+
+        function submitService(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('svc-id').value;
+            const name = document.getElementById('svc-name').value.trim();
+            const price = parseFloat(document.getElementById('svc-price').value) || 0;
+
+            if (!name || price <= 0) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            const service = {
+                id: id || getID(),
+                name,
+                price
+            };
+
+            if (id) {
+                const index = db.services.findIndex(s => s.id === id);
+                if (index !== -1) {
+                    db.services[index] = service;
+                }
+            } else {
+                db.services.push(service);
+            }
+
+            save();
+            closeModal('serviceModal');
+            renderServices();
+            showNotification('Plano salvo com sucesso!', 'success');
+        }
+
+        function submitExpense(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('exp-id').value;
+            const type = document.getElementById('exp-type').value;
+            const description = document.getElementById('exp-desc').value.trim();
+            const amount = parseFloat(document.getElementById('exp-amount').value) || 0;
+            const date = document.getElementById('exp-date').value;
+            const category = document.getElementById('exp-category').value;
+
+            if (!description || amount <= 0) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            const transaction = {
+                id: id || getID(),
+                type: type, // 'income' or 'expense'
+                description,
+                amount,
+                date,
+                category
+            };
+
+            if (id) {
+                const index = db.transactions.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    db.transactions[index] = { ...db.transactions[index], ...transaction };
+                }
+            } else {
+                db.transactions.push(transaction);
+            }
+
+            save();
+            closeModal('expenseModal');
+
+            if (document.getElementById('view-finance').classList.contains('hide') === false) {
+                renderFinance();
+            }
+
+            const msg = id ? 'Lançamento atualizado!' : (type === 'income' ? 'Receita registrada!' : 'Despesa registrada!');
+            showNotification(msg, 'success');
+        }
+
+        function submitClient(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('cli-id').value;
+            const name = document.getElementById('cli-name').value.trim();
+            const phone = document.getElementById('cli-phone').value.trim();
+            const email = document.getElementById('cli-email').value.trim();
+            const notes = document.getElementById('cli-notes').value.trim();
+
+            if (!name) {
+                alert('Por favor, insira o nome do aluno.');
+                return;
+            }
+
+            const client = {
+                id: id || getID(),
+                name,
+                phone: phone || null,
+                email: email || null,
+                notes: notes || null,
+                createdAt: new Date().toISOString()
+            };
+
+            if (id) {
+                const index = db.clients.findIndex(c => c.id === id);
+                if (index !== -1) {
+                    db.clients[index] = client;
+                }
+            } else {
+                db.clients.push(client);
+            }
+
+            save();
+            closeModal('clientModal');
+            renderClients();
+            showNotification('Aluno salvo com sucesso!', 'success');
+        }
+
+        // APPOINTMENT ACTIONS
+        function finishAppt(id) {
+            if (!confirm('Finalizar aula e lançar no caixa?')) return;
+
+            const index = db.appointments.findIndex(a => a.id === id);
+            const appt = db.appointments[index];
+
+            appt.status = 'done';
+
+            // Criar transação de entrada
+            const incomeTransaction = {
+                id: getID(),
+                type: 'income',
+                description: `Aula: ${appt.serviceName} - ${appt.client}`,
+                amount: appt.price,
+                date: appt.date,
+                proId: appt.proId,
+                proName: appt.proName,
+                serviceId: appt.serviceId,
+                clientId: findOrCreateClient(appt.client),
+                commission: appt.commissionVal
+            };
+
+            db.transactions.push(incomeTransaction);
+            save();
+            renderDashboard();
+            showNotification('Aula finalizada e lançada no caixa!', 'success');
+        }
+
+        function cancelAppt(id) {
+            if (confirm('Cancelar este check-in?')) {
+                const index = db.appointments.findIndex(a => a.id === id);
+                if (index !== -1) {
+                    db.appointments[index].status = 'canceled';
+                    save();
+                    renderDashboard();
+                    showNotification('Check-in cancelado!', 'success');
+                }
+            }
+        }
+
+        function findOrCreateClient(name) {
+            let client = db.clients.find(c => c.name.toLowerCase() === name.toLowerCase());
+
+            if (!client) {
+                client = {
+                    id: getID(),
+                    name,
+                    createdAt: new Date().toISOString()
+                };
+                db.clients.push(client);
+            }
+            return client.id;
+        }
+
+        // COMMISSIONS
+        let currentCommissionData = null;
+
+        function payCommission(proId) {
+            const pendingTransactions = db.transactions.filter(t =>
+                t.proId === proId && t.type === 'income' && !t.commissionPaid
+            );
+
+            if (pendingTransactions.length === 0) {
+                alert('Não há comissões pendentes para este instrutor.');
+                return;
+            }
+
+            const totalCommission = pendingTransactions.reduce((sum, t) => sum + (t.commission || 0), 0);
+            const professional = db.team.find(t => t.id === proId);
+
+            // Store data for the modal actions
+            currentCommissionData = {
+                proId: proId,
+                proName: professional.name,
+                amount: totalCommission,
+                date: new Date().toISOString().split('T')[0]
+            };
+
+            // Fill Modal
+            document.getElementById('comm-pro-name').innerText = professional.name;
+            document.getElementById('comm-value').innerText = fmtMoney(totalCommission);
+
+            // Show Modal
+            document.getElementById('commissionModal').classList.remove('hidden');
+        }
+
+        function confirmCommissionPayment() {
+            if (!currentCommissionData) return;
+
+            // Generate Expense
+            const expenseTransaction = {
+                id: getID(),
+                description: `Pagamento Comissão: ${currentCommissionData.proName}`,
+                amount: currentCommissionData.amount,
+                date: currentCommissionData.date,
+                category: 'comissao'
+            };
+
+            db.transactions.push(expenseTransaction);
+
+            // Mark transactions as paid
+            db.transactions.forEach(t => {
+                if (t.proId === currentCommissionData.proId && t.type === 'income' && !t.commissionPaid) {
+                    t.commissionPaid = true;
+                    t.commissionPaidDate = currentCommissionData.date;
+                }
+            });
+
+            save();
+            renderFinance(); // Ensure finance view updates if active
+            renderTeam();    // Refresh team list to disable button
+
+            closeModal('commissionModal');
+            showNotification('Comissão paga com sucesso!', 'success');
+            currentCommissionData = null;
+        }
+
+        function shareCommissionWhatsApp() {
+            if (!currentCommissionData) return;
+            const academyName = db.settings.businessName || 'PLENA FIT ACADEMIA';
+
+            let msg = `💰 *PAGAMENTO DE COMISSÃO*\n`;
+            msg += `🏢 ${academyName.toUpperCase()}\n`;
+            msg += `📅 ${fmtDate(currentCommissionData.date)}\n`;
+            msg += `--------------------------------\n`;
+            msg += `👤 Instrutor: *${currentCommissionData.proName}*\n`;
+            msg += `💵 Valor Pago: *${fmtMoney(currentCommissionData.amount)}*\n`;
+            msg += `--------------------------------\n`;
+            msg += `✅ *PAGAMENTO CONFIRMADO*`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function printCommissionReceipt() {
+            if (!currentCommissionData) return;
+
+            const academyName = db.settings.businessName || 'ACADEMIA';
+            const dateStr = new Date().toLocaleDateString('pt-BR');
+
+            const receiptHTML = `
+                <div style="padding: 40px; font-family: sans-serif; max-width: 800px; margin: 0 auto; border: 2px solid #000;">
+                    <h1 style="text-align: center; margin-bottom: 30px;">RECIBO DE PAGAMENTO DE COMISSÃO</h1>
+                    
+                    <p style="margin-bottom: 20px; font-size: 14px;">
+                        <strong>EMPREGADOR:</strong> ${academyName.toUpperCase()}<br>
+                        <strong>DATA:</strong> ${dateStr}
+                    </p>
+
+                    <p style="font-size: 16px; line-height: 1.6; text-align: justify; margin-bottom: 40px;">
+                        Eu, <strong>${currentCommissionData.proName.toUpperCase()}</strong>, declaro que recebi do estabelecimento 
+                        <strong>${academyName.toUpperCase()}</strong> a importância líquida de 
+                        <strong>${fmtMoney(currentCommissionData.amount)}</strong>, referente ao pagamento das comissões 
+                        pelas aulas prestadas.
+                    </p>
+
+                    <p style="text-align: center; margin-bottom: 15px; font-size: 18px; font-weight: bold;">
+                        VALOR RECEBIDO: ${fmtMoney(currentCommissionData.amount)}
+                    </p>
+
+                    <div style="margin-top: 80px; text-align: center;">
+                        <div style="border-top: 1px solid #000; display: inline-block; width: 300px; padding-top: 5px;">
+                            Assinatura do Instrutor
+                        </div>
+                    </div>
+                </div>
+             `;
+
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            iframe.contentDocument.write(receiptHTML);
+            iframe.contentDocument.close();
+            iframe.contentWindow.print();
+
+            // Cleanup after a delay
+            setTimeout(() => iframe.remove(), 2000);
+        }
+
+        // EDIT FUNCTIONS
+        function editTeam(id) {
+            const professional = db.team.find(p => p.id === id);
+            if (professional) {
+                openTeamModal(professional);
+            }
+        }
+
+        function editService(id) {
+            const service = db.services.find(s => s.id === id);
+            if (service) {
+                openServiceModal(service);
+            }
+        }
+
+        function editClient(id) {
+            const client = db.clients.find(c => c.id === id);
+            if (client) {
+                openClientModal(client);
+            }
+        }
+
+        // REPORTS
+        function generateReport() {
+            const start = document.getElementById('rep-start').value;
+            const end = document.getElementById('rep-end').value;
+
+            if (!start || !end) {
+                alert('Por favor, selecione um período.');
+                return;
+            }
+
+            const transactions = db.transactions.filter(t => t.date >= start && t.date <= end);
+
+            const income = transactions
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+
+            const expense = transactions
+                .filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+
+            const commission = transactions
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + (t.commission || 0), 0);
+
+            document.getElementById('rep-inc').textContent = fmtMoney(income);
+            document.getElementById('rep-exp').textContent = fmtMoney(expense);
+            document.getElementById('rep-com').textContent = fmtMoney(commission);
+
+            // Top services
+            renderTopServicesReport(transactions);
+
+            document.getElementById('report-result').classList.remove('hide');
+        }
+
+        function generateMonthReport() {
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+            document.getElementById('rep-start').value = firstDay.toISOString().split('T')[0];
+            document.getElementById('rep-end').value = lastDay.toISOString().split('T')[0];
+
+            generateReport();
+        }
+
+        function renderTopServicesReport(transactions) {
+            const serviceMap = {};
+
+            transactions
+                .filter(t => t.type === 'income' && t.serviceId)
+                .forEach(t => {
+                    const service = db.services.find(s => s.id === t.serviceId);
+                    if (service) {
+                        if (!serviceMap[service.name]) {
+                            serviceMap[service.name] = { count: 0, total: 0 };
+                        }
+                        serviceMap[service.name].count++;
+                        serviceMap[service.name].total += t.amount;
+                    }
+                });
+
+            const topServices = Object.entries(serviceMap)
+                .sort((a, b) => b[1].total - a[1].total)
+                .slice(0, 5);
+
+            const container = document.getElementById('top-services');
+
+            if (topServices.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 text-center">Sem dados para o período</p>';
+                return;
+            }
+
+            container.innerHTML = topServices.map(([name, data]) => `
+                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                    <div>
+                        <p class="text-sm font-medium text-slate-800">${name}</p>
+                        <p class="text-xs text-slate-500">${data.count} vendidos</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-bold text-green-600">${fmtMoney(data.total)}</p>
+                        <p class="text-xs text-slate-500">${data.count > 0 ? fmtMoney(data.total / data.count) : 'R$ 0,00'} (média)</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // EXPORTAÇÃO E COMPARTILHAMENTO
+        function shareReport() {
+            const inc = document.getElementById('rep-inc').textContent;
+            const exp = document.getElementById('rep-exp').textContent;
+            const com = document.getElementById('rep-com').textContent;
+            const academyName = db.settings.businessName || 'PLENA FIT ACADEMIA';
+            const date = document.getElementById('rep-start').value === document.getElementById('rep-end').value
+                ? fmtDate(document.getElementById('rep-start').value)
+                : `${fmtDate(document.getElementById('rep-start').value)} a ${fmtDate(document.getElementById('rep-end').value)}`;
+
+            let msg = `📊 *RELATÓRIO FINANCEIRO* 📊\n`;
+            msg += `🏢 ${academyName.toUpperCase()}\n`;
+            msg += `📅 Período: ${date}\n`;
+            msg += `--------------------------------\n`;
+            msg += `💰 Faturamento: *${inc}*\n`;
+            msg += `🔻 Despesas: ${exp}\n`;
+            msg += `👛 Comissões: ${com}\n`;
+            msg += `--------------------------------\n`;
+            msg += `_Gerado por Plena Fit_`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function shareClosing() {
+            const inc = document.getElementById('close-inc').textContent;
+            const exp = document.getElementById('close-exp').textContent;
+            const com = document.getElementById('close-com').textContent;
+            const bal = document.getElementById('close-bal').textContent;
+            const date = new Date().toLocaleDateString('pt-BR');
+            const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            const academyName = db.settings.businessName || 'PLENA FIT ACADEMIA';
+
+            let msg = `🔒 *FECHAMENTO DE CAIXA* 🔒\n`;
+            msg += `🏢 *${academyName.toUpperCase()}*\n`;
+            msg += `📅 Data: ${date} às ${time}\n`;
+            msg += `--------------------------------\n`;
+            msg += `📈 *RESUMO FINANCEIRO*\n`;
+            msg += `💰 Entradas: *${inc}*\n`;
+            msg += `🔻 Despesas: ${exp}\n`;
+            msg += `👥 Comissões: ${com}\n`;
+            msg += `--------------------------------\n`;
+            msg += `✨ *SALDO FINAL: ${bal}*\n`;
+            msg += `--------------------------------\n`;
+            msg += `_Documento de conferência interna_`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function printClosing() {
+            const inc = document.getElementById('close-inc').textContent;
+            const exp = document.getElementById('close-exp').textContent;
+            const com = document.getElementById('close-com').textContent;
+            const bal = document.getElementById('close-bal').textContent;
+
+            const academyName = db.settings.businessName || 'PLENA FIT ACADEMIA';
+            const dateStr = new Date().toLocaleDateString('pt-BR');
+            const timeStr = new Date().toLocaleTimeString('pt-BR');
+
+            const receiptHTML = `
+                <div style="font-family: 'Courier New', monospace; padding: 40px; max-width: 800px; margin: 0 auto; color: #000;">
+                    
+                    <div style="text-align: center; border-bottom: 2px dashed #000; padding-bottom: 20px; margin-bottom: 30px;">
+                        <h1 style="margin: 0; font-size: 24px; text-transform: uppercase;">${academyName}</h1>
+                        <p style="margin: 5px 0; font-size: 14px;">RELATÓRIO DE FECHAMENTO DE CAIXA</p>
+                        <p style="margin: 5px 0; font-size: 12px;">Data: ${dateStr} - Hora: ${timeStr}</p>
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="border-bottom: 1px solid #000; padding-bottom: 5px; margin-bottom: 15px;">RESUMO FINANCEIRO</h3>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                            <tr>
+                                <td style="padding: 8px 0; border-bottom: 1px solid #eee;">(+) Total de Entradas</td>
+                                <td style="padding: 8px 0; border-bottom: 1px solid #eee; text-align: right; font-weight: bold;">${inc}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0; border-bottom: 1px solid #eee;">(-) Despesas Operacionais</td>
+                                <td style="padding: 8px 0; border-bottom: 1px solid #eee; text-align: right;">${exp}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0; border-bottom: 1px solid #eee;">(-) Comissões Pagas/Previstas</td>
+                                <td style="padding: 8px 0; border-bottom: 1px solid #eee; text-align: right;">${com}</td>
+                            </tr>
+                            <tr style="font-size: 18px;">
+                                <td style="padding: 15px 0; font-weight: bold;">(=) SALDO EM CAIXA</td>
+                                <td style="padding: 15px 0; text-align: right; font-weight: bold;">${bal}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div style="margin-top: 50px;">
+                        <div style="border: 1px solid #000; padding: 15px; font-size: 12px; text-align: center; margin-bottom: 50px;">
+                            <p style="font-weight: bold; margin-bottom: 5px;">DECLARAÇÃO DE CONFERÊNCIA</p>
+                            <p>Declaro que os valores acima conferem com o numerário físico e comprovantes em caixa nesta data.</p>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; gap: 40px;">
+                            <div style="flex: 1; text-align: center;">
+                                <div style="border-top: 1px solid #000; padding-top: 10px;">
+                                    Responsável pelo Caixa
+                                </div>
+                            </div>
+                            <div style="flex: 1; text-align: center;">
+                                <div style="border-top: 1px solid #000; padding-top: 10px;">
+                                    Gerência / Auditoria
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 40px; text-align: center; font-size: 10px; color: #666; border-top: 1px dotted #ccc; padding-top: 10px;">
+                        Documento gerado eletronicamente por Plena Fit V4 Pro<br>
+                        ${new Date().toLocaleString('pt-BR')}
+                    </div>
+                </div>
+            `;
+
+            // 3. Criar Iframe Invisível (Técnica Robusta)
+            const iframe = document.createElement('iframe');
+
+            // Posicionamento fora da tela (melhor que display:none para impressão)
+            iframe.style.position = 'absolute';
+            iframe.style.left = '-9999px';
+            iframe.style.top = '0';
+            iframe.style.width = '1px';
+            iframe.style.height = '1px';
+
+            document.body.appendChild(iframe);
+
+            // 4. Escrever e Imprimir
+            const doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write(receiptHTML);
+            doc.close();
+
+            // Executar com pequeno delay para garantir renderização das fontes
+            setTimeout(() => {
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+
+                // Limpeza após impressão
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                }, 2000);
+            }, 500);
+        }
+
+        function updatePrintHeaders() {
+            const s = db.settings;
+            // Header estilo Academia (Ajustado)
+            const headerHTML = `
+                <div class="print-header" style="text-align: center; margin-bottom: 20px; border-bottom: 2px dashed #000; padding-bottom: 10px;">
+                    <h2 style="font-size: 24px; font-weight: bold; color: #000; margin: 0; text-transform: uppercase; font-family: 'Courier New', monospace;">${s.businessName || 'ACADEMIA'}</h2>
+                    <p style="font-size: 14px; color: #000; margin: 5px 0 0 0; font-family: 'Courier New', monospace;">RELATÓRIO GERENCIAL</p>
+                    <p style="font-size: 12px; color: #000; margin: 0; font-family: 'Courier New', monospace;">${new Date().toLocaleDateString('pt-BR')} - ${new Date().toLocaleTimeString('pt-BR')}</p>
+                </div>
+            `;
+
+            const containers = [
+                document.getElementById('report-result')
+            ];
+
+            containers.forEach(container => {
+                if (!container) return;
+                const existing = container.querySelector('.print-header');
+                if (existing) existing.outerHTML = headerHTML;
+                else container.insertAdjacentHTML('afterbegin', headerHTML);
+            });
+        }
+
+        function printReport() {
+            updatePrintHeaders();
+            window.print();
+        }
+
+        function printFinanceReport() {
+            updatePrintHeaders();
+            window.print();
+        }
+
+        // SETTINGS
+        function saveBusinessInfo() {
+            db.settings.businessName = document.getElementById('biz-name').value;
+            db.settings.businessOwner = document.getElementById('biz-owner').value;
+            db.settings.businessDoc = document.getElementById('biz-doc').value;
+            db.settings.businessHours = document.getElementById('biz-hours').value;
+            save();
+            showNotification('Informações salvas com sucesso!', 'success');
+        }
+
+        // BACKUP E RESTAURAÇÃO
+        function downloadBackup() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "plena_fit_backup.json");
+            document.body.appendChild(downloadAnchorNode); // Required for firefox
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function restoreBackup(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const backup = JSON.parse(e.target.result);
+
+                    // Validação rigorosa de tipos (Security Audit)
+                    const arrayKeys = ['appointments', 'team', 'services', 'transactions', 'clients'];
+                    const objectKeys = ['settings'];
+
+                    const isArraysValid = arrayKeys.every(key => Array.isArray(backup[key]));
+                    const isObjectsValid = objectKeys.every(key => typeof backup[key] === 'object' && !Array.isArray(backup[key]));
+
+                    if (isArraysValid && isObjectsValid) {
+                        // Sanitização profunda do backup antes de carregar
+                        // Evita que JSON malicioso injete scripts via innerHTML posteriormente
+                        const sanitizeObj = (obj) => {
+                            if (typeof obj === 'string') return sanitizeHTML(obj);
+                            if (Array.isArray(obj)) return obj.map(sanitizeObj);
+                            if (typeof obj === 'object' && obj !== null) {
+                                Object.keys(obj).forEach(key => {
+                                    obj[key] = sanitizeObj(obj[key]);
+                                });
+                                return obj;
+                            }
+                            return obj;
+                        };
+
+                        db = sanitizeObj(backup);
+                        save();
+                        alert('Backup restaurado com sucesso! A página será recarregada.');
+                        location.reload();
+                    } else {
+                        alert('Arquivo de backup inválido ou corrompido.');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Erro ao ler arquivo. Verifique se é um backup válido.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function clearAllData() {
+            if (confirm('Tem certeza que deseja limpar TODOS os dados? Esta ação é irreversível!')) {
+                db.appointments = [];
+                db.transactions = [];
+                save();
+                renderDashboard();
+                renderFinance();
+                showNotification('Todos os dados foram removidos!', 'success');
+            }
+        }
+
+        function factoryReset() {
+            if (confirm('ATENÇÃO: Isso resetará TODO o sistema para as configurações de fábrica. Todos os dados serão perdidos. Tem certeza?')) {
+                localStorage.removeItem(DB_KEY);
+                location.reload();
+            }
+        }
+
+        function clearFinanceFilters() {
+            const firstDay = new Date();
+            firstDay.setDate(1);
+            const firstDayStr = firstDay.toISOString().split('T')[0];
+            const today = new Date().toISOString().split('T')[0];
+
+            document.getElementById('search-term').value = '';
+            document.getElementById('filter-type').value = 'all';
+            document.getElementById('filter-start').value = firstDayStr;
+            document.getElementById('filter-end').value = today;
+
+            renderFinance();
+        }
+
+        // UTILITÁRIOS GERAIS
+        function updateDataStatus() {
+            const totalAppts = db.appointments.length;
+            const totalTeam = db.team.length;
+            const totalServices = db.services.length;
+            const totalClients = db.clients.length;
+
+            console.log(`Dados atualizados: ${totalAppts} check-ins, ${totalTeam} instrutores, ${totalServices} planos, ${totalClients} alunos`);
+        }
+
+        function showNotification(message, type = 'info') {
+            // Criar elemento de notificação
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                    'bg-blue-500 text-white'
+                }`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}" 
+                       class="w-5 h-5 mr-2"></i>
+                    <span>${sanitizeHTML(message)}</span>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+            lucide.createIcons();
+
+            // Remover após 3 segundos
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // OFFLINE SUPPORT
+        window.addEventListener('online', () => {
+            showNotification('Conexão restaurada!', 'success');
+        });
+
+        window.addEventListener('offline', () => {
+            showNotification('Modo offline ativado. Seus dados estão seguros localmente.', 'warning');
+        });
+
+        // SECURITY CHECK
+        setInterval(() => {
+            const footer = document.querySelector('.sidebar .border-t');
+            if (footer && !footer.innerText.includes('Plena')) {
+                document.body.innerHTML = '<div style="background:#111;color:red;height:100vh;display:flex;align-items:center;justify-content:center;"><h1>VIOLAÇÃO DE SEGURANÇA</h1></div>';
+                throw new Error("Piracy");
+            }
+        }, 8000);
+
+        // === MANUAL INTERATIVO PADRONIZADO ===
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function markSectionComplete(sectionId) {
+            let completed = JSON.parse(localStorage.getItem('plena_manual_completed') || '[]');
+            if (!completed.includes(sectionId)) {
+                completed.push(sectionId);
+                localStorage.setItem('plena_manual_completed', JSON.stringify(completed));
+                showNotification('Etapa concluída!', 'success');
+            }
+            updateTutorialProgress();
+        }
+
+        function updateTutorialProgress() {
+            const sections = ['instalacao', 'primeiro-cadastro', 'agendamentos', 'relatorios', 'backup', 'duvidas', 'checklist'];
+            const completed = JSON.parse(localStorage.getItem('plena_manual_completed') || '[]');
+            const total = sections.length;
+            const percent = Math.round((completed.length / total) * 100);
+
+            const progressBar = document.getElementById('tutorial-progress');
+            const completedSteps = document.getElementById('completed-steps');
+
+            if (progressBar) progressBar.style.width = percent + '%';
+            if (completedSteps) completedSteps.textContent = `${completed.length}/${total} etapas`;
+
+            // Atualizar visual dos botões
+            sections.forEach(id => {
+                const btn = document.querySelector(`[onclick="scrollToSection('${id}')"]`);
+                if (btn) {
+                    if (completed.includes(id)) {
+                        btn.classList.add('bg-green-100', 'border-green-300', 'text-green-700');
+                        btn.classList.remove('border-gray-200');
+                    } else {
+                        btn.classList.remove('bg-green-100', 'border-green-300', 'text-green-700');
+                        btn.classList.add('border-gray-200');
+                    }
+                }
+            });
+        }
+
+        function updateChecklist() {
+            const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+            const totalTasks = checkboxes.length;
+            let completedTasks = 0;
+
+            const checklistState = {};
+            checkboxes.forEach(cb => {
+                checklistState[cb.id] = cb.checked;
+                if (cb.checked) completedTasks++;
+
+                // Estilo visual do item
+                const item = cb.closest('.checklist-item');
+                if (item) {
+                    if (cb.checked) {
+                        item.classList.add('opacity-60');
+                        item.querySelector('span').classList.add('line-through');
+                    } else {
+                        item.classList.remove('opacity-60');
+                        item.querySelector('span').classList.remove('line-through');
+                    }
+                }
+            });
+
+            localStorage.setItem('plena_checklist_state', JSON.stringify(checklistState));
+
+            const percent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+            const percentEl = document.getElementById('checklist-percent');
+            const progressEl = document.getElementById('checklist-progress');
+            const completedEl = document.getElementById('checklist-completed');
+            const totalEl = document.getElementById('checklist-total');
+
+            if (percentEl) percentEl.textContent = percent + '%';
+            if (progressEl) progressEl.style.width = percent + '%';
+            if (completedEl) completedEl.textContent = completedTasks;
+            if (totalEl) totalEl.textContent = totalTasks;
+
+            // Atualizar próximas tarefas
+            const nextTasks = document.getElementById('next-tasks');
+            if (nextTasks) {
+                const unchecked = Array.from(checkboxes).filter(cb => !cb.checked).slice(0, 2);
+                if (unchecked.length > 0) {
+                    nextTasks.innerHTML = unchecked.map(cb => {
+                        const text = cb.nextElementSibling.textContent;
+                        return `<div class="flex items-center gap-2 text-xs text-gray-300">
+                                    <i data-lucide="circle" class="w-3 h-3"></i>
+                                    <span>${text}</span>
+                                </div>`;
+                    }).join('');
+                } else {
+                    nextTasks.innerHTML = `<div class="flex items-center gap-2 text-xs text-green-400 font-bold">
+                                                <i data-lucide="check-circle" class="w-3 h-3"></i>
+                                                <span>Tudo em dia!</span>
+                                            </div>`;
+                }
+                lucide.createIcons();
+            }
+        }
+
+        function loadChecklistState() {
+            const saved = JSON.parse(localStorage.getItem('plena_checklist_state') || '{}');
+            Object.keys(saved).forEach(id => {
+                const checkbox = document.getElementById(id);
+                if (checkbox) checkbox.checked = saved[id];
+            });
+            updateChecklist();
+        }
+
+        function showExample(type) {
+            showNotification(`Exemplo de ${type} carregado!`, 'info');
+        }
+
+        // INICIALIZAR APLICATIVO
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Carregar estado do manual ao carregar página
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTutorialProgress();
+            loadChecklistState();
+        });
+    </script>
+</body>
+
+</html>

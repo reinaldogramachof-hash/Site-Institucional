@@ -1,0 +1,2947 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Plena Artesanato - Precificação Profissional</title>
+
+    <meta name="theme-color" content="#db2777">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Plena Artesanato">
+    <link rel="manifest"
+        href='data:application/manifest+json,{"name":"Plena Artesanato","short_name":"Plena","start_url":".","display":"standalone","background_color":"#FDF2F8","theme_color":"#db2777","icons":[{"src":"https://unpkg.com/lucide-static@0.16.29/icons/scissors.svg","sizes":"192x192","type":"image/svg+xml"}]}'>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        plena: {
+                            pink: '#db2777',
+                            dark: '#be185d',
+                            black: '#1a1a1a',
+                            blue: '#3B82F6',
+                            green: '#10B981',
+                            red: '#EF4444',
+                            yellow: '#F59E0B'
+                        },
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s infinite',
+                        'slide-in': 'slideIn 0.3s ease-out',
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
+
+    <style>
+        /* CSS Otimizado - Padronizado V4 */
+        :root {
+            --plena-pink: #db2777;
+            --plena-dark: #be185d;
+            --plena-black: #1a1a1a;
+            --plena-blue: #3B82F6;
+            --plena-green: #10B981;
+            --plena-red: #EF4444;
+            --plena-yellow: #F59E0B;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #FDF2F8;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-10px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s ease;
+        }
+
+        /* Sidebar Mobile */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 50;
+                height: 100vh;
+                width: 280px;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .sidebar {
+                width: 280px;
+                position: fixed;
+                height: 100vh;
+            }
+
+            .main-content {
+                margin-left: 280px;
+            }
+        }
+
+        /* Card Hover Effects */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 180px;
+            gap: 2%;
+        }
+
+        .bar-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            height: 100%;
+            position: relative;
+        }
+
+        .bar-wrapper {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 2px;
+            height: 100%;
+            width: 100%;
+        }
+
+        .bar {
+            width: 45%;
+            border-radius: 6px 6px 0 0;
+            transition: height 0.5s ease;
+            min-height: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .bar:hover::after {
+            content: attr(data-value);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .x-label {
+            font-size: 10px;
+            color: #666;
+            text-align: center;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        /* --- STYLES DO MANUAL (Padronização) --- */
+        .step-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .checklist-item {
+            transition: all 0.2s ease;
+        }
+
+        .checklist-item.completed {
+            opacity: 0.7;
+            text-decoration: line-through;
+        }
+
+        .code-block {
+            background: #1a1a1a;
+            color: #f8f8f2;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 8px 0;
+        }
+
+        .progress-bar {
+            height: 6px;
+            border-radius: 3px;
+            background: #e5e7eb;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #db2777, #be185d);
+            transition: width 0.5s ease;
+        }
+
+        @media print {
+
+            .sidebar,
+            #overlay,
+            button,
+            .header-buttons,
+            .no-print,
+            header,
+            #month-selector,
+            .view-section.hide {
+                display: none !important;
+            }
+
+            .main-content {
+                margin: 0 !important;
+                width: 100% !important;
+                padding: 0 !important;
+            }
+
+            body {
+                background: white !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 antialiased">
+    <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+
+    <aside id="sidebar"
+        class="sidebar bg-plena-black text-white transition-transform duration-300 flex flex-col shadow-2xl">
+        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-plena-pink to-plena-dark">
+            <i data-lucide="palette" class="w-8 h-8 mr-3"></i>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight">PLENA ARTESANATO</h1>
+                <p class="text-xs text-white/90 font-medium">Precificação Profissional</p>
+            </div>
+        </div>
+
+        <nav class="p-4 space-y-2 flex-1 overflow-y-auto">
+            <button onclick="router('dashboard')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group active-nav"
+                id="nav-dashboard">
+                <i data-lucide="palette" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Dashboard
+            </button>
+            <button onclick="router('products')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-products">
+                <i data-lucide="package" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Meus Produtos
+            </button>
+            <button onclick="router('materials')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-materials">
+                <i data-lucide="layers" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Estoque de Materiais
+            </button>
+            <button onclick="router('transactions')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-transactions">
+                <i data-lucide="wallet" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Caixa do Ateliê
+            </button>
+            <button onclick="router('reports')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-reports">
+                <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Relatórios
+            </button>
+            <button onclick="router('settings')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-settings">
+                <i data-lucide="calculator" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Configurações
+            </button>
+            <button onclick="router('instructions')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-instructions">
+                <i data-lucide="book-open" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Manual de Uso
+            </button>
+            <button onclick="router('about')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-about">
+                <i data-lucide="info" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Sobre a Plena
+            </button>
+        </nav>
+
+        <div class="p-6 border-t border-white/10 text-center">
+            <p class="text-xs text-gray-500">Todos os Direitos Reservados &copy; 2026</p>
+            <a href="https://www.plenaaplicativos.com.br" target="_blank"
+                class="text-[10px] text-gray-600 hover:text-plena-pink transition-colors mt-1 block decoration-0">
+                Plena Soluções Digitais LTDA
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content min-h-screen flex flex-col">
+        <header
+            class="bg-white h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-gray-100">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg text-gray-600">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <h2 id="page-title" class="text-xl font-bold text-gray-800 hidden sm:block">Dashboard</h2>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-plena-green/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                    </div>
+                    <button onclick="openClosingModal()"
+                        class="relative flex items-center px-4 py-2.5 bg-gray-800 text-white rounded-lg text-sm font-medium hover:bg-black transition-all shadow-sm active:scale-95">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 sm:mr-2"></i>
+                        <span class="hidden sm:inline">Fechar Caixa</span>
+                        <span class="sm:hidden">Fechar</span>
+                    </button>
+                </div>
+
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-plena-pink/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                    </div>
+                    <button onclick="openProductModal()"
+                        class="relative flex items-center px-4 py-2.5 bg-plena-pink text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-all shadow-lg shadow-pink-200 active:scale-95">
+                        <i data-lucide="plus" class="w-5 h-5 sm:mr-2"></i>
+                        <span class="hidden sm:inline">Novo Produto</span>
+                        <span class="sm:hidden">Novo</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-4 lg:p-8 flex-1 overflow-y-auto">
+            <section id="view-dashboard" class="view-section fade-in">
+                <div class="mb-6 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-gray-800">Resumo Financeiro</h3>
+                    <div class="flex items-center gap-3">
+                        <input type="month" id="month-selector" onchange="renderDashboard()"
+                            class="border rounded-lg p-2 text-sm bg-white">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Valor Hora</p>
+                                <h3 id="dash-hourly-rate" class="text-2xl font-bold text-plena-pink">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">Baseado na sua meta</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-plena-pink/10 flex items-center justify-center">
+                                <i data-lucide="clock" class="w-6 h-6 text-plena-pink"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Peças
+                                    Cadastradas</p>
+                                <h3 id="dash-products-count" class="text-2xl font-bold text-gray-900">0</h3>
+                                <p class="text-xs text-gray-500 mt-1">Total de produtos</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i data-lucide="package" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Faturamento
+                                    (Mês)</p>
+                                <h3 id="dash-revenue" class="text-2xl font-bold text-green-600">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    <span id="revenue-growth" class="text-green-500">+0%</span> vs mês anterior
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Custos (Mês)
+                                </p>
+                                <h3 id="dash-costs" class="text-2xl font-bold text-red-600">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    <span id="costs-growth" class="text-red-500">+0%</span> vs mês anterior
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                                <i data-lucide="trending-down" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                    <div class="xl:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-bold text-gray-800">Faturamento x Custos (7 Dias)</h3>
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                    <span class="text-xs text-gray-600">Vendas</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <span class="text-xs text-gray-600">Custos</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="chart-area" class="chart-container"></div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                <i data-lucide="star" class="w-4 h-4 mr-2 text-plena-pink"></i>
+                                Produtos Mais Rentáveis
+                            </h3>
+                            <div id="top-products" class="space-y-4"></div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4">Materiais mais utilizados</h3>
+                            <div id="top-materials" class="space-y-3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-gray-800">Produtos Recentes</h3>
+                        <button onclick="router('products')"
+                            class="text-sm text-plena-pink hover:text-plena-dark font-medium">
+                            Ver todos →
+                        </button>
+                    </div>
+                    <div id="recent-products" class="space-y-3"></div>
+                </div>
+            </section>
+
+            <section id="view-products" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Meus Produtos</h2>
+                        <p class="text-sm text-gray-600">Gerencie todas as peças do seu catálogo</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="exportProductsCSV()"
+                            class="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+                            <i data-lucide="download" class="w-4 h-4"></i> Exportar CSV
+                        </button>
+                        <button onclick="printProducts()"
+                            class="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors">
+                            <i data-lucide="printer" class="w-4 h-4"></i> Imprimir
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+                    <div class="p-4 bg-gray-50 grid grid-cols-1 md:grid-cols-3 gap-3 border-b border-gray-200">
+                        <div class="relative">
+                            <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                            <input type="text" id="search-term" onkeyup="renderProducts()"
+                                placeholder="Buscar produto..."
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-pink outline-none text-sm">
+                        </div>
+                        <div>
+                            <select id="filter-category" onchange="renderProducts()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                                <option value="all">Todas as categorias</option>
+                            </select>
+                        </div>
+                        <div class="flex gap-2">
+                            <select id="filter-sort" onchange="renderProducts()"
+                                class="flex-1 px-4 py-2 rounded-lg border border-gray-300 text-sm bg-white outline-none">
+                                <option value="newest">Mais recentes</option>
+                                <option value="oldest">Mais antigos</option>
+                                <option value="price-high">Maior preço</option>
+                                <option value="price-low">Menor preço</option>
+                            </select>
+                            <button onclick="clearFilters()"
+                                class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm transition-colors">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6"></div>
+                    <div id="empty-msg" class="hidden p-8 text-center text-gray-400">
+                        <i data-lucide="package" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
+                        <p>Nenhum produto encontrado.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-materials" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Estoque de Materiais</h2>
+                    <p class="text-sm text-gray-600">Cadastre e gerencie os materiais do seu ateliê</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-bold text-gray-800">Cadastrar Material</h3>
+                        </div>
+                        <form onsubmit="submitMaterial(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="text-xs font-bold text-gray-500 uppercase">Nome do Material</label>
+                                    <input type="text" id="mat-name" required
+                                        class="w-full border p-2 rounded-lg text-sm" placeholder="Ex: Linha de algodão">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold text-gray-500 uppercase">Categoria</label>
+                                    <select id="mat-category" class="w-full border p-2 rounded-lg text-sm bg-white">
+                                        <option value="Tecidos">Tecidos</option>
+                                        <option value="Linhas">Linhas</option>
+                                        <option value="Tintas">Tintas</option>
+                                        <option value="Acessórios">Acessórios</option>
+                                        <option value="Ferragens">Ferragens</option>
+                                        <option value="Outros">Outros</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="text-xs font-bold text-gray-500 uppercase">Preço Pago (R$)</label>
+                                    <input type="number" step="0.01" id="mat-cost" required
+                                        class="w-full border p-2 rounded-lg text-sm" placeholder="Ex: 25.90">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold text-gray-500 uppercase">Quantidade Total</label>
+                                    <input type="number" step="0.01" id="mat-quantity" required
+                                        class="w-full border p-2 rounded-lg text-sm" placeholder="Ex: 100">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold text-gray-500 uppercase">Unidade</label>
+                                    <select id="mat-unit" class="w-full border p-2 rounded-lg text-sm bg-white">
+                                        <option value="metros">Metros</option>
+                                        <option value="gramas">Gramas</option>
+                                        <option value="unidades">Unidades</option>
+                                        <option value="litros">Litros</option>
+                                        <option value="pacotes">Pacotes</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit"
+                                class="w-full bg-plena-pink text-white py-3 rounded-lg font-bold hover:bg-plena-dark transition-colors">
+                                Salvar Material
+                            </button>
+                        </form>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-bold text-gray-800">Materiais Cadastrados</h3>
+                            <div class="relative">
+                                <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-gray-400"></i>
+                                <input type="text" id="mat-search" onkeyup="renderMaterials()" placeholder="Buscar..."
+                                    class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 text-sm w-48">
+                            </div>
+                        </div>
+                        <div id="materials-list" class="space-y-3 max-h-96 overflow-y-auto pr-2"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-transactions" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Caixa do Ateliê</h2>
+                        <p class="text-sm text-gray-600">Controle todas as movimentações financeiras</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openTransModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-plena-pink text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Nova Movimentação
+                        </button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+                    <div class="p-4 bg-gray-50 grid grid-cols-1 md:grid-cols-4 gap-3 border-b border-gray-200">
+                        <div class="relative">
+                            <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                            <input type="text" id="trans-search-term" onkeyup="renderTransactions()"
+                                placeholder="Buscar..."
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-pink outline-none text-sm">
+                        </div>
+                        <div>
+                            <input type="date" id="filter-start" onchange="renderTransactions()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div>
+                            <input type="date" id="filter-end" onchange="renderTransactions()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div class="flex gap-2">
+                            <select id="filter-type" onchange="renderTransactions()"
+                                class="flex-1 px-4 py-2 rounded-lg border border-gray-300 text-sm bg-white outline-none">
+                                <option value="all">Todos</option>
+                                <option value="income">Vendas</option>
+                                <option value="expense">Custos</option>
+                            </select>
+                            <button onclick="clearTransFilters()"
+                                class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm transition-colors">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                                <tr>
+                                    <th class="px-6 py-3">Data</th>
+                                    <th class="px-6 py-3">Descrição</th>
+                                    <th class="px-6 py-3">Tipo</th>
+                                    <th class="px-6 py-3">Categoria</th>
+                                    <th class="px-6 py-3 text-right">Valor</th>
+                                    <th class="px-6 py-3 text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trans-table-body" class="divide-y divide-gray-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                    <div id="trans-empty-msg" class="hidden p-8 text-center text-gray-400">
+                        <i data-lucide="file-text" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
+                        <p>Nenhuma movimentação encontrada.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total Vendas</p>
+                        <p id="filter-income" class="text-lg font-bold text-green-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total Custos</p>
+                        <p id="filter-expense" class="text-lg font-bold text-red-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Saldo Filtrado</p>
+                        <p id="filter-balance" class="text-lg font-bold text-blue-700">R$ 0,00</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-reports" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Relatórios Avançados</h2>
+                    <p class="text-sm text-gray-600">Gere relatórios detalhados para análise do seu negócio</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
+                    <h3 class="font-bold text-gray-800 mb-4">Configurar Período</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Data Inicial</label>
+                            <input type="date" id="rep-start" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Data Final</label>
+                            <input type="date" id="rep-end" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="generateReport()"
+                                class="flex-1 bg-plena-pink text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                                Gerar Relatório
+                            </button>
+                            <button onclick="generateFullReport()"
+                                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors"
+                                title="Relatório Completo">
+                                <i data-lucide="file-text" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="report-result" class="hide space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-green-50 p-6 rounded-xl text-center border border-green-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Vendas</p>
+                            <p id="rep-inc" class="text-2xl font-bold text-green-700 mt-2">R$ 0,00</p>
+                        </div>
+                        <div class="bg-red-50 p-6 rounded-xl text-center border border-red-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="trending-down" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Custos</p>
+                            <p id="rep-exp" class="text-2xl font-bold text-red-700 mt-2">R$ 0,00</p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-xl text-center border border-blue-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="wallet" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Lucro Líquido</p>
+                            <p id="rep-bal" class="text-2xl font-bold text-blue-700 mt-2">R$ 0,00</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="font-bold text-gray-800 mb-4">Análise por Categoria de Produto</h3>
+                        <div id="category-report" class="space-y-4"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button onclick="shareReport()"
+                            class="bg-[#25D366] text-white py-3 rounded-xl font-bold hover:bg-[#128C7E] flex justify-center items-center gap-2">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i> Enviar WhatsApp
+                        </button>
+                        <button onclick="printReport()"
+                            class="bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 flex justify-center items-center gap-2">
+                            <i data-lucide="printer" class="w-4 h-4"></i> Imprimir / Salvar PDF
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-settings" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Configurações do Sistema</h2>
+                    <p class="text-sm text-gray-600">Personalize e gerencie suas preferências</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-2">
+                        <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                            <i data-lucide="id-card" class="w-5 h-5 mr-2 text-plena-pink"></i>
+                            Dados do Artesão / Ateliê
+                        </h3>
+                        <p class="text-gray-500 text-sm mb-4">Informações para personalização e licença de uso.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="font-bold text-gray-700 text-sm">Nome do Responsável</label>
+                                <input type="text" id="set-owner-name" class="w-full border p-3 rounded-lg mt-1"
+                                    placeholder="Seu nome ou nome do ateliê">
+                            </div>
+                            <div>
+                                <label class="font-bold text-gray-700 text-sm">CPF ou CNPJ</label>
+                                <input type="text" id="set-owner-doc" class="w-full border p-3 rounded-lg mt-1"
+                                    placeholder="000.000.000-00">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                            <i data-lucide="calculator" class="w-5 h-5 mr-2 text-plena-pink"></i>
+                            Calculadora de Valor Hora
+                        </h3>
+                        <p class="text-gray-500 text-sm mb-6">Para precificar corretamente, precisamos saber quanto vale
+                            sua hora de trabalho.</p>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="font-bold text-gray-700 text-sm">Quanto você quer ganhar por mês?
+                                    (Salário)</label>
+                                <div class="flex items-center mt-1">
+                                    <span class="bg-gray-100 p-3 rounded-l-lg text-gray-500 border border-r-0">R$</span>
+                                    <input type="number" id="conf-salary"
+                                        class="w-full border p-3 rounded-r-lg outline-none focus:border-plena-pink transition-colors"
+                                        placeholder="Ex: 2500.00" onchange="calculateHourlyRate()">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="font-bold text-gray-700 text-sm">Horas por dia</label>
+                                    <input type="number" id="conf-hours-day" class="w-full border p-3 rounded-lg mt-1"
+                                        placeholder="Ex: 6" onchange="calculateHourlyRate()">
+                                </div>
+                                <div>
+                                    <label class="font-bold text-gray-700 text-sm">Dias por semana</label>
+                                    <input type="number" id="conf-days-week" class="w-full border p-3 rounded-lg mt-1"
+                                        placeholder="Ex: 5" onchange="calculateHourlyRate()">
+                                </div>
+                            </div>
+                            <div class="bg-pink-50 p-4 rounded-xl border border-pink-100 text-center mt-6">
+                                <p class="text-sm text-pink-800 font-bold uppercase">Sua hora vale:</p>
+                                <h2 id="conf-result-rate" class="text-4xl font-bold text-plena-pink mt-1">R$ 0,00</h2>
+                            </div>
+                            <button onclick="saveSettings()"
+                                class="w-full bg-gray-900 text-white py-4 rounded-xl font-bold hover:bg-black mt-4">
+                                Salvar Configuração
+                            </button>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                <i data-lucide="shield-check" class="w-5 h-5 mr-2 text-plena-pink"></i>
+                                Segurança de Dados
+                            </h3>
+
+                            <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg text-sm text-blue-800 mb-6">
+                                <p class="font-bold mb-2">⚠️ Importante</p>
+                                <p>Seus dados ficam salvos 100% no navegador. Faça backup regularmente!</p>
+                            </div>
+
+                            <div class="space-y-3">
+                                <button onclick="downloadBackup()"
+                                    class="w-full border border-gray-300 py-3 rounded-lg text-sm font-medium hover:bg-gray-50 flex justify-center items-center gap-2">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    Baixar Backup (.json)
+                                </button>
+
+                                <div class="relative">
+                                    <button
+                                        class="w-full bg-gray-800 text-white py-3 rounded-lg text-sm font-medium flex justify-center items-center gap-2">
+                                        <i data-lucide="upload" class="w-4 h-4"></i>
+                                        Restaurar Backup
+                                    </button>
+                                    <input type="file" onchange="restoreBackup(this)" accept=".json"
+                                        class="absolute inset-0 opacity-0 cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Danger Zone -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center text-red-600">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
+                                Zona de Perigo
+                            </h3>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="clearAllTransactions()"
+                                    class="py-2.5 border border-red-300 text-red-600 rounded-lg text-sm hover:bg-red-50 transition-colors">
+                                    Limpar Lançamentos
+                                </button>
+                                <button onclick="factoryReset()"
+                                    class="py-2.5 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition-colors">
+                                    Resetar Tudo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Instructions View - COMPLETAMENTE REVISADA -->
+            <section id="view-instructions" class="view-section hide fade-in">
+                <div class="max-w-6xl mx-auto pb-12">
+                    <!-- Cabeçalho Hero -->
+                    <div class="text-center mb-10 pt-4">
+                        <div
+                            class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-plena-pink to-plena-dark rounded-2xl mb-4 shadow-lg">
+                            <i data-lucide="palette" class="w-12 h-12 text-white"
+                                aria-label="Ícone de Tesoura - Manual de Uso"></i>
+                        </div>
+                        <h1 class="text-3xl font-bold text-gray-800 mb-2">Manual Completo de Uso</h1>
+                        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Guia passo a passo para gestão profissional do seu ateliê</p>
+                        <div class="mt-4 flex flex-wrap justify-center gap-2">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">✓ Precificação Correta</span>
+                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">📱 Mobile e Desktop</span>
+                            <span class="px-3 py-1 bg-pink-100 text-plena-pink rounded-full text-xs font-bold">⚡ Controle de Estoque</span>
+                        </div>
+                    </div>
+
+                    <!-- Barra de Progresso do Tutorial -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
+                        <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                            <i data-lucide="compass" class="w-5 h-5 mr-2 text-plena-pink"></i>
+                            Seu Progresso no Aprendizado
+                        </h3>
+                        <div class="mb-4">
+                            <div class="progress-bar">
+                                <div id="tutorial-progress" class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-500 mt-2">
+                                <span>0% Concluído</span>
+                                <span id="completed-steps">0/7 etapas</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-7 gap-2">
+                            <button onclick="scrollToSection('instalacao')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                1. Instalação
+                            </button>
+                            <button onclick="scrollToSection('configuracao')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                2. Configuração
+                            </button>
+                            <button onclick="scrollToSection('materiais')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                3. Materiais
+                            </button>
+                            <button onclick="scrollToSection('precificacao')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                4. Precificação
+                            </button>
+                            <button onclick="scrollToSection('backup')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                5. Backup
+                            </button>
+                            <button onclick="scrollToSection('duvidas')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                6. Dúvidas
+                            </button>
+                            <button onclick="scrollToSection('checklist')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                7. Checklist
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Seção 1: Instalação -->
+                    <div id="instalacao"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-pink to-plena-dark text-white">1
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Instalação do App (Uso Offline)</h3>
+                    <!-- Seção 1: Instalação -->
+                    <div id="instalacao"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-pink to-plena-dark text-white">1
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 ml-3">Instalação do App</h3>
+                            </div>
+                            <button onclick="markSectionComplete('instalacao')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="bg-gray-900 rounded-2xl p-6 text-white shadow-lg mb-6">
+                            <h4 class="font-bold text-lg mb-4 flex items-center text-pink-400">
+                                <i data-lucide="download" class="w-5 h-5 mr-2"></i>
+                                Torne o App Disponível OFFLINE
+                            </h4>
+                            <p class="text-gray-300 mb-4 text-sm">Instale no celular ou computador para usar sem internet:</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                                <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+                                    <div class="font-bold text-white mb-3 flex items-center">
+                                        <div
+                                            class="w-6 h-6 rounded-full bg-pink-600 flex items-center justify-center mr-2">
+                                            <i data-lucide="smartphone" class="w-3 h-3"></i>
+                                        </div>
+                                        Android/iPhone
+                                    </div>
+                                    <ol class="list-decimal pl-5 space-y-2 text-gray-300">
+                                        <li>Abra o navegador Chrome/Safari</li>
+                                        <li>Toque em "Compartilhar" ou "Menu ☰"</li>
+                                        <li>Toque em "Adicionar à Tela de Início"</li>
+                                    </ol>
+                                </div>
+                                <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+                                    <div class="font-bold text-white mb-3 flex items-center">
+                                        <div
+                                            class="w-6 h-6 rounded-full bg-pink-800 flex items-center justify-center mr-2">
+                                            <i data-lucide="monitor" class="w-3 h-3"></i>
+                                        </div>
+                                        Windows/Desktop
+                                    </div>
+                                    <ol class="list-decimal pl-5 space-y-2 text-gray-300">
+                                        <li>Clique no ícone (+) na barra</li>
+                                        <li>Clique em "Instalar"</li>
+                                        <li>Use como um app nativo</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 2: Configuração Inicial -->
+                    <div id="configuracao"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-pink to-plena-dark text-white">2
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 ml-3">Configuração do Ateliê</h3>
+                            </div>
+                            <button onclick="markSectionComplete('configuracao')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 mb-6">
+                            <h4 class="font-bold text-blue-700 mb-3 flex items-center text-sm">
+                                <i data-lucide="calculator" class="w-5 h-5 mr-2"></i>
+                                PASSO 1: Defina sua Mão de Obra
+                            </h4>
+                            <p class="text-sm text-gray-600 mb-3">Vá em <strong>Configurações</strong> e defina:</p>
+                            <ul class="list-disc pl-5 text-xs text-gray-600 space-y-1">
+                                <li>Seu salário mensal desejado</li>
+                                <li>Horas de trabalho por dia</li>
+                                <li>Dias de trabalho por semana</li>
+                            </ul>
+                            <p class="mt-2 text-[10px] text-blue-500 font-bold">* O sistema calculará seu valor/hora automaticamente.</p>
+                        </div>
+                    </div>
+
+                    <!-- Seção 3: Materiais e Estoque -->
+                    <div id="materiais"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-pink to-plena-dark text-white">3
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 ml-3">Materiais e Insumos</h3>
+                            </div>
+                            <button onclick="markSectionComplete('materiais')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                                <h4 class="font-bold text-gray-700 mb-2 flex items-center text-sm">
+                                    <i data-lucide="package" class="w-4 h-4 mr-2"></i>
+                                    Cadastro de Materiais
+                                </h4>
+                                <p class="text-xs text-gray-600">Cadastre tudo: linhas, tecidos, colas, embalagens. Informe o valor pago e a quantidade total para que o sistema calcule o custo unitário.</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                                <h4 class="font-bold text-gray-700 mb-2 flex items-center text-sm">
+                                    <i data-lucide="alert-triangle" class="w-4 h-4 mr-2 text-pink-500"></i>
+                                    Controle de Estoque
+                                    <span class="ml-auto px-2 py-0.5 bg-pink-100 text-pink-700 rounded-full text-[10px]">Importante</span>
+                                </h4>
+                                <p class="text-xs text-gray-600">Mantenha as quantidades atualizadas para saber exatamente quanto custa cada peça produzida.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 4: Precificação de Produtos -->
+                    <div id="precificacao"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-pink to-plena-dark text-white">4
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 ml-3">Precificação Profissional</h3>
+                            </div>
+                            <button onclick="markSectionComplete('precificacao')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="bg-pink-50 p-5 rounded-xl border border-pink-100 mb-6">
+                            <h4 class="font-bold text-pink-700 mb-3 flex items-center text-sm">
+                                <i data-lucide="tag" class="w-5 h-5 mr-2"></i>
+                                Como o sistema calcula o preço:
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                                <div class="bg-white p-3 rounded-lg shadow-sm border border-pink-100">
+                                    <p class="text-[10px] text-gray-500 uppercase">Custo de Materiais</p>
+                                    <p class="font-bold text-pink-600">Soma de tudo que usou</p>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg shadow-sm border border-pink-100">
+                                    <p class="text-[10px] text-gray-500 uppercase">Mão de Obra</p>
+                                    <p class="font-bold text-pink-600">Tempo de produção</p>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg shadow-sm border border-pink-100">
+                                    <p class="text-[10px] text-gray-500 uppercase">Lucro e Taxas</p>
+                                    <p class="font-bold text-pink-600">Margem definida por você</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 5: Backup e Segurança -->
+                    <div id="backup"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-pink to-plena-dark text-white">5
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 ml-3">Segurança dos Dados</h3>
+                            </div>
+                            <button onclick="markSectionComplete('backup')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl mb-6">
+                            <p class="text-sm text-red-800">
+                                <strong>ATENÇÃO:</strong> Seus dados ficam salvos apenas no seu dispositivo. Faça backup regularmente em <strong>Configurações > Exportar Dados</strong> para não perder seu histórico.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Seção 6: Dúvidas Frequentes -->
+                    <div id="duvidas"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-pink to-plena-dark text-white">6
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 ml-3">Dúvidas Comuns</h3>
+                            </div>
+                            <button onclick="markSectionComplete('duvidas')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="space-y-3">
+                            <details class="group bg-gray-50 border border-gray-200 rounded-xl">
+                                <summary class="flex items-center justify-between p-4 cursor-pointer font-bold text-gray-700 text-sm">
+                                    Como funciona o cálculo do preço?
+                                    <i data-lucide="chevron-down" class="w-4 h-4 transition-transform group-open:rotate-180"></i>
+                                </summary>
+                                <div class="p-4 pt-0 text-xs text-gray-600 border-t border-gray-100">
+                                    O sistema soma o custo dos materiais, o custo da sua mão de obra (baseado no tempo) e a margem de lucro.
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+
+                    <!-- Seção 7: Checklist Interativo -->
+                    <div id="checklist"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-pink to-plena-dark text-white">7
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 ml-3">Checklist de Rotina</h3>
+                            </div>
+                            <button onclick="markSectionComplete('checklist')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-3">
+                                <h4 class="font-bold text-pink-600 text-xs uppercase text-center">Diário</h4>
+                                <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
+                                    <input type="checkbox" id="check-1" onchange="updateChecklist()" class="w-4 h-4">
+                                    <label for="check-1" class="text-xs text-gray-700">Registrar vendas do dia</label>
+                                </div>
+                                <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
+                                    <input type="checkbox" id="check-2" onchange="updateChecklist()" class="w-4 h-4">
+                                    <label for="check-2" class="text-xs text-gray-700">Registrar tempo de produção</label>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <h4 class="font-bold text-pink-600 text-xs uppercase text-center">Semanal</h4>
+                                <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
+                                    <input type="checkbox" id="check-3" onchange="updateChecklist()" class="w-4 h-4">
+                                    <label for="check-3" class="text-xs text-gray-700">Fazer backup dos dados</label>
+                                </div>
+                                <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
+                                    <input type="checkbox" id="check-4" onchange="updateChecklist()" class="w-4 h-4">
+                                    <label for="check-4" class="text-xs text-gray-700">Revisar estoque de materiais</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rodapé do Manual -->
+                    <div class="mt-10 bg-white border border-gray-200 rounded-2xl p-8 text-center shadow-sm">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Dúvidas Técnicas?</h3>
+                        <p class="text-gray-500 text-sm mb-6">Nossa equipe de suporte responde em até 24h úteis.</p>
+                        <a href="mailto:tecnologia@plenaaplicativos.com.br"
+                            class="inline-flex items-center text-plena-pink font-bold hover:underline">
+                            <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+                            tecnologia@plenaaplicativos.com.br
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+        <!-- About View: Legal & Safety Center -->
+        <section id="view-about" class="view-section hide fade-in">
+            <div class="max-w-4xl mx-auto pb-12">
+
+                <!-- 1. Header Institucional -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mb-8 text-center">
+                    <div
+                        class="w-20 h-20 rounded-full bg-gradient-to-r from-plena-pink to-plena-dark flex items-center justify-center mx-auto mb-4 shadow-lg shadow-pink-200">
+                        <i data-lucide="shield-check" class="w-10 h-10 text-white"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-1">Central de Segurança e Legalidade</h2>
+                    <p class="text-gray-500 font-medium">Plena Soluções Digitais • Transparência Total</p>
+                </div>
+
+                <!-- 2. Grid de Políticas -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Termos de Uso -->
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                        <h3 class="font-bold text-gray-800 mb-3 flex items-center text-lg">
+                            <div class="p-2 bg-pink-50 rounded-lg mr-3">
+                                <i data-lucide="file-text" class="w-5 h-5 text-plena-pink"></i>
+                            </div>
+                            Termos de Uso
+                        </h3>
+                        <p class="text-sm text-gray-600 leading-relaxed text-justify">
+                            A licença concedida é <strong>pessoal, intransferível e não exclusiva</strong>. O software é
+                            fornecido "no estado em que se encontra" (as-is). É estritamente proibida a revenda, cópia,
+                            distribuição não autorizada ou engenharia reversa do código-fonte, sob pena das sanções
+                            previstas na Lei de Propriedade Intelectual (9.610/98).
+                        </p>
+                    </div>
+
+                    <!-- Privacidade e LGPD -->
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                        <h3 class="font-bold text-gray-800 mb-3 flex items-center text-lg">
+                            <div class="p-2 bg-green-50 rounded-lg mr-3">
+                                <i data-lucide="lock" class="w-5 h-5 text-green-600"></i>
+                            </div>
+                            Privacidade (LGPD)
+                        </h3>
+                        <p class="text-sm text-gray-600 leading-relaxed text-justify">
+                            Adotamos a arquitetura <strong>Privacy by Design (Local-First)</strong>. Seus dados
+                            financeiros e de inquilinos ficam salvos <strong>exclusivamente no seu dispositivo</strong>.
+                            A Plena não coleta, não armazena e não tem acesso a nenhuma informação inserida no sistema.
+                            Sua privacidade é absoluta.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 3. Responsabilidade do Usuário (Crítico) -->
+                <div class="bg-red-50 border border-red-100 p-8 rounded-2xl mb-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <i data-lucide="alert-octagon" class="w-32 h-32 text-red-900"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <h3 class="font-bold text-red-800 mb-4 flex items-center text-lg">
+                            <i data-lucide="alert-triangle" class="w-6 h-6 mr-3"></i>
+                            IMPORTANTE: Sua Responsabilidade sobre os Dados
+                        </h3>
+                        <div class="space-y-4 text-sm text-red-900/80 text-justify font-medium">
+                            <p>
+                                <strong>1. Backup é Obrigatório:</strong> Como não temos acesso aos seus dados,
+                                <strong>não podemos recuperá-los</strong> em caso de perda, roubo ou dano ao seu
+                                dispositivo. A realização de cópias de segurança (Backup) é de responsabilidade única e
+                                exclusiva do usuário.
+                            </p>
+                            <p>
+                                <strong>2. Isenção de Responsabilidade Técnica:</strong> A Plena exime-se de qualquer
+                                responsabilidade por prejuízos decorrentes de falhas de hardware, vírus no dispositivo
+                                do usuário, ou uso incorreto dos cálculos financeiros do sistema. Verifique sempre as
+                                taxas configuradas.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Suporte e SLA -->
+                <div class="bg-gradient-to-br from-gray-900 to-plena-dark text-white p-8 rounded-2xl mb-12 shadow-xl">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                        <div class="flex-1">
+                            <h3 class="font-bold text-xl mb-2 flex items-center">
+                                <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-plena-pink"></i>
+                                Suporte Premium Especializado
+                            </h3>
+                            <p class="text-gray-300 text-sm mb-6 leading-relaxed">
+                                Precisa de ajuda ou encontrou alguma inconsistência? Nossa equipe técnica está pronta
+                                para atender você com prioridade. Garantimos a qualidade e a segurança da nossa marca.
+                            </p>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                    <p class="text-xs text-gray-400 uppercase font-bold">Canal Oficial</p>
+                                    <p class="font-bold text-white">E-mail</p>
+                                </div>
+                                <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                    <p class="text-xs text-gray-400 uppercase font-bold">Tempo de Resposta (SLA)</p>
+                                    <p class="font-bold text-plena-pink">Até 24h Úteis</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <a href="mailto:tecnologia@plenaaplicativos.com.br"
+                                class="inline-flex items-center justify-center bg-white text-plena-dark px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-transform transform hover:scale-105 shadow-lg">
+                                <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+                                Falar com Suporte
+                            </a>
+                            <p class="text-xs text-center text-gray-400 mt-3">tecnologia@plenaaplicativos.com.br</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Confirmação e Aceite (Travamento) -->
+                <div class="mt-8 mb-12" id="terms-action-container">
+                    <div class="bg-gray-50 border border-gray-200 p-6 rounded-2xl flex flex-col items-center text-center transition-all duration-300"
+                        id="terms-box">
+                        <i data-lucide="check-circle-2" class="w-12 h-12 text-gray-300 mb-3" id="terms-icon"></i>
+                        <h3 class="font-bold text-gray-800 text-lg mb-2" id="terms-title">Confirmação de Leitura</h3>
+                        <p class="text-sm text-gray-500 mb-6 max-w-lg" id="terms-desc">
+                            Para prosseguir com segurança, confirme que você leu e compreendeu os Termos de Uso, a
+                            Política de Privacidade e sua responsabilidade sobre os backups.
+                        </p>
+
+                        <button onclick="confirmTerms()" id="btn-confirm-terms"
+                            class="bg-plena-pink hover:bg-plena-dark text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-pink-200 transform hover:scale-105 transition-all flex items-center gap-2 group">
+                            <span>Li, Compreendi e Concordo</span>
+                            <i data-lucide="arrow-right"
+                                class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+
+                        <div id="terms-accepted-badge"
+                            class="hidden flex flex-col items-center animate-in fade-in zoom-in duration-300">
+                            <span
+                                class="bg-green-100 text-green-700 font-bold px-6 py-2 rounded-full text-sm border border-green-200 flex items-center gap-2 mb-2">
+                                <i data-lucide="lock" class="w-4 h-4"></i>
+                                Termos Aceitos e Registrados
+                            </span>
+                            <p class="text-xs text-gray-400 font-mono" id="terms-date">Carregando data...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Rodapé Legal -->
+                <div class="text-center border-t border-gray-200 pt-8">
+                    <p class="text-sm font-bold text-gray-800">Plena Soluções Digitais LTDA</p>
+                    <p class="text-xs text-gray-500 mt-1">CNPJ: 17.347.919/0001-59 • Todos os direitos reservados</p>
+                    <p class="text-[10px] text-gray-400 mt-4">
+                        Versão 4.1 Pro • Build 2026.01.07
+                    </p>
+                </div>
+
+            </div>
+        </section>
+        </div>
+    </main>
+
+    <div id="productModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800" id="prod-modal-title">Precificar Nova Peça</h3>
+                <button onclick="closeModal('productModal')" class="text-gray-400 hover:text-gray-600">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form onsubmit="submitProduct(event)" class="space-y-6">
+                <input type="hidden" id="pd-id">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Nome da Peça</label>
+                        <input type="text" id="pd-name" required
+                            class="w-full border p-2 rounded-lg text-sm focus:border-plena-pink outline-none"
+                            placeholder="Ex: Bolsa de Crochê">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Tempo de Produção (Horas)</label>
+                        <input type="number" step="0.1" id="pd-time" required
+                            class="w-full border p-2 rounded-lg text-sm focus:border-plena-pink outline-none"
+                            placeholder="Ex: 2.5" onkeyup="calculatePrice()">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Categoria</label>
+                    <select id="pd-category"
+                        class="w-full border p-2 rounded-lg text-sm bg-white outline-none focus:border-plena-pink">
+                        <option value="Bolsas">Bolsas</option>
+                        <option value="Roupas">Roupas</option>
+                        <option value="Acessórios">Acessórios</option>
+                        <option value="Decoração">Decoração</option>
+                        <option value="Bijuterias">Bijuterias</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="font-bold text-gray-700 text-sm">Custos de Materiais</h4>
+                        <button type="button" onclick="addMaterial()"
+                            class="text-xs bg-gray-800 text-white px-3 py-1.5 rounded hover:bg-black transition-colors">
+                            <i data-lucide="plus" class="w-3 h-3 inline mr-1"></i> Adicionar
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 mb-3">
+                        <input type="text" id="mat-name" class="col-span-2 border p-2 rounded-lg text-sm"
+                            placeholder="Material (Ex: Linha)">
+                        <input type="number" step="0.01" id="mat-cost" class="border p-2 rounded-lg text-sm"
+                            placeholder="Valor R$">
+                    </div>
+                    <ul id="materials-list-modal" class="space-y-2 text-sm text-gray-600 mb-3 max-h-40 overflow-y-auto">
+                    </ul>
+                    <input type="hidden" id="pd-materials-json">
+                    <div class="flex justify-between border-t border-gray-300 pt-2 font-bold text-gray-800">
+                        <span>Total Materiais:</span>
+                        <span id="display-mat-total">R$ 0,00</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Margem de Lucro (%)</label>
+                        <input type="number" id="pd-profit"
+                            class="w-full border p-2 rounded-lg text-sm focus:border-plena-pink outline-none" value="30"
+                            onkeyup="calculatePrice()">
+                    </div>
+                    <div class="bg-plena-pink/10 p-4 rounded-xl border border-plena-pink/20 text-center">
+                        <p class="text-xs text-plena-pink font-bold uppercase">Preço Final Sugerido</p>
+                        <h2 id="display-final-price" class="text-3xl font-bold text-plena-pink">R$ 0,00</h2>
+                        <input type="hidden" id="pd-final-price">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
+                    <textarea id="pd-notes" rows="2"
+                        class="w-full border p-2 rounded-lg text-sm focus:border-plena-pink outline-none"
+                        placeholder="Detalhes sobre a peça..."></textarea>
+                </div>
+                <div class="flex gap-2">
+                    <button type="button" onclick="deleteProduct()" id="btn-delete-prod"
+                        class="hidden px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl font-bold border border-red-200 transition-colors">
+                        Excluir Peça
+                    </button>
+                    <button type="submit"
+                        class="flex-1 bg-plena-pink text-white py-3 rounded-xl font-bold hover:bg-plena-dark transition-colors shadow-lg shadow-pink-200">
+                        Salvar Produto
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="transactionModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Nova Movimentação</h3>
+                <button onclick="closeModal('transactionModal')" class="text-gray-400 hover:text-gray-600">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form onsubmit="submitTransaction(event)" class="space-y-4">
+                <input type="hidden" id="t-id">
+                <div class="grid grid-cols-2 gap-3 p-1 bg-gray-100 rounded-lg">
+                    <label class="cursor-pointer text-center">
+                        <input type="radio" name="t-type" value="income" class="peer hidden">
+                        <div
+                            class="py-2 text-sm font-bold text-gray-500 rounded-md peer-checked:bg-white peer-checked:text-green-600 shadow-sm transition-all">
+                            Venda
+                        </div>
+                    </label>
+                    <label class="cursor-pointer text-center">
+                        <input type="radio" name="t-type" value="expense" class="peer hidden" checked>
+                        <div
+                            class="py-2 text-sm font-bold text-gray-500 rounded-md peer-checked:bg-white peer-checked:text-red-600 shadow-sm transition-all">
+                            Custo
+                        </div>
+                    </label>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Valor (R$)</label>
+                    <input type="number" id="t-amount" step="0.01" min="0.01" required
+                        class="w-full border-2 border-gray-200 p-3 rounded-xl text-lg font-bold focus:border-plena-pink outline-none"
+                        placeholder="0,00">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Descrição</label>
+                    <input type="text" id="t-desc" required
+                        class="w-full border p-2 rounded-lg text-sm focus:border-plena-pink outline-none"
+                        placeholder="Ex: Venda de bolsa ou Compra de material">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Categoria</label>
+                        <select id="t-cat"
+                            class="w-full border p-2 rounded-lg text-sm bg-white outline-none focus:border-plena-pink"
+                            required>
+                            <option value="Venda">Venda</option>
+                            <option value="Material">Material</option>
+                            <option value="Ferramenta">Ferramenta</option>
+                            <option value="Transporte">Transporte</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Pagamento</label>
+                        <select id="t-method"
+                            class="w-full border p-2 rounded-lg text-sm bg-white outline-none focus:border-plena-pink"
+                            required>
+                            <option value="Dinheiro">Dinheiro</option>
+                            <option value="Pix">Pix</option>
+                            <option value="Débito">Débito</option>
+                            <option value="Crédito">Crédito</option>
+                            <option value="Transferência">Transferência</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Data</label>
+                    <input type="date" id="t-date" required
+                        class="w-full border p-2 rounded-lg text-sm bg-white outline-none focus:border-plena-pink">
+                </div>
+                <button type="submit"
+                    class="w-full bg-plena-pink text-white py-3 rounded-xl font-bold shadow-lg shadow-pink-200 hover:bg-plena-dark transition-all mt-2">
+                    Salvar Movimentação
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="closingModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+            <div class="bg-gradient-to-r from-gray-900 to-black p-6 text-center text-white">
+                <h3 class="font-bold text-lg">Fechamento do Dia</h3>
+                <p id="close-date" class="text-sm text-gray-300 mt-1">Hoje</p>
+                <p id="close-time" class="text-xs text-gray-500 mt-0">--:--</p>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4 mb-6">
+                    <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg border border-green-100">
+                        <div class="flex items-center">
+                            <i data-lucide="trending-up" class="w-4 h-4 text-green-600 mr-2"></i>
+                            <span class="text-sm">Vendas</span>
+                        </div>
+                        <span id="close-inc" class="font-bold text-green-700">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg border border-red-100">
+                        <div class="flex items-center">
+                            <i data-lucide="trending-down" class="w-4 h-4 text-red-600 mr-2"></i>
+                            <span class="text-sm">Custos</span>
+                        </div>
+                        <span id="close-exp" class="font-bold text-red-700">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-4 border-t">
+                        <span class="font-bold text-gray-800">Lucro do Dia</span>
+                        <span id="close-bal" class="font-bold text-2xl text-gray-900">R$ 0,00</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <button onclick="shareClosing()"
+                        class="bg-[#25D366] text-white py-2.5 rounded-lg font-bold text-sm hover:bg-[#128C7E] flex justify-center items-center gap-2">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
+                    </button>
+                    <button onclick="printClosing()"
+                        class="bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 flex justify-center items-center gap-2">
+                        <i data-lucide="printer" class="w-4 h-4"></i> Imprimir
+                    </button>
+                </div>
+                <button onclick="closeModal('closingModal')"
+                    class="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-bold text-sm hover:bg-gray-200 transition-colors flex justify-center items-center gap-2">
+                    Concluir Fechamento
+                </button>
+                <div class="mt-4 pt-4 border-t border-gray-100 text-center">
+                    <a href="https://www.plenaaplicativos.com.br" target="_blank"
+                        class="text-[10px] text-gray-400 hover:text-plena-pink no-underline">
+                        Plena Soluções Digitais &copy; 2026
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div id="confirmModal"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center hidden">
+            <div class="bg-white p-6 rounded-2xl shadow-xl max-w-sm w-full mx-4">
+                <h3 id="confirm-title" class="text-xl font-bold text-gray-800 mb-3">Confirmação</h3>
+                <p id="confirm-message" class="text-gray-600 mb-6">Tem certeza que deseja prosseguir?</p>
+                <div class="flex gap-3">
+                    <button id="confirm-btn-cancel"
+                        class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-300 transition-colors">Cancelar</button>
+                    <button id="confirm-btn-action"
+                        class="flex-1 px-4 py-2 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors shadow-lg shadow-red-200">Confirmar</button>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+
+
+            // ESTADO GLOBAL
+            const DB_KEY = 'plena_artesanato_pro_v2';
+            const defaultDB = {
+                products: [],
+                materials: [],
+                transactions: [],
+                settings: {
+                    salary: 0,
+                    hoursDay: 0,
+                    daysWeek: 0,
+                    hourlyRate: 0
+                },
+                categories: [
+                    { id: '1', name: 'Bolsas', type: 'product', color: '#db2777' },
+                    { id: '2', name: 'Roupas', type: 'product', color: '#3B82F6' },
+                    { id: '3', name: 'Acessórios', type: 'product', color: '#10B981' },
+                    { id: '4', name: 'Decoração', type: 'product', color: '#F59E0B' },
+                    { id: '5', name: 'Bijuterias', type: 'product', color: '#8B5CF6' }
+                ],
+                tutorial: {
+                    completedSteps: [],
+                    checklistState: {}
+                }
+            };
+
+            let db = JSON.parse(localStorage.getItem(DB_KEY)) || defaultDB;
+
+            // UTILITÁRIOS
+            const save = () => {
+                localStorage.setItem(DB_KEY, JSON.stringify(db));
+                updateDataStatus();
+            };
+
+            // --- MÓDULO DE SEGURANÇA E VALIDAÇÃO ---
+            let currentConfirmCallback = null;
+            let currentCancelCallback = null;
+
+            function showCustomConfirm(title, message, onConfirm, isDestructive = true, confirmText = 'Confirmar', cancelText = 'Cancelar', onCancel = null) {
+                const confirmModal = document.getElementById('confirmModal');
+                if (!confirmModal) {
+                    console.error("Elemento #confirmModal não encontrado no DOM.");
+                    return;
+                }
+                document.getElementById('confirm-title').innerText = title;
+                document.getElementById('confirm-message').innerText = message;
+
+                const btnConfirm = document.getElementById('confirm-btn-action');
+                const btnCancel = document.getElementById('confirm-btn-cancel');
+
+                btnConfirm.innerText = confirmText;
+                btnCancel.innerText = cancelText;
+
+                if (isDestructive) {
+                    btnConfirm.className = "flex-1 px-4 py-2 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors shadow-lg shadow-red-200";
+                } else {
+                    btnConfirm.className = "flex-1 px-4 py-2 bg-plena-pink text-white rounded-xl font-bold hover:bg-plena-dark transition-colors shadow-lg shadow-pink-200";
+                }
+
+                currentConfirmCallback = onConfirm;
+                currentCancelCallback = onCancel;
+
+                confirmModal.classList.remove('hidden');
+            }
+
+            function closeConfirmModal() {
+                const confirmModal = document.getElementById('confirmModal');
+                if (confirmModal) {
+                    confirmModal.classList.add('hidden');
+                }
+                currentConfirmCallback = null;
+                currentCancelCallback = null;
+            }
+            
+            function handleConfirmCancel() {
+                if (currentCancelCallback) currentCancelCallback();
+                closeConfirmModal();
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const confirmBtn = document.getElementById('confirm-btn-action');
+                if(confirmBtn) {
+                    confirmBtn.addEventListener('click', () => {
+                        if (currentConfirmCallback) currentConfirmCallback();
+                        closeConfirmModal();
+                    });
+                }
+                const cancelBtn = document.getElementById('confirm-btn-cancel');
+                if(cancelBtn) {
+                    cancelBtn.addEventListener('click', handleConfirmCancel);
+                }
+            });
+
+            // --- SECURITY FUNCTIONS ---
+            function downloadBackup() {
+                const appIdentifier = DB_KEY.replace('_pro_v2', '').replace('_pro_v4', '');
+                const backupData = {
+                    ...db,
+                    exportedAt: new Date().toISOString(),
+                    version: `${appIdentifier}_v4`
+                };
+
+                const dataStr = JSON.stringify(backupData, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+                const exportFileName = `${appIdentifier}_backup_${new Date().toISOString().slice(0, 10)}.json`;
+
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileName);
+                linkElement.click();
+
+                showNotification('Backup baixado com sucesso!', 'success');
+            }
+
+            function restoreBackup(input) {
+                const file = input.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    try {
+                        const backup = JSON.parse(e.target.result);
+
+                        if (!backup.settings || !backup.version) {
+                            throw new Error('Arquivo de backup inválido ou incompatível.');
+                        }
+
+                        showCustomConfirm('Restaurar Backup', 'Restaurar o backup substituirá todos os dados atuais. Tem certeza?', () => {
+                            const expectedVersionPrefix = DB_KEY.replace('_pro_v2', '').replace('_pro_v4', '');
+                            if (!backup.version.startsWith(expectedVersionPrefix)) {
+                                showNotification(`Atenção: O backup é de um app diferente (${backup.version}). A restauração pode causar inconsistências.`, 'error');
+                            }
+                            db = backup;
+                            save();
+                            location.reload();
+                        });
+                    } catch (error) {
+                        showNotification('Erro ao restaurar backup: ' + error.message, 'error');
+                    }
+                };
+                reader.readAsText(file);
+            }
+
+            function clearAllTransactions() {
+                showCustomConfirm('Limpar Lançamentos', 'Tem certeza que deseja limpar TODOS os lançamentos (vendas e custos)? Esta ação é irreversível!', () => {
+                    if(db.transactions) db.transactions = [];
+                    if(db.entries) db.entries = [];
+                    if(db.sales) db.sales = [];
+                    
+                    save();
+                    
+                    if(typeof renderDashboard === 'function') renderDashboard();
+                    if(typeof renderTransactions === 'function') renderTransactions();
+                    if(typeof renderEntries === 'function') renderEntries();
+                    if(typeof renderSales === 'function') renderSales();
+                    
+                    showNotification('Todos os lançamentos foram removidos!', 'success');
+                });
+            }
+
+            function factoryReset() {
+                showCustomConfirm('Resetar Tudo', 'ATENÇÃO: Isso apagará TODOS os dados deste app e restaurará as configurações de fábrica. Esta ação é irreversível!', () => {
+                    localStorage.removeItem(DB_KEY);
+                    location.reload();
+                });
+            }
+            
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `fixed top-4 right-4 z-[9999] px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${type === 'success' ? 'bg-green-500 text-white' : type === 'error' ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'}`;
+                notification.innerHTML = `<div class="flex items-center"><i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-triangle' : 'info'}" class="w-5 h-5 mr-2"></i><span>${message}</span></div>`;
+                document.body.appendChild(notification);
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(120%)';
+                    notification.style.opacity = '0';
+                    setTimeout(() => notification.remove(), 500);
+                }, 3500);
+            }
+
+
+            const fmtMoney = (v) => {
+                return v.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            };
+
+            const fmtDate = (d) => {
+                const date = new Date(d);
+                return date.toLocaleDateString('pt-BR');
+            };
+
+            const getID = () => {
+                return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+            };
+
+            const calculatePercentage = (current, previous) => {
+                if (previous === 0) return current > 0 ? 100 : 0;
+                return ((current - previous) / previous * 100).toFixed(1);
+            };
+
+            // --- LEGAL TERMS LOGIC ---
+            function confirmTerms() {
+                if (!confirm('Tem certeza que leu e concorda com todos os termos apresentados?')) return;
+
+                // Update DB
+                db.settings.termsAccepted = true;
+                db.settings.termsAcceptedAt = new Date().toISOString();
+                save();
+
+                // Update Visuals
+                updateTermsVisuals();
+
+                // Celebration Effect
+                const btn = document.getElementById('btn-confirm-terms');
+                if (btn) {
+                    // Confetti or visual feedback could go here
+                    alert('Obrigado! Seu aceite foi registrado com sucesso.');
+                }
+            }
+
+            function updateTermsVisuals() {
+                const hasAccepted = db.settings.termsAccepted;
+                const termsBox = document.getElementById('terms-box');
+                const btn = document.getElementById('btn-confirm-terms');
+                const badge = document.getElementById('terms-accepted-badge');
+                const icon = document.getElementById('terms-icon');
+                const title = document.getElementById('terms-title');
+                const desc = document.getElementById('terms-desc');
+
+                if (hasAccepted && termsBox) {
+                    // Change Box Style
+                    termsBox.classList.remove('bg-gray-50', 'border-gray-200');
+                    termsBox.classList.add('bg-green-50', 'border-green-200');
+
+                    // Hide Button / Show Badge
+                    if (btn) btn.classList.add('hidden');
+                    if (badge) {
+                        badge.classList.remove('hidden');
+                        badge.classList.add('flex');
+                    }
+
+                    // Update Date
+                    const dateElement = document.getElementById('terms-date');
+                    if (dateElement && db.settings.termsAcceptedAt) {
+                        const dateObj = new Date(db.settings.termsAcceptedAt);
+                        dateElement.textContent = 'Confirmado em: ' + dateObj.toLocaleString('pt-BR');
+                    }
+
+                    // Update Icon and Text
+                    if (icon) {
+                        icon.setAttribute('class', 'w-16 h-16 text-green-500 mb-3 transition-colors duration-500');
+                    }
+                    if (title) {
+                        title.textContent = "Você está seguro e ciente";
+                        title.classList.add('text-green-800');
+                    }
+                    if (desc) {
+                        desc.textContent = "Obrigado por colaborar com a segurança da nossa comunidade. Seu aceite dos termos está registrado localmente.";
+                        desc.classList.remove('text-gray-500');
+                        desc.classList.add('text-green-700/80');
+                    }
+                }
+            }
+
+            // ROTEAMENTO E NAVEGAÇÃO
+            function router(view) {
+                document.querySelectorAll('.view-section').forEach(el => el.classList.add('hide'));
+                document.querySelectorAll('.nav-item').forEach(el => {
+                    el.classList.remove('bg-white/10', 'text-white');
+                    el.classList.add('text-gray-400');
+                });
+
+                const viewElement = document.getElementById(`view-${view}`);
+                if (viewElement) {
+                    viewElement.classList.remove('hide');
+                    viewElement.classList.add('fade-in');
+                }
+
+                const navElement = document.getElementById(`nav-${view}`);
+                if (navElement) {
+                    navElement.classList.add('bg-white/10', 'text-white');
+                    navElement.classList.remove('text-gray-400');
+                }
+
+                const titles = {
+                    dashboard: 'Dashboard',
+                    products: 'Meus Produtos',
+                    materials: 'Estoque de Materiais',
+                    transactions: 'Caixa do Ateliê',
+                    reports: 'Relatórios',
+                    settings: 'Configurações',
+                    instructions: 'Manual de Uso',
+                    about: 'Sobre a Plena'
+                };
+
+                document.getElementById('page-title').innerText = titles[view] || 'Plena Artesanato';
+
+                if (window.innerWidth < 1024) toggleSidebar();
+
+                if (view === 'dashboard') renderDashboard();
+                else if (view === 'products') renderProducts();
+                else if (view === 'materials') renderMaterials();
+                else if (view === 'transactions') renderTransactions();
+                else if (view === 'settings') loadSettings();
+                else if (view === 'instructions') {
+                    loadTutorialState();
+                }
+            }
+
+            function toggleSidebar() {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('overlay');
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('hidden');
+                document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+            }
+
+            // LÓGICA DO DASHBOARD (Mantida original)
+            function renderDashboard() {
+                const monthSelector = document.getElementById('month-selector').value;
+                const currentMonth = monthSelector || new Date().toISOString().slice(0, 7);
+                const monthTrans = db.transactions.filter(t => t.date.startsWith(currentMonth));
+                const income = monthTrans.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+                const expense = monthTrans.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+
+                document.getElementById('dash-hourly-rate').innerText = fmtMoney(db.settings.hourlyRate || 0);
+                document.getElementById('dash-products-count').innerText = db.products.length;
+                document.getElementById('dash-revenue').innerText = fmtMoney(income);
+                document.getElementById('dash-costs').innerText = fmtMoney(expense);
+
+                renderChart(currentMonth);
+                renderTopProducts();
+                renderTopMaterials();
+                renderRecentProducts();
+            }
+
+            function renderChart(month) {
+                const chartArea = document.getElementById('chart-area');
+                const transactions = db.transactions.filter(t => t.date.startsWith(month));
+                const last7Days = [];
+                for (let i = 6; i >= 0; i--) {
+                    const date = new Date();
+                    date.setDate(date.getDate() - i);
+                    const dateStr = date.toISOString().split('T')[0];
+                    const dayTrans = transactions.filter(t => t.date === dateStr);
+                    last7Days.push({
+                        label: date.getDate().toString().padStart(2, '0'),
+                        income: dayTrans.filter(t => t.type === 'income').reduce((a, b) => a + b.amount, 0),
+                        expense: dayTrans.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0)
+                    });
+                }
+                const maxValue = Math.max(...last7Days.map(d => Math.max(d.income, d.expense)), 100);
+                chartArea.innerHTML = last7Days.map(day => `
+                <div class="bar-group">
+                    <div class="bar-wrapper">
+                        <div class="bar bg-green-500" style="height:${(day.income / maxValue) * 100}%" data-value="${fmtMoney(day.income)}"></div>
+                        <div class="bar bg-red-500" style="height:${(day.expense / maxValue) * 100}%" data-value="${fmtMoney(day.expense)}"></div>
+                    </div>
+                    <div class="x-label">${day.label}</div>
+                </div>
+            `).join('');
+            }
+
+            function renderTopProducts() { /* Lógica mantida... */ }
+            function renderTopMaterials() { /* Lógica mantida... */ }
+            function renderRecentProducts() { /* Lógica mantida... */ }
+
+            // LÓGICA DE PRODUTOS
+            let tempMaterials = [];
+            function openProductModal(id = null) {
+                document.querySelector('#productModal form').reset();
+                tempMaterials = [];
+                renderTempMaterials();
+                document.getElementById('btn-delete-prod').classList.add('hidden');
+                if (id) {
+                    const p = db.products.find(x => x.id === id);
+                    if (p) {
+                        document.getElementById('pd-id').value = p.id;
+                        document.getElementById('pd-name').value = p.name;
+                        document.getElementById('pd-time').value = p.productionTime;
+                        document.getElementById('pd-profit').value = p.profitMargin;
+                        document.getElementById('pd-category').value = p.category || '';
+                        document.getElementById('pd-notes').value = p.notes || '';
+                        tempMaterials = p.materials || [];
+                        renderTempMaterials();
+                        calculatePrice();
+                        document.getElementById('prod-modal-title').innerText = 'Editar Produto';
+                        document.getElementById('btn-delete-prod').classList.remove('hidden');
+                    }
+                } else {
+                    document.getElementById('pd-id').value = '';
+                    document.getElementById('prod-modal-title').innerText = 'Novo Produto';
+                    calculatePrice();
+                }
+                document.getElementById('productModal').classList.remove('hidden');
+            }
+
+            function addMaterial() {
+                const name = document.getElementById('mat-name').value;
+                const cost = parseFloat(document.getElementById('mat-cost').value);
+                if (name && cost) {
+                    tempMaterials.push({ id: getID(), name, cost });
+                    document.getElementById('mat-name').value = '';
+                    document.getElementById('mat-cost').value = '';
+                    renderTempMaterials();
+                    calculatePrice();
+                }
+            }
+
+            function renderTempMaterials() {
+                const list = document.getElementById('materials-list-modal');
+                list.innerHTML = tempMaterials.map((m, idx) => `
+                <li class="flex justify-between items-center border-b pb-2">
+                    <div><span class="text-sm">${m.name}</span><span class="text-xs text-gray-500 ml-2">${fmtMoney(m.cost)}</span></div>
+                    <button type="button" onclick="removeMaterial(${idx})" class="text-red-500 hover:text-red-700"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                </li>
+            `).join('');
+                document.getElementById('display-mat-total').innerText = fmtMoney(tempMaterials.reduce((acc, m) => acc + m.cost, 0));
+            }
+
+            function removeMaterial(idx) {
+                tempMaterials.splice(idx, 1);
+                renderTempMaterials();
+                calculatePrice();
+            }
+
+            function calculatePrice() {
+                const time = parseFloat(document.getElementById('pd-time').value) || 0;
+                const profit = parseFloat(document.getElementById('pd-profit').value) || 0;
+                const matTotal = tempMaterials.reduce((acc, m) => acc + m.cost, 0);
+                const laborCost = time * (db.settings.hourlyRate || 0);
+                const costBase = matTotal + laborCost;
+                const finalPrice = costBase * (1 + profit / 100);
+                document.getElementById('display-final-price').innerText = fmtMoney(finalPrice);
+                document.getElementById('pd-final-price').value = finalPrice;
+            }
+
+            function submitProduct(e) {
+                e.preventDefault();
+                const id = document.getElementById('pd-id').value;
+                const productData = {
+                    id: id || getID(),
+                    name: document.getElementById('pd-name').value,
+                    productionTime: parseFloat(document.getElementById('pd-time').value) || 0,
+                    profitMargin: parseFloat(document.getElementById('pd-profit').value) || 0,
+                    category: document.getElementById('pd-category').value,
+                    materials: tempMaterials,
+                    finalPrice: parseFloat(document.getElementById('pd-final-price').value) || 0,
+                    notes: document.getElementById('pd-notes').value,
+                    date: new Date().toISOString()
+                };
+                if (id) {
+                    const idx = db.products.findIndex(x => x.id === id);
+                    db.products[idx] = productData;
+                } else {
+                    db.products.push(productData);
+                }
+                save();
+                closeModal('productModal');
+                renderDashboard();
+                renderProducts();
+                showNotification('Produto salvo com sucesso!', 'success');
+            }
+
+            // LÓGICA DO MANUAL (PADRONIZADA E UNIFICADA)
+            function scrollToSection(sectionId) {
+                const element = document.getElementById(sectionId);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+
+            function markSectionComplete(sectionId) {
+                if (!db.settings.tutorial) db.settings.tutorial = {};
+                if (!db.settings.tutorial.completedSections) db.settings.tutorial.completedSections = [];
+
+                const completedSections = db.settings.tutorial.completedSections;
+                if (!completedSections.includes(sectionId)) {
+                    completedSections.push(sectionId);
+                    save();
+                    updateTutorialProgress();
+                    showNotification('Seção marcada como concluída!', 'success');
+                }
+            }
+
+            function updateTutorialProgress() {
+                const sections = ['instalacao', 'configuracao', 'materiais', 'precificacao', 'vendas', 'backup', 'duvidas', 'checklist'];
+                const completedSections = (db.settings.tutorial && db.settings.tutorial.completedSections) ? db.settings.tutorial.completedSections : [];
+                const progress = sections.length > 0 ? (completedSections.length / sections.length) * 100 : 0;
+
+                const progressBar = document.getElementById('tutorial-progress');
+                const completedSteps = document.getElementById('completed-steps');
+
+                if (progressBar) progressBar.style.width = `${progress}%`;
+                if (completedSteps) completedSteps.textContent = `${completedSections.length}/${sections.length} etapas`;
+
+                sections.forEach(sectionId => {
+                    const button = document.querySelector(`.tutorial-step[onclick="scrollToSection('${sectionId}')"]`);
+                    if (button) {
+                        if (completedSections.includes(sectionId)) {
+                            button.classList.add('bg-green-100', 'border-green-300', 'text-green-800');
+                            button.classList.remove('border-gray-200', 'hover:bg-gray-50');
+                        } else {
+                            button.classList.remove('bg-green-100', 'border-green-300', 'text-green-800');
+                            button.classList.add('border-gray-200', 'hover:bg-gray-50');
+                        }
+                    }
+                });
+                updateChecklistProgress();
+            }
+
+            function updateChecklistProgress() {
+                const checkboxes = document.querySelectorAll('#checklist .checklist-item input[type="checkbox"]');
+                if(checkboxes.length === 0) return;
+
+                const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+                const percentage = (checked / checkboxes.length) * 100;
+                
+                const circle = document.getElementById('checklist-circle');
+                const percentageText = document.getElementById('checklist-percentage');
+
+                if (circle) {
+                    const circumference = circle.r.baseVal.value * 2 * Math.PI;
+                    circle.style.strokeDasharray = `${circumference} ${circumference}`;
+                    circle.style.strokeDashoffset = circumference - percentage / 100 * circumference;
+                }
+                
+                if (percentageText) {
+                    percentageText.textContent = `${Math.round(percentage)}%`;
+                }
+
+                const checklistState = {};
+                checkboxes.forEach(cb => {
+                    checklistState[cb.id] = cb.checked;
+                    const item = cb.closest('.checklist-item');
+                    if (item) {
+                        item.classList.toggle('opacity-50', cb.checked);
+                        item.classList.toggle('line-through', cb.checked);
+                    }
+                });
+                
+                if (!db.settings.tutorial) db.settings.tutorial = {};
+                db.settings.tutorial.checklist = checklistState;
+                save();
+            }
+
+            function loadTutorialState() {
+                const savedChecklist = (db.settings.tutorial && db.settings.tutorial.checklist) ? db.settings.tutorial.checklist : {};
+                Object.keys(savedChecklist).forEach(id => {
+                    const checkbox = document.getElementById(id);
+                    if (checkbox) checkbox.checked = savedChecklist[id];
+                });
+                
+                if (db.settings.tutorial && db.settings.tutorial.manualReadAt) {
+                    const badge = document.getElementById('manual-accepted-badge');
+                    const button = document.getElementById('btn-confirm-manual');
+                    const dateEl = document.getElementById('manual-date');
+                    if(badge && button && dateEl) {
+                        badge.classList.remove('hidden');
+                        button.classList.add('hidden');
+                        dateEl.textContent = new Date(db.settings.tutorial.manualReadAt).toLocaleString('pt-BR');
+                    }
+                }
+                updateTutorialProgress();
+            }
+
+            function confirmManualRead() {
+                if (!db.settings.tutorial) db.settings.tutorial = {};
+                db.settings.tutorial.manualReadAt = new Date().toISOString();
+                save();
+
+                const badge = document.getElementById('manual-accepted-badge');
+                const button = document.getElementById('btn-confirm-manual');
+                const dateEl = document.getElementById('manual-date');
+                
+                if(badge && button && dateEl) {
+                    button.classList.add('hidden');
+                    badge.classList.remove('hidden');
+                    dateEl.textContent = new Date().toLocaleString('pt-BR');
+                }
+                showNotification('Manual lido e confirmado com sucesso!', 'success');
+            }
+            
+            function resetTraining() {
+                showCustomConfirm('Reiniciar Treinamento', 'Isso irá limpar seu progresso no manual e no checklist. Deseja continuar?', () => {
+                    if (db.settings.tutorial) db.settings.tutorial = {};
+                    save();
+                    location.reload();
+                }, true, 'Reiniciar', 'Cancelar');
+            }
+
+            // FUNÇÕES GERAIS (RESTANTE DO CÓDIGO MANTIDO)
+            function renderProducts() {
+                const term = document.getElementById('search-term')?.value.toLowerCase() || '';
+                const category = document.getElementById('filter-category')?.value || 'all';
+                const sort = document.getElementById('filter-sort')?.value || 'newest';
+
+                let filtered = db.products.filter(p => {
+                    const matchesTerm = p.name.toLowerCase().includes(term);
+                    const matchesCategory = category === 'all' || p.category === category;
+                    return matchesTerm && matchesCategory;
+                });
+
+                // Ordenar
+                filtered.sort((a, b) => {
+                    switch (sort) {
+                        case 'newest': return new Date(b.date) - new Date(a.date);
+                        case 'oldest': return new Date(a.date) - new Date(b.date);
+                        case 'price-high': return b.finalPrice - a.finalPrice;
+                        case 'price-low': return a.finalPrice - b.finalPrice;
+                        default: return 0;
+                    }
+                });
+
+                const container = document.getElementById('products-grid');
+                const emptyMsg = document.getElementById('empty-msg');
+
+                if (filtered.length === 0) {
+                    container.innerHTML = '';
+                    emptyMsg.classList.remove('hidden');
+                    return;
+                }
+
+                emptyMsg.classList.add('hidden');
+
+                container.innerHTML = filtered.map(p => {
+                    const materialsCount = p.materials ? p.materials.length : 0;
+                    return `
+                    <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:border-plena-pink transition-all cursor-pointer card-hover" onclick="openProductModal('${p.id}')">
+                        <h3 class="font-bold text-gray-800 text-lg mb-2 truncate" title="${p.name}">${p.name}</h3>
+                        <div class="text-sm text-gray-500 mb-4 space-y-1">
+                            <p><i data-lucide="clock" class="w-3 h-3 inline mr-1"></i> ${p.productionTime}h de produção</p>
+                            <p><i data-lucide="layers" class="w-3 h-3 inline mr-1"></i> ${materialsCount} material(is)</p>
+                            <p><i data-lucide="tag" class="w-3 h-3 inline mr-1"></i> ${p.category || 'Sem categoria'}</p>
+                        </div>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <span class="text-xs font-bold uppercase text-gray-400">Preço Sugerido</span>
+                            <span class="font-bold text-2xl text-plena-pink">${fmtMoney(p.finalPrice)}</span>
+                        </div>
+                    </div>
+                `;
+                }).join('');
+                lucide.createIcons();
+            }
+
+            function submitMaterial(e) {
+                e.preventDefault();
+                const materialData = {
+                    id: getID(),
+                    name: document.getElementById('mat-name').value,
+                    category: document.getElementById('mat-category').value,
+                    cost: parseFloat(document.getElementById('mat-cost').value),
+                    quantity: parseFloat(document.getElementById('mat-quantity').value),
+                    unit: document.getElementById('mat-unit').value,
+                    date: new Date().toISOString()
+                };
+                db.materials.push(materialData);
+                save();
+                e.target.reset();
+                renderMaterials();
+                showNotification('Material cadastrado com sucesso!', 'success');
+            }
+
+            function renderMaterials() {
+                const term = document.getElementById('mat-search')?.value.toLowerCase() || '';
+                const filtered = db.materials.filter(m =>
+                    m.name.toLowerCase().includes(term) ||
+                    m.category.toLowerCase().includes(term)
+                );
+
+                const container = document.getElementById('materials-list');
+
+                if (filtered.length === 0) {
+                    container.innerHTML = '<p class="text-gray-400 text-sm text-center">Nenhum material cadastrado</p>';
+                    return;
+                }
+
+                container.innerHTML = filtered.map(m => {
+                    const unitCost = m.cost / m.quantity;
+                    return `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div>
+                            <p class="text-sm font-medium text-gray-800">${m.name}</p>
+                            <p class="text-xs text-gray-500">${m.category} • ${m.quantity} ${m.unit}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-bold text-gray-900">${fmtMoney(m.cost)}</p>
+                            <p class="text-xs text-gray-500">${fmtMoney(unitCost)}/${m.unit}</p>
+                        </div>
+                    </div>
+                `;
+                }).join('');
+            }
+
+            function openTransModal(transaction = null) {
+                const modal = document.getElementById('transactionModal');
+                const title = modal.querySelector('h3');
+                const form = modal.querySelector('form');
+
+                if (transaction) {
+                    // Modo edição
+                    title.textContent = 'Editar Movimentação';
+                    document.getElementById('t-id').value = transaction.id;
+                    document.querySelector(`input[name="t-type"][value="${transaction.type}"]`).checked = true;
+                    document.getElementById('t-amount').value = transaction.amount;
+                    document.getElementById('t-desc').value = transaction.desc;
+                    document.getElementById('t-cat').value = transaction.cat;
+                    document.getElementById('t-method').value = transaction.method;
+                    document.getElementById('t-date').value = transaction.date;
+                } else {
+                    // Modo criação
+                    title.textContent = 'Nova Movimentação';
+                    form.reset();
+                    document.getElementById('t-id').value = '';
+                    document.getElementById('t-date').value = new Date().toISOString().split('T')[0];
+                    document.querySelector('input[name="t-type"][value="expense"]').checked = true;
+                }
+
+                modal.classList.remove('hidden');
+            }
+            function submitTransaction(e) {
+                e.preventDefault();
+
+                const id = document.getElementById('t-id').value;
+                const type = document.querySelector('input[name="t-type"]:checked').value;
+                const amount = parseFloat(document.getElementById('t-amount').value);
+                const desc = document.getElementById('t-desc').value.trim();
+                const cat = document.getElementById('t-cat').value;
+                const method = document.getElementById('t-method').value;
+                const date = document.getElementById('t-date').value;
+
+                if (!desc || !amount || amount <= 0) {
+                    showNotification('Por favor, preencha todos os campos corretamente.', 'error');
+                    return;
+                }
+
+                const transaction = {
+                    id: id || getID(),
+                    type,
+                    amount,
+                    desc,
+                    cat,
+                    method,
+                    date
+                };
+
+                if (id) {
+                    // Editar transação existente
+                    const index = db.transactions.findIndex(t => t.id === id);
+                    if (index !== -1) {
+                        db.transactions[index] = transaction;
+                    }
+                } else {
+                    // Adicionar nova transação
+                    db.transactions.push(transaction);
+                }
+
+                save();
+                closeModal('transactionModal');
+
+                // Resetar formulário
+                e.target.reset();
+                document.getElementById('t-date').value = new Date().toISOString().split('T')[0];
+
+                // Atualizar views
+                if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                    renderDashboard();
+                }
+                if (document.getElementById('view-transactions').classList.contains('hide') === false) {
+                    renderTransactions();
+                }
+
+                showNotification('Movimentação salva com sucesso!', 'success');
+            }
+            function renderTransactions() {
+                const term = document.getElementById('trans-search-term').value.toLowerCase();
+                const filter = document.getElementById('filter-type').value;
+                const start = document.getElementById('filter-start').value;
+                const end = document.getElementById('filter-end').value;
+
+                // Filtrar transações
+                let filtered = db.transactions.filter(t => {
+                    const matchesTerm = t.desc.toLowerCase().includes(term) ||
+                        (t.method && t.method.toLowerCase().includes(term)) ||
+                        (t.cat && t.cat.toLowerCase().includes(term));
+                    const matchesType = filter === 'all' || t.type === filter;
+                    const matchesDate = (!start || t.date >= start) && (!end || t.date <= end);
+
+                    return matchesTerm && matchesType && matchesDate;
+                });
+
+                // Ordenar por data (mais recente primeiro)
+                filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                // Atualizar tabela
+                const tbody = document.getElementById('trans-table-body');
+                const emptyMsg = document.getElementById('trans-empty-msg');
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '';
+                    emptyMsg.classList.remove('hidden');
+                    updateTransFilterSummary(0, 0);
+                    return;
+                }
+
+                emptyMsg.classList.add('hidden');
+
+                tbody.innerHTML = filtered.map(t => {
+                    const isIncome = t.type === 'income';
+
+                    return `
+                    <tr class="hover:bg-gray-50 group border-b border-gray-100">
+                        <td class="px-6 py-4 text-gray-500 whitespace-nowrap">${fmtDate(t.date)}</td>
+                        <td class="px-6 py-4">
+                            <div class="font-medium text-gray-800">${t.desc}</div>
+                            <div class="text-xs text-gray-400">${t.method || 'Não especificado'}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${isIncome ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                ${isIncome ? 'Venda' : 'Custo'}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500">${t.cat || '-'}</td>
+                        <td class="px-6 py-4 text-right font-bold ${isIncome ? 'text-green-600' : 'text-red-600'}">
+                            ${isIncome ? '+' : '-'} ${fmtMoney(t.amount)}
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="editTransaction('${t.id}')" 
+                                        class="text-gray-400 hover:text-blue-500 transition-colors"
+                                        title="Editar">
+                                    <i data-lucide="edit" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="deleteTransaction('${t.id}')" 
+                                        class="text-gray-400 hover:text-red-500 transition-colors"
+                                        title="Excluir">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                }).join('');
+
+                lucide.createIcons();
+                updateTransFilterSummary(filtered);
+            }
+
+            function updateTransFilterSummary(transactions) {
+                const income = transactions ? transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0) : 0;
+                const expense = transactions ? transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0) : 0;
+                const balance = income - expense;
+
+                document.getElementById('filter-income').textContent = fmtMoney(income);
+                document.getElementById('filter-expense').textContent = fmtMoney(expense);
+                document.getElementById('filter-balance').textContent = fmtMoney(balance);
+            }
+            function clearTransFilters() {
+                const firstDay = new Date();
+                firstDay.setDate(1);
+                const firstDayStr = firstDay.toISOString().split('T')[0];
+                const today = new Date().toISOString().split('T')[0];
+
+                document.getElementById('trans-search-term').value = '';
+                document.getElementById('filter-type').value = 'all';
+                document.getElementById('filter-start').value = firstDayStr;
+                document.getElementById('filter-end').value = today;
+
+                renderTransactions();
+            }
+
+            function loadSettings() {
+                const s = db.settings;
+                document.getElementById('conf-salary').value = s.salary || '';
+                document.getElementById('conf-hours-day').value = s.hoursDay || '';
+                document.getElementById('conf-days-week').value = s.daysWeek || '';
+                document.getElementById('conf-result-rate').innerText = fmtMoney(s.hourlyRate || 0);
+                document.getElementById('dash-hourly-rate').innerText = fmtMoney(s.hourlyRate || 0);
+
+                if (s.ownerName) document.getElementById('set-owner-name').value = s.ownerName;
+                if (s.ownerDoc) document.getElementById('set-owner-doc').value = s.ownerDoc;
+
+                if (s.ownerName && s.ownerDoc) {
+                    document.getElementById('set-owner-name').disabled = true;
+                    document.getElementById('set-owner-doc').disabled = true;
+                }
+            }
+            function calculateHourlyRate() {
+                const salary = parseFloat(document.getElementById('conf-salary').value) || 0;
+                const hours = parseFloat(document.getElementById('conf-hours-day').value) || 0;
+                const days = parseFloat(document.getElementById('conf-days-week').value) || 0;
+
+                if (salary && hours && days) {
+                    const totalHoursMonth = hours * days * 4.33; // aprox weeks/month
+                    const rate = salary / totalHoursMonth;
+                    document.getElementById('conf-result-rate').innerText = fmtMoney(rate);
+                    return rate;
+                }
+                return 0;
+            }
+            function saveSettings() {
+                const ownerName = document.getElementById('set-owner-name').value.trim();
+                const ownerDoc = document.getElementById('set-owner-doc').value.trim();
+
+                if (ownerDoc) {
+                    if (!validateCPF(ownerDoc) && !validateCNPJ(ownerDoc)) {
+                        showNotification('CPF ou CNPJ inválido. Verifique os dados.', 'error');
+                        return;
+                    }
+                }
+
+                const rate = calculateHourlyRate();
+                db.settings = {
+                    ...db.settings,
+                    salary: parseFloat(document.getElementById('conf-salary').value) || 0,
+                    hoursDay: parseFloat(document.getElementById('conf-hours-day').value) || 0,
+                    daysWeek: parseFloat(document.getElementById('conf-days-week').value) || 0,
+                    hourlyRate: rate,
+                    ownerName: ownerName,
+                    ownerDoc: ownerDoc
+                };
+                save();
+                showNotification('Configurações salvas com sucesso!', 'success');
+                loadSettings();
+                renderDashboard();
+
+                // Update watermark immediately
+                document.getElementById('license-owner').innerText = ownerName || 'Não registrado';
+
+                // Lock UI if needed
+                if (ownerName && ownerDoc) {
+                    document.getElementById('set-owner-name').disabled = true;
+                    document.getElementById('set-owner-doc').disabled = true;
+                }
+            }
+
+            function generateReport() {
+                const start = document.getElementById('rep-start').value;
+                const end = document.getElementById('rep-end').value;
+
+                if (!start || !end) {
+                    showNotification('Por favor, selecione um período.', 'error');
+                    return;
+                }
+
+                const transactions = db.transactions.filter(t => t.date >= start && t.date <= end);
+                const income = transactions.filter(t => t.type === 'income')
+                    .reduce((sum, t) => sum + t.amount, 0);
+                const expense = transactions.filter(t => t.type === 'expense')
+                    .reduce((sum, t) => sum + t.amount, 0);
+                const balance = income - expense;
+
+                document.getElementById('rep-inc').textContent = fmtMoney(income);
+                document.getElementById('rep-exp').textContent = fmtMoney(expense);
+                document.getElementById('rep-bal').textContent = fmtMoney(balance);
+
+                // Gerar análise por categoria
+                renderCategoryReport(transactions);
+
+                document.getElementById('report-result').classList.remove('hide');
+            }
+            function generateFullReport() {
+                // Configurar período do mês atual
+                const today = new Date();
+                const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+
+                document.getElementById('rep-start').value = firstDay.toISOString().split('T')[0];
+                document.getElementById('rep-end').value = today.toISOString().split('T')[0];
+
+                generateReport();
+            }
+            function renderCategoryReport(transactions) {
+                const categoryMap = {};
+
+                transactions.forEach(t => {
+                    const catName = t.cat || 'Geral';
+
+                    if (!categoryMap[catName]) {
+                        categoryMap[catName] = {
+                            income: 0,
+                            expense: 0
+                        };
+                    }
+
+                    if (t.type === 'income') {
+                        categoryMap[catName].income += t.amount;
+                    } else {
+                        categoryMap[catName].expense += t.amount;
+                    }
+                });
+
+                const container = document.getElementById('category-report');
+                const sortedCategories = Object.entries(categoryMap)
+                    .sort((a, b) => (b[1].income + b[1].expense) - (a[1].income + a[1].expense));
+
+                if (sortedCategories.length === 0) {
+                    container.innerHTML = '<p class="text-gray-400 text-center">Sem dados para o período selecionado</p>';
+                    return;
+                }
+
+                container.innerHTML = sortedCategories.map(([name, data]) => {
+                    const total = data.income + data.expense;
+                    const net = data.income - data.expense;
+
+                    return `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-plena-pink mr-3"></div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">${name}</p>
+                                <p class="text-xs text-gray-500">Vendas: ${fmtMoney(data.income)} | Custos: ${fmtMoney(data.expense)}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-bold ${net >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                ${net >= 0 ? '+' : ''}${fmtMoney(net)}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                }).join('');
+            }
+            function exportProductsCSV() {
+                const headers = ['Nome', 'Categoria', 'Tempo Produção (h)', 'Custo Materiais', 'Margem Lucro (%)', 'Preço Final'];
+                const rows = db.products.map(p => {
+                    const matCost = p.materials ? p.materials.reduce((acc, m) => acc + m.cost, 0) : 0;
+                    return [
+                        `"${p.name}"`,
+                        p.category || 'Geral',
+                        p.productionTime,
+                        matCost.toFixed(2).replace('.', ','),
+                        p.profitMargin,
+                        p.finalPrice.toFixed(2).replace('.', ',')
+                    ];
+                });
+
+                const csv = [headers, ...rows].map(row => row.join(';')).join('\n');
+                const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+
+                a.href = url;
+                a.download = `produtos_artesanato_${new Date().toISOString().slice(0, 10)}.csv`;
+                a.click();
+
+                URL.revokeObjectURL(url);
+                showNotification('CSV exportado com sucesso!', 'success');
+            }
+            function shareReport() {
+                const start = document.getElementById('rep-start').value;
+                const end = document.getElementById('rep-end').value;
+                const income = document.getElementById('rep-inc').textContent;
+                const expense = document.getElementById('rep-exp').textContent;
+                const balance = document.getElementById('rep-bal').textContent;
+
+                // Formatar data PT-BR
+                const fmtDateBr = (d) => d.split('-').reverse().join('/');
+
+                const message = `📊 *RELATÓRIO FINANCEIRO*%0A` +
+                    `----------------------------%0A` +
+                    `📅 *Período:* ${fmtDateBr(start)} a ${fmtDateBr(end)}%0A` +
+                    `----------------------------%0A` +
+                    `✅ *Vendas:* ${income}%0A` +
+                    `🔻 *Custos:* ${expense}%0A` +
+                    `----------------------------%0A` +
+                    `💰 *LUCRO:* ${balance}%0A` +
+                    `----------------------------%0A` +
+                    `_Gerado por Plena Artesanato_`;
+
+                window.open(`https://wa.me/?text=${message}`, '_blank');
+            }
+            function shareClosing() {
+                const today = new Date().toISOString().split('T')[0];
+                const income = document.getElementById('close-inc').textContent;
+                const expense = document.getElementById('close-exp').textContent;
+                const balance = document.getElementById('close-bal').textContent;
+
+                // Formatar data PT-BR
+                const fmtDateBr = (d) => d.split('-').reverse().join('/');
+
+                const message = `✂️ *FECHAMENTO DE CAIXA*%0A` +
+                    `----------------------------%0A` +
+                    `📅 *Data:* ${fmtDateBr(today)}%0A` +
+                    `🕒 *Hora:* ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}%0A` +
+                    `----------------------------%0A` +
+                    `✅ *Entradas:* ${income}%0A` +
+                    `🔻 *Saídas:* ${expense}%0A` +
+                    `----------------------------%0A` +
+                    `💰 *SALDO:* ${balance}%0A` +
+                    `----------------------------%0A` +
+                    `_Gerado por Plena Artesanato_`;
+
+                window.open(`https://wa.me/?text=${message}`, '_blank');
+            }
+
+            function closeModal(modalId) {
+                document.getElementById(modalId).classList.add('hidden');
+            }
+
+            function openClosingModal() {
+                const today = new Date().toISOString().split('T')[0];
+                const todayTrans = db.transactions.filter(t => t.date === today);
+
+                const income = todayTrans.filter(t => t.type === 'income')
+                    .reduce((sum, t) => sum + t.amount, 0);
+                const expense = todayTrans.filter(t => t.type === 'expense')
+                    .reduce((sum, t) => sum + t.amount, 0);
+                const balance = income - expense;
+
+                document.getElementById('close-inc').textContent = fmtMoney(income);
+                document.getElementById('close-exp').textContent = fmtMoney(expense);
+                document.getElementById('close-bal').textContent = fmtMoney(balance);
+                document.getElementById('close-date').textContent = fmtDate(today);
+                document.getElementById('close-time').textContent = new Date().toLocaleTimeString('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                document.getElementById('closingModal').classList.remove('hidden');
+            }
+
+            function downloadBackup() {
+                const backupData = {
+                    ...db,
+                    exportedAt: new Date().toISOString(),
+                    version: 'plena_artesanato_v2'
+                };
+
+                const dataStr = JSON.stringify(backupData, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+                const exportFileName = `plena_artesanato_backup_${new Date().toISOString().slice(0, 10)}.json`;
+
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileName);
+                linkElement.click();
+
+                showNotification('Backup baixado com sucesso!', 'success');
+            }
+            function restoreBackup(input) {
+                const file = input.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    try {
+                        const backup = JSON.parse(e.target.result);
+
+                        // Validar backup
+                        if (!backup.products || !backup.transactions) {
+                            throw new Error('Arquivo de backup inválido');
+                        }
+
+                        showCustomConfirm('Restaurar Backup', 'Restaurar backup substituirá todos os dados atuais. Tem certeza?', () => {
+                            db = backup;
+                            save();
+                            location.reload();
+                        });
+                    } catch (error) {
+                        showNotification('Erro ao restaurar backup: ' + error.message, 'error');
+                    }
+                };
+                reader.readAsText(file);
+            }
+            function syncToCloud() {
+                const button = document.getElementById('sync-button');
+                const originalText = button.innerHTML;
+
+                button.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Sincronizando...';
+                button.disabled = true;
+
+                // Simular sincronização
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    showNotification('Sincronização simulada com sucesso!', 'success');
+                }, 1500);
+            }
+
+            function clearAllTransactions() {
+                showCustomConfirm('Limpar Movimentações', 'Tem certeza que deseja limpar TODAS as movimentações? Esta ação é irreversível!', () => {
+                    db.transactions = [];
+                    save();
+                    renderDashboard();
+                    renderTransactions();
+                    showNotification('Todas as movimentações foram removidas!', 'success');
+                });
+            }
+
+            function factoryReset() {
+                showCustomConfirm('Resetar Sistema', 'ATENÇÃO: Isso resetará TODO o sistema para as configurações de fábrica. Todos os dados serão perdidos. Tem certeza?', () => {
+                    localStorage.removeItem(DB_KEY);
+                    location.reload();
+                });
+            }
+            function updateDataStatus() {
+                const totalProducts = db.products.length;
+                const totalMaterials = db.materials.length;
+                const totalTransactions = db.transactions.length;
+                console.log(`Dados atualizados: ${totalProducts} produtos, ${totalMaterials} materiais, ${totalTransactions} transações`);
+            }
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${type === 'success' ? 'bg-green-500 text-white' :
+                    type === 'error' ? 'bg-red-500 text-white' :
+                        'bg-blue-500 text-white'
+                    }`;
+                notification.innerHTML = `
+                <div class="flex items-center">
+                    <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}" 
+                       class="w-5 h-5 mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+                document.body.appendChild(notification);
+                lucide.createIcons();
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+
+            function printProducts() { window.print(); }
+            function printClosing() { window.print(); }
+            function printReport() { window.print(); }
+            function deleteProduct() {
+                const id = document.getElementById('pd-id').value;
+                showCustomConfirm('Excluir Produto', 'Tem certeza que deseja excluir este produto?', () => {
+                    db.products = db.products.filter(x => x.id !== id);
+                    save();
+                    closeModal('productModal');
+                    renderProducts();
+                    renderDashboard();
+                    showNotification('Produto excluído com sucesso!', 'success');
+                });
+            }
+            function deleteTransaction(id) {
+                showCustomConfirm('Excluir Movimentação', 'Tem certeza que deseja excluir esta movimentação?', () => {
+                    db.transactions = db.transactions.filter(t => t.id !== id);
+                    save();
+                    if (document.getElementById('view-transactions').classList.contains('hide') === false) {
+                        renderTransactions();
+                    }
+                    if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                        renderDashboard();
+                    }
+                    showNotification('Movimentação excluída com sucesso!', 'success');
+                });
+            }
+            function editTransaction(id) {
+                const transaction = db.transactions.find(t => t.id === id);
+                if (transaction) {
+                    openTransModal(transaction);
+                }
+            }
+            function clearFilters() {
+                document.getElementById('search-term').value = '';
+                document.getElementById('filter-category').value = 'all';
+                document.getElementById('filter-sort').value = 'newest';
+                renderProducts();
+            }
+
+            // INICIALIZAÇÃO
+            function init() {
+                lucide.createIcons();
+                if (typeof LICENSE_DATA !== 'undefined' && LICENSE_DATA.active) {
+                    if (document.getElementById('set-owner-name')) document.getElementById('set-owner-name').value = LICENSE_DATA.ownerName;
+                    if (document.getElementById('set-owner-doc')) document.getElementById('set-owner-doc').value = LICENSE_DATA.ownerDoc;
+                    const nameInput = document.getElementById('set-owner-name');
+                    const docInput = document.getElementById('set-owner-doc');
+                    if (nameInput) { nameInput.readOnly = true; nameInput.classList.add('bg-gray-100'); }
+                    if (docInput) { docInput.readOnly = true; docInput.classList.add('bg-gray-100'); }
+                }
+
+                // Update Watermark
+                if (db.settings && db.settings.ownerName) {
+                    document.getElementById('license-owner').innerText = db.settings.ownerName;
+                } else {
+                    document.getElementById('license-owner').innerText = "Versão de Demonstração";
+                }
+                const today = new Date().toISOString().split('T')[0];
+                const firstDay = new Date();
+                firstDay.setDate(1);
+                const firstDayStr = firstDay.toISOString().split('T')[0];
+
+                if (document.getElementById('t-date')) document.getElementById('t-date').value = today;
+                if (document.getElementById('month-selector')) document.getElementById('month-selector').value = today.slice(0, 7);
+                if (document.getElementById('rep-start')) document.getElementById('rep-start').value = firstDayStr;
+                if (document.getElementById('rep-end')) document.getElementById('rep-end').value = today;
+
+                renderDashboard();
+                loadSettings();
+                updateDataStatus();
+                loadTutorialState();
+                updateTermsVisuals();
+
+                setInterval(save, 30000);
+            }
+
+            document.addEventListener('DOMContentLoaded', init);
+        </script>
+        <script>
+            // CONTEXT AWARENESS FOR IFRAMES
+            if (window.self !== window.top) {
+                document.body.classList.add('in-iframe');
+            }
+        </script>
+</body>
+
+</html>

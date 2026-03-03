@@ -1,0 +1,3890 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Plena Delivery - Gestão para Motoboys</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#10B981">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Sistema de gestão de entregas para motoboys - Controle financeiro e rotas">
+    <link rel="manifest" href="data:application/manifest+json,{}">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        plena: {
+                            green: '#10B981',
+                            dark: '#059669',
+                            black: '#1a1a1a',
+                            blue: '#3B82F6',
+                            orange: '#F59E0B',
+                            red: '#EF4444',
+                            yellow: '#F59E0B'
+                        },
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s infinite',
+                        'slide-in': 'slideIn 0.3s ease-out',
+                        'bounce-slow': 'bounce 2s infinite'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
+
+    <style>
+        :root {
+            --plena-green: #10B981;
+            --plena-dark: #059669;
+            --plena-black: #1a1a1a;
+            --plena-blue: #3B82F6;
+            --plena-orange: #F59E0B;
+            --plena-red: #EF4444;
+            --plena-yellow: #F59E0B;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #F3F4F6;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-10px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse-green {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pending {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        .status-collecting {
+            background-color: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .status-delivering {
+            background-color: #FCE7F3;
+            color: #9D174D;
+        }
+
+        .status-delivered {
+            background-color: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-cancelled {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s ease;
+        }
+
+        /* Sidebar Mobile */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 50;
+                height: 100vh;
+                width: 280px;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .sidebar {
+                width: 280px;
+                position: fixed;
+                height: 100vh;
+            }
+
+            .main-content {
+                margin-left: 280px;
+            }
+        }
+
+        /* Card Hover Effects */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Distance Indicator */
+        .distance-indicator {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .distance-indicator::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: var(--progress);
+            height: 100%;
+            background: linear-gradient(90deg, #10B981, #34D399);
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        /* Map Preview */
+        .map-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* Fuel Gauge */
+        .fuel-gauge {
+            position: relative;
+            width: 80px;
+            height: 40px;
+        }
+
+        .fuel-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, #10B981, #34D399);
+            border-radius: 4px 4px 0 0;
+            transition: height 0.5s ease;
+        }
+
+        .fuel-level {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+        }
+
+        /* MANUAL STYLES */
+        .step-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0
+        }
+
+        .checklist-item input[type="checkbox"]:checked+label {
+            text-decoration: line-through;
+            opacity: 0.6
+        }
+
+        .checklist-item.completed {
+            opacity: 0.7
+        }
+
+        .code-block {
+            background: #1f2937;
+            color: #10b981;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 12px
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            border-radius: 999px;
+            background: #e5e7eb;
+            overflow: hidden
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10B981, #059669);
+            transition: width 0.5s ease
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 antialiased">
+
+    <!-- Overlay para sidebar mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+        class="sidebar bg-plena-black text-white transition-transform duration-300 flex flex-col shadow-2xl">
+        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-plena-green to-plena-dark">
+            <i data-lucide="motorcycle" class="w-8 h-8 mr-3"></i>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight">PLENA DELIVERY</h1>
+                <p class="text-xs text-white/90 font-medium">Gestão para Motoboys</p>
+            </div>
+        </div>
+
+        <nav class="p-4 space-y-2 flex-1 overflow-y-auto">
+            <button onclick="router('dashboard')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group active-nav"
+                id="nav-dashboard">
+                <i data-lucide="package" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Dashboard
+            </button>
+            <button onclick="router('deliveries')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-deliveries">
+                <i data-lucide="package" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Entregas
+            </button>
+            <button onclick="router('clients')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-clients">
+                <i data-lucide="users" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Clientes
+            </button>
+            <button onclick="router('finance')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-finance">
+                <i data-lucide="wallet" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Financeiro
+            </button>
+            <button onclick="router('vehicle')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-vehicle">
+                <i data-lucide="bike" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Veículo
+            </button>
+            <button onclick="router('reports')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-reports">
+                <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Relatórios
+            </button>
+            <button onclick="router('settings')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-settings">
+                <i data-lucide="settings" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Configurações
+            </button>
+            <button onclick="router('instructions')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-instructions">
+                <i data-lucide="book-open" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Manual de Uso
+            </button>
+            <button onclick="router('about')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-about">
+                <i data-lucide="info" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Sobre a Plena
+            </button>
+        </nav>
+
+        <div class="p-6 border-t border-white/10 text-center">
+            <p class="text-xs text-gray-500">Todos os Direitos Reservados &copy; 2026</p>
+            <a href="https://www.plenaaplicativos.com.br" target="_blank"
+                class="text-[10px] text-gray-600 hover:text-plena-green transition-colors mt-1 block decoration-0">
+                Plena Soluções Digitais LTDA
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content min-h-screen flex flex-col">
+        <!-- Header -->
+        <header
+            class="bg-white h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-gray-100">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg text-gray-600">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <h2 id="page-title" class="text-xl font-bold text-gray-800 hidden sm:block">Dashboard</h2>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Fuel Status -->
+                <div id="fuel-status" class="hidden sm:flex items-center gap-2 px-3 py-2 bg-yellow-50 rounded-lg">
+                    <i data-lucide="fuel" class="w-4 h-4 text-yellow-600"></i>
+                    <span class="text-sm font-medium text-yellow-700" id="fuel-percentage">75%</span>
+                </div>
+
+                <!-- Online Status -->
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-plena-green/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                    </div>
+                    <button onclick="toggleOnlineStatus()" id="online-toggle"
+                        class="relative flex items-center px-4 py-2.5 bg-gray-800 text-white rounded-lg text-sm font-medium hover:bg-black transition-all shadow-sm active:scale-95">
+                        <i data-lucide="circle" class="w-3 h-3 mr-2 text-red-500 animate-pulse"></i>
+                        <span class="hidden sm:inline">Offline</span>
+                    </button>
+                </div>
+
+                <!-- New Delivery Button -->
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-plena-green/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                    </div>
+                    <button onclick="openDeliveryModal()"
+                        class="relative flex items-center px-4 py-2.5 bg-plena-green text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-all shadow-lg shadow-green-200 active:scale-95">
+                        <i data-lucide="plus" class="w-5 h-5 sm:mr-2"></i>
+                        <span class="hidden sm:inline">Nova Entrega</span>
+                        <span class="sm:hidden">Nova</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="p-4 lg:p-8 flex-1 overflow-y-auto">
+
+            <!-- Dashboard View -->
+            <section id="view-dashboard" class="view-section fade-in">
+                <!-- Welcome Card -->
+                <div class="bg-gradient-to-r from-plena-green to-emerald-600 rounded-2xl p-6 text-white mb-6">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                        <div>
+                            <h2 class="text-2xl font-bold mb-2">Bom dia, <span id="rider-name">Motoboy</span>! 👋</h2>
+                            <p class="text-white/90">Pronto para suas entregas de hoje?</p>
+                            <div class="flex items-center gap-4 mt-4">
+                                <div class="flex items-center">
+                                    <i data-lucide="package" class="w-4 h-4 mr-2"></i>
+                                    <span id="current-date" class="text-sm"></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i data-lucide="clock" class="w-4 h-4 mr-2"></i>
+                                    <span id="current-time" class="text-sm"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 md:mt-0">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold" id="today-earnings">R$ 0,00</div>
+                                <p class="text-sm text-white/80">Ganhos de hoje</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Entregas Hoje
+                                </p>
+                                <h3 id="today-deliveries" class="text-3xl font-bold text-gray-900">0</h3>
+                                <p class="text-xs text-gray-500 mt-1">Total realizadas</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                                <i data-lucide="package-check" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Em Andamento
+                                </p>
+                                <h3 id="active-deliveries" class="text-3xl font-bold text-blue-600">0</h3>
+                                <p class="text-xs text-gray-500 mt-1">Para entregar</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i data-lucide="package" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Média por
+                                    Entrega</p>
+                                <h3 id="avg-delivery" class="text-2xl font-bold text-purple-600">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">Valor médio</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
+                                <i data-lucide="dollar-sign" class="w-6 h-6 text-purple-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">KM Rodados</p>
+                                <h3 id="today-distance" class="text-2xl font-bold text-orange-600">0 km</h3>
+                                <p class="text-xs text-gray-500 mt-1">Distância total</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
+                                <i data-lucide="map-pin" class="w-6 h-6 text-orange-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Today's Deliveries -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="p-6 border-b border-gray-100">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="font-bold text-gray-800">Entregas de Hoje</h3>
+                                    <button onclick="router('deliveries')"
+                                        class="text-sm text-plena-green hover:text-plena-dark font-medium">
+                                        Ver todas →
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="today-deliveries-list" class="divide-y divide-gray-100">
+                                <!-- Dynamic content -->
+                            </div>
+                            <div id="no-deliveries-today" class="hidden p-8 text-center text-gray-400">
+                                <i data-lucide="package-x" class="w-12 h-12 mx-auto mb-4"></i>
+                                <p>Nenhuma entrega para hoje</p>
+                                <button onclick="openDeliveryModal()"
+                                    class="mt-4 text-sm text-plena-green hover:text-plena-dark font-medium">
+                                    + Adicionar primeira entrega
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                            <button onclick="openQuickDelivery()"
+                                class="bg-white p-4 rounded-xl border border-gray-200 hover:border-plena-green transition-colors text-center card-hover">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+                                    <i data-lucide="package-plus" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-700">Nova Entrega</span>
+                            </button>
+                            <button onclick="startNavigation()"
+                                class="bg-white p-4 rounded-xl border border-gray-200 hover:border-blue-500 transition-colors text-center card-hover">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                                    <i data-lucide="navigation" class="w-5 h-5 text-blue-600"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-700">Navegação</span>
+                            </button>
+                            <button onclick="openExpenseModal()"
+                                class="bg-white p-4 rounded-xl border border-gray-200 hover:border-red-500 transition-colors text-center card-hover">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-2">
+                                    <i data-lucide="fuel" class="w-5 h-5 text-red-600"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-700">Abastecer</span>
+                            </button>
+                            <button onclick="openPaymentModal()"
+                                class="bg-white p-4 rounded-xl border border-gray-200 hover:border-purple-500 transition-colors text-center card-hover">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
+                                    <i data-lucide="credit-card" class="w-5 h-5 text-purple-600"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-700">Receber</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Sidebar -->
+                    <div class="space-y-6">
+                        <!-- Vehicle Status -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                <i data-lucide="bike" class="w-5 h-5 mr-2 text-plena-green"></i>
+                                Status da Moto
+                            </h3>
+                            <div class="space-y-4">
+                                <!-- Fuel Gauge -->
+                                <div>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-sm font-medium text-gray-700">Combustível</span>
+                                        <span class="text-sm font-bold" id="fuel-display">75%</span>
+                                    </div>
+                                    <div class="fuel-gauge bg-gray-200 rounded">
+                                        <div class="fuel-fill" id="fuel-fill" style="height: 75%"></div>
+                                        <div class="fuel-level" id="fuel-percent">75%</div>
+                                    </div>
+                                </div>
+
+                                <!-- Maintenance -->
+                                <div>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-sm font-medium text-gray-700">Próxima Revisão</span>
+                                        <span class="text-sm" id="next-maintenance">15 dias</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Odometer -->
+                                <div class="pt-4 border-t border-gray-100">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="text-xs text-gray-500">Quilometragem</p>
+                                            <p class="text-lg font-bold text-gray-800" id="odometer">12.450 km</p>
+                                        </div>
+                                        <button onclick="updateOdometer()"
+                                            class="text-plena-green hover:text-plena-dark">
+                                            <i data-lucide="edit" class="w-4 h-4"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Daily Goals -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4">Meta Diária</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm text-gray-600">Valor (R$)</span>
+                                        <span class="text-sm font-bold text-plena-green" id="goal-progress">R$
+                                            120/200</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-plena-green h-2 rounded-full" id="goal-bar" style="width: 60%">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm text-gray-600">Entregas</span>
+                                        <span class="text-sm font-bold text-blue-600">4/8</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-500 h-2 rounded-full" style="width: 50%"></div>
+                                    </div>
+                                </div>
+                                <button onclick="updateDailyGoal()"
+                                    class="w-full mt-4 text-sm text-plena-green hover:text-plena-dark font-medium">
+                                    Alterar meta
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Deliveries View -->
+            <section id="view-deliveries" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Entregas</h2>
+                        <p class="text-sm text-gray-600">Gerencie todas as suas entregas</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="exportDeliveriesCSV()"
+                            class="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            Exportar CSV
+                        </button>
+                        <button onclick="openDeliveryModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-plena-green text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            Nova Entrega
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+                    <div class="p-4 bg-gray-50 grid grid-cols-1 md:grid-cols-5 gap-3 border-b border-gray-200">
+                        <div class="relative">
+                            <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                            <input type="text" id="delivery-search" onkeyup="renderDeliveries()"
+                                placeholder="Buscar cliente..."
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-green outline-none text-sm">
+                        </div>
+                        <div>
+                            <input type="date" id="delivery-start" onchange="renderDeliveries()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div>
+                            <input type="date" id="delivery-end" onchange="renderDeliveries()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div class="flex gap-2">
+                            <select id="delivery-status" onchange="renderDeliveries()"
+                                class="flex-1 px-4 py-2 rounded-lg border border-gray-300 text-sm bg-white outline-none">
+                                <option value="all">Todos</option>
+                                <option value="pending">Pendente</option>
+                                <option value="collecting">Coletando</option>
+                                <option value="delivering">Entregando</option>
+                                <option value="delivered">Entregue</option>
+                                <option value="cancelled">Cancelada</option>
+                            </select>
+                            <button onclick="clearDeliveryFilters()"
+                                class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm transition-colors">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div>
+                            <select id="delivery-payment" onchange="renderDeliveries()"
+                                class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm bg-white outline-none">
+                                <option value="all">Todos pagamentos</option>
+                                <option value="paid">Pago</option>
+                                <option value="pending">A receber</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Deliveries Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                                <tr>
+                                    <th class="px-6 py-3">Data/Hora</th>
+                                    <th class="px-6 py-3">Cliente</th>
+                                    <th class="px-6 py-3">Endereço</th>
+                                    <th class="px-6 py-3">Status</th>
+                                    <th class="px-6 py-3 text-right">Valor</th>
+                                    <th class="px-6 py-3 text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="deliveries-table-body" class="divide-y divide-gray-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                    <div id="deliveries-empty-msg" class="hidden p-8 text-center text-gray-400">
+                        <i data-lucide="package" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
+                        <p>Nenhuma entrega encontrada.</p>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total Entregas</p>
+                        <p id="total-deliveries" class="text-lg font-bold text-blue-700">0</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Valor Total</p>
+                        <p id="total-delivery-value" class="text-lg font-bold text-green-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">A Receber</p>
+                        <p id="pending-payments" class="text-lg font-bold text-yellow-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-xl border border-purple-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Taxa de Sucesso</p>
+                        <p id="success-rate" class="text-lg font-bold text-purple-700">0%</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Clients View -->
+            <section id="view-clients" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Clientes</h2>
+                        <p class="text-sm text-gray-600">Gerencie seus clientes frequentes</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openClientModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-plena-green text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                            <i data-lucide="user-plus" class="w-4 h-4"></i>
+                            Novo Cliente
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Clients Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Client Cards will be inserted here -->
+                </div>
+
+                <!-- No Clients Message -->
+                <div id="no-clients-msg"
+                    class="hidden bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+                    <i data-lucide="users" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
+                    <h3 class="font-bold text-gray-800 mb-2">Nenhum cliente cadastrado</h3>
+                    <p class="text-gray-600 mb-4">Adicione seus primeiros clientes para agilizar as entregas.</p>
+                    <button onclick="openClientModal()"
+                        class="bg-plena-green text-white px-6 py-2 rounded-lg font-bold hover:bg-plena-dark">
+                        + Adicionar Cliente
+                    </button>
+                </div>
+            </section>
+
+            <!-- Finance View -->
+            <section id="view-finance" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Financeiro</h2>
+                        <p class="text-sm text-gray-600">Controle suas receitas e despesas</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openIncomeModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            Nova Receita
+                        </button>
+                        <button onclick="openExpenseModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-lg text-sm font-medium hover:bg-red-200 transition-colors">
+                            <i data-lucide="minus" class="w-4 h-4"></i>
+                            Nova Despesa
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Finance Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Saldo Atual</p>
+                                <h3 id="current-balance" class="text-3xl font-bold text-gray-900">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">Disponível</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                                <i data-lucide="wallet" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Receitas (Mês)
+                                </p>
+                                <h3 id="month-income" class="text-2xl font-bold text-green-600">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">Entregas realizadas</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Despesas (Mês)
+                                </p>
+                                <h3 id="month-expenses" class="text-2xl font-bold text-red-600">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">Combustível e manutenção</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                                <i data-lucide="trending-down" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="font-bold text-gray-800">Últimas Movimentações</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                                <tr>
+                                    <th class="px-6 py-3">Data</th>
+                                    <th class="px-6 py-3">Descrição</th>
+                                    <th class="px-6 py-3">Categoria</th>
+                                    <th class="px-6 py-3 text-right">Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="finance-table-body" class="divide-y divide-gray-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vehicle View -->
+            <section id="view-vehicle" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">Gestão do Veículo</h2>
+                    <p class="text-sm text-gray-600">Controle de combustível, manutenção e despesas</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Vehicle Info -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-6">Informações da Moto</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="text-xs font-bold text-gray-500 uppercase">Modelo</label>
+                                    <input type="text" id="vehicle-model"
+                                        class="w-full border p-2 rounded-lg text-sm mt-1"
+                                        placeholder="Ex: Honda CG 160">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold text-gray-500 uppercase">Placa</label>
+                                    <input type="text" id="vehicle-plate"
+                                        class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="ABC-1234">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold text-gray-500 uppercase">Ano</label>
+                                    <input type="number" id="vehicle-year"
+                                        class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="2023">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold text-gray-500 uppercase">Cor</label>
+                                    <input type="text" id="vehicle-color"
+                                        class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="Vermelho">
+                                </div>
+                            </div>
+                            <button onclick="saveVehicleInfo()"
+                                class="mt-6 w-full bg-plena-green text-white py-3 rounded-lg font-bold hover:bg-plena-dark">
+                                Salvar Informações
+                            </button>
+                        </div>
+
+                        <!-- Maintenance History -->
+                        <div class="mt-6 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="font-bold text-gray-800">Histórico de Manutenção</h3>
+                                <button onclick="openMaintenanceModal()"
+                                    class="flex items-center gap-2 px-3 py-1.5 bg-plena-green text-white text-sm rounded-lg hover:bg-plena-dark">
+                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                    Nova Manutenção
+                                </button>
+                            </div>
+                            <div id="maintenance-list" class="space-y-4"></div>
+                        </div>
+                    </div>
+
+                    <!-- Right Sidebar -->
+                    <div class="space-y-6">
+                        <!-- Fuel Tracker -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4">Controle de Combustível</h3>
+                            <div class="space-y-4">
+                                <div class="text-center">
+                                    <div class="fuel-gauge bg-gray-200 rounded mx-auto"
+                                        style="width: 120px; height: 60px;">
+                                        <div class="fuel-fill" id="detail-fuel-fill" style="height: 75%"></div>
+                                        <div class="fuel-level" id="detail-fuel-percent">75%</div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <button onclick="refuelVehicle()"
+                                        class="bg-green-100 text-green-700 py-2 rounded-lg font-bold hover:bg-green-200">
+                                        Abastecer
+                                    </button>
+                                    <button onclick="updateFuel()"
+                                        class="bg-blue-100 text-blue-700 py-2 rounded-lg font-bold hover:bg-blue-200">
+                                        Atualizar
+                                    </button>
+                                </div>
+                                <div class="pt-4 border-t">
+                                    <p class="text-sm text-gray-600">Último abastecimento: <span
+                                            id="last-refuel">--/--/----</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Expense Categories -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4">Despesas do Mês</h3>
+                            <div id="vehicle-expenses" class="space-y-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports View -->
+            <section id="view-reports" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">Relatórios</h2>
+                    <p class="text-sm text-gray-600">Análises detalhadas do seu desempenho</p>
+                </div>
+
+                <!-- Report Filters -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
+                    <h3 class="font-bold text-gray-800 mb-4">Configurar Período</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Data Inicial</label>
+                            <input type="date" id="report-start" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Data Final</label>
+                            <input type="date" id="report-end" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="generateReport()"
+                                class="flex-1 bg-plena-green text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                                Gerar Relatório
+                            </button>
+                            <button onclick="generateCurrentMonthReport()"
+                                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors"
+                                title="Mês Atual">
+                                <i data-lucide="calendar" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Results -->
+                <div id="report-results" class="hidden space-y-6">
+                    <!-- Summary Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="bg-green-50 p-6 rounded-xl text-center border border-green-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="package-check" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Entregas</p>
+                            <p id="report-deliveries" class="text-2xl font-bold text-green-700 mt-2">0</p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-xl text-center border border-blue-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="dollar-sign" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Receita</p>
+                            <p id="report-income" class="text-2xl font-bold text-blue-700 mt-2">R$ 0,00</p>
+                        </div>
+                        <div class="bg-red-50 p-6 rounded-xl text-center border border-red-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="fuel" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Despesas</p>
+                            <p id="report-expenses" class="text-2xl font-bold text-red-700 mt-2">R$ 0,00</p>
+                        </div>
+                        <div class="bg-purple-50 p-6 rounded-xl text-center border border-purple-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-purple-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Lucro</p>
+                            <p id="report-profit" class="text-2xl font-bold text-purple-700 mt-2">R$ 0,00</p>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Analysis -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4">Entregas por Status</h3>
+                            <div id="status-chart" class="space-y-4"></div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4">Despesas por Categoria</h3>
+                            <div id="expense-chart" class="space-y-4"></div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button onclick="shareReport()"
+                            class="bg-[#25D366] text-white py-3 rounded-xl font-bold hover:bg-[#128C7E] flex justify-center items-center gap-2">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i> Enviar WhatsApp
+                        </button>
+                        <button onclick="printReport()"
+                            class="bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 flex justify-center items-center gap-2">
+                            <i data-lucide="printer" class="w-4 h-4"></i> Imprimir
+                        </button>
+                        <button onclick="downloadReportPDF()"
+                            class="bg-gray-800 text-white py-3 rounded-xl font-bold hover:bg-black flex justify-center items-center gap-2">
+                            <i data-lucide="download" class="w-4 h-4"></i> Baixar PDF
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings View -->
+            <section id="view-settings" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Configurações</h2>
+                    <p class="text-sm text-gray-600">Personalize o sistema conforme suas necessidades</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Profile Settings -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="font-bold text-gray-800 mb-6">Perfil do Motoboy</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 uppercase">Seu Nome</label>
+                                <input type="text" id="rider-name-input"
+                                    class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="Seu nome completo">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 uppercase">Telefone</label>
+                                <input type="tel" id="rider-phone" class="w-full border p-2 rounded-lg text-sm mt-1"
+                                    placeholder="(11) 99999-9999">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 uppercase">E-mail</label>
+                                <input type="email" id="rider-email" class="w-full border p-2 rounded-lg text-sm mt-1"
+                                    placeholder="seu@email.com">
+                            </div>
+                            <button onclick="saveProfile()"
+                                class="w-full bg-plena-green text-white py-3 rounded-lg font-bold hover:bg-plena-dark">
+                                Salvar Perfil
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- App Settings -->
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4">Configurações do App</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-800">Notificações</p>
+                                        <p class="text-xs text-gray-500">Receber alertas de entregas</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="notifications-toggle" class="sr-only peer" checked>
+                                        <div
+                                            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-plena-green">
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-800">Modo Escuro</p>
+                                        <p class="text-xs text-gray-500">Interface com tema escuro</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="dark-mode-toggle" class="sr-only peer">
+                                        <div
+                                            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-plena-green">
+                                        </div>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold text-gray-500 uppercase">Taxa Média por Entrega
+                                        (R$)</label>
+                                    <input type="number" id="default-fee"
+                                        class="w-full border p-2 rounded-lg text-sm mt-1" placeholder="15.00"
+                                        step="0.01">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Management -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                <i data-lucide="shield-alert" class="w-5 h-5 mr-2 text-plena-green"></i>
+                                Segurança de Dados
+                            </h3>
+
+                            <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg text-sm text-blue-800 mb-6">
+                                <p class="font-bold mb-2">⚠️ Importante</p>
+                                <p>Seus dados ficam salvos 100% no navegador. Faça backup regularmente!</p>
+                            </div>
+
+                            <div class="space-y-3">
+                                <button onclick="downloadBackup()"
+                                    class="w-full border border-gray-300 py-3 rounded-lg text-sm font-medium hover:bg-gray-50 flex justify-center items-center gap-2">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    Baixar Backup (.json)
+                                </button>
+
+                                <div class="relative">
+                                    <button
+                                        class="w-full bg-gray-800 text-white py-3 rounded-lg text-sm font-medium flex justify-center items-center gap-2">
+                                        <i data-lucide="upload" class="w-4 h-4"></i>
+                                        Restaurar Backup
+                                    </button>
+                                    <input type="file" onchange="restoreBackup(this)" accept=".json"
+                                        class="absolute inset-0 opacity-0 cursor-pointer">
+                                </div>
+
+                                <button onclick="syncToCloud()" id="sync-button"
+                                    class="w-full bg-green-600 text-white py-3 rounded-lg text-sm font-medium hover:bg-green-700 flex justify-center items-center gap-2">
+                                    <i data-lucide="cloud" class="w-4 h-4"></i>
+                                    Sincronizar com Nuvem
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Danger Zone -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center text-red-600">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
+                                Zona de Perigo
+                            </h3>
+
+                            <div class="bg-red-50 p-4 rounded-lg border border-red-100 mb-4">
+                                <p class="text-sm text-red-600"><strong>Atenção:</strong> Estas ações são irreversíveis.
+                                </p>
+                            </div>
+
+                            <button onclick="factoryReset()"
+                                class="w-full py-2.5 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition-colors font-medium">
+                                Resetar Sistema de Fábrica
+            </section>
+
+            <!-- Manual/Instructions View -->
+            <section id="view-instructions" class="view-section hide fade-in">
+                <div class="max-w-6xl mx-auto pb-12">
+                    <div class="text-center mb-10 pt-4">
+                        <div
+                            class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-plena-green to-emerald-600 rounded-2xl mb-4 shadow-lg">
+                            <i data-lucide="motorcycle" class="w-12 h-12 text-white"></i>
+                        </div>
+                        <h1 class="text-3xl font-bold text-gray-800 mb-2">Manual Completo de Uso</h1>
+                        <p class="text-gray-600 text-lg">Guia para motoboys profissionais</p>
+                        <div class="mt-4 flex flex-wrap justify-center gap-2">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">🏍️
+                                Entregas</span>
+                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">📍
+                                Rotas</span>
+                            <span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-bold">💰
+                                Financeiro</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
+                        <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                            <i data-lucide="compass" class="w-5 h-5 mr-2 text-plena-green"></i>
+                            Progresso
+                        </h3>
+                        <div class="progress-bar mb-2">
+                            <div id="tutorial-progress" class="progress-fill" style="width:0%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs text-gray-500">
+                            <span>0% Concluído</span>
+                            <span id="completed-steps">0/8</span>
+                        </div>
+                    </div>
+
+                    <div id="instalacao" class="bg-white border rounded-2xl p-6 shadow-sm mb-6 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-green to-emerald-600 text-white">1
+                                </div>
+                                <h3 class="text-xl font-bold">Instalação no Celular</h3>
+                            </div>
+                            <button onclick="markSectionComplete('instalacao')" class="text-xs text-gray-500"><i
+                                    data-lucide="check-circle" class="w-4 h-4"></i></button>
+                        </div>
+                        <div class="bg-gray-900 rounded-xl p-6 text-white">
+                            <h4 class="font-bold mb-3 flex items-center"><i data-lucide="download"
+                                    class="w-5 h-5 mr-2 text-green-400"></i>Funciona OFFLINE!</h4>
+                            <p class="text-gray-300 text-sm mb-4">Instale para trabalhar sem internet:</p>
+                            <div class="grid md:grid-cols-2 gap-4 text-sm">
+                                <div class="bg-white/10 p-3 rounded-lg">
+                                    <div class="font-bold mb-2">📱 Android</div>
+                                    <ol class="list-decimal pl-4 space-y-1 text-gray-300 text-xs">
+                                        <li>Chrome > Menu > "Instalar app"</li>
+                                    </ol>
+                                </div>
+                                <div class="bg-white/10 p-3 rounded-lg">
+                                    <div class="font-bold mb-2">🍎 iPhone</div>
+                                    <ol class="list-decimal pl-4 space-y-1 text-gray-300 text-xs">
+                                        <li>Safari > Compartilhar > "Tela Início"</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="config" class="bg-white border rounded-2xl p-6 shadow-sm mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-green to-emerald-600 text-white">2
+                                </div>
+                                <h3 class="text-xl font-bold">Configuração</h3>
+                            </div><button onclick="markSectionComplete('config')"><i data-lucide="check-circle"
+                                    class="w-4 h-4"></i></button>
+                        </div>
+                        <p class="text-sm text-gray-600">Configure perfil, telefone e taxa média.</p>
+                    </div>
+
+                    <div id="entregas" class="bg-white border rounded-2xl p-6 shadow-sm mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-green to-emerald-600 text-white">3
+                                </div>
+                                <h3 class="text-xl font-bold">Gestão Entregas</h3>
+                            </div><button onclick="markSectionComplete('entregas')"><i data-lucide="check-circle"
+                                    class="w-4 h-4"></i></button>
+                        </div>
+                        <p class="text-sm text-gray-600">Cadastre cliente, endereço, valor e status.</p>
+                    </div>
+
+                    <div id="rotas" class="bg-white border rounded-2xl p-6 shadow-sm mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-green to-emerald-600 text-white">4
+                                </div>
+                                <h3 class="text-xl font-bold">Navegação/Rotas</h3>
+                            </div><button onclick="markSectionComplete('rotas')"><i data-lucide="check-circle"
+                                    class="w-4 h-4"></i></button>
+                        </div>
+                        <p class="text-sm text-gray-600">Abre Google Maps/Waze automaticamente.</p>
+                    </div>
+
+                    <div id="financeiro" class="bg-white border rounded-2xl p-6 shadow-sm mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-green to-emerald-600 text-white">5
+                                </div>
+                                <h3 class="text-xl font-bold">Financeiro</h3>
+                            </div><button onclick="markSectionComplete('financeiro')"><i data-lucide="check-circle"
+                                    class="w-4 h-4"></i></button>
+                        </div>
+                        <p class="text-sm text-gray-600">Registre combustível e despesas.</p>
+                    </div>
+
+                    <div id="backup" class="bg-white border rounded-2xl p-6 shadow-sm mb-6 border-l-4 border-l-red-500">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-green to-emerald-600 text-white">6
+                                </div>
+                                <h3 class="text-xl font-bold">Backup</h3>
+                            </div><button onclick="markSectionComplete('backup')"><i data-lucide="check-circle"
+                                    class="w-4 h-4"></i></button>
+                        </div>
+                        <div class="text-sm text-red-800 space-y-1 mb-3">
+                            <p>🏍️ <strong>Suas corridas valem dinheiro!</strong></p>
+                            <p>💾 <strong>Backup semanal obrigatório.</strong></p>
+                        </div><button onclick="router('settings')"
+                            class="w-full py-3 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700"><i
+                                data-lucide="download" class="w-4 h-4 inline mr-2"></i>Fazer Agora</button>
+                    </div>
+
+                    <div id="faq" class="bg-white border rounded-2xl p-6 shadow-sm mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-green to-emerald-600 text-white">7
+                                </div>
+                                <h3 class="text-xl font-bold">FAQ</h3>
+                            </div><button onclick="markSectionComplete('faq')"><i data-lucide="check-circle"
+                                    class="w-4 h-4"></i></button>
+                        </div>
+                        <details class="mb-2 border p-3 rounded-lg">
+                            <summary class="font-bold cursor-pointer text-sm">Funciona sem internet?</summary>
+                            <p class="mt-2 text-xs text-gray-600">Sim! 100% offline.</p>
+                        </details>
+                        <details class="mb-2 border p-3 rounded-lg">
+                            <summary class="font-bold cursor-pointer text-sm">Perdi celular. Como recupero?</summary>
+                            <p class="mt-2 text-xs text-gray-600">Se fez backup, restaure em outro.</p>
+                        </details>
+                        <details class="border p-3 rounded-lg">
+                            <summary class="font-bold cursor-pointer text-sm">Vários celulares?</summary>
+                            <p class="mt-2 text-xs text-gray-600">Sim! Backup > Restaurar.</p>
+                        </details>
+                    </div>
+
+                    <div id="checklist" class="bg-white border rounded-2xl p-6 shadow-sm mb-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-green to-emerald-600 text-white">8
+                                </div>
+                                <h3 class="text-xl font-bold">Checklist Diário</h3>
+                            </div><button onclick="markSectionComplete('checklist')"><i data-lucide="check-circle"
+                                    class="w-4 h-4"></i></button>
+                        </div>
+                        <div
+                            class="bg-gradient-to-r from-green-600 to-emerald-600 p-4 rounded-xl text-white mb-4 text-center">
+                            <div class="text-4xl font-bold mb-1" id="checklist-percent">0%</div>
+                            <div class="progress-bar mb-2">
+                                <div id="checklist-progress" class="progress-fill" style="width:0%"></div>
+                            </div>
+                            <p class="text-xs"><span id="checklist-completed">0</span>/<span
+                                    id="checklist-total">12</span> tarefas</p>
+                        </div>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="bg-blue-50 p-4 rounded-xl">
+                                <h4 class="font-bold text-blue-600 text-sm mb-3">🏍️ Diário</h4>
+                                <div class="space-y-2">
+                                    <div class="checklist-item flex items-center"><input type="checkbox" id="check-1-1"
+                                            class="w-4 h-4" onchange="updateChecklist()"><label for="check-1-1"
+                                            class="ml-2 text-xs cursor-pointer">Conferir entregas</label></div>
+                                    <div class="checklist-item flex items-center"><input type="checkbox" id="check-1-2"
+                                            class="w-4 h-4" onchange="updateChecklist()"><label for="check-1-2"
+                                            class="ml-2 text-xs cursor-pointer">Verificar combustível</label></div>
+                                    <div class="checklist-item flex items-center"><input type="checkbox" id="check-1-3"
+                                            class="w-4 h-4" onchange="updateChecklist()"><label for="check-1-3"
+                                            class="ml-2 text-xs cursor-pointer">Revisar rotas</label></div>
+                                    <div class="checklist-item flex items-center"><input type="checkbox" id="check-1-4"
+                                            class="w-4 h-4" onchange="updateChecklist()"><label for="check-1-4"
+                                            class="ml-2 text-xs cursor-pointer">Lançar ganhos</label></div>
+                                </div>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-xl">
+                                <h4 class="font-bold text-green-600 text-sm mb-3">📅 Semanal</h4>
+                                <div class="space-y-2">
+                                    <div class="checklist-item flex items-center"><input type="checkbox" id="check-2-1"
+                                            class="w-4 h-4" onchange="updateChecklist()"><label for="check-2-1"
+                                            class="ml-2 text-xs cursor-pointer">Analisar ganhos</label></div>
+                                    <div class="checklist-item flex items-center"><input type="checkbox" id="check-2-2"
+                                            class="w-4 h-4" onchange="updateChecklist()"><label for="check-2-2"
+                                            class="ml-2 text-xs cursor-pointer">Revisar despesas</label></div>
+                                    <div class="checklist-item flex items-center"><input type="checkbox" id="check-2-3"
+                                            class="w-4 h-4" onchange="updateChecklist()"><label for="check-2-3"
+                                            class="ml-2 text-xs cursor-pointer">Atualizar clientes</label></div>
+                                    <div class="checklist-item flex items-center"><input type="checkbox" id="check-2-4"
+                                            class="w-4 h-4" onchange="updateChecklist()"><label for="check-2-4"
+                                            class="ml-2 text-xs cursor-pointer">Planejar semana</label></div>
+                                </div>
+                            </div>
+                            <div class="bg-yellow-50 p-4 rounded-xl">
+                                <h4 class="font-bold text-yellow-600 text-sm mb-3">🔧 Mensal</h4>
+                                <div class="space-y-2">
+                                    <div class="checklist-item flex items-center"><input type="checkbox" id="check-3-1"
+                                            class="w-4 h-4" onchange="updateChecklist()"><label for="check-3-1"
+                                            class="ml-2 text-xs cursor-pointer">Backup</label></div>
+                                    <div class="checklist-item flex items-center"><input type="checkbox" id="check-3-2"
+                                            class="w-4 h-4" onchange="updateChecklist()"><label for="check-3-2"
+                                            class="ml-2 text-xs cursor-pointer">Relatório</label></div>
+                                    <div class="checklist-item flex items-center"><input type="checkbox" id="check-3-3"
+                                            class="w-4 h-4" onchange="updateChecklist()"><label for="check-3-3"
+                                            class="ml-2 text-xs cursor-pointer">Revisão moto</label></div>
+                                    <div class="checklist-item flex items-center"><input type="checkbox" id="check-3-4"
+                                            class="w-4 h-4" onchange="updateChecklist()"><label for="check-3-4"
+                                            class="ml-2 text-xs cursor-pointer">Performance</label></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-center"><button onclick="resetChecklist()"
+                                class="px-4 py-2 bg-red-600 text-white rounded-lg text-xs font-bold hover:bg-red-700"><i
+                                    data-lucide="rotate-ccw" class="w-3 h-3 inline mr-1"></i>Reiniciar</button></div>
+                    </div>
+
+                    <div class="text-center text-gray-500 text-sm mt-8 pb-6">
+                        <p>💡 Dúvidas?</p><a href="mailto:tecnologia@plenaaplicativos.com.br"
+                            class="text-plena-green font-bold hover:underline">tecnologia@plenaaplicativos.com.br</a>
+                        <p class="mt-2 text-xs">Plena Delivery v4.1 Pro</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About View -->
+            <section id="view-about" class="view-section hide fade-in">
+                <div class="max-w-4xl mx-auto pb-12">
+
+                    <!-- 1. Header Institucional -->
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mb-8 text-center">
+                        <div
+                            class="w-20 h-20 rounded-full bg-gradient-to-r from-plena-green to-emerald-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-green-200">
+                            <i data-lucide="shield-check" class="w-10 h-10 text-white"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-1">Central de Segurança e Legalidade</h2>
+                        <p class="text-gray-500 font-medium">Plena Soluções Digitais • Transparência Total</p>
+                    </div>
+
+                    <!-- 2. Grid de Políticas -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <!-- Termos de Uso -->
+                        <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                            <h3 class="font-bold text-gray-800 mb-3 flex items-center text-lg">
+                                <div class="p-2 bg-blue-50 rounded-lg mr-3">
+                                    <i data-lucide="file-text" class="w-5 h-5 text-plena-green"></i>
+                                </div>
+                                Termos de Uso
+                            </h3>
+                            <p class="text-sm text-gray-600 leading-relaxed text-justify">
+                                A licença concedida é <strong>pessoal, intransferível e não exclusiva</strong>. O software é
+                                fornecido "no estado em que se encontra" (as-is). É estritamente proibida a revenda, cópia,
+                                distribuição não autorizada ou engenharia reversa do código-fonte, sob pena das sanções
+                                previstas na Lei de Propriedade Intelectual (9.610/98).
+                            </p>
+                        </div>
+
+                        <!-- Privacidade e LGPD -->
+                        <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                            <h3 class="font-bold text-gray-800 mb-3 flex items-center text-lg">
+                                <div class="p-2 bg-green-50 rounded-lg mr-3">
+                                    <i data-lucide="lock" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                                Privacidade (LGPD)
+                            </h3>
+                            <p class="text-sm text-gray-600 leading-relaxed text-justify">
+                                Adotamos a arquitetura <strong>Privacy by Design (Local-First)</strong>. Seus dados
+                                financeiros e de clientes ficam salvos <strong>exclusivamente no seu dispositivo</strong>.
+                                A Plena não coleta, não armazena e não tem acesso a nenhuma informação inserida no sistema.
+                                Sua privacidade é absoluta.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 3. Responsabilidade do Usuário (Crítico) -->
+                    <div class="bg-red-50 border border-red-100 p-8 rounded-2xl mb-8 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <i data-lucide="alert-octagon" class="w-32 h-32 text-red-900"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <h3 class="font-bold text-red-800 mb-4 flex items-center text-lg">
+                                <i data-lucide="alert-triangle" class="w-6 h-6 mr-3"></i>
+                                IMPORTANTE: Sua Responsabilidade sobre os Dados
+                            </h3>
+                            <div class="space-y-4 text-sm text-red-900/80 text-justify font-medium">
+                                <p>
+                                    <strong>1. Backup é Obrigatório:</strong> Como não temos acesso aos seus dados,
+                                    <strong>não podemos recuperá-los</strong> em caso de perda, roubo ou dano ao seu
+                                    dispositivo. A realização de cópias de segurança (Backup) é de responsabilidade única e
+                                    exclusiva do usuário.
+                                </p>
+                                <p>
+                                    <strong>2. Isenção de Responsabilidade Técnica:</strong> A Plena exime-se de qualquer
+                                    responsabilidade por prejuízos decorrentes de falhas de hardware, vírus no dispositivo
+                                    do usuário, ou uso incorreto dos cálculos financeiros do sistema. Verifique sempre as
+                                    taxas configuradas.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Suporte e SLA -->
+                    <div class="bg-gradient-to-br from-gray-900 to-plena-dark text-white p-8 rounded-2xl mb-12 shadow-xl">
+                        <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                            <div class="flex-1">
+                                <h3 class="font-bold text-xl mb-2 flex items-center">
+                                    <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-plena-green"></i>
+                                    Suporte Premium Especializado
+                                </h3>
+                                <p class="text-gray-300 text-sm mb-6 leading-relaxed">
+                                    Precisa de ajuda ou encontrou alguma inconsistência? Nossa equipe técnica está pronta
+                                    para atender você com prioridade. Garantimos a qualidade e a segurança da nossa marca.
+                                </p>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                        <p class="text-xs text-gray-400 uppercase font-bold">Canal Oficial</p>
+                                        <p class="font-bold text-white">E-mail</p>
+                                    </div>
+                                    <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                        <p class="text-xs text-gray-400 uppercase font-bold">Tempo de Resposta (SLA)</p>
+                                        <p class="font-bold text-plena-green">Até 24h Úteis</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <a href="mailto:tecnologia@plenaaplicativos.com.br"
+                                    class="inline-flex items-center justify-center bg-white text-plena-dark px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-transform transform hover:scale-105 shadow-lg">
+                                    <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+                                    Falar com Suporte
+                                </a>
+                                <p class="text-xs text-center text-gray-400 mt-3">tecnologia@plenaaplicativos.com.br</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Confirmação e Aceite (Travamento) -->
+                    <div class="mt-8 mb-12" id="terms-action-container">
+                        <div class="bg-gray-50 border border-gray-200 p-6 rounded-2xl flex flex-col items-center text-center transition-all duration-300"
+                            id="terms-box">
+                            <i data-lucide="check-circle-2" class="w-12 h-12 text-gray-300 mb-3" id="terms-icon"></i>
+                            <h3 class="font-bold text-gray-800 text-lg mb-2" id="terms-title">Confirmação de Leitura</h3>
+                            <p class="text-sm text-gray-500 mb-6 max-w-lg" id="terms-desc">
+                                Para prosseguir com segurança, confirme que você leu e compreendeu os Termos de Uso, a
+                                Política de Privacidade e sua responsabilidade sobre os backups.
+                            </p>
+
+                            <button onclick="confirmTerms()" id="btn-confirm-terms"
+                                class="bg-plena-green hover:bg-plena-dark text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-green-200 transform hover:scale-105 transition-all flex items-center gap-2 group">
+                                <span>Li, Compreendi e Concordo</span>
+                                <i data-lucide="arrow-right"
+                                    class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+
+                            <div id="terms-accepted-badge"
+                                class="hidden flex flex-col items-center animate-in fade-in zoom-in duration-300">
+                                <span
+                                    class="bg-green-100 text-green-700 font-bold px-6 py-2 rounded-full text-sm border border-green-200 flex items-center gap-2 mb-2">
+                                    <i data-lucide="lock" class="w-4 h-4"></i>
+                                    Termos Aceitos e Registrados
+                                </span>
+                                <p class="text-xs text-gray-400 font-mono" id="terms-date">Carregando data...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. Rodapé Legal -->
+                    <div class="text-center border-t border-gray-200 pt-8">
+                        <p class="text-sm font-bold text-gray-800">Plena Soluções Digitais LTDA</p>
+                        <p class="text-xs text-gray-500 mt-1">CNPJ: 17.347.919/0001-59 • Todos os direitos reservados</p>
+                        <p class="text-[10px] text-gray-400 mt-4">
+                            Versão 4.1 Pro • Build 2026.01.07
+                        </p>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- MODALS -->
+
+    <!-- Delivery Modal -->
+    <div id="deliveryModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800" id="delivery-modal-title">Nova Entrega</h3>
+                <button onclick="closeModal('deliveryModal')" class="text-gray-400 hover:text-gray-600">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <form onsubmit="submitDelivery(event)" class="space-y-4">
+                <input type="hidden" id="d-id">
+
+                <!-- Quick Client Selection -->
+                <div id="quick-client-section">
+                    <label class="text-xs font-bold text-gray-500 uppercase">Cliente</label>
+                    <div class="flex gap-2 mb-2">
+                        <button type="button" onclick="showClientForm()"
+                            class="flex-1 border border-gray-300 py-2 rounded-lg text-sm hover:bg-gray-50">
+                            Novo Cliente
+                        </button>
+                        <select id="existing-client" class="flex-1 border p-2 rounded-lg text-sm bg-white outline-none"
+                            onchange="fillClientInfo(this.value)">
+                            <option value="">Cliente Existente</option>
+                            <!-- Options populated by JavaScript -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Client Form (hidden by default) -->
+                <div id="client-form-section" class="hidden space-y-3">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Nome</label>
+                            <input type="text" id="d-client-name" class="w-full border p-2 rounded-lg text-sm"
+                                placeholder="Nome do cliente">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Telefone</label>
+                            <input type="tel" id="d-client-phone" class="w-full border p-2 rounded-lg text-sm"
+                                placeholder="(11) 99999-9999">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Endereço</label>
+                        <input type="text" id="d-client-address" class="w-full border p-2 rounded-lg text-sm"
+                            placeholder="Rua, Número, Bairro">
+                    </div>
+                </div>
+
+                <!-- Delivery Details -->
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Valor da Entrega (R$)</label>
+                    <input type="number" id="d-value" step="0.01" min="0.01" required
+                        class="w-full border-2 border-gray-200 p-3 rounded-xl text-lg font-bold focus:border-plena-green outline-none"
+                        placeholder="15.00">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Tipo</label>
+                        <select id="d-type" class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                            <option value="food">Comida</option>
+                            <option value="document">Documento</option>
+                            <option value="product">Produto</option>
+                            <option value="other">Outro</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Pagamento</label>
+                        <select id="d-payment" class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                            <option value="cash">Dinheiro</option>
+                            <option value="pix">Pix</option>
+                            <option value="card">Cartão</option>
+                            <option value="pending">A Receber</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
+                    <textarea id="d-notes" rows="2" class="w-full border p-2 rounded-lg text-sm"
+                        placeholder="Instruções especiais..."></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Data</label>
+                        <input type="date" id="d-date" required
+                            class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Hora</label>
+                        <input type="time" id="d-time" required
+                            class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="submit" id="delivery-save-btn"
+                        class="flex-1 bg-plena-green text-white py-3 rounded-xl font-bold shadow-lg shadow-green-200 hover:bg-plena-dark">
+                        Salvar Entrega
+                    </button>
+                    <button type="button" onclick="saveAndStartDelivery()" id="delivery-start-btn"
+                        class="flex-1 bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700">
+                        Iniciar Agora
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Client Modal -->
+    <div id="clientModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Novo Cliente</h3>
+                <button onclick="closeModal('clientModal')" class="text-gray-400 hover:text-gray-600">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <form onsubmit="submitClient(event)" class="space-y-4">
+                <input type="hidden" id="c-id">
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Nome</label>
+                    <input type="text" id="c-name" required class="w-full border p-2 rounded-lg text-sm"
+                        placeholder="Nome completo">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Telefone</label>
+                        <input type="tel" id="c-phone" class="w-full border p-2 rounded-lg text-sm"
+                            placeholder="(11) 99999-9999">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">WhatsApp</label>
+                        <select id="c-whatsapp" class="w-full border p-2 rounded-lg text-sm">
+                            <option value="yes">Sim</option>
+                            <option value="no">Não</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Endereço</label>
+                    <textarea id="c-address" rows="2" class="w-full border p-2 rounded-lg text-sm"
+                        placeholder="Endereço completo"></textarea>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Referência</label>
+                    <input type="text" id="c-reference" class="w-full border p-2 rounded-lg text-sm"
+                        placeholder="Ponto de referência">
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
+                    <textarea id="c-notes" rows="2" class="w-full border p-2 rounded-lg text-sm"
+                        placeholder="Informações adicionais"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-plena-green text-white py-3 rounded-lg font-bold hover:bg-plena-dark">
+                    Salvar Cliente
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Income Modal -->
+    <div id="incomeModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Nova Receita</h3>
+                <button onclick="closeModal('incomeModal')" class="text-gray-400 hover:text-gray-600">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <form onsubmit="submitIncome(event)" class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Descrição</label>
+                    <input type="text" id="i-desc" required class="w-full border p-2 rounded-lg text-sm"
+                        placeholder="Ex: Pagamento de entrega">
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Valor (R$)</label>
+                    <input type="number" id="i-amount" step="0.01" min="0.01" required
+                        class="w-full border p-2 rounded-lg text-lg font-bold" placeholder="0.00">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Categoria</label>
+                        <select id="i-category" class="w-full border p-2 rounded-lg text-sm">
+                            <option value="delivery">Entrega</option>
+                            <option value="extra">Extra</option>
+                            <option value="tip">Gorjeta</option>
+                            <option value="other">Outro</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Data</label>
+                        <input type="date" id="i-date" required class="w-full border p-2 rounded-lg text-sm">
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700">
+                    Salvar Receita
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Expense Modal -->
+    <div id="expenseModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Nova Despesa</h3>
+                <button onclick="closeModal('expenseModal')" class="text-gray-400 hover:text-gray-600">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <form onsubmit="submitExpense(event)" class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Descrição</label>
+                    <input type="text" id="e-desc" required class="w-full border p-2 rounded-lg text-sm"
+                        placeholder="Ex: Combustível">
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Valor (R$)</label>
+                    <input type="number" id="e-amount" step="0.01" min="0.01" required
+                        class="w-full border p-2 rounded-lg text-lg font-bold" placeholder="0.00">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Categoria</label>
+                        <select id="e-category" class="w-full border p-2 rounded-lg text-sm">
+                            <option value="fuel">Combustível</option>
+                            <option value="maintenance">Manutenção</option>
+                            <option value="food">Alimentação</option>
+                            <option value="other">Outro</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Data</label>
+                        <input type="date" id="e-date" required class="w-full border p-2 rounded-lg text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
+                    <input type="text" id="e-notes" class="w-full border p-2 rounded-lg text-sm"
+                        placeholder="Detalhes adicionais">
+                </div>
+
+                <button type="submit" class="w-full bg-red-600 text-white py-3 rounded-lg font-bold hover:bg-red-700">
+                    Salvar Despesa
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Maintenance Modal -->
+    <div id="maintenanceModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Nova Manutenção</h3>
+                <button onclick="closeModal('maintenanceModal')" class="text-gray-400 hover:text-gray-600">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <form onsubmit="submitMaintenance(event)" class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Serviço</label>
+                    <input type="text" id="m-service" required class="w-full border p-2 rounded-lg text-sm"
+                        placeholder="Ex: Troca de óleo">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Valor (R$)</label>
+                        <input type="number" id="m-cost" step="0.01" min="0" required
+                            class="w-full border p-2 rounded-lg text-sm" placeholder="0.00">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Data</label>
+                        <input type="date" id="m-date" required class="w-full border p-2 rounded-lg text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Oficina</label>
+                    <input type="text" id="m-workshop" class="w-full border p-2 rounded-lg text-sm"
+                        placeholder="Nome da oficina">
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Próxima Manutenção</label>
+                    <input type="date" id="m-next" class="w-full border p-2 rounded-lg text-sm">
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Observações</label>
+                    <textarea id="m-notes" rows="2" class="w-full border p-2 rounded-lg text-sm"
+                        placeholder="Detalhes do serviço"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-yellow-600 text-white py-3 rounded-lg font-bold hover:bg-yellow-700">
+                    Salvar Manutenção
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delivery Details Modal -->
+    <div id="deliveryDetailModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-bold text-gray-800">Detalhes da Entrega</h3>
+                    <button onclick="closeModal('deliveryDetailModal')" class="text-gray-400 hover:text-gray-600">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+
+                <div id="delivery-detail-content">
+                    <!-- Dynamic content -->
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="updateDeliveryStatus()" id="status-action-btn"
+                            class="bg-plena-green text-white py-3 rounded-lg font-bold hover:bg-plena-dark">
+                            Atualizar Status
+                        </button>
+                        <button onclick="navigateToDelivery()"
+                            class="bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700">
+                            <i data-lucide="navigation" class="w-4 h-4 inline mr-2"></i>
+                            Navegar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Delivery Modal -->
+    <div id="quickDeliveryModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+            <h3 class="text-lg font-bold text-gray-800 mb-4 text-center">Entrega Rápida</h3>
+
+            <div class="space-y-4">
+                <button onclick="startQuickDelivery('food')"
+                    class="w-full bg-red-50 border border-red-200 p-4 rounded-xl text-red-700 font-bold hover:bg-red-100 flex items-center justify-center gap-3">
+                    <i data-lucide="pizza" class="w-5 h-5"></i>
+                    Comida
+                </button>
+
+                <button onclick="startQuickDelivery('document')"
+                    class="w-full bg-blue-50 border border-blue-200 p-4 rounded-xl text-blue-700 font-bold hover:bg-blue-100 flex items-center justify-center gap-3">
+                    <i data-lucide="file-text" class="w-5 h-5"></i>
+                    Documento
+                </button>
+
+                <button onclick="startQuickDelivery('product')"
+                    class="w-full bg-green-50 border border-green-200 p-4 rounded-xl text-green-700 font-bold hover:bg-green-100 flex items-center justify-center gap-3">
+                    <i data-lucide="package" class="w-5 h-5"></i>
+                    Produto
+                </button>
+
+                <button onclick="openDeliveryModal()"
+                    class="w-full border border-gray-300 p-4 rounded-xl text-gray-700 font-bold hover:bg-gray-50 flex items-center justify-center gap-3">
+                    <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+                    Personalizado
+                </button>
+            </div>
+
+            <button onclick="closeModal('quickDeliveryModal')"
+                class="w-full mt-6 text-gray-500 hover:text-gray-700 text-sm">
+                Cancelar
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // ESTADO GLOBAL
+        const DB_KEY = 'plena_delivery_v1';
+        const defaultDB = {
+            deliveries: [],
+            clients: [],
+            finances: {
+                incomes: [],
+                expenses: []
+            },
+            vehicle: {
+                model: '',
+                plate: '',
+                year: '',
+                color: '',
+                fuel: 75,
+                odometer: 0,
+                maintenance: []
+            },
+            settings: {
+                riderName: 'Motoboy',
+                riderPhone: '',
+                riderEmail: '',
+                defaultFee: 15.00,
+                notifications: true,
+                darkMode: false,
+                online: false,
+                termsAccepted: false,
+                termsAcceptedAt: null
+            },
+            goals: {
+                dailyEarnings: 200,
+                dailyDeliveries: 8
+            }
+        };
+
+        let db = JSON.parse(localStorage.getItem(DB_KEY)) || defaultDB;
+        let currentDeliveryId = null;
+
+        // UTILITÁRIOS
+        const save = () => {
+            localStorage.setItem(DB_KEY, JSON.stringify(db));
+            updateDataStatus();
+        };
+
+        const fmtMoney = (v) => {
+            return v.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        };
+
+        const fmtDate = (d) => {
+            const date = new Date(d);
+            return date.toLocaleDateString('pt-BR');
+        };
+
+        const fmtDateTime = (d, t) => {
+            const date = new Date(d);
+            const time = t || '12:00';
+            return `${fmtDate(d)} ${time}`;
+        };
+
+        const getID = () => {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        };
+
+        const calculateDistance = (lat1, lon1, lat2, lon2) => {
+            // Simplified distance calculation
+            return Math.round(Math.sqrt(Math.pow(lat2 - lat1, 2) + Math.pow(lon2 - lon1, 2)) * 100);
+        };
+
+        // INICIALIZAÇÃO
+        function init() {
+            // Garantir que Lucide seja carregado
+            if (window.lucide) {
+                lucide.createIcons();
+            } else {
+                setTimeout(() => { if (window.lucide) lucide.createIcons(); }, 500);
+            }
+
+            // Configurar datas padrão
+            const today = new Date().toISOString().split('T')[0];
+            const now = new Date();
+            const currentTime = now.getHours().toString().padStart(2, '0') + ':' +
+                now.getMinutes().toString().padStart(2, '0');
+
+            // Configurar inputs de data
+            document.getElementById('d-date').value = today;
+            document.getElementById('d-time').value = currentTime;
+            document.getElementById('i-date').value = today;
+            document.getElementById('e-date').value = today;
+            document.getElementById('m-date').value = today;
+            document.getElementById('delivery-start').value = today;
+            document.getElementById('delivery-end').value = today;
+            document.getElementById('report-start').value = today;
+            document.getElementById('report-end').value = today;
+
+            // Carregar configurações
+            loadSettings();
+
+            // Iniciar relógio
+            updateClock();
+            setInterval(updateClock, 60000);
+
+            // Renderizar dados iniciais
+            renderDashboard();
+            updateFuelDisplay();
+
+            // Atualizar Termos
+            if (typeof updateTermsVisuals === 'function') updateTermsVisuals();
+
+            // Configurar periodicidade para salvar
+            setInterval(save, 30000);
+        }
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('current-date').textContent = fmtDate(now.toISOString());
+            document.getElementById('current-time').textContent = now.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function loadSettings() {
+            document.getElementById('rider-name-input').value = db.settings.riderName;
+            document.getElementById('rider-phone').value = db.settings.riderPhone;
+            document.getElementById('rider-email').value = db.settings.riderEmail;
+            document.getElementById('default-fee').value = db.settings.defaultFee;
+            document.getElementById('notifications-toggle').checked = db.settings.notifications;
+            document.getElementById('dark-mode-toggle').checked = db.settings.darkMode;
+
+            // Vehicle info
+            document.getElementById('vehicle-model').value = db.vehicle.model;
+            document.getElementById('vehicle-plate').value = db.vehicle.plate;
+            document.getElementById('vehicle-year').value = db.vehicle.year;
+            document.getElementById('vehicle-color').value = db.vehicle.color;
+
+            updateOnlineStatus();
+        }
+
+        // ROTEAMENTO E NAVEGAÇÃO
+        function router(view) {
+            // Esconder todas as views
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hide'));
+
+            // Remover classe active de todos os nav items
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('bg-white/10', 'text-white');
+                el.classList.add('text-gray-400');
+            });
+
+            // Mostrar view selecionada
+            const viewElement = document.getElementById(`view-${view}`);
+            if (viewElement) {
+                viewElement.classList.remove('hide');
+                viewElement.classList.add('fade-in');
+            }
+
+            // Ativar nav item selecionado
+            const navElement = document.getElementById(`nav-${view}`);
+            if (navElement) {
+                navElement.classList.add('bg-white/10', 'text-white');
+                navElement.classList.remove('text-gray-400');
+            }
+
+            // Atualizar título da página
+            const titles = {
+                dashboard: 'Dashboard',
+                deliveries: 'Entregas',
+                clients: 'Clientes',
+                finance: 'Financeiro',
+                vehicle: 'Veículo',
+                reports: 'Relatórios',
+                settings: 'Configurações',
+                instructions: 'Manual de Uso',
+                about: 'Sobre a Plena'
+            };
+
+            document.getElementById('page-title').innerText = titles[view] || 'Plena Delivery';
+
+            // Fechar sidebar no mobile
+            if (window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+
+            // Renderizar dados específicos da view
+            switch (view) {
+                case 'dashboard':
+                    renderDashboard();
+                    break;
+                case 'deliveries':
+                    renderDeliveries();
+                    break;
+                case 'clients':
+                    renderClients();
+                    break;
+                case 'finance':
+                    renderFinance();
+                    break;
+                case 'vehicle':
+                    renderVehicle();
+                    break;
+                case 'reports':
+                    renderReports();
+                    break;
+                case 'settings':
+                    loadSettings();
+                    break;
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('hidden');
+
+            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+        }
+
+        // DASHBOARD
+        function renderDashboard() {
+            const today = new Date().toISOString().split('T')[0];
+
+            // Filtrar entregas de hoje
+            const todayDeliveries = db.deliveries.filter(d => d.date === today);
+            const activeDeliveries = todayDeliveries.filter(d =>
+                ['pending', 'collecting', 'delivering'].includes(d.status)
+            );
+            const deliveredToday = todayDeliveries.filter(d => d.status === 'delivered');
+
+            // Calcular estatísticas
+            const todayEarnings = deliveredToday.reduce((sum, d) => sum + d.value, 0);
+            const avgDelivery = deliveredToday.length > 0 ?
+                todayEarnings / deliveredToday.length : db.settings.defaultFee;
+
+            // Calcular distância (simulada)
+            const todayDistance = deliveredToday.length * 5; // 5km por entrega
+
+            // Atualizar cards
+            document.getElementById('today-deliveries').textContent = deliveredToday.length;
+            document.getElementById('active-deliveries').textContent = activeDeliveries.length;
+            document.getElementById('today-earnings').textContent = fmtMoney(todayEarnings);
+            document.getElementById('avg-delivery').textContent = fmtMoney(avgDelivery);
+            document.getElementById('today-distance').textContent = `${todayDistance} km`;
+            document.getElementById('rider-name').textContent = db.settings.riderName;
+
+            // Atualizar lista de entregas de hoje
+            renderTodayDeliveries(todayDeliveries);
+
+            // Atualizar metas
+            updateGoals(todayEarnings, deliveredToday.length);
+
+            // Atualizar status do combustível
+            updateFuelStatus();
+        }
+
+        function renderTodayDeliveries(deliveries) {
+            const container = document.getElementById('today-deliveries-list');
+            const emptyMsg = document.getElementById('no-deliveries-today');
+
+            if (deliveries.length === 0) {
+                container.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
+                return;
+            }
+
+            emptyMsg.classList.add('hidden');
+
+            const statusLabels = {
+                pending: 'Pendente',
+                collecting: 'Coletando',
+                delivering: 'Entregando',
+                delivered: 'Entregue',
+                cancelled: 'Cancelada'
+            };
+
+            const statusColors = {
+                pending: 'status-pending',
+                collecting: 'status-collecting',
+                delivering: 'status-delivering',
+                delivered: 'status-delivered',
+                cancelled: 'status-cancelled'
+            };
+
+            container.innerHTML = deliveries.slice(0, 5).map(d => {
+                return `
+                    <div class="p-4 hover:bg-gray-50 cursor-pointer" onclick="viewDeliveryDetail('${d.id}')">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3">
+                                    <span class="status-badge ${statusColors[d.status]}">${statusLabels[d.status]}</span>
+                                    <span class="text-xs text-gray-500">${d.time}</span>
+                                </div>
+                                <h4 class="font-medium text-gray-800 mt-2">${d.clientName}</h4>
+                                <p class="text-sm text-gray-600 truncate">${d.address}</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold text-plena-green">${fmtMoney(d.value)}</div>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    ${d.payment === 'pending' ? 'A receber' : 'Pago'}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateGoals(earnings, deliveries) {
+            const earningsGoal = db.goals.dailyEarnings;
+            const deliveriesGoal = db.goals.dailyDeliveries;
+
+            const earningsPercent = Math.min((earnings / earningsGoal) * 100, 100);
+            const deliveriesPercent = Math.min((deliveries / deliveriesGoal) * 100, 100);
+
+            document.getElementById('goal-progress').textContent =
+                `${fmtMoney(earnings)}/${fmtMoney(earningsGoal)}`;
+            document.getElementById('goal-bar').style.width = `${earningsPercent}%`;
+        }
+
+        function updateFuelStatus() {
+            const fuel = db.vehicle.fuel;
+            const fuelElements = ['fuel-fill', 'detail-fuel-fill'];
+            const percentElements = ['fuel-percent', 'detail-fuel-percent'];
+
+            fuelElements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.height = `${fuel}%`;
+            });
+
+            percentElements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = `${fuel}%`;
+            });
+
+            document.getElementById('fuel-display').textContent = `${fuel}%`;
+
+            // Mostrar/ocultar alerta de combustível
+            const fuelStatus = document.getElementById('fuel-status');
+            if (fuel < 20) {
+                fuelStatus.classList.remove('hidden');
+            } else {
+                fuelStatus.classList.add('hidden');
+            }
+        }
+
+        // ENTREGAS
+        function renderDeliveries() {
+            const term = document.getElementById('delivery-search').value.toLowerCase();
+            const statusFilter = document.getElementById('delivery-status').value;
+            const paymentFilter = document.getElementById('delivery-payment').value;
+            const start = document.getElementById('delivery-start').value;
+            const end = document.getElementById('delivery-end').value;
+
+            // Filtrar entregas
+            let filtered = db.deliveries.filter(d => {
+                const matchesTerm = d.clientName.toLowerCase().includes(term) ||
+                    d.address.toLowerCase().includes(term);
+                const matchesStatus = statusFilter === 'all' || d.status === statusFilter;
+                const matchesPayment = paymentFilter === 'all' ||
+                    (paymentFilter === 'paid' && d.payment !== 'pending') ||
+                    (paymentFilter === 'pending' && d.payment === 'pending');
+                const matchesDate = (!start || d.date >= start) && (!end || d.date <= end);
+
+                return matchesTerm && matchesStatus && matchesPayment && matchesDate;
+            });
+
+            // Ordenar por data (mais recente primeiro)
+            filtered.sort((a, b) => new Date(b.date + 'T' + b.time) - new Date(a.date + 'T' + a.time));
+
+            // Atualizar tabela
+            const tbody = document.getElementById('deliveries-table-body');
+            const emptyMsg = document.getElementById('deliveries-empty-msg');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
+                updateDeliverySummary(filtered);
+                return;
+            }
+
+            emptyMsg.classList.add('hidden');
+
+            const statusLabels = {
+                pending: 'Pendente',
+                collecting: 'Coletando',
+                delivering: 'Entregando',
+                delivered: 'Entregue',
+                cancelled: 'Cancelada'
+            };
+
+            const statusColors = {
+                pending: 'bg-yellow-100 text-yellow-800',
+                collecting: 'bg-blue-100 text-blue-800',
+                delivering: 'bg-pink-100 text-pink-800',
+                delivered: 'bg-green-100 text-green-800',
+                cancelled: 'bg-red-100 text-red-800'
+            };
+
+            tbody.innerHTML = filtered.map(d => {
+                return `
+                    <tr class="hover:bg-gray-50 group border-b border-gray-100">
+                        <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+                            ${fmtDate(d.date)}<br>
+                            <span class="text-xs">${d.time}</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="font-medium text-gray-800">${d.clientName}</div>
+                            <div class="text-xs text-gray-400">${d.clientPhone || ''}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-700 line-clamp-2 max-w-[200px]">${d.address}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColors[d.status]}">
+                                ${statusLabels[d.status]}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <div class="font-bold ${d.payment === 'pending' ? 'text-yellow-600' : 'text-green-600'}">
+                                ${fmtMoney(d.value)}
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                ${d.payment === 'pending' ? 'A receber' : 'Pago'}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="viewDeliveryDetail('${d.id}')" 
+                                        class="text-gray-400 hover:text-blue-500 transition-colors"
+                                        title="Visualizar">
+                                    <i data-lucide="eye" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="editDelivery('${d.id}')" 
+                                        class="text-gray-400 hover:text-green-500 transition-colors"
+                                        title="Editar">
+                                    <i data-lucide="edit" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+            updateDeliverySummary(filtered);
+        }
+
+        function updateDeliverySummary(deliveries) {
+            const total = deliveries.length;
+            const totalValue = deliveries.reduce((sum, d) => sum + d.value, 0);
+            const pendingPayments = deliveries
+                .filter(d => d.payment === 'pending')
+                .reduce((sum, d) => sum + d.value, 0);
+
+            const successful = deliveries.filter(d => d.status === 'delivered').length;
+            const successRate = total > 0 ? Math.round((successful / total) * 100) : 0;
+
+            document.getElementById('total-deliveries').textContent = total;
+            document.getElementById('total-delivery-value').textContent = fmtMoney(totalValue);
+            document.getElementById('pending-payments').textContent = fmtMoney(pendingPayments);
+            document.getElementById('success-rate').textContent = `${successRate}%`;
+        }
+
+        function clearDeliveryFilters() {
+            const today = new Date().toISOString().split('T')[0];
+
+            document.getElementById('delivery-search').value = '';
+            document.getElementById('delivery-status').value = 'all';
+            document.getElementById('delivery-payment').value = 'all';
+            document.getElementById('delivery-start').value = today;
+            document.getElementById('delivery-end').value = today;
+
+            renderDeliveries();
+        }
+
+        // CLIENTES
+        function renderClients() {
+            const container = document.querySelector('#view-clients .grid');
+            const emptyMsg = document.getElementById('no-clients-msg');
+
+            if (db.clients.length === 0) {
+                container.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
+                return;
+            }
+
+            emptyMsg.classList.add('hidden');
+
+            container.innerHTML = db.clients.map(client => {
+                const deliveryCount = db.deliveries.filter(d => d.clientId === client.id).length;
+                const totalValue = db.deliveries
+                    .filter(d => d.clientId === client.id)
+                    .reduce((sum, d) => sum + d.value, 0);
+
+                return `
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 card-hover">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-bold text-gray-800">${client.name}</h3>
+                                <p class="text-sm text-gray-600 mt-1">${client.phone || 'Sem telefone'}</p>
+                            </div>
+                            <button onclick="editClient('${client.id}')" class="text-gray-400 hover:text-plena-green">
+                                <i data-lucide="edit" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="text-sm text-gray-600">
+                                <i data-lucide="map-pin" class="w-4 h-4 inline mr-2"></i>
+                                <span class="line-clamp-2">${client.address || 'Sem endereço'}</span>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-3 text-center">
+                                <div class="bg-gray-50 p-2 rounded-lg">
+                                    <p class="text-xs text-gray-500">Entregas</p>
+                                    <p class="font-bold text-gray-800">${deliveryCount}</p>
+                                </div>
+                                <div class="bg-gray-50 p-2 rounded-lg">
+                                    <p class="text-xs text-gray-500">Total</p>
+                                    <p class="font-bold text-plena-green">${fmtMoney(totalValue)}</p>
+                                </div>
+                            </div>
+                            
+                            <button onclick="createDeliveryForClient('${client.id}')"
+                                class="w-full bg-plena-green text-white py-2 rounded-lg text-sm font-bold hover:bg-plena-dark">
+                                Nova Entrega
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // FINANCEIRO
+        function renderFinance() {
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            const firstDayStr = firstDay.toISOString().split('T')[0];
+            const todayStr = today.toISOString().split('T')[0];
+
+            // Filtrar transações do mês
+            const monthIncomes = db.finances.incomes.filter(i => i.date >= firstDayStr && i.date <= todayStr);
+            const monthExpenses = db.finances.expenses.filter(e => e.date >= firstDayStr && e.date <= todayStr);
+
+            // Calcular totais
+            const totalIncome = monthIncomes.reduce((sum, i) => sum + i.amount, 0);
+            const totalExpense = monthExpenses.reduce((sum, e) => sum + e.amount, 0);
+            const currentBalance = totalIncome - totalExpense;
+
+            // Atualizar cards
+            document.getElementById('current-balance').textContent = fmtMoney(currentBalance);
+            document.getElementById('month-income').textContent = fmtMoney(totalIncome);
+            document.getElementById('month-expenses').textContent = fmtMoney(totalExpense);
+
+            // Atualizar tabela de transações recentes
+            renderRecentTransactions();
+        }
+
+        function renderRecentTransactions() {
+            const tbody = document.getElementById('finance-table-body');
+
+            // Combinar receitas e despesas
+            const allTransactions = [
+                ...db.finances.incomes.map(t => ({ ...t, type: 'income' })),
+                ...db.finances.expenses.map(t => ({ ...t, type: 'expense' }))
+            ];
+
+            // Ordenar por data (mais recente primeiro)
+            allTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            // Pegar as 10 mais recentes
+            const recent = allTransactions.slice(0, 10);
+
+            if (recent.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="px-6 py-8 text-center text-gray-400">
+                            Nenhuma transação registrada
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = recent.map(t => {
+                const isIncome = t.type === 'income';
+
+                return `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 text-gray-500">${fmtDate(t.date)}</td>
+                        <td class="px-6 py-4 font-medium text-gray-800">${t.description}</td>
+                        <td class="px-6 py-4">
+                            <span class="text-sm text-gray-600">${t.category}</span>
+                        </td>
+                        <td class="px-6 py-4 text-right font-bold ${isIncome ? 'text-green-600' : 'text-red-600'}">
+                            ${isIncome ? '+' : '-'}${fmtMoney(t.amount)}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // VEÍCULO
+        function renderVehicle() {
+            // Atualizar informações do veículo
+            document.getElementById('odometer').textContent = `${db.vehicle.odometer.toLocaleString()} km`;
+
+            // Atualizar histórico de manutenção
+            renderMaintenanceHistory();
+
+            // Atualizar despesas do mês
+            renderVehicleExpenses();
+
+            // Atualizar combustível
+            updateFuelDisplay();
+        }
+
+        function renderMaintenanceHistory() {
+            const container = document.getElementById('maintenance-list');
+
+            if (db.vehicle.maintenance.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-gray-400 py-4">
+                        <i data-lucide="wrench" class="w-8 h-8 mx-auto mb-2"></i>
+                        <p>Nenhuma manutenção registrada</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Ordenar por data (mais recente primeiro)
+            const sorted = [...db.vehicle.maintenance].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            container.innerHTML = sorted.map(m => {
+                return `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div>
+                            <p class="font-medium text-gray-800">${m.service}</p>
+                            <p class="text-xs text-gray-500">${fmtDate(m.date)} • ${m.workshop || 'Oficina não informada'}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-gray-800">${fmtMoney(m.cost)}</p>
+                            ${m.next ? `<p class="text-xs text-gray-500">Próxima: ${fmtDate(m.next)}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderVehicleExpenses() {
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            const firstDayStr = firstDay.toISOString().split('T')[0];
+            const todayStr = today.toISOString().split('T')[0];
+
+            // Filtrar despesas do veículo deste mês
+            const vehicleExpenses = db.finances.expenses.filter(e =>
+                e.date >= firstDayStr && e.date <= todayStr &&
+                ['fuel', 'maintenance'].includes(e.category)
+            );
+
+            const container = document.getElementById('vehicle-expenses');
+
+            if (vehicleExpenses.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center">Sem despesas este mês</p>';
+                return;
+            }
+
+            // Agrupar por categoria
+            const byCategory = {};
+            vehicleExpenses.forEach(expense => {
+                if (!byCategory[expense.category]) {
+                    byCategory[expense.category] = 0;
+                }
+                byCategory[expense.category] += expense.amount;
+            });
+
+            const categoryLabels = {
+                fuel: 'Combustível',
+                maintenance: 'Manutenção'
+            };
+
+            container.innerHTML = Object.entries(byCategory).map(([category, total]) => {
+                return `
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-700">${categoryLabels[category] || category}</span>
+                        <span class="font-bold text-red-600">${fmtMoney(total)}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // RELATÓRIOS
+        function renderReports() {
+            // Configurar datas padrão para o mês atual
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+
+            document.getElementById('report-start').value = firstDay.toISOString().split('T')[0];
+            document.getElementById('report-end').value = today.toISOString().split('T')[0];
+        }
+
+        function generateReport() {
+            const start = document.getElementById('report-start').value;
+            const end = document.getElementById('report-end').value;
+
+            if (!start || !end) {
+                alert('Por favor, selecione um período.');
+                return;
+            }
+
+            // Filtrar entregas do período
+            const periodDeliveries = db.deliveries.filter(d => d.date >= start && d.date <= end);
+            const periodIncomes = db.finances.incomes.filter(i => i.date >= start && i.date <= end);
+            const periodExpenses = db.finances.expenses.filter(e => e.date >= start && e.date <= end);
+
+            // Calcular totais
+            const totalDeliveries = periodDeliveries.length;
+            const totalIncome = periodIncomes.reduce((sum, i) => sum + i.amount, 0);
+            const totalExpenses = periodExpenses.reduce((sum, e) => sum + e.amount, 0);
+            const totalProfit = totalIncome - totalExpenses;
+
+            // Atualizar cards
+            document.getElementById('report-deliveries').textContent = totalDeliveries;
+            document.getElementById('report-income').textContent = fmtMoney(totalIncome);
+            document.getElementById('report-expenses').textContent = fmtMoney(totalExpenses);
+            document.getElementById('report-profit').textContent = fmtMoney(totalProfit);
+
+            // Gerar gráficos
+            generateStatusChart(periodDeliveries);
+            generateExpenseChart(periodExpenses);
+
+            // Mostrar resultados
+            document.getElementById('report-results').classList.remove('hidden');
+        }
+
+        function generateCurrentMonthReport() {
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+
+            document.getElementById('report-start').value = firstDay.toISOString().split('T')[0];
+            document.getElementById('report-end').value = today.toISOString().split('T')[0];
+
+            generateReport();
+        }
+
+        function generateStatusChart(deliveries) {
+            const statusCounts = {
+                pending: 0,
+                collecting: 0,
+                delivering: 0,
+                delivered: 0,
+                cancelled: 0
+            };
+
+            deliveries.forEach(d => {
+                statusCounts[d.status] = (statusCounts[d.status] || 0) + 1;
+            });
+
+            const total = deliveries.length;
+            const container = document.getElementById('status-chart');
+
+            if (total === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center">Sem dados no período</p>';
+                return;
+            }
+
+            const statusLabels = {
+                pending: 'Pendente',
+                collecting: 'Coletando',
+                delivering: 'Entregando',
+                delivered: 'Entregue',
+                cancelled: 'Cancelada'
+            };
+
+            container.innerHTML = Object.entries(statusCounts)
+                .filter(([_, count]) => count > 0)
+                .map(([status, count]) => {
+                    const percentage = total > 0 ? Math.round((count / total) * 100) : 0;
+                    return `
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-sm text-gray-700">${statusLabels[status]}</span>
+                                <span class="text-sm font-bold">${count} (${percentage}%)</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-plena-green h-2 rounded-full" style="width: ${percentage}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+        }
+
+        function generateExpenseChart(expenses) {
+            const categoryTotals = {};
+
+            expenses.forEach(e => {
+                if (!categoryTotals[e.category]) {
+                    categoryTotals[e.category] = 0;
+                }
+                categoryTotals[e.category] += e.amount;
+            });
+
+            const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+            const container = document.getElementById('expense-chart');
+
+            if (total === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center">Sem despesas no período</p>';
+                return;
+            }
+
+            const categoryLabels = {
+                fuel: 'Combustível',
+                maintenance: 'Manutenção',
+                food: 'Alimentação',
+                other: 'Outros'
+            };
+
+            container.innerHTML = Object.entries(categoryTotals)
+                .sort((a, b) => b[1] - a[1])
+                .map(([category, amount]) => {
+                    const percentage = total > 0 ? Math.round((amount / total) * 100) : 0;
+                    return `
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-sm text-gray-700">${categoryLabels[category] || category}</span>
+                                <span class="text-sm font-bold">${fmtMoney(amount)} (${percentage}%)</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-red-500 h-2 rounded-full" style="width: ${percentage}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+        }
+
+        // MODAIS
+        function openDeliveryModal(delivery = null) {
+            const modal = document.getElementById('deliveryModal');
+            const title = document.getElementById('delivery-modal-title');
+            const form = modal.querySelector('form');
+
+            // Preencher clientes existentes
+            populateExistingClients();
+
+            if (delivery) {
+                // Modo edição
+                title.textContent = 'Editar Entrega';
+                document.getElementById('d-id').value = delivery.id;
+                document.getElementById('d-client-name').value = delivery.clientName;
+                document.getElementById('d-client-phone').value = delivery.clientPhone;
+                document.getElementById('d-client-address').value = delivery.address;
+                document.getElementById('d-value').value = delivery.value;
+                document.getElementById('d-type').value = delivery.type;
+                document.getElementById('d-payment').value = delivery.payment;
+                document.getElementById('d-notes').value = delivery.notes || '';
+                document.getElementById('d-date').value = delivery.date;
+                document.getElementById('d-time').value = delivery.time;
+
+                // Mostrar formulário de cliente
+                document.getElementById('client-form-section').classList.remove('hidden');
+                document.getElementById('quick-client-section').classList.add('hidden');
+            } else {
+                // Modo criação
+                title.textContent = 'Nova Entrega';
+                form.reset();
+                document.getElementById('d-id').value = '';
+                document.getElementById('d-date').value = new Date().toISOString().split('T')[0];
+                document.getElementById('d-time').value = new Date().toLocaleTimeString('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                document.getElementById('d-value').value = db.settings.defaultFee;
+
+                // Mostrar seleção rápida
+                document.getElementById('client-form-section').classList.add('hidden');
+                document.getElementById('quick-client-section').classList.remove('hidden');
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function openQuickDelivery() {
+            document.getElementById('quickDeliveryModal').classList.remove('hidden');
+        }
+
+        function startQuickDelivery(type) {
+            closeModal('quickDeliveryModal');
+            openDeliveryModal();
+
+            // Preencher tipo automaticamente
+            document.getElementById('d-type').value = type;
+
+            // Definir valor padrão baseado no tipo
+            const defaultValues = {
+                food: 12.00,
+                document: 15.00,
+                product: 18.00
+            };
+
+            if (defaultValues[type]) {
+                document.getElementById('d-value').value = defaultValues[type];
+            }
+        }
+
+        function openClientModal(client = null) {
+            const modal = document.getElementById('clientModal');
+            const form = modal.querySelector('form');
+
+            if (client) {
+                // Modo edição
+                document.getElementById('c-id').value = client.id;
+                document.getElementById('c-name').value = client.name;
+                document.getElementById('c-phone').value = client.phone;
+                document.getElementById('c-whatsapp').value = client.whatsapp || 'yes';
+                document.getElementById('c-address').value = client.address || '';
+                document.getElementById('c-reference').value = client.reference || '';
+                document.getElementById('c-notes').value = client.notes || '';
+            } else {
+                // Modo criação
+                form.reset();
+                document.getElementById('c-id').value = '';
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function openIncomeModal() {
+            document.getElementById('incomeModal').classList.remove('hidden');
+        }
+
+        function openExpenseModal() {
+            document.getElementById('expenseModal').classList.remove('hidden');
+        }
+
+        function openMaintenanceModal() {
+            document.getElementById('maintenanceModal').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function showClientForm() {
+            document.getElementById('client-form-section').classList.remove('hidden');
+            document.getElementById('quick-client-section').classList.add('hidden');
+        }
+
+        function populateExistingClients() {
+            const select = document.getElementById('existing-client');
+            select.innerHTML = '<option value="">Cliente Existente</option>' +
+                db.clients.map(client =>
+                    `<option value="${client.id}">${client.name} - ${client.phone || 'Sem telefone'}</option>`
+                ).join('');
+        }
+
+        function fillClientInfo(clientId) {
+            if (!clientId) return;
+
+            const client = db.clients.find(c => c.id === clientId);
+            if (client) {
+                document.getElementById('d-client-name').value = client.name;
+                document.getElementById('d-client-phone').value = client.phone;
+                document.getElementById('d-client-address').value = client.address;
+
+                // Mostrar formulário preenchido
+                document.getElementById('client-form-section').classList.remove('hidden');
+                document.getElementById('quick-client-section').classList.add('hidden');
+            }
+        }
+
+        // CRUD ENTREGAS
+        function submitDelivery(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('d-id').value;
+            const clientName = document.getElementById('d-client-name').value.trim();
+            const clientPhone = document.getElementById('d-client-phone').value.trim();
+            const address = document.getElementById('d-client-address').value.trim();
+            const value = parseFloat(document.getElementById('d-value').value);
+            const type = document.getElementById('d-type').value;
+            const payment = document.getElementById('d-payment').value;
+            const notes = document.getElementById('d-notes').value.trim();
+            const date = document.getElementById('d-date').value;
+            const time = document.getElementById('d-time').value;
+
+            if (!clientName || !address || !value || value <= 0) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+
+            // Verificar se é um novo cliente para salvar
+            const clientId = getID();
+            const existingClient = db.clients.find(c =>
+                c.phone === clientPhone && c.phone !== ''
+            );
+
+            if (!existingClient && clientPhone) {
+                // Salvar novo cliente
+                db.clients.push({
+                    id: clientId,
+                    name: clientName,
+                    phone: clientPhone,
+                    address: address,
+                    whatsapp: 'yes',
+                    reference: '',
+                    notes: `Cliente adicionado via entrega em ${date}`
+                });
+            }
+
+            const delivery = {
+                id: id || getID(),
+                clientId: existingClient ? existingClient.id : clientId,
+                clientName,
+                clientPhone,
+                address,
+                value,
+                type,
+                payment,
+                notes,
+                date,
+                time,
+                status: 'pending',
+                createdAt: new Date().toISOString()
+            };
+
+            if (id) {
+                // Editar entrega existente
+                const index = db.deliveries.findIndex(d => d.id === id);
+                if (index !== -1) {
+                    db.deliveries[index] = delivery;
+                }
+            } else {
+                // Adicionar nova entrega
+                db.deliveries.push(delivery);
+
+                // Adicionar como receita se já estiver pago
+                if (payment !== 'pending') {
+                    db.finances.incomes.push({
+                        id: getID(),
+                        description: `Entrega para ${clientName}`,
+                        amount: value,
+                        category: 'delivery',
+                        date: date,
+                        deliveryId: delivery.id
+                    });
+                }
+            }
+
+            save();
+            closeModal('deliveryModal');
+            showNotification('Entrega salva com sucesso!', 'success');
+
+            // Atualizar views
+            if (!document.getElementById('view-dashboard').classList.contains('hide')) {
+                renderDashboard();
+            }
+            if (!document.getElementById('view-deliveries').classList.contains('hide')) {
+                renderDeliveries();
+            }
+            if (!document.getElementById('view-finance').classList.contains('hide')) {
+                renderFinance();
+            }
+        }
+
+        function saveAndStartDelivery() {
+            // Primeiro salva a entrega
+            const form = document.querySelector('#deliveryModal form');
+            const submitEvent = new Event('submit', { cancelable: true });
+            form.dispatchEvent(submitEvent);
+
+            // Se foi salvo com sucesso, inicia a entrega
+            setTimeout(() => {
+                const delivery = db.deliveries[db.deliveries.length - 1];
+                if (delivery) {
+                    startDelivery(delivery.id);
+                }
+            }, 100);
+        }
+
+        function startDelivery(deliveryId) {
+            const delivery = db.deliveries.find(d => d.id === deliveryId);
+            if (delivery) {
+                delivery.status = 'collecting';
+                save();
+
+                showNotification('Entrega iniciada! Boa viagem! 🛵', 'success');
+
+                // Atualizar views
+                if (!document.getElementById('view-dashboard').classList.contains('hide')) {
+                    renderDashboard();
+                }
+                if (!document.getElementById('view-deliveries').classList.contains('hide')) {
+                    renderDeliveries();
+                }
+
+                closeModal('deliveryModal');
+            }
+        }
+
+        function viewDeliveryDetail(deliveryId) {
+            const delivery = db.deliveries.find(d => d.id === deliveryId);
+            if (!delivery) return;
+
+            currentDeliveryId = deliveryId;
+
+            const container = document.getElementById('delivery-detail-content');
+            const statusLabels = {
+                pending: 'Pendente',
+                collecting: 'Coletando',
+                delivering: 'Entregando',
+                delivered: 'Entregue',
+                cancelled: 'Cancelada'
+            };
+
+            const paymentLabels = {
+                cash: 'Dinheiro',
+                pix: 'Pix',
+                card: 'Cartão',
+                pending: 'A Receber'
+            };
+
+            const typeLabels = {
+                food: 'Comida',
+                document: 'Documento',
+                product: 'Produto',
+                other: 'Outro'
+            };
+
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <!-- Status e Valor -->
+                    <div class="flex justify-between items-center">
+                        <span class="status-badge status-${delivery.status}">
+                            ${statusLabels[delivery.status]}
+                        </span>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-plena-green">${fmtMoney(delivery.value)}</div>
+                            <div class="text-sm ${delivery.payment === 'pending' ? 'text-yellow-600' : 'text-green-600'}">
+                                ${paymentLabels[delivery.payment]}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Informações do Cliente -->
+                    <div>
+                        <h4 class="text-xs font-bold text-gray-500 uppercase mb-2">Cliente</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="font-bold text-gray-800">${delivery.clientName}</p>
+                            ${delivery.clientPhone ? `<p class="text-sm text-gray-600 mt-1">${delivery.clientPhone}</p>` : ''}
+                            <p class="text-sm text-gray-600 mt-2">${delivery.address}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Detalhes da Entrega -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs font-bold text-gray-500 uppercase">Data/Hora</p>
+                            <p class="font-medium">${fmtDateTime(delivery.date, delivery.time)}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-500 uppercase">Tipo</p>
+                            <p class="font-medium">${typeLabels[delivery.type]}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Observações -->
+                    ${delivery.notes ? `
+                        <div>
+                            <h4 class="text-xs font-bold text-gray-500 uppercase mb-2">Observações</h4>
+                            <div class="bg-blue-50 p-3 rounded-lg border border-blue-100">
+                                <p class="text-sm text-gray-700">${delivery.notes}</p>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            // Configurar botão de ação baseado no status
+            const actionBtn = document.getElementById('status-action-btn');
+            const statusActions = {
+                pending: { text: 'Iniciar Coleta', action: 'collecting' },
+                collecting: { text: 'Iniciar Entrega', action: 'delivering' },
+                delivering: { text: 'Marcar como Entregue', action: 'delivered' },
+                delivered: { text: 'Já Entregue', action: null },
+                cancelled: { text: 'Cancelada', action: null }
+            };
+
+            const currentAction = statusActions[delivery.status];
+            if (currentAction.action) {
+                actionBtn.textContent = currentAction.text;
+                actionBtn.onclick = () => updateDeliveryStatus(currentAction.action);
+                actionBtn.disabled = false;
+                actionBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                actionBtn.textContent = currentAction.text;
+                actionBtn.disabled = true;
+                actionBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+
+            document.getElementById('deliveryDetailModal').classList.remove('hidden');
+        }
+
+        function updateDeliveryStatus(newStatus) {
+            const delivery = db.deliveries.find(d => d.id === currentDeliveryId);
+            if (delivery) {
+                delivery.status = newStatus;
+
+                // Se foi entregue e está como "a receber", marcar como pago
+                if (newStatus === 'delivered' && delivery.payment === 'pending') {
+                    delivery.payment = 'cash';
+
+                    // Adicionar como receita
+                    db.finances.incomes.push({
+                        id: getID(),
+                        description: `Entrega para ${delivery.clientName}`,
+                        amount: delivery.value,
+                        category: 'delivery',
+                        date: new Date().toISOString().split('T')[0],
+                        deliveryId: delivery.id
+                    });
+                }
+
+                save();
+                showNotification('Status atualizado!', 'success');
+
+                // Fechar modal e atualizar views
+                closeModal('deliveryDetailModal');
+
+                if (!document.getElementById('view-dashboard').classList.contains('hide')) {
+                    renderDashboard();
+                }
+                if (!document.getElementById('view-deliveries').classList.contains('hide')) {
+                    renderDeliveries();
+                }
+                if (!document.getElementById('view-finance').classList.contains('hide')) {
+                    renderFinance();
+                }
+            }
+        }
+
+        function editDelivery(deliveryId) {
+            const delivery = db.deliveries.find(d => d.id === deliveryId);
+            if (delivery) {
+                openDeliveryModal(delivery);
+            }
+        }
+
+        // CRUD CLIENTES
+        function submitClient(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('c-id').value;
+            const name = document.getElementById('c-name').value.trim();
+            const phone = document.getElementById('c-phone').value.trim();
+            const whatsapp = document.getElementById('c-whatsapp').value;
+            const address = document.getElementById('c-address').value.trim();
+            const reference = document.getElementById('c-reference').value.trim();
+            const notes = document.getElementById('c-notes').value.trim();
+
+            if (!name) {
+                alert('Por favor, informe o nome do cliente.');
+                return;
+            }
+
+            const client = {
+                id: id || getID(),
+                name,
+                phone,
+                whatsapp,
+                address,
+                reference,
+                notes,
+                createdAt: new Date().toISOString()
+            };
+
+            if (id) {
+                // Editar cliente existente
+                const index = db.clients.findIndex(c => c.id === id);
+                if (index !== -1) {
+                    db.clients[index] = client;
+                }
+            } else {
+                // Adicionar novo cliente
+                db.clients.push(client);
+            }
+
+            save();
+            closeModal('clientModal');
+            showNotification('Cliente salvo com sucesso!', 'success');
+
+            // Atualizar view de clientes se estiver ativa
+            if (!document.getElementById('view-clients').classList.contains('hide')) {
+                renderClients();
+            }
+        }
+
+        function editClient(clientId) {
+            const client = db.clients.find(c => c.id === clientId);
+            if (client) {
+                openClientModal(client);
+            }
+        }
+
+        function createDeliveryForClient(clientId) {
+            const client = db.clients.find(c => c.id === clientId);
+            if (client) {
+                openDeliveryModal();
+
+                // Preencher automaticamente
+                document.getElementById('d-client-name').value = client.name;
+                document.getElementById('d-client-phone').value = client.phone;
+                document.getElementById('d-client-address').value = client.address;
+
+                // Mostrar formulário preenchido
+                document.getElementById('client-form-section').classList.remove('hidden');
+                document.getElementById('quick-client-section').classList.add('hidden');
+            }
+        }
+
+        // CRUD FINANCEIRO
+        function submitIncome(e) {
+            e.preventDefault();
+
+            const description = document.getElementById('i-desc').value.trim();
+            const amount = parseFloat(document.getElementById('i-amount').value);
+            const category = document.getElementById('i-category').value;
+            const date = document.getElementById('i-date').value;
+
+            if (!description || !amount || amount <= 0) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            db.finances.incomes.push({
+                id: getID(),
+                description,
+                amount,
+                category,
+                date
+            });
+
+            save();
+            closeModal('incomeModal');
+            showNotification('Receita registrada!', 'success');
+
+            // Atualizar view financeira se estiver ativa
+            if (!document.getElementById('view-finance').classList.contains('hide')) {
+                renderFinance();
+            }
+        }
+
+        function submitExpense(e) {
+            e.preventDefault();
+
+            const description = document.getElementById('e-desc').value.trim();
+            const amount = parseFloat(document.getElementById('e-amount').value);
+            const category = document.getElementById('e-category').value;
+            const date = document.getElementById('e-date').value;
+            const notes = document.getElementById('e-notes').value.trim();
+
+            if (!description || !amount || amount <= 0) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            db.finances.expenses.push({
+                id: getID(),
+                description,
+                amount,
+                category,
+                date,
+                notes
+            });
+
+            save();
+            closeModal('expenseModal');
+            showNotification('Despesa registrada!', 'success');
+
+            // Atualizar views
+            if (!document.getElementById('view-finance').classList.contains('hide')) {
+                renderFinance();
+            }
+            if (!document.getElementById('view-vehicle').classList.contains('hide') &&
+                ['fuel', 'maintenance'].includes(category)) {
+                renderVehicle();
+            }
+        }
+
+        // CRUD MANUTENÇÃO
+        function submitMaintenance(e) {
+            e.preventDefault();
+
+            const service = document.getElementById('m-service').value.trim();
+            const cost = parseFloat(document.getElementById('m-cost').value);
+            const date = document.getElementById('m-date').value;
+            const workshop = document.getElementById('m-workshop').value.trim();
+            const next = document.getElementById('m-next').value;
+            const notes = document.getElementById('m-notes').value.trim();
+
+            if (!service || !cost || cost < 0) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+
+            db.vehicle.maintenance.push({
+                id: getID(),
+                service,
+                cost,
+                date,
+                workshop,
+                next,
+                notes
+            });
+
+            save();
+            closeModal('maintenanceModal');
+            showNotification('Manutenção registrada!', 'success');
+
+            // Atualizar view do veículo se estiver ativa
+            if (!document.getElementById('view-vehicle').classList.contains('hide')) {
+                renderVehicle();
+            }
+        }
+
+        // CONFIGURAÇÕES
+        function saveProfile() {
+            db.settings.riderName = document.getElementById('rider-name-input').value.trim() || 'Motoboy';
+            db.settings.riderPhone = document.getElementById('rider-phone').value.trim();
+            db.settings.riderEmail = document.getElementById('rider-email').value.trim();
+            db.settings.defaultFee = parseFloat(document.getElementById('default-fee').value) || 15.00;
+            db.settings.notifications = document.getElementById('notifications-toggle').checked;
+            db.settings.darkMode = document.getElementById('dark-mode-toggle').checked;
+
+            save();
+            showNotification('Perfil salvo com sucesso!', 'success');
+
+            // Atualizar dashboard
+            if (!document.getElementById('view-dashboard').classList.contains('hide')) {
+                renderDashboard();
+            }
+        }
+
+        function saveVehicleInfo() {
+            db.vehicle.model = document.getElementById('vehicle-model').value.trim();
+            db.vehicle.plate = document.getElementById('vehicle-plate').value.trim();
+            db.vehicle.year = document.getElementById('vehicle-year').value;
+            db.vehicle.color = document.getElementById('vehicle-color').value.trim();
+
+            save();
+            showNotification('Informações da moto salvas!', 'success');
+        }
+
+        function updateFuel() {
+            const newFuel = prompt('Informe o nível de combustível (0-100%):', db.vehicle.fuel);
+            if (newFuel !== null) {
+                const fuel = parseInt(newFuel);
+                if (!isNaN(fuel) && fuel >= 0 && fuel <= 100) {
+                    db.vehicle.fuel = fuel;
+                    save();
+                    updateFuelDisplay();
+                    showNotification('Combustível atualizado!', 'success');
+                } else {
+                    alert('Por favor, informe um valor entre 0 e 100.');
+                }
+            }
+        }
+
+        function refuelVehicle() {
+            const liters = prompt('Quantos litros abasteceu?');
+            const price = prompt('Qual o preço por litro?');
+
+            if (liters && price) {
+                const litersNum = parseFloat(liters.replace(',', '.'));
+                const priceNum = parseFloat(price.replace(',', '.'));
+
+                if (!isNaN(litersNum) && !isNaN(priceNum) && litersNum > 0 && priceNum > 0) {
+                    const total = litersNum * priceNum;
+
+                    // Registrar despesa
+                    db.finances.expenses.push({
+                        id: getID(),
+                        description: `Abastecimento - ${litersNum}L`,
+                        amount: total,
+                        category: 'fuel',
+                        date: new Date().toISOString().split('T')[0],
+                        notes: `Preço: R$ ${priceNum.toFixed(2)}/L`
+                    });
+
+                    // Atualizar nível de combustível (cada 10L = 25%)
+                    const fuelIncrease = Math.min(litersNum * 2.5, 100 - db.vehicle.fuel);
+                    db.vehicle.fuel = Math.min(db.vehicle.fuel + fuelIncrease, 100);
+
+                    save();
+
+                    // Atualizar data do último abastecimento
+                    document.getElementById('last-refuel').textContent =
+                        new Date().toLocaleDateString('pt-BR');
+
+                    updateFuelDisplay();
+                    showNotification(`Abastecimento registrado: ${fmtMoney(total)}`, 'success');
+
+                    // Atualizar views
+                    if (!document.getElementById('view-finance').classList.contains('hide')) {
+                        renderFinance();
+                    }
+                    if (!document.getElementById('view-vehicle').classList.contains('hide')) {
+                        renderVehicle();
+                    }
+                } else {
+                    alert('Por favor, informe valores válidos.');
+                }
+            }
+        }
+
+        function updateOdometer() {
+            const newOdometer = prompt('Informe a nova quilometragem:', db.vehicle.odometer);
+            if (newOdometer !== null) {
+                const odometer = parseInt(newOdometer.replace(/\D/g, ''));
+                if (!isNaN(odometer) && odometer >= db.vehicle.odometer) {
+                    db.vehicle.odometer = odometer;
+                    save();
+
+                    // Atualizar display
+                    document.getElementById('odometer').textContent = `${odometer.toLocaleString()} km`;
+                    showNotification('Quilometragem atualizada!', 'success');
+                } else {
+                    alert('Por favor, informe um valor válido maior que a atual.');
+                }
+            }
+        }
+
+        function updateDailyGoal() {
+            const earnings = prompt('Meta de ganhos diários (R$):', db.goals.dailyEarnings);
+            const deliveries = prompt('Meta de entregas diárias:', db.goals.dailyDeliveries);
+
+            if (earnings && deliveries) {
+                const earningsNum = parseFloat(earnings.replace(',', '.'));
+                const deliveriesNum = parseInt(deliveries);
+
+                if (!isNaN(earningsNum) && earningsNum > 0 && !isNaN(deliveriesNum) && deliveriesNum > 0) {
+                    db.goals.dailyEarnings = earningsNum;
+                    db.goals.dailyDeliveries = deliveriesNum;
+
+                    save();
+                    showNotification('Metas atualizadas!', 'success');
+
+                    // Atualizar dashboard
+                    if (!document.getElementById('view-dashboard').classList.contains('hide')) {
+                        renderDashboard();
+                    }
+                } else {
+                    alert('Por favor, informe valores válidos.');
+                }
+            }
+        }
+
+        function updateFuelDisplay() {
+            const fuel = db.vehicle.fuel;
+
+            // Atualizar todos os elementos de combustível
+            document.querySelectorAll('[id*="fuel"]').forEach(el => {
+                if (el.id.includes('fill')) {
+                    el.style.height = `${fuel}%`;
+                } else if (el.id.includes('percent') || el.id.includes('display')) {
+                    el.textContent = `${fuel}%`;
+                }
+            });
+
+            // Mostrar/ocultar alerta
+            const fuelStatus = document.getElementById('fuel-status');
+            if (fuel < 20) {
+                fuelStatus.classList.remove('hidden');
+            } else {
+                fuelStatus.classList.add('hidden');
+            }
+        }
+
+        // STATUS ONLINE/OFFLINE
+        function toggleOnlineStatus() {
+            db.settings.online = !db.settings.online;
+            save();
+            updateOnlineStatus();
+
+            const status = db.settings.online ? 'online' : 'offline';
+            showNotification(`Você está agora ${status}`, 'success');
+        }
+
+        function updateOnlineStatus() {
+            const button = document.getElementById('online-toggle');
+            const icon = button.querySelector('i');
+            const text = button.querySelector('span');
+
+            if (db.settings.online) {
+                icon.className = 'w-3 h-3 mr-2 text-green-500 animate-pulse';
+                text.textContent = 'Online';
+                button.classList.remove('bg-gray-800');
+                button.classList.add('bg-green-600');
+            } else {
+                icon.className = 'w-3 h-3 mr-2 text-red-500 animate-pulse';
+                text.textContent = 'Offline';
+                button.classList.remove('bg-green-600');
+                button.classList.add('bg-gray-800');
+            }
+        }
+
+        // NAVEGAÇÃO E FUNCIONALIDADES
+        function startNavigation() {
+            if (!db.settings.online) {
+                alert('Você precisa estar online para usar a navegação.');
+                return;
+            }
+
+            // Simular abertura do Google Maps
+            showNotification('Abrindo navegação...', 'info');
+
+            // Em um app real, isso abriria o Google Maps ou outro app de navegação
+            setTimeout(() => {
+                alert('Navegação iniciada! Use seu app de mapas preferido.');
+            }, 500);
+        }
+
+        function navigateToDelivery() {
+            const delivery = db.deliveries.find(d => d.id === currentDeliveryId);
+            if (delivery) {
+                // Criar URL para o Google Maps
+                const address = encodeURIComponent(delivery.address);
+                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${address}`;
+
+                // Abrir em nova aba
+                window.open(mapsUrl, '_blank');
+
+                showNotification('Navegando para o destino...', 'success');
+                closeModal('deliveryDetailModal');
+            }
+        }
+
+        // EXPORTAÇÃO
+        function exportDeliveriesCSV() {
+            const headers = ['Data', 'Hora', 'Cliente', 'Telefone', 'Endereço', 'Valor', 'Tipo', 'Status', 'Pagamento'];
+            const rows = db.deliveries.map(d => {
+                return [
+                    fmtDate(d.date),
+                    d.time,
+                    `"${d.clientName}"`,
+                    d.clientPhone || '',
+                    `"${d.address}"`,
+                    d.value.toFixed(2).replace('.', ','),
+                    d.type,
+                    d.status,
+                    d.payment
+                ];
+            });
+
+            const csv = [headers, ...rows].map(row => row.join(';')).join('\n');
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+
+            a.href = url;
+            a.download = `entregas_${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+
+            URL.revokeObjectURL(url);
+            showNotification('Entregas exportadas com sucesso!', 'success');
+        }
+
+        // BACKUP E RESTAURAÇÃO
+        function downloadBackup() {
+            const backupData = {
+                ...db,
+                exportedAt: new Date().toISOString(),
+                version: 'plena_delivery_v1'
+            };
+
+            const dataStr = JSON.stringify(backupData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+            const exportFileName = `plena_delivery_backup_${new Date().toISOString().slice(0, 10)}.json`;
+
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileName);
+            linkElement.click();
+
+            showNotification('Backup baixado com sucesso!', 'success');
+        }
+
+        function restoreBackup(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const backup = JSON.parse(e.target.result);
+
+                    // Validar backup
+                    if (!backup.deliveries || !backup.clients) {
+                        throw new Error('Arquivo de backup inválido');
+                    }
+
+                    if (confirm('Restaurar backup substituirá todos os dados atuais. Tem certeza?')) {
+                        db = backup;
+                        save();
+                        location.reload();
+                    }
+                } catch (error) {
+                    alert('Erro ao restaurar backup: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // UTILITÁRIOS GERAIS
+        function updateDataStatus() {
+            console.log(`Dados salvos: ${db.deliveries.length} entregas, ${db.clients.length} clientes`);
+        }
+
+        function showNotification(message, type = 'info') {
+            // Criar elemento de notificação
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                    'bg-blue-500 text-white'
+                }`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}" 
+                       class="w-5 h-5 mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+            lucide.createIcons();
+
+            // Remover após 3 segundos
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // PWA INSTALL PROMPT
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Mostrar botão de instalação
+            const installButton = document.createElement('button');
+            installButton.className = 'fixed bottom-4 right-4 bg-plena-green text-white px-4 py-2 rounded-lg shadow-lg z-40';
+            installButton.innerHTML = '<i data-lucide="download" class="w-4 h-4 inline mr-2"></i>Instalar App';
+            installButton.onclick = () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(() => {
+                    deferredPrompt = null;
+                    installButton.remove();
+                });
+            };
+
+            document.body.appendChild(installButton);
+            lucide.createIcons();
+        });
+
+        // OFFLINE SUPPORT
+        window.addEventListener('online', () => {
+            showNotification('Conexão restaurada!', 'success');
+            db.settings.online = true;
+            updateOnlineStatus();
+        });
+
+        window.addEventListener('offline', () => {
+            showNotification('Modo offline ativado. Seus dados estão seguros localmente.', 'warning');
+            db.settings.online = false;
+            updateOnlineStatus();
+        });
+
+        // MANUAL FUNCTIONS
+        function scrollToSection(sectionId) { const el = document.getElementById(sectionId); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        function markSectionComplete(id) { const c = JSON.parse(localStorage.getItem('tutorial-completed') || '[]'); if (!c.includes(id)) { c.push(id); localStorage.setItem('tutorial-completed', JSON.stringify(c)); updateTutorialProgress(); showNotification('Seção concluída!', 'success'); } }
+        function updateTutorialProgress() { const s = ['instalacao', 'config', 'entregas', 'rotas', 'financeiro', 'backup', 'faq', 'checklist']; const c = JSON.parse(localStorage.getItem('tutorial-completed') || '[]'); const p = (c.length / s.length) * 100; const pb = document.getElementById('tutorial-progress'); const cs = document.getElementById('completed-steps'); if (pb) pb.style.width = `${p}%`; if (cs) cs.textContent = `${c.length}/${s.length} etapas`; }
+        function updateChecklist() { const cbs = document.querySelectorAll('#checklist input[type="checkbox"]'); const t = cbs.length; const ch = document.querySelectorAll('#checklist input[type="checkbox"]:checked').length; const pct = Math.round((ch / t) * 100); document.getElementById('checklist-percent').textContent = `${pct}%`; document.getElementById('checklist-progress').style.width = `${pct}%`; document.getElementById('checklist-completed').textContent = ch; document.getElementById('checklist-total').textContent = t; cbs.forEach(cb => { const it = cb.closest('.checklist-item'); const lbl = cb.nextElementSibling; if (cb.checked) { it.classList.add('completed'); if (lbl) lbl.style.textDecoration = 'line-through'; } else { it.classList.remove('completed'); if (lbl) lbl.style.textDecoration = 'none'; } }); const st = {}; cbs.forEach(cb => st[cb.id] = cb.checked); localStorage.setItem('checklist-state', JSON.stringify(st)); }
+        function resetChecklist() { if (confirm('Reiniciar checklist?')) { localStorage.removeItem('checklist-state'); document.querySelectorAll('#checklist input[type="checkbox"]').forEach(cb => cb.checked = false); updateChecklist(); } }
+        function loadChecklistState() { const st = JSON.parse(localStorage.getItem('checklist-state') || '{}'); Object.keys(st).forEach(id => { const cb = document.getElementById(id); if (cb) cb.checked = st[id]; }); updateChecklist(); }
+        function showExample(type) { showNotification('Exemplo: ' + type, 'info'); }
+
+        // --- FUNÇÕES DE TERMOS DE USO ---
+        function confirmTerms() {
+            if (!confirm('Tem certeza que leu e concorda com todos os termos apresentados?')) return;
+
+            // Update DB
+            db.settings.termsAccepted = true;
+            db.settings.termsAcceptedAt = new Date().toISOString();
+            save();
+
+            // Update Visuals
+            updateTermsVisuals();
+
+            // Celebration Effect
+            const btn = document.getElementById('btn-confirm-terms');
+            if (btn) {
+                alert('Obrigado! Seu aceite foi registrado com sucesso.');
+            }
+        }
+
+        function updateTermsVisuals() {
+            const hasAccepted = db.settings.termsAccepted;
+            const termsBox = document.getElementById('terms-box');
+            const btn = document.getElementById('btn-confirm-terms');
+            const badge = document.getElementById('terms-accepted-badge');
+            const icon = document.getElementById('terms-icon');
+            const title = document.getElementById('terms-title');
+            const desc = document.getElementById('terms-desc');
+
+            if (hasAccepted && termsBox) {
+                // Change Box Style
+                termsBox.classList.remove('bg-gray-50', 'border-gray-200');
+                termsBox.classList.add('bg-green-50', 'border-green-200');
+
+                // Hide Button / Show Badge
+                if (btn) btn.classList.add('hidden');
+                if (badge) {
+                    badge.classList.remove('hidden');
+                    badge.classList.add('flex');
+                }
+
+                // Update Date
+                const dateElement = document.getElementById('terms-date');
+                if (dateElement && db.settings.termsAcceptedAt) {
+                    const dateObj = new Date(db.settings.termsAcceptedAt);
+                    dateElement.textContent = 'Confirmado em: ' + dateObj.toLocaleString('pt-BR');
+                }
+
+                // Update Icon and Text
+                if (icon) {
+                    icon.setAttribute('class', 'w-16 h-16 text-green-500 mb-3 transition-colors duration-500');
+                    icon.setAttribute('data-lucide', 'shield-check');
+                    if (window.lucide) lucide.createIcons();
+                }
+                if (title) {
+                    title.textContent = 'Termos Aceitos e Válidos';
+                    title.classList.add('text-green-800');
+                }
+                if (desc) {
+                    desc.textContent = 'Obrigado por sua transparência e confiança. Seu uso está regularizado.';
+                    desc.classList.add('text-green-700');
+                }
+            }
+        }
+
+        // INICIALIZAR APLICATIVO
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+    <script>
+        // CONTEXT AWARENESS FOR IFRAMES
+        if (window.self !== window.top) {
+            document.body.classList.add('in-iframe');
+        }
+    </script>
+</body>
+
+</html>

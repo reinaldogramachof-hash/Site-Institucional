@@ -1,0 +1,3692 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Plena Frota - Gestão de Frotas Profissional</title>
+
+    <!-- PWA Meta Tags Padronizadas -->
+    <meta name="theme-color" content="#2563EB">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Sistema de gestão completo para controle de frotas - Plena Aplicativos">
+    
+    <!-- Manifest PWA -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        plena: {
+                            blue: '#2563EB',
+                            dark: '#1e3a8a',
+                            black: '#0f172a',
+                            green: '#10B981',
+                            gray: '#334155',
+                            lightblue: '#60A5FA',
+                            orange: '#F59E0B'
+                        },
+                        fleet: {
+                            light: '#F1F5F9',
+                            soft: '#E2E8F0',
+                            danger: '#EF4444',
+                            warning: '#F59E0B',
+                            success: '#10B981'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s infinite',
+                        'slide-in': 'slideIn 0.3s ease-out',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
+
+    <style>
+        /* CSS Otimizado Padronizado */
+        :root {
+            --plena-blue: #2563EB;
+            --plena-dark: #1e3a8a;
+            --plena-black: #0f172a;
+            --plena-green: #10B981;
+            --plena-orange: #f59e0b;
+            --fleet-light: #F1F5F9;
+            --fleet-soft: #E2E8F0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #F8FAFC;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s ease;
+        }
+
+        /* Sidebar Mobile Toggle */
+        .sidebar.open {
+            transform: translateX(0) !important;
+        }
+
+        /* Print Optimization */
+        @media print {
+            @page {
+                margin: 1cm;
+                size: A4;
+            }
+
+            body {
+                background: white;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .sidebar,
+            .no-print,
+            button,
+            .modal-backdrop,
+            header,
+            .hide {
+                display: none !important;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+
+            .view-section {
+                display: none !important;
+            }
+
+            #view-reports,
+            #view-maintenance {
+                display: block !important;
+            }
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-active {
+            background-color: #DCFCE7;
+            color: #166534;
+        }
+
+        .badge-inactive {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .badge-maintenance {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        .badge-available {
+            background-color: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        /* Status Colors */
+        .status-active {
+            background-color: #DCFCE7;
+            border-color: #10B981;
+            color: #166534;
+        }
+
+        .status-inactive {
+            background-color: #FEE2E2;
+            border-color: #EF4444;
+            color: #991B1B;
+        }
+
+        .status-maintenance {
+            background-color: #FEF3C7;
+            border-color: #F59E0B;
+            color: #92400E;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        /* Vehicle Card */
+        .vehicle-card {
+            transition: all 0.2s ease;
+        }
+
+        .vehicle-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Estilos para Manual Interativo */
+        .step-number {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .checklist-item input[type="checkbox"]:checked+span {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2563EB 0%, #60A5FA 100%);
+            transition: width 0.3s ease;
+        }
+
+        /* Fuel Efficiency Indicator */
+        .fuel-indicator {
+            height: 8px;
+            background: linear-gradient(90deg, #EF4444 0%, #F59E0B 50%, #10B981 100%);
+            border-radius: 4px;
+            margin-top: 4px;
+        }
+
+        .fuel-marker {
+            position: absolute;
+            width: 2px;
+            height: 12px;
+            background: #000;
+            bottom: -2px;
+            transform: translateX(-50%);
+        }
+    </style>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('service-worker.js').then(
+                    function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    },
+                    function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    }
+                );
+            });
+        }
+    </script>
+</head>
+
+<body class="text-slate-800 antialiased">
+
+    <!-- Overlay para sidebar mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar Padronizada -->
+    <aside id="sidebar"
+        class="sidebar bg-plena-black text-white fixed top-0 left-0 z-40 w-64 h-screen transition-transform transform -translate-x-full lg:translate-x-0 duration-300 flex flex-col shadow-2xl">
+        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-plena-blue to-plena-dark">
+            <i data-lucide="truck" class="w-8 h-8 mr-3"></i>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight">PLENA FROTA</h1>
+                <p class="text-xs text-white/90 font-medium">Controle Profissional</p>
+            </div>
+        </div>
+
+        <nav class="p-4 space-y-2 flex-1 overflow-y-auto">
+            <button onclick="router('dashboard')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group active-nav"
+                id="nav-dashboard">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Dashboard
+            </button>
+            <button onclick="router('vehicles')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-vehicles">
+                <i data-lucide="truck" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Veículos
+            </button>
+            <button onclick="router('drivers')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-drivers">
+                <i data-lucide="users" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Motoristas
+            </button>
+            <button onclick="router('trips')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-trips">
+                <i data-lucide="map-pin" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Viagens
+            </button>
+            <button onclick="router('maintenance')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-maintenance">
+                <i data-lucide="wrench" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Manutenção
+            </button>
+            <button onclick="router('fuel')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-fuel">
+                <i data-lucide="fuel" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Abastecimento
+            </button>
+            <button onclick="router('finance')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-finance">
+                <i data-lucide="wallet" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Financeiro
+            </button>
+            <button onclick="router('reports')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-reports">
+                <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Relatórios
+            </button>
+            <button onclick="router('settings')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-settings">
+                <i data-lucide="settings" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Configurações
+            </button>
+            <button onclick="router('instructions')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-instructions">
+                <i data-lucide="book-open" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Manual de Uso
+            </button>
+            <button onclick="router('about')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-about">
+                <i data-lucide="info" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Sobre a Plena
+            </button>
+        </nav>
+
+        <div class="p-6 border-t border-white/10 text-center">
+            <p class="text-xs text-gray-500">Todos os Direitos Reservados &copy; 2026</p>
+            <a href="https://www.plenaaplicativos.com.br" target="_blank"
+                class="text-[10px] text-gray-600 hover:text-plena-blue transition-colors mt-1 block decoration-0">
+                Plena Soluções Digitais LTDA
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content min-h-screen flex flex-col lg:ml-64 transition-all duration-300">
+        <!-- Header -->
+        <header
+            class="bg-white h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-slate-100">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-slate-100 rounded-lg text-slate-600">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <h2 id="page-title" class="text-xl font-bold text-slate-800 hidden sm:block">Dashboard</h2>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-green-500/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                    </div>
+                    <button onclick="openQuickTripModal()"
+                        class="relative flex items-center px-4 py-2.5 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-black transition-all shadow-sm active:scale-95">
+                        <i data-lucide="plus" class="w-4 h-4 sm:mr-2"></i>
+                        <span class="hidden sm:inline">Nova Viagem</span>
+                        <span class="sm:hidden">Viagem</span>
+                    </button>
+                </div>
+
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-plena-blue/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                    </div>
+                    <button onclick="openVehicleModal()"
+                        class="relative flex items-center px-4 py-2.5 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-all shadow-lg shadow-blue-200 active:scale-95">
+                        <i data-lucide="truck" class="w-5 h-5 sm:mr-2"></i>
+                        <span class="hidden sm:inline">Novo Veículo</span>
+                        <span class="sm:hidden">Veículo</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="p-4 lg:p-8 flex-1 overflow-y-auto">
+
+            <!-- Dashboard View -->
+            <section id="view-dashboard" class="view-section fade-in">
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Veículos Ativos</p>
+                                <h3 id="dash-active-vehicles" class="text-3xl font-bold text-slate-900">0</h3>
+                                <p class="text-xs text-slate-500 mt-1">Em operação</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                                <i data-lucide="truck" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Viagens (Mês)</p>
+                                <h3 id="dash-month-trips" class="text-2xl font-bold text-plena-blue">0</h3>
+                                <p class="text-xs text-slate-500 mt-1">
+                                    <span id="trips-growth" class="text-green-500">+0%</span> vs mês anterior
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i data-lucide="map-pin" class="w-6 h-6 text-plena-blue"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Custo Mês</p>
+                                <h3 id="dash-month-cost" class="text-2xl font-bold text-red-600">R$ 0,00</h3>
+                                <p class="text-xs text-slate-500 mt-1">Combustível + Manutenção</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                                <i data-lucide="dollar-sign" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Em Manutenção</p>
+                                <h3 id="dash-maintenance" class="text-2xl font-bold text-orange-600">0</h3>
+                                <p class="text-xs text-slate-500 mt-1">Veículos parados</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
+                                <i data-lucide="wrench" class="w-6 h-6 text-orange-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h3 class="font-bold text-slate-800 mb-4 flex items-center">
+                            <i data-lucide="zap" class="mr-2 w-5 h-5 text-plena-blue"></i> Ações Rápidas
+                        </h3>
+                        <div class="space-y-3">
+                            <button onclick="openFuelModal()"
+                                class="w-full flex items-center justify-between p-3 border border-slate-200 rounded-lg hover:bg-slate-50">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                        <i data-lucide="fuel" class="w-4 h-4 text-blue-600"></i>
+                                    </div>
+                                    <span class="text-sm font-medium">Registrar Abastecimento</span>
+                                </div>
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                            </button>
+                            <button onclick="openMaintenanceModal()"
+                                class="w-full flex items-center justify-between p-3 border border-slate-200 rounded-lg hover:bg-slate-50">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center mr-3">
+                                        <i data-lucide="wrench" class="w-4 h-4 text-orange-600"></i>
+                                    </div>
+                                    <span class="text-sm font-medium">Agendar Manutenção</span>
+                                </div>
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                            </button>
+                            <button onclick="openTripModal()"
+                                class="w-full flex items-center justify-between p-3 border border-slate-200 rounded-lg hover:bg-slate-50">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                        <i data-lucide="map-pin" class="w-4 h-4 text-green-600"></i>
+                                    </div>
+                                    <span class="text-sm font-medium">Registrar Viagem</span>
+                                </div>
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Veículos que precisam de atenção -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-bold text-slate-800 flex items-center">
+                                <i data-lucide="alert-triangle" class="mr-2 w-5 h-5 text-orange-600"></i> 
+                                Atenção Necessária
+                            </h3>
+                            <button onclick="router('maintenance')"
+                                class="text-sm text-plena-blue hover:text-plena-dark font-medium">
+                                Ver tudo →
+                            </button>
+                        </div>
+                        <div id="attention-list" class="space-y-3">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Próximas Manutenções -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-slate-800">Próximas Manutenções</h3>
+                        <button onclick="router('maintenance')"
+                            class="text-sm text-plena-blue hover:text-plena-dark font-medium">
+                            Ver agenda completa →
+                        </button>
+                    </div>
+                    <div id="upcoming-maintenance" class="space-y-3">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vehicles View -->
+            <section id="view-vehicles" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Veículos</h2>
+                        <p class="text-sm text-slate-600">Gerencie sua frota</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openVehicleModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                            <i data-lucide="truck" class="w-4 h-4"></i>
+                            Novo Veículo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Vehicle Grid -->
+                <div id="vehicle-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </section>
+
+            <!-- Drivers View -->
+            <section id="view-drivers" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Motoristas</h2>
+                        <p class="text-sm text-slate-600">Gerencie sua equipe</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openDriverModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                            <i data-lucide="user-plus" class="w-4 h-4"></i>
+                            Novo Motorista
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Drivers Grid -->
+                <div id="drivers-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </section>
+
+            <!-- Trips View -->
+            <section id="view-trips" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Viagens</h2>
+                        <p class="text-sm text-slate-600">Controle de deslocamentos</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openTripModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                            <i data-lucide="map-pin" class="w-4 h-4"></i>
+                            Nova Viagem
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-6">
+                    <div class="p-4 bg-slate-50 grid grid-cols-1 md:grid-cols-4 gap-3 border-b border-slate-200">
+                        <div class="relative">
+                            <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-slate-400"></i>
+                            <input type="text" id="search-trip" onkeyup="renderTrips()" placeholder="Buscar..."
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-plena-blue outline-none text-sm">
+                        </div>
+                        <div>
+                            <input type="date" id="filter-trip-start" onchange="renderTrips()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div>
+                            <input type="date" id="filter-trip-end" onchange="renderTrips()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div class="flex gap-2">
+                            <select id="filter-vehicle" onchange="renderTrips()"
+                                class="flex-1 px-4 py-2 rounded-lg border border-slate-300 text-sm bg-white outline-none">
+                                <option value="all">Todos os Veículos</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Trips Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+                                <tr>
+                                    <th class="px-6 py-3">Data</th>
+                                    <th class="px-6 py-3">Veículo</th>
+                                    <th class="px-6 py-3">Motorista</th>
+                                    <th class="px-6 py-3">Origem/Destino</th>
+                                    <th class="px-6 py-3">KM</th>
+                                    <th class="px-6 py-3 text-right">Custo</th>
+                                    <th class="px-6 py-3 text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trips-list" class="divide-y divide-slate-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Maintenance View -->
+            <section id="view-maintenance" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Manutenções</h2>
+                        <p class="text-sm text-slate-600">Controle de serviços e reparos</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openMaintenanceModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                            <i data-lucide="wrench" class="w-4 h-4"></i>
+                            Nova Manutenção
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Maintenance Grid -->
+                <div id="maintenance-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </section>
+
+            <!-- Fuel View -->
+            <section id="view-fuel" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Abastecimentos</h2>
+                        <p class="text-sm text-slate-600">Controle de combustível</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openFuelModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                            <i data-lucide="fuel" class="w-4 h-4"></i>
+                            Novo Abastecimento
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Fuel Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <p class="text-xs text-slate-500 uppercase font-bold mb-1">Consumo Médio (Mês)</p>
+                        <p id="fuel-avg" class="text-lg font-bold text-blue-700">0,0 KM/L</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                        <p class="text-xs text-slate-500 uppercase font-bold mb-1">Custo Combustível (Mês)</p>
+                        <p id="fuel-cost" class="text-lg font-bold text-red-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                        <p class="text-xs text-slate-500 uppercase font-bold mb-1">Eficiência</p>
+                        <p id="fuel-efficiency" class="text-lg font-bold text-green-700">Regular</p>
+                    </div>
+                </div>
+
+                <!-- Fuel Table -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+                                <tr>
+                                    <th class="px-6 py-3">Data</th>
+                                    <th class="px-6 py-3">Veículo</th>
+                                    <th class="px-6 py-3">Combustível</th>
+                                    <th class="px-6 py-3">Litros</th>
+                                    <th class="px-6 py-3">KM Rodado</th>
+                                    <th class="px6 py-3">Média</th>
+                                    <th class="px-6 py-3 text-right">Valor</th>
+                                    <th class="px-6 py-3 text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fuel-list" class="divide-y divide-slate-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Finance View -->
+            <section id="view-finance" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Financeiro</h2>
+                        <p class="text-sm text-slate-600">Controle de custos e despesas</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openExpenseModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-plena-blue text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                            Nova Despesa
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <p class="text-xs text-slate-500 uppercase font-bold mb-1">Total (Mês)</p>
+                        <p id="fin-total" class="text-lg font-bold text-blue-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                        <p class="text-xs text-slate-500 uppercase font-bold mb-1">Combustível (Mês)</p>
+                        <p id="fin-fuel" class="text-lg font-bold text-red-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded-xl border border-orange-100">
+                        <p class="text-xs text-slate-500 uppercase font-bold mb-1">Manutenção (Mês)</p>
+                        <p id="fin-maintenance" class="text-lg font-bold text-orange-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-xl border border-purple-100">
+                        <p class="text-xs text-slate-500 uppercase font-bold mb-1">Outros (Mês)</p>
+                        <p id="fin-other" class="text-lg font-bold text-purple-700">R$ 0,00</p>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-6">
+                    <div class="p-4 bg-slate-50 grid grid-cols-1 md:grid-cols-4 gap-3 border-b border-slate-200">
+                        <div class="relative">
+                            <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-slate-400"></i>
+                            <input type="text" id="search-finance" onkeyup="renderFinance()" placeholder="Buscar..."
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-plena-blue outline-none text-sm">
+                        </div>
+                        <div>
+                            <input type="date" id="filter-fin-start" onchange="renderFinance()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div>
+                            <input type="date" id="filter-fin-end" onchange="renderFinance()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div class="flex gap-2">
+                            <select id="filter-category" onchange="renderFinance()"
+                                class="flex-1 px-4 py-2 rounded-lg border border-slate-300 text-sm bg-white outline-none">
+                                <option value="all">Todas Categorias</option>
+                                <option value="fuel">Combustível</option>
+                                <option value="maintenance">Manutenção</option>
+                                <option value="insurance">Seguro</option>
+                                <option value="tax">Impostos</option>
+                                <option value="other">Outros</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Finance Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+                                <tr>
+                                    <th class="px-6 py-3">Data</th>
+                                    <th class="px-6 py-3">Descrição</th>
+                                    <th class="px-6 py-3">Veículo</th>
+                                    <th class="px-6 py-3">Categoria</th>
+                                    <th class="px-6 py-3 text-right">Valor</th>
+                                    <th class="px-6 py-3 text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="finance-list" class="divide-y divide-slate-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports View -->
+            <section id="view-reports" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-slate-800 mb-2">Relatórios</h2>
+                    <p class="text-sm text-slate-600">Análise completa da sua frota</p>
+                </div>
+
+                <!-- Report Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow cursor-pointer"
+                        onclick="generateVehicleReport()">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                                <i data-lucide="truck" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800">Por Veículo</h3>
+                                <p class="text-sm text-slate-500">Desempenho individual</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow cursor-pointer"
+                        onclick="generateCostReport()">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mr-4">
+                                <i data-lucide="dollar-sign" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800">Custos</h3>
+                                <p class="text-sm text-slate-500">Análise financeira</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow cursor-pointer"
+                        onclick="generateMaintenanceReport()">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mr-4">
+                                <i data-lucide="wrench" class="w-6 h-6 text-orange-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800">Manutenção</h3>
+                                <p class="text-sm text-slate-500">Histórico de serviços</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Period -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-6">
+                    <h3 class="font-bold text-slate-800 mb-4">Configurar Período</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase">Data Inicial</label>
+                            <input type="date" id="rep-start" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase">Data Final</label>
+                            <input type="date" id="rep-end" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="generateCustomReport()"
+                                class="flex-1 bg-plena-blue text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                                Gerar Relatório
+                            </button>
+                            <button onclick="generateMonthReport()"
+                                class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm transition-colors"
+                                title="Relatório do Mês">
+                                <i data-lucide="calendar" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Results -->
+                <div id="report-result" class="hide space-y-6"></div>
+            </section>
+
+            <!-- Settings View -->
+            <section id="view-settings" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-slate-800 mb-2">Configurações</h2>
+                    <p class="text-sm text-slate-600">Personalize o sistema</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Business Info -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <h3 class="font-bold text-slate-800 mb-4">Informações da Empresa</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-xs font-bold text-slate-500 uppercase">Nome da Empresa</label>
+                                <input type="text" id="biz-name" class="w-full border p-2 rounded-lg text-sm"
+                                    placeholder="Ex: Transportes XYZ">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-500 uppercase">Nome do Responsável</label>
+                                <input type="text" id="biz-owner" class="w-full border p-2 rounded-lg text-sm"
+                                    placeholder="Ex: João Silva">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-500 uppercase">CNPJ</label>
+                                <input type="text" id="biz-cnpj" class="w-full border p-2 rounded-lg text-sm"
+                                    placeholder="00.000.000/0000-00">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-500 uppercase">Unidade de Distância</label>
+                                <select id="biz-distance-unit" class="w-full border p-2 rounded-lg text-sm">
+                                    <option value="km">Quilômetros (KM)</option>
+                                    <option value="mi">Milhas (MI)</option>
+                                </select>
+                            </div>
+                            <button onclick="saveBusinessInfo()"
+                                class="w-full bg-slate-800 text-white py-2.5 rounded-lg text-sm font-bold hover:bg-black">
+                                Salvar Informações
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Data Management -->
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                            <h3 class="font-bold text-slate-800 mb-4 flex items-center">
+                                <i data-lucide="shield-alert" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                                Segurança de Dados
+                            </h3>
+
+                            <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg text-sm text-blue-800 mb-6">
+                                <p class="font-bold mb-2">⚠️ Importante</p>
+                                <p>Seus dados ficam salvos 100% no navegador. Faça backup regularmente!</p>
+                            </div>
+
+                            <div class="space-y-3">
+                                <button onclick="downloadBackup()"
+                                    class="w-full border border-slate-300 py-3 rounded-lg text-sm font-medium hover:bg-slate-50 flex justify-center items-center gap-2">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    Baixar Backup Completo (.json)
+                                </button>
+
+                                <div class="relative">
+                                    <button
+                                        class="w-full bg-slate-800 text-white py-3 rounded-lg text-sm font-medium flex justify-center items-center gap-2">
+                                        <i data-lucide="upload" class="w-4 h-4"></i>
+                                        Restaurar Backup
+                                    </button>
+                                    <input type="file" onchange="restoreBackup(this)" accept=".json"
+                                        class="absolute inset-0 opacity-0 cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Danger Zone -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                            <h3 class="font-bold text-slate-800 mb-4 flex items-center text-red-600">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
+                                Zona de Perigo
+                            </h3>
+
+                            <div class="bg-red-50 p-4 rounded-lg border border-red-100 mb-4">
+                                <p class="text-sm text-red-600"><strong>Atenção:</strong> Estas ações são irreversíveis.
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="clearAllData()"
+                                    class="py-2.5 border border-red-300 text-red-600 rounded-lg text-sm hover:bg-red-50 transition-colors">
+                                    Limpar Todos os Dados
+                                </button>
+                                <button onclick="factoryReset()"
+                                    class="py-2.5 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition-colors">
+                                    Resetar Sistema
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Instructions View - MANUAL COMPLETO PADRONIZADO -->
+            <section id="view-instructions" class="view-section hide fade-in">
+                <div class="max-w-6xl mx-auto pb-12">
+                    <!-- Cabeçalho Hero -->
+                    <div class="text-center mb-10 pt-4">
+                        <div
+                            class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-plena-blue to-plena-dark rounded-2xl mb-4 shadow-lg">
+                            <i data-lucide="truck" class="w-12 h-12 text-white"
+                                aria-label="Ícone de Frota - Manual de Uso"></i>
+                        </div>
+                        <h1 class="text-3xl font-bold text-gray-800 mb-2">Manual Completo de Uso</h1>
+                        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Guia passo a passo para gestores de frotas e logística</p>
+                        <div class="mt-4 flex flex-wrap justify-center gap-2">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">✓ Para
+                                Iniciantes</span>
+                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">📱 Mobile e
+                                Desktop</span>
+                            <span class="px-3 py-1 bg-blue-100 text-plena-blue rounded-full text-xs font-bold">⚡ Rápido
+                                e Prático</span>
+                        </div>
+                    </div>
+
+                    <!-- Barra de Progresso do Tutorial -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
+                        <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                            <i data-lucide="compass" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                            Seu Progresso no Aprendizado
+                        </h3>
+                        <div class="mb-4">
+                            <div class="progress-bar">
+                                <div id="tutorial-progress" class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-500 mt-2">
+                                <span>0% Concluído</span>
+                                <span id="completed-steps">0/7 etapas</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-7 gap-2">
+                            <button onclick="scrollToSection('instalacao')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                1. Instalação
+                            </button>
+                            <button onclick="scrollToSection('configuracao')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                2. Configuração
+                            </button>
+                            <button onclick="scrollToSection('gestao')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                3. Gestão
+                            </button>
+                            <button onclick="scrollToSection('manutencao')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                4. Manutenção
+                            </button>
+                            <button onclick="scrollToSection('backup')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                5. Backup
+                            </button>
+                            <button onclick="scrollToSection('duvidas')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                6. Dúvidas
+                            </button>
+                            <button onclick="scrollToSection('checklist')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                7. Checklist
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Seção 1: Instalação -->
+                    <div id="instalacao"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">1
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 ml-3">Instalação do Sistema</h3>
+                            </div>
+                            <button onclick="markSectionComplete('instalacao')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="bg-gray-900 rounded-2xl p-6 text-white shadow-lg mb-6">
+                            <h4 class="font-bold text-lg mb-4 flex items-center text-blue-400">
+                                <i data-lucide="download" class="w-5 h-5 mr-2"></i>
+                                Torne o App Disponível OFFLINE
+                            </h4>
+                            <p class="text-gray-300 mb-4 text-sm">Instale no celular ou computador para usar sem internet:</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                                <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+                                    <div class="font-bold text-white mb-3 flex items-center">
+                                        <div
+                                            class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center mr-2">
+                                            <i data-lucide="smartphone" class="w-3 h-3"></i>
+                                        </div>
+                                        Android/iPhone
+                                    </div>
+                                    <ol class="list-decimal pl-5 space-y-2 text-gray-300">
+                                        <li>Abra o navegador Chrome/Safari</li>
+                                        <li>Toque em "Compartilhar" ou "Menu ☰"</li>
+                                        <li>Toque em "Adicionar à Tela de Início"</li>
+                                    </ol>
+                                </div>
+                                <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+                                    <div class="font-bold text-white mb-3 flex items-center">
+                                        <div
+                                            class="w-6 h-6 rounded-full bg-blue-800 flex items-center justify-center mr-2">
+                                            <i data-lucide="monitor" class="w-3 h-3"></i>
+                                        </div>
+                                        Windows/Desktop
+                                    </div>
+                                    <ol class="list-decimal pl-5 space-y-2 text-gray-300">
+                                        <li>Clique no ícone (+) na barra</li>
+                                        <li>Clique em "Instalar"</li>
+                                        <li>Use como um app nativo</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 2: Configuração Inicial -->
+                    <div id="configuracao"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">2
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 ml-3">Configuração Inicial</h3>
+                            </div>
+                            <button onclick="markSectionComplete('configuracao')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div class="bg-blue-50 p-5 rounded-xl border border-blue-100">
+                                    <h4 class="font-bold text-blue-700 mb-3 flex items-center">
+                                        <i data-lucide="building" class="w-5 h-5 mr-2"></i>
+                                        PASSO 1: Dados da Empresa
+                                    </h4>
+                                    <ol class="space-y-3 text-sm text-gray-600">
+                                        <li>Vá em <strong>Configurações</strong></li>
+                                        <li>Preencha Nome, CNPJ e Unidade</li>
+                                        <li>Salve as alterações</li>
+                                    </ol>
+                                </div>
+
+                                <div class="bg-green-50 p-5 rounded-xl border border-green-100">
+                                    <h4 class="font-bold text-green-700 mb-3 flex items-center">
+                                        <i data-lucide="truck" class="w-5 h-5 mr-2"></i>
+                                        PASSO 2: Primeiro Veículo
+                                    </h4>
+                                    <ol class="space-y-3 text-sm text-gray-600">
+                                        <li>Vá em <strong>Veículos</strong></li>
+                                        <li>Clique em <strong>Novo Veículo</strong></li>
+                                        <li>Defina Placa, Modelo e KM Inicial</li>
+                                    </ol>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 p-6 rounded-2xl border border-gray-200">
+                                <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                    <i data-lucide="users" class="w-5 h-5 mr-2 text-blue-500"></i>
+                                    PASSO 3: Motoristas
+                                </h4>
+                                <p class="text-sm text-gray-600 mb-4">
+                                    Cadastre seus motoristas com CNH e telefone para vinculá-los às viagens e manutenções.
+                                </p>
+                                <div class="flex gap-2">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-bold">Controle Total</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-bold">Segurança</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 3: Gestão de Viagens -->
+                    <div id="gestao"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">3
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 ml-3">Gestão de Viagens</h3>
+                            </div>
+                            <button onclick="markSectionComplete('gestao')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="bg-blue-50 p-5 rounded-xl border border-blue-100 mb-6">
+                            <h4 class="font-bold text-blue-700 mb-3 flex items-center text-sm">
+                                <i data-lucide="map-pin" class="w-5 h-5 mr-2"></i>
+                                Fluxo Diário de Operação
+                            </h4>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                    <p class="font-bold text-blue-600">1. Registrar</p>
+                                    <p>Saída/Chegada</p>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                    <p class="font-bold text-blue-600">2. Vincular</p>
+                                    <p>Motorista/Veículo</p>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                    <p class="font-bold text-blue-600">3. Controlar</p>
+                                    <p>KM e Horários</p>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                    <p class="font-bold text-blue-600">4. Analisar</p>
+                                    <p>Relatórios</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 4: Manutenção e Combustível -->
+                    <div id="manutencao"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">4
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 ml-3">Manutenção e Custos</h3>
+                            </div>
+                            <button onclick="markSectionComplete('manutencao')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="border border-gray-100 rounded-xl p-4 bg-gray-50">
+                                <h4 class="font-bold text-gray-700 mb-2 flex items-center text-sm">
+                                    <i data-lucide="wrench" class="w-4 h-4 mr-2"></i>
+                                    Manutenções
+                                </h4>
+                                <p class="text-xs text-gray-600">Registre trocas de óleo, pneus e revisões preventivas para evitar paradas não planejadas.</p>
+                            </div>
+                            <div class="border border-gray-100 rounded-xl p-4 bg-gray-50">
+                                <h4 class="font-bold text-gray-700 mb-2 flex items-center text-sm">
+                                    <i data-lucide="fuel" class="w-4 h-4 mr-2"></i>
+                                    Combustível
+                                </h4>
+                                <p class="text-xs text-gray-600">Controle o consumo médio de cada veículo e identifique gastos excessivos na frota.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 5: Backup e Segurança -->
+                    <div id="backup"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">5
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 ml-3">Segurança e Backup</h3>
+                            </div>
+                            <button onclick="markSectionComplete('backup')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl mb-6">
+                            <p class="text-sm text-red-800">
+                                <strong>IMPORTANTE:</strong> Seus dados são salvos localmente. Faça backup semanalmente em <strong>Configurações > Exportar Dados</strong> para evitar perdas.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Seção 6: Dúvidas Frequentes -->
+                    <div id="duvidas"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">6
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 ml-3">Dúvidas Comuns</h3>
+                            </div>
+                            <button onclick="markSectionComplete('duvidas')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="space-y-3">
+                            <details class="group bg-gray-50 border border-gray-200 rounded-xl">
+                                <summary class="flex items-center justify-between p-4 cursor-pointer font-bold text-gray-700 text-sm">
+                                    Como funciona o controle de KM?
+                                    <i data-lucide="chevron-down" class="w-4 h-4 transition-transform group-open:rotate-180"></i>
+                                </summary>
+                                <div class="p-4 pt-0 text-xs text-gray-600 border-t border-gray-100">
+                                    Ao registrar uma viagem, informe o KM inicial e final. O sistema calculará a distância percorrida e atualizará o KM atual do veículo automaticamente.
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+
+                    <!-- Seção 7: Checklist Interativo -->
+                    <div id="checklist"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">7
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 ml-3">Checklist de Rotina</h3>
+                            </div>
+                            <button onclick="markSectionComplete('checklist')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-3">
+                                <h4 class="font-bold text-blue-600 text-xs uppercase">Diário</h4>
+                                <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
+                                    <input type="checkbox" id="check-1" onchange="updateChecklist()" class="w-4 h-4">
+                                    <label for="check-1" class="text-xs text-gray-700">Registrar saídas e chegadas</label>
+                                </div>
+                                <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
+                                    <input type="checkbox" id="check-2" onchange="updateChecklist()" class="w-4 h-4">
+                                    <label for="check-2" class="text-xs text-gray-700">Conferir nível de combustível</label>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <h4 class="font-bold text-green-600 text-xs uppercase">Semanal</h4>
+                                <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
+                                    <input type="checkbox" id="check-3" onchange="updateChecklist()" class="w-4 h-4">
+                                    <label for="check-3" class="text-xs text-gray-700">Fazer backup dos dados</label>
+                                </div>
+                                <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
+                                    <input type="checkbox" id="check-4" onchange="updateChecklist()" class="w-4 h-4">
+                                    <label for="check-4" class="text-xs text-gray-700">Revisar custos de manutenção</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rodapé do Manual -->
+                    <div class="mt-10 bg-white border border-gray-200 rounded-2xl p-8 text-center shadow-sm">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Dúvidas Técnicas?</h3>
+                        <p class="text-gray-500 text-sm mb-6">Nossa equipe de suporte responde em até 24h úteis.</p>
+                        <a href="mailto:tecnologia@plenaaplicativos.com.br"
+                            class="inline-flex items-center text-plena-blue font-bold hover:underline">
+                            <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+                            tecnologia@plenaaplicativos.com.br
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About View -->
+            <section id="view-about" class="view-section hide fade-in">
+                <div class="max-w-4xl mx-auto pb-12">
+
+                    <!-- 1. Header Institucional -->
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-8 text-center">
+                        <div
+                            class="w-20 h-20 rounded-full bg-gradient-to-r from-plena-blue to-plena-dark flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-200">
+                            <i data-lucide="shield-check" class="w-10 h-10 text-white"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-slate-800 mb-1">Central de Segurança e Legalidade</h2>
+                        <p class="text-slate-500 font-medium">Plena Soluções Digitais • Transparência Total</p>
+                    </div>
+
+                    <!-- 2. Grid de Políticas -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <!-- Termos de Uso -->
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 hover:shadow-md transition-shadow">
+                            <h3 class="font-bold text-slate-800 mb-3 flex items-center text-lg">
+                                <div class="p-2 bg-blue-50 rounded-lg mr-3">
+                                    <i data-lucide="file-text" class="w-5 h-5 text-plena-blue"></i>
+                                </div>
+                                Termos de Uso
+                            </h3>
+                            <p class="text-sm text-slate-600 leading-relaxed text-justify">
+                                A licença concedida é <strong>pessoal, intransferível e não exclusiva</strong>. O software é
+                                fornecido "no estado em que se encontra" (as-is). É estritamente proibida a revenda, cópia,
+                                distribuição não autorizada ou engenharia reversa do código-fonte, sob pena das sanções
+                                previstas na Lei de Propriedade Intelectual (9.610/98).
+                            </p>
+                        </div>
+
+                        <!-- Privacidade e LGPD -->
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 hover:shadow-md transition-shadow">
+                            <h3 class="font-bold text-slate-800 mb-3 flex items-center text-lg">
+                                <div class="p-2 bg-green-50 rounded-lg mr-3">
+                                    <i data-lucide="lock" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                                Privacidade (LGPD)
+                            </h3>
+                            <p class="text-sm text-slate-600 leading-relaxed text-justify">
+                                Adotamos a arquitetura <strong>Privacy by Design (Local-First)</strong>. Seus dados
+                                ficam salvos <strong>exclusivamente no seu dispositivo</strong>.
+                                A Plena não coleta, não armazena e não tem acesso a nenhuma informação inserida no sistema.
+                                Sua privacidade é absoluta.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 3. Responsabilidade do Usuário (Crítico) -->
+                    <div class="bg-red-50 border border-red-100 p-8 rounded-2xl mb-8 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <i data-lucide="alert-octagon" class="w-32 h-32 text-red-900"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <h3 class="font-bold text-red-800 mb-4 flex items-center text-lg">
+                                <i data-lucide="alert-triangle" class="w-6 h-6 mr-3"></i>
+                                IMPORTANTE: Sua Responsabilidade sobre os Dados
+                            </h3>
+                            <div class="space-y-4 text-sm text-red-900/80 text-justify font-medium">
+                                <p>
+                                    <strong>1. Backup é Obrigatório:</strong> Como não temos acesso aos seus dados,
+                                    <strong>não podemos recuperá-los</strong> em caso de perda, roubo ou dano ao seu
+                                    dispositivo. A realização de cópias de segurança (Backup) é de responsabilidade única e
+                                    exclusiva do usuário.
+                                </p>
+                                <p>
+                                    <strong>2. Isenção de Responsabilidade Técnica:</strong> A Plena exime-se de qualquer
+                                    responsabilidade por prejuízos decorrentes de falhas de hardware, vírus no dispositivo
+                                    do usuário, ou uso incorreto dos cálculos do sistema.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Suporte e SLA -->
+                    <div class="bg-gradient-to-br from-slate-900 to-plena-dark text-white p-8 rounded-2xl mb-12 shadow-xl">
+                        <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                            <div class="flex-1">
+                                <h3 class="font-bold text-xl mb-2 flex items-center">
+                                    <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-plena-blue"></i>
+                                    Suporte Premium Especializado
+                                </h3>
+                                <p class="text-slate-300 text-sm mb-6 leading-relaxed">
+                                    Precisa de ajuda ou encontrou alguma inconsistência? Nossa equipe técnica está pronta
+                                    para atender você com prioridade. Garantimos a qualidade e a segurança da nossa marca.
+                                </p>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                        <p class="text-xs text-slate-400 uppercase font-bold">Canal Oficial</p>
+                                        <p class="font-bold text-white">E-mail</p>
+                                    </div>
+                                    <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                        <p class="text-xs text-slate-400 uppercase font-bold">Tempo de Resposta (SLA)</p>
+                                        <p class="font-bold text-plena-blue">Até 24h Úteis</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <a href="mailto:tecnologia@plenaaplicativos.com.br"
+                                    class="inline-flex items-center justify-center bg-white text-plena-dark px-8 py-4 rounded-xl font-bold hover:bg-slate-100 transition-transform transform hover:scale-105 shadow-lg">
+                                    <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+                                    Falar com Suporte
+                                </a>
+                                <p class="text-xs text-center text-slate-400 mt-3">tecnologia@plenaaplicativos.com.br</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Rodapé Legal -->
+                    <div class="text-center border-t border-slate-200 pt-8">
+                        <p class="text-sm font-bold text-slate-800">Plena Soluções Digitais LTDA</p>
+                        <p class="text-xs text-slate-500 mt-1">CNPJ: 17.347.919/0001-59 • Todos os direitos reservados</p>
+                        <p class="text-[10px] text-slate-400 mt-4">
+                            Versão 1.0 Pro • Build 2026.01.07
+                        </p>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- MODAIS -->
+
+    <!-- Vehicle Modal -->
+    <div id="vehicleModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-slate-800">Novo Veículo</h3>
+                <button onclick="closeModal('vehicleModal')" class="text-slate-400 hover:text-slate-600">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <form onsubmit="submitVehicle(event)" class="space-y-4">
+                <input type="hidden" id="vh-id">
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Placa</label>
+                        <input type="text" id="vh-plate" required
+                            class="w-full border p-2 rounded-lg text-sm focus:border-plena-blue outline-none"
+                            placeholder="ABC-1234">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Marca/Modelo</label>
+                        <input type="text" id="vh-model" required
+                            class="w-full border p-2 rounded-lg text-sm focus:border-plena-blue outline-none"
+                            placeholder="Volkswagen Delivery">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Ano</label>
+                        <input type="number" id="vh-year" min="1900" max="2030"
+                            class="w-full border p-2 rounded-lg text-sm" placeholder="2023">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Cor</label>
+                        <input type="text" id="vh-color" class="w-full border p-2 rounded-lg text-sm" placeholder="Branco">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">KM Atual</label>
+                    <input type="number" id="vh-km" required step="1" min="0"
+                        class="w-full border p-2 rounded-lg text-sm" placeholder="15000">
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Status</label>
+                    <select id="vh-status" class="w-full border p-2 rounded-lg text-sm">
+                        <option value="active">Ativo</option>
+                        <option value="inactive">Inativo</option>
+                        <option value="maintenance">Em Manutenção</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Observações</label>
+                    <textarea id="vh-notes" class="w-full border p-2 rounded-lg text-sm" rows="2"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-plena-blue text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-plena-dark transition-all mt-2">
+                    Salvar Veículo
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Driver Modal -->
+    <div id="driverModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-slate-800">Novo Motorista</h3>
+                <button onclick="closeModal('driverModal')" class="text-slate-400">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form onsubmit="submitDriver(event)" class="space-y-4">
+                <input type="hidden" id="dr-id">
+                <input type="text" id="dr-name" required placeholder="Nome completo"
+                    class="w-full border p-2 rounded-lg">
+                <input type="text" id="dr-cnh" required placeholder="Número da CNH"
+                    class="w-full border p-2 rounded-lg">
+                <input type="text" id="dr-cnh-category" required placeholder="Categoria (Ex: A, B, C, D, E)"
+                    class="w-full border p-2 rounded-lg">
+                <input type="tel" id="dr-phone" placeholder="Telefone" class="w-full border p-2 rounded-lg">
+                <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold">Salvar Motorista</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Trip Modal -->
+    <div id="tripModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-slate-800">Nova Viagem</h3>
+                <button onclick="closeModal('tripModal')" class="text-slate-400">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form onsubmit="submitTrip(event)" class="space-y-4">
+                <input type="hidden" id="tr-id">
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Data</label>
+                        <input type="date" id="tr-date" required class="w-full border p-2 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Veículo</label>
+                        <select id="tr-vehicle" required class="w-full border p-2 rounded-lg text-sm">
+                            <option value="">Selecione...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Motorista</label>
+                    <select id="tr-driver" required class="w-full border p-2 rounded-lg text-sm">
+                        <option value="">Selecione...</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Origem</label>
+                        <input type="text" id="tr-origin" required class="w-full border p-2 rounded-lg text-sm" placeholder="Cidade/Estado">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Destino</label>
+                        <input type="text" id="tr-destination" required class="w-full border p-2 rounded-lg text-sm" placeholder="Cidade/Estado">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">KM Inicial</label>
+                        <input type="number" id="tr-km-start" required step="1" class="w-full border p-2 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">KM Final</label>
+                        <input type="number" id="tr-km-end" required step="1" class="w-full border p-2 rounded-lg text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Observações</label>
+                    <textarea id="tr-notes" class="w-full border p-2 rounded-lg text-sm" rows="2"></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-plena-blue text-white py-3 rounded-lg font-bold">Registrar Viagem</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Maintenance Modal -->
+    <div id="maintenanceModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-slate-800">Nova Manutenção</h3>
+                <button onclick="closeModal('maintenanceModal')" class="text-slate-400">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form onsubmit="submitMaintenance(event)" class="space-y-4">
+                <input type="hidden" id="mt-id">
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Data</label>
+                        <input type="date" id="mt-date" required class="w-full border p-2 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Veículo</label>
+                        <select id="mt-vehicle" required class="w-full border p-2 rounded-lg text-sm">
+                            <option value="">Selecione...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Tipo</label>
+                    <select id="mt-type" required class="w-full border p-2 rounded-lg text-sm">
+                        <option value="preventive">Preventiva</option>
+                        <option value="corrective">Corretiva</option>
+                        <option value="tire">Pneus</option>
+                        <option value="oil">Troca de Óleo</option>
+                        <option value="other">Outro</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Descrição</label>
+                    <input type="text" id="mt-description" required class="w-full border p-2 rounded-lg text-sm" placeholder="Ex: Troca de óleo e filtro">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Custo (R$)</label>
+                        <input type="number" id="mt-cost" required step="0.01" min="0" class="w-full border p-2 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Próxima Manutenção (KM)</label>
+                        <input type="number" id="mt-next-km" step="1" min="0" class="w-full border p-2 rounded-lg text-sm">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-plena-blue text-white py-3 rounded-lg font-bold">Salvar Manutenção</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Fuel Modal -->
+    <div id="fuelModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-slate-800">Novo Abastecimento</h3>
+                <button onclick="closeModal('fuelModal')" class="text-slate-400">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form onsubmit="submitFuel(event)" class="space-y-4">
+                <input type="hidden" id="fl-id">
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Data</label>
+                        <input type="date" id="fl-date" required class="w-full border p-2 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Veículo</label>
+                        <select id="fl-vehicle" required class="w-full border p-2 rounded-lg text-sm">
+                            <option value="">Selecione...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Combustível</label>
+                    <select id="fl-type" required class="w-full border p-2 rounded-lg text-sm">
+                        <option value="gasoline">Gasolina</option>
+                        <option value="ethanol">Etanol</option>
+                        <option value="diesel">Diesel</option>
+                        <option value="cng">GNV</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Litros</label>
+                        <input type="number" id="fl-liters" required step="0.01" min="0" class="w-full border p-2 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">Valor Total (R$)</label>
+                        <input type="number" id="fl-amount" required step="0.01" min="0" class="w-full border p-2 rounded-lg text-sm">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">KM Anterior</label>
+                        <input type="number" id="fl-km-previous" required step="1" class="w-full border p-2 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase">KM Atual</label>
+                        <input type="number" id="fl-km-current" required step="1" class="w-full border p-2 rounded-lg text-sm">
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-lg">
+                    <p class="text-sm text-slate-600">Consumo médio calculado: <span id="fl-avg-display" class="font-bold text-plena-blue">0,0 KM/L</span></p>
+                </div>
+
+                <button type="submit" class="w-full bg-plena-blue text-white py-3 rounded-lg font-bold">Registrar Abastecimento</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Expense Modal -->
+    <div id="expenseModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-slate-800">Nova Despesa</h3>
+                <button onclick="closeModal('expenseModal')" class="text-slate-400">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form onsubmit="submitExpense(event)" class="space-y-4">
+                <input type="hidden" id="ex-id">
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Descrição</label>
+                    <input type="text" id="ex-description" required placeholder="Ex: Licenciamento anual"
+                        class="w-full border p-2 rounded-lg mt-1">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Categoria</label>
+                    <select id="ex-category" class="w-full border p-2 rounded-lg mt-1">
+                        <option value="fuel">Combustível</option>
+                        <option value="maintenance">Manutenção</option>
+                        <option value="insurance">Seguro</option>
+                        <option value="tax">Impostos</option>
+                        <option value="other">Outros</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Veículo</label>
+                    <select id="ex-vehicle" class="w-full border p-2 rounded-lg mt-1">
+                        <option value="all">Todos os Veículos</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Valor (R$)</label>
+                    <input type="number" id="ex-amount" required step="0.01" min="0" placeholder="0,00"
+                        class="w-full border p-2 rounded-lg mt-1 text-lg font-bold">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase">Data</label>
+                    <input type="date" id="ex-date" required class="w-full border p-2 rounded-lg mt-1">
+                </div>
+                <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold">
+                    Salvar Despesa
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // 🔒 DADOS DA LICENÇA
+        const LICENSE_DATA = {
+            active: false,
+            businessName: "",
+            ownerName: "",
+            ownerDoc: ""
+        };
+        Object.freeze(LICENSE_DATA);
+
+        // ESTADO GLOBAL
+        const DB_KEY = 'plena_fleet_pro_v1';
+        const defaultDB = {
+            vehicles: [
+                {
+                    id: 'v1',
+                    plate: 'ABC-1234',
+                    model: 'Volkswagen Delivery',
+                    year: 2023,
+                    color: 'Branco',
+                    km: 15000,
+                    status: 'active',
+                    notes: '',
+                    createdAt: new Date().toISOString()
+                }
+            ],
+            drivers: [
+                {
+                    id: 'd1',
+                    name: 'João Silva',
+                    cnh: '123456789',
+                    cnhCategory: 'C',
+                    phone: '(11) 99999-9999',
+                    status: 'active',
+                    createdAt: new Date().toISOString()
+                }
+            ],
+            trips: [],
+            maintenance: [],
+            fuel: [],
+            expenses: [],
+            settings: {
+                businessName: '',
+                businessOwner: '',
+                businessCNPJ: '',
+                distanceUnit: 'km',
+                termsAccepted: false,
+                termsAcceptedAt: null
+            },
+            tutorial: {
+                completedSteps: [],
+                checklistState: {}
+            }
+        };
+
+        let db = JSON.parse(localStorage.getItem(DB_KEY)) || defaultDB;
+
+        // UTILITÁRIOS
+        const sanitizeHTML = (str) => {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        };
+
+        const save = () => {
+            localStorage.setItem(DB_KEY, JSON.stringify(db));
+            updateDataStatus();
+        };
+
+        const fmtMoney = (v) => {
+            return v.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        };
+
+        const fmtDate = (d) => {
+            if (!d) return '--/--/--';
+            const date = new Date(d);
+            return date.toLocaleDateString('pt-BR');
+        };
+
+        const fmtDateInput = (d) => {
+            return new Date(d).toISOString().split('T')[0];
+        };
+
+        const getID = () => {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        };
+
+        const calculateFuelEfficiency = (km, liters) => {
+            if (!liters || liters === 0) return 0;
+            return parseFloat((km / liters).toFixed(2));
+        };
+
+        // INICIALIZAÇÃO
+        // LÓGICA DO MANUAL DE USO
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+                element.classList.add('ring-2', 'ring-plena-blue', 'ring-opacity-50');
+                setTimeout(() => {
+                    element.classList.remove('ring-2', 'ring-plena-blue', 'ring-opacity-50');
+                }, 2000);
+            }
+        }
+
+        function markSectionComplete(sectionId) {
+            if (!db.tutorial) db.tutorial = { completedSteps: [], checklistState: {} };
+            if (!db.tutorial.completedSteps.includes(sectionId)) {
+                db.tutorial.completedSteps.push(sectionId);
+                saveDB();
+                showNotification('Etapa concluída!', 'success');
+                updateTutorialProgress();
+            }
+        }
+
+        function updateTutorialProgress() {
+            if (!db.tutorial) return;
+            const totalSteps = 7;
+            const completedCount = db.tutorial.completedSteps.length;
+            const progress = (completedCount / totalSteps) * 100;
+
+            const progressBar = document.getElementById('tutorial-progress');
+            const completedStepsText = document.getElementById('completed-steps');
+
+            if (progressBar) progressBar.style.width = `${progress}%`;
+            if (completedStepsText) completedStepsText.textContent = `${completedCount}/${totalSteps} etapas`;
+
+            // Atualiza visual dos botões
+            document.querySelectorAll('.tutorial-step').forEach((btn, index) => {
+                const sectionId = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
+                if (db.tutorial.completedSteps.includes(sectionId)) {
+                    btn.classList.add('bg-green-50', 'border-green-200', 'text-green-700');
+                }
+            });
+        }
+
+        function updateChecklist() {
+            if (!db.tutorial) db.tutorial = { completedSteps: [], checklistState: {} };
+            const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                db.tutorial.checklistState[cb.id] = cb.checked;
+            });
+            saveDB();
+        }
+
+        function loadChecklistState() {
+            if (!db.tutorial || !db.tutorial.checklistState) return;
+            Object.entries(db.tutorial.checklistState).forEach(([id, checked]) => {
+                const cb = document.getElementById(id);
+                if (cb) cb.checked = checked;
+            });
+        }
+
+        function init() {
+            lucide.createIcons();
+
+            // Configurar datas padrão
+            const today = new Date().toISOString().split('T')[0];
+            const firstDay = new Date();
+            firstDay.setDate(1);
+            const firstDayStr = firstDay.toISOString().split('T')[0];
+
+            // Configurar inputs de data
+            document.getElementById('tr-date').value = today;
+            document.getElementById('mt-date').value = today;
+            document.getElementById('fl-date').value = today;
+            document.getElementById('ex-date').value = today;
+            document.getElementById('rep-start').value = firstDayStr;
+            document.getElementById('rep-end').value = today;
+            document.getElementById('filter-trip-start').value = firstDayStr;
+            document.getElementById('filter-trip-end').value = today;
+            document.getElementById('filter-fin-start').value = firstDayStr;
+            document.getElementById('filter-fin-end').value = today;
+
+            // Configurar business info
+            document.getElementById('biz-name').value = db.settings.businessName || '';
+            document.getElementById('biz-owner').value = db.settings.businessOwner || '';
+            document.getElementById('biz-cnpj').value = db.settings.businessCNPJ || '';
+            document.getElementById('biz-distance-unit').value = db.settings.distanceUnit || 'km';
+
+            // 🔐 VERIFICAÇÃO DE LICENÇA
+            if (typeof LICENSE_DATA !== 'undefined' && LICENSE_DATA.active) {
+                if (LICENSE_DATA.businessName && LICENSE_DATA.businessName.trim() !== "") {
+                    db.settings.businessName = LICENSE_DATA.businessName;
+                }
+                db.settings.businessOwner = LICENSE_DATA.ownerName;
+                db.settings.businessCNPJ = LICENSE_DATA.ownerDoc;
+
+                const nameInput = document.getElementById('biz-name');
+                const ownerInput = document.getElementById('biz-owner');
+                const cnpjInput = document.getElementById('biz-cnpj');
+
+                if (nameInput && LICENSE_DATA.businessName && LICENSE_DATA.businessName.trim() !== "") {
+                    nameInput.value = LICENSE_DATA.businessName;
+                    nameInput.disabled = true;
+                    nameInput.classList.add('bg-slate-100', 'cursor-not-allowed');
+                }
+
+                if (ownerInput) {
+                    ownerInput.value = LICENSE_DATA.ownerName;
+                    ownerInput.disabled = true;
+                    ownerInput.classList.add('bg-slate-100', 'cursor-not-allowed');
+                }
+
+                if (cnpjInput) {
+                    cnpjInput.value = LICENSE_DATA.ownerDoc;
+                    cnpjInput.disabled = true;
+                    cnpjInput.classList.add('bg-slate-100', 'cursor-not-allowed');
+
+                    if (!cnpjInput.parentElement.querySelector('.lock-icon')) {
+                        cnpjInput.parentElement.insertAdjacentHTML('beforeend',
+                            `<span class="lock-icon text-[10px] text-plena-blue font-bold flex items-center mt-1"><i data-lucide="lock" class="w-3 h-3 mr-1"></i> Licença Vitalícia Ativa</span>`
+                        );
+                    }
+                }
+
+                const sidebarFooter = document.querySelector('aside .border-t');
+                if (sidebarFooter && !sidebarFooter.querySelector('.license-watermark')) {
+                    const licenseDiv = document.createElement('div');
+                    licenseDiv.className = 'license-watermark mt-2 pt-2 border-t border-white/5 text-[10px] text-white/50 font-mono';
+                    licenseDiv.innerHTML = `Licenciado para:<br><strong class="text-white/80">${sanitizeHTML(LICENSE_DATA.ownerName)}</strong><br>CNPJ: ${sanitizeHTML(LICENSE_DATA.ownerDoc)}`;
+                    sidebarFooter.appendChild(licenseDiv);
+                }
+            }
+
+            // Renderizar dados iniciais
+            renderDashboard();
+            updateDataStatus();
+            updateTutorialProgress();
+            loadChecklistState();
+
+            // Configurar periodicidade para salvar
+            setInterval(save, 30000);
+        }
+
+        // ROTEAMENTO E NAVEGAÇÃO
+        function router(view) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hide'));
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('bg-white/10', 'text-white');
+                el.classList.add('text-slate-400');
+            });
+
+            const viewElement = document.getElementById(`view-${view}`);
+            if (viewElement) {
+                viewElement.classList.remove('hide');
+                viewElement.classList.add('fade-in');
+            }
+
+            const navElement = document.getElementById(`nav-${view}`);
+            if (navElement) {
+                navElement.classList.add('bg-white/10', 'text-white');
+                navElement.classList.remove('text-slate-400');
+            }
+
+            const titles = {
+                dashboard: 'Dashboard',
+                vehicles: 'Veículos',
+                drivers: 'Motoristas',
+                trips: 'Viagens',
+                maintenance: 'Manutenção',
+                fuel: 'Abastecimento',
+                finance: 'Financeiro',
+                reports: 'Relatórios',
+                settings: 'Configurações',
+                instructions: 'Manual de Uso',
+                about: 'Sobre a Plena'
+            };
+
+            document.getElementById('page-title').innerText = titles[view] || 'Plena Frota';
+
+            if (window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+
+            if (view === 'dashboard') {
+                renderDashboard();
+            } else if (view === 'vehicles') {
+                renderVehicles();
+            } else if (view === 'drivers') {
+                renderDrivers();
+            } else if (view === 'trips') {
+                renderTrips();
+            } else if (view === 'maintenance') {
+                renderMaintenance();
+            } else if (view === 'fuel') {
+                renderFuel();
+            } else if (view === 'finance') {
+                renderFinance();
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('hidden');
+            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+        }
+
+        // DASHBOARD
+        function renderDashboard() {
+            const activeVehicles = db.vehicles.filter(v => v.status === 'active').length;
+            const maintenanceVehicles = db.vehicles.filter(v => v.status === 'maintenance').length;
+            
+            const today = new Date();
+            const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+            const monthTrips = db.trips.filter(t => new Date(t.date) >= firstDayOfMonth).length;
+            
+            const monthExpenses = db.expenses.filter(e => {
+                const expDate = new Date(e.date);
+                return expDate.getMonth() === today.getMonth() && expDate.getFullYear() === today.getFullYear();
+            }).reduce((sum, e) => sum + parseFloat(e.amount), 0);
+
+            document.getElementById('dash-active-vehicles').innerText = activeVehicles;
+            document.getElementById('dash-month-trips').innerText = monthTrips;
+            document.getElementById('dash-month-cost').innerText = fmtMoney(monthExpenses);
+            document.getElementById('dash-maintenance').innerText = maintenanceVehicles;
+
+            // Atenção necessária
+            const attentionList = document.getElementById('attention-list');
+            const needsAttention = db.vehicles.filter(v => {
+                if (v.status === 'maintenance') return true;
+                
+                // Verificar se precisa de manutenção
+                const lastMaintenance = db.maintenance
+                    .filter(m => m.vehicleId === v.id)
+                    .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+                
+                if (lastMaintenance && lastMaintenance.nextKm && v.km >= lastMaintenance.nextKm) {
+                    return true;
+                }
+                return false;
+            }).slice(0, 3);
+
+            if (needsAttention.length === 0) {
+                attentionList.innerHTML = `
+                    <div class="text-center py-8">
+                        <i data-lucide="check-circle" class="w-12 h-12 mx-auto mb-4 text-green-300"></i>
+                        <p class="text-slate-400">Nenhum veículo precisa de atenção imediata</p>
+                    </div>
+                `;
+            } else {
+                attentionList.innerHTML = needsAttention.map(vehicle => `
+                    <div class="flex items-center justify-between p-3 border border-orange-100 bg-orange-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
+                                <i data-lucide="truck" class="w-5 h-5 text-orange-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">${vehicle.plate}</h4>
+                                <p class="text-xs text-slate-500">${vehicle.model}</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-bold text-orange-600">Atenção</span>
+                    </div>
+                `).join('');
+            }
+
+            // Próximas manutenções
+            const upcomingMaintenance = db.maintenance
+                .filter(m => {
+                    const vehicle = db.vehicles.find(v => v.id === m.vehicleId);
+                    return vehicle && vehicle.status === 'active' && m.nextKm && vehicle.km >= m.nextKm - 1000;
+                })
+                .slice(0, 3);
+
+            const upcomingList = document.getElementById('upcoming-maintenance');
+            if (upcomingMaintenance.length === 0) {
+                upcomingList.innerHTML = '<p class="text-center text-slate-400 py-4">Nenhuma manutenção próxima</p>';
+            } else {
+                upcomingList.innerHTML = upcomingMaintenance.map(maintenance => {
+                    const vehicle = db.vehicles.find(v => v.id === maintenance.vehicleId);
+                    return `
+                        <div class="flex items-center justify-between p-3 hover:bg-slate-50 rounded-lg border border-slate-100">
+                            <div>
+                                <p class="text-sm font-medium text-slate-800">${vehicle ? vehicle.plate : 'N/A'}</p>
+                                <p class="text-xs text-slate-500">${maintenance.description}</p>
+                            </div>
+                            <span class="text-sm text-orange-600 font-bold">Próximo: ${maintenance.nextKm} KM</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            lucide.createIcons();
+        }
+
+        // VEHICLES MANAGEMENT
+        function renderVehicles() {
+            const container = document.getElementById('vehicle-list');
+
+            if (db.vehicles.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <i data-lucide="truck" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
+                        <p class="text-slate-400">Nenhum veículo cadastrado</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = db.vehicles.map(vehicle => {
+                const statusColors = {
+                    active: 'bg-green-100 text-green-700',
+                    inactive: 'bg-red-100 text-red-700',
+                    maintenance: 'bg-orange-100 text-orange-700'
+                };
+
+                const statusText = {
+                    active: 'Ativo',
+                    inactive: 'Inativo',
+                    maintenance: 'Manutenção'
+                };
+
+                const lastMaintenance = db.maintenance
+                    .filter(m => m.vehicleId === vehicle.id)
+                    .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+
+                const nextMaintenance = lastMaintenance ? lastMaintenance.nextKm : null;
+                const needsMaintenance = nextMaintenance && vehicle.km >= nextMaintenance;
+
+                return `
+                    <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm vehicle-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="bg-blue-50 p-3 rounded-full text-plena-blue">
+                                <i data-lucide="truck" class="w-6 h-6"></i>
+                            </div>
+                            <span class="text-xs font-bold px-2 py-1 rounded ${statusColors[vehicle.status]}">
+                                ${statusText[vehicle.status]}
+                            </span>
+                        </div>
+                        
+                        <h3 class="font-bold text-lg text-slate-800 mb-1">${vehicle.plate}</h3>
+                        <p class="text-sm text-slate-600 mb-4">${vehicle.model} • ${vehicle.year} • ${vehicle.color}</p>
+                        
+                        <div class="space-y-3 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-500">KM Atual:</span>
+                                <span class="font-bold">${vehicle.km.toLocaleString()} KM</span>
+                            </div>
+                            ${nextMaintenance ? `
+                                <div class="flex justify-between text-sm ${needsMaintenance ? 'text-orange-600 font-bold' : 'text-slate-500'}">
+                                    <span>Próxima Manutenção:</span>
+                                    <span>${nextMaintenance.toLocaleString()} KM</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="pt-4 border-t border-slate-100 flex justify-between items-center">
+                            <button onclick="editVehicle('${vehicle.id}')" 
+                                    class="text-sm font-bold text-plena-blue hover:text-blue-800">
+                                Editar
+                            </button>
+                            <button onclick="viewVehicleDetails('${vehicle.id}')" 
+                                    class="text-slate-400 hover:text-slate-600">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // DRIVERS MANAGEMENT
+        function renderDrivers() {
+            const container = document.getElementById('drivers-list');
+
+            if (db.drivers.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <i data-lucide="users" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
+                        <p class="text-slate-400">Nenhum motorista cadastrado</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = db.drivers.map(driver => {
+                const driverTrips = db.trips.filter(t => t.driverId === driver.id).length;
+
+                return `
+                    <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="bg-green-50 p-3 rounded-full text-green-600">
+                                <i data-lucide="user" class="w-6 h-6"></i>
+                            </div>
+                            <span class="text-xs font-bold bg-slate-100 px-2 py-1 rounded">
+                                ${driver.cnhCategory}
+                            </span>
+                        </div>
+                        
+                        <h3 class="font-bold text-lg text-slate-800 mb-2">${driver.name}</h3>
+                        <p class="text-sm text-slate-600 mb-1">CNH: ${driver.cnh}</p>
+                        ${driver.phone ? `<p class="text-sm text-slate-600">${driver.phone}</p>` : ''}
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-500">Viagens realizadas:</span>
+                                <span class="font-bold">${driverTrips}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
+                            <button onclick="editDriver('${driver.id}')" 
+                                    class="text-sm font-bold text-plena-blue hover:text-blue-800">
+                                Editar
+                            </button>
+                            <button onclick="viewDriverTrips('${driver.id}')" 
+                                    class="text-slate-400 hover:text-slate-600">
+                                <i data-lucide="list" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // TRIPS MANAGEMENT
+        function renderTrips() {
+            const term = document.getElementById('search-trip').value.toLowerCase();
+            const start = document.getElementById('filter-trip-start').value;
+            const end = document.getElementById('filter-trip-end').value;
+            const vehicleFilter = document.getElementById('filter-vehicle').value;
+
+            // Populate vehicle filter
+            const vehicleSelect = document.getElementById('filter-vehicle');
+            if (vehicleSelect.options.length <= 1) {
+                vehicleSelect.innerHTML = '<option value="all">Todos os Veículos</option>';
+                db.vehicles.forEach(v => {
+                    const opt = document.createElement('option');
+                    opt.value = v.id;
+                    opt.text = `${v.plate} - ${v.model}`;
+                    vehicleSelect.appendChild(opt);
+                });
+            }
+
+            // Filter trips
+            let filtered = db.trips.filter(t => {
+                const matchesTerm = t.origin.toLowerCase().includes(term) || 
+                                   t.destination.toLowerCase().includes(term);
+                const matchesDate = (!start || t.date >= start) && (!end || t.date <= end);
+                const matchesVehicle = vehicleFilter === 'all' || t.vehicleId === vehicleFilter;
+                
+                return matchesTerm && matchesDate && matchesVehicle;
+            });
+
+            // Sort by date (newest first)
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            // Update table
+            const tbody = document.getElementById('trips-list');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-6 py-8 text-center text-slate-400">
+                            <i data-lucide="map-pin" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
+                            <p>Nenhuma viagem encontrada</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(trip => {
+                const vehicle = db.vehicles.find(v => v.id === trip.vehicleId);
+                const driver = db.drivers.find(d => d.id === trip.driverId);
+                const distance = trip.kmEnd - trip.kmStart;
+
+                return `
+                    <tr class="hover:bg-slate-50">
+                        <td class="px-6 py-4 text-slate-500">${fmtDate(trip.date)}</td>
+                        <td class="px-6 py-4 font-medium">${vehicle ? vehicle.plate : 'N/A'}</td>
+                        <td class="px-6 py-4">${driver ? driver.name : 'N/A'}</td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm">${trip.origin} → ${trip.destination}</div>
+                        </td>
+                        <td class="px-6 py-4 font-bold">${distance.toLocaleString()} KM</td>
+                        <td class="px-6 py-4 text-right text-slate-500">-</td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="viewTripDetails('${trip.id}')" class="text-slate-400 hover:text-blue-600">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // MAINTENANCE MANAGEMENT
+        function renderMaintenance() {
+            const container = document.getElementById('maintenance-list');
+
+            if (db.maintenance.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <i data-lucide="wrench" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
+                        <p class="text-slate-400">Nenhuma manutenção registrada</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = db.maintenance.map(maintenance => {
+                const vehicle = db.vehicles.find(v => v.id === maintenance.vehicleId);
+                const typeText = {
+                    preventive: 'Preventiva',
+                    corrective: 'Corretiva',
+                    tire: 'Pneus',
+                    oil: 'Óleo',
+                    other: 'Outro'
+                };
+
+                return `
+                    <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="bg-orange-50 p-3 rounded-full text-orange-600">
+                                <i data-lucide="wrench" class="w-6 h-6"></i>
+                            </div>
+                            <span class="text-xs font-bold bg-orange-100 text-orange-700 px-2 py-1 rounded">
+                                ${typeText[maintenance.type]}
+                            </span>
+                        </div>
+                        
+                        <h3 class="font-bold text-lg text-slate-800 mb-2">${maintenance.description}</h3>
+                        <p class="text-sm text-slate-600 mb-1">${vehicle ? vehicle.plate + ' - ' + vehicle.model : 'Veículo não encontrado'}</p>
+                        <p class="text-sm text-slate-500 mb-4">${fmtDate(maintenance.date)}</p>
+                        
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-500">Custo:</span>
+                                <span class="font-bold text-red-600">${fmtMoney(maintenance.cost)}</span>
+                            </div>
+                            ${maintenance.nextKm ? `
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500">Próxima em:</span>
+                                    <span class="font-bold text-blue-600">${maintenance.nextKm.toLocaleString()} KM</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
+                            <button onclick="editMaintenance('${maintenance.id}')" 
+                                    class="text-sm font-bold text-plena-blue hover:text-blue-800">
+                                Editar
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // FUEL MANAGEMENT
+        function renderFuel() {
+            const container = document.getElementById('fuel-list');
+
+            // Calculate stats
+            const today = new Date();
+            const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+            const monthFuel = db.fuel.filter(f => new Date(f.date) >= firstDayOfMonth);
+            
+            let totalKm = 0;
+            let totalLiters = 0;
+            let totalCost = 0;
+            
+            monthFuel.forEach(f => {
+                const km = f.kmCurrent - f.kmPrevious;
+                totalKm += km;
+                totalLiters += parseFloat(f.liters);
+                totalCost += parseFloat(f.amount);
+            });
+            
+            const avgEfficiency = totalLiters > 0 ? totalKm / totalLiters : 0;
+            
+            document.getElementById('fuel-avg').textContent = avgEfficiency.toFixed(1) + ' KM/L';
+            document.getElementById('fuel-cost').textContent = fmtMoney(totalCost);
+            
+            let efficiencyText = 'Regular';
+            let efficiencyColor = 'text-yellow-600';
+            if (avgEfficiency > 10) {
+                efficiencyText = 'Excelente';
+                efficiencyColor = 'text-green-600';
+            } else if (avgEfficiency > 7) {
+                efficiencyText = 'Boa';
+                efficiencyColor = 'text-green-500';
+            } else if (avgEfficiency > 5) {
+                efficiencyText = 'Regular';
+                efficiencyColor = 'text-yellow-600';
+            } else {
+                efficiencyText = 'Ruim';
+                efficiencyColor = 'text-red-600';
+            }
+            
+            document.getElementById('fuel-efficiency').textContent = efficiencyText;
+            document.getElementById('fuel-efficiency').className = `text-lg font-bold ${efficiencyColor}`;
+
+            if (db.fuel.length === 0) {
+                container.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="px-6 py-8 text-center text-slate-400">
+                            <i data-lucide="fuel" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
+                            <p>Nenhum abastecimento registrado</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            // Sort by date (newest first)
+            const sortedFuel = [...db.fuel].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            container.innerHTML = sortedFuel.map(fuel => {
+                const vehicle = db.vehicles.find(v => v.id === fuel.vehicleId);
+                const km = fuel.kmCurrent - fuel.kmPrevious;
+                const efficiency = calculateFuelEfficiency(km, fuel.liters);
+                
+                const typeText = {
+                    gasoline: 'Gasolina',
+                    ethanol: 'Etanol',
+                    diesel: 'Diesel',
+                    cng: 'GNV'
+                };
+
+                return `
+                    <tr class="hover:bg-slate-50">
+                        <td class="px-6 py-4 text-slate-500">${fmtDate(fuel.date)}</td>
+                        <td class="px-6 py-4 font-medium">${vehicle ? vehicle.plate : 'N/A'}</td>
+                        <td class="px-6 py-4">${typeText[fuel.type]}</td>
+                        <td class="px-6 py-4">${parseFloat(fuel.liters).toFixed(1)} L</td>
+                        <td class="px-6 py-4">${km.toLocaleString()} KM</td>
+                        <td class="px-6 py-4 font-bold ${efficiency > 10 ? 'text-green-600' : efficiency > 7 ? 'text-yellow-600' : 'text-red-600'}">
+                            ${efficiency.toFixed(1)} KM/L
+                        </td>
+                        <td class="px-6 py-4 text-right font-bold">${fmtMoney(fuel.amount)}</td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="editFuel('${fuel.id}')" class="text-slate-400 hover:text-blue-600">
+                                <i data-lucide="edit" class="w-4 h-4"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // FINANCE MANAGEMENT
+        function renderFinance() {
+            const term = document.getElementById('search-finance').value.toLowerCase();
+            const start = document.getElementById('filter-fin-start').value;
+            const end = document.getElementById('filter-fin-end').value;
+            const category = document.getElementById('filter-category').value;
+
+            // Populate vehicle filter
+            const vehicleSelect = document.getElementById('ex-vehicle');
+            if (vehicleSelect.options.length <= 1) {
+                vehicleSelect.innerHTML = '<option value="all">Todos os Veículos</option>';
+                db.vehicles.forEach(v => {
+                    const opt = document.createElement('option');
+                    opt.value = v.id;
+                    opt.text = `${v.plate} - ${v.model}`;
+                    vehicleSelect.appendChild(opt);
+                });
+            }
+
+            // Filter expenses
+            let filtered = db.expenses.filter(e => {
+                const matchesTerm = e.description.toLowerCase().includes(term);
+                const matchesDate = (!start || e.date >= start) && (!end || e.date <= end);
+                const matchesCategory = category === 'all' || e.category === category;
+                
+                return matchesTerm && matchesDate && matchesCategory;
+            });
+
+            // Sort by date (newest first)
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            // Calculate stats
+            const today = new Date();
+            const monthExpenses = db.expenses.filter(e => {
+                const expDate = new Date(e.date);
+                return expDate.getMonth() === today.getMonth() && expDate.getFullYear() === today.getFullYear();
+            });
+
+            const totalMonth = monthExpenses.reduce((sum, e) => sum + parseFloat(e.amount), 0);
+            const fuelMonth = monthExpenses.filter(e => e.category === 'fuel').reduce((sum, e) => sum + parseFloat(e.amount), 0);
+            const maintenanceMonth = monthExpenses.filter(e => e.category === 'maintenance').reduce((sum, e) => sum + parseFloat(e.amount), 0);
+            const otherMonth = monthExpenses.filter(e => !['fuel', 'maintenance'].includes(e.category)).reduce((sum, e) => sum + parseFloat(e.amount), 0);
+
+            document.getElementById('fin-total').textContent = fmtMoney(totalMonth);
+            document.getElementById('fin-fuel').textContent = fmtMoney(fuelMonth);
+            document.getElementById('fin-maintenance').textContent = fmtMoney(maintenanceMonth);
+            document.getElementById('fin-other').textContent = fmtMoney(otherMonth);
+
+            // Update table
+            const tbody = document.getElementById('finance-list');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-6 py-8 text-center text-slate-400">
+                            <i data-lucide="file-text" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
+                            <p>Nenhuma despesa encontrada</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(expense => {
+                const vehicle = expense.vehicleId !== 'all' ? db.vehicles.find(v => v.id === expense.vehicleId) : null;
+                
+                const categoryColors = {
+                    fuel: 'bg-red-100 text-red-800',
+                    maintenance: 'bg-orange-100 text-orange-800',
+                    insurance: 'bg-blue-100 text-blue-800',
+                    tax: 'bg-purple-100 text-purple-800',
+                    other: 'bg-gray-100 text-gray-800'
+                };
+
+                const categoryText = {
+                    fuel: 'Combustível',
+                    maintenance: 'Manutenção',
+                    insurance: 'Seguro',
+                    tax: 'Imposto',
+                    other: 'Outro'
+                };
+
+                return `
+                    <tr class="hover:bg-slate-50">
+                        <td class="px-6 py-4 text-slate-500">${fmtDate(expense.date)}</td>
+                        <td class="px-6 py-4 font-medium">${expense.description}</td>
+                        <td class="px-6 py-4">${vehicle ? vehicle.plate : 'Todos'}</td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${categoryColors[expense.category]}">
+                                ${categoryText[expense.category]}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-right font-bold text-red-600">- ${fmtMoney(expense.amount)}</td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="editExpense('${expense.id}')" class="text-slate-400 hover:text-blue-600">
+                                <i data-lucide="edit" class="w-4 h-4"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // MODAIS
+        function openVehicleModal(vehicle = null) {
+            if (vehicle) {
+                document.getElementById('vh-id').value = vehicle.id;
+                document.getElementById('vh-plate').value = vehicle.plate;
+                document.getElementById('vh-model').value = vehicle.model;
+                document.getElementById('vh-year').value = vehicle.year;
+                document.getElementById('vh-color').value = vehicle.color;
+                document.getElementById('vh-km').value = vehicle.km;
+                document.getElementById('vh-status').value = vehicle.status;
+                document.getElementById('vh-notes').value = vehicle.notes || '';
+            } else {
+                document.querySelector('#vehicleModal form').reset();
+                document.getElementById('vh-id').value = '';
+            }
+            document.getElementById('vehicleModal').classList.remove('hidden');
+        }
+
+        function openDriverModal(driver = null) {
+            if (driver) {
+                document.getElementById('dr-id').value = driver.id;
+                document.getElementById('dr-name').value = driver.name;
+                document.getElementById('dr-cnh').value = driver.cnh;
+                document.getElementById('dr-cnh-category').value = driver.cnhCategory;
+                document.getElementById('dr-phone').value = driver.phone || '';
+            } else {
+                document.querySelector('#driverModal form').reset();
+                document.getElementById('dr-id').value = '';
+            }
+            document.getElementById('driverModal').classList.remove('hidden');
+        }
+
+        function openTripModal() {
+            // Populate vehicle select
+            const vehicleSelect = document.getElementById('tr-vehicle');
+            vehicleSelect.innerHTML = '<option value="">Selecione...</option>';
+            db.vehicles.filter(v => v.status === 'active').forEach(v => {
+                const opt = document.createElement('option');
+                opt.value = v.id;
+                opt.text = `${v.plate} - ${v.model}`;
+                vehicleSelect.appendChild(opt);
+            });
+
+            // Populate driver select
+            const driverSelect = document.getElementById('tr-driver');
+            driverSelect.innerHTML = '<option value="">Selecione...</option>';
+            db.drivers.filter(d => d.status === 'active').forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.id;
+                opt.text = d.name;
+                driverSelect.appendChild(opt);
+            });
+
+            document.querySelector('#tripModal form').reset();
+            document.getElementById('tr-id').value = '';
+            document.getElementById('tr-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('tripModal').classList.remove('hidden');
+        }
+
+        function openMaintenanceModal() {
+            // Populate vehicle select
+            const vehicleSelect = document.getElementById('mt-vehicle');
+            vehicleSelect.innerHTML = '<option value="">Selecione...</option>';
+            db.vehicles.forEach(v => {
+                const opt = document.createElement('option');
+                opt.value = v.id;
+                opt.text = `${v.plate} - ${v.model}`;
+                vehicleSelect.appendChild(opt);
+            });
+
+            document.querySelector('#maintenanceModal form').reset();
+            document.getElementById('mt-id').value = '';
+            document.getElementById('mt-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('maintenanceModal').classList.remove('hidden');
+        }
+
+        function openFuelModal() {
+            // Populate vehicle select
+            const vehicleSelect = document.getElementById('fl-vehicle');
+            vehicleSelect.innerHTML = '<option value="">Selecione...</option>';
+            db.vehicles.filter(v => v.status === 'active').forEach(v => {
+                const opt = document.createElement('option');
+                opt.value = v.id;
+                opt.text = `${v.plate} - ${v.model}`;
+                vehicleSelect.appendChild(opt);
+            });
+
+            document.querySelector('#fuelModal form').reset();
+            document.getElementById('fl-id').value = '';
+            document.getElementById('fl-date').value = new Date().toISOString().split('T')[0];
+            
+            // Add event listeners for KM calculation
+            const kmPrevInput = document.getElementById('fl-km-previous');
+            const kmCurrInput = document.getElementById('fl-km-current');
+            const litersInput = document.getElementById('fl-liters');
+            const avgDisplay = document.getElementById('fl-avg-display');
+            
+            const calculateAvg = () => {
+                const kmPrev = parseFloat(kmPrevInput.value) || 0;
+                const kmCurr = parseFloat(kmCurrInput.value) || 0;
+                const liters = parseFloat(litersInput.value) || 0;
+                
+                if (kmCurr > kmPrev && liters > 0) {
+                    const avg = (kmCurr - kmPrev) / liters;
+                    avgDisplay.textContent = avg.toFixed(1) + ' KM/L';
+                } else {
+                    avgDisplay.textContent = '0,0 KM/L';
+                }
+            };
+            
+            kmPrevInput.oninput = calculateAvg;
+            kmCurrInput.oninput = calculateAvg;
+            litersInput.oninput = calculateAvg;
+            
+            document.getElementById('fuelModal').classList.remove('hidden');
+        }
+
+        function openExpenseModal() {
+            // Populate vehicle select
+            const vehicleSelect = document.getElementById('ex-vehicle');
+            if (vehicleSelect.options.length <= 1) {
+                vehicleSelect.innerHTML = '<option value="all">Todos os Veículos</option>';
+                db.vehicles.forEach(v => {
+                    const opt = document.createElement('option');
+                    opt.value = v.id;
+                    opt.text = `${v.plate} - ${v.model}`;
+                    vehicleSelect.appendChild(opt);
+                });
+            }
+
+            document.querySelector('#expenseModal form').reset();
+            document.getElementById('ex-id').value = '';
+            document.getElementById('ex-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('expenseModal').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // CRUD OPERATIONS
+        function submitVehicle(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('vh-id').value;
+            const plate = document.getElementById('vh-plate').value.trim().toUpperCase();
+            const model = document.getElementById('vh-model').value.trim();
+            const year = parseInt(document.getElementById('vh-year').value) || 0;
+            const color = document.getElementById('vh-color').value.trim();
+            const km = parseInt(document.getElementById('vh-km').value) || 0;
+            const status = document.getElementById('vh-status').value;
+            const notes = document.getElementById('vh-notes').value.trim();
+
+            if (!plate || !model) {
+                alert('Por favor, preencha placa e modelo.');
+                return;
+            }
+
+            const vehicle = {
+                id: id || getID(),
+                plate,
+                model,
+                year,
+                color,
+                km,
+                status,
+                notes,
+                createdAt: id ? db.vehicles.find(v => v.id === id)?.createdAt || new Date().toISOString() : new Date().toISOString()
+            };
+
+            if (id) {
+                const index = db.vehicles.findIndex(v => v.id === id);
+                if (index !== -1) {
+                    db.vehicles[index] = vehicle;
+                }
+            } else {
+                db.vehicles.push(vehicle);
+            }
+
+            save();
+            closeModal('vehicleModal');
+            renderVehicles();
+            if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                renderDashboard();
+            }
+            showNotification('Veículo salvo com sucesso!', 'success');
+        }
+
+        function submitDriver(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('dr-id').value;
+            const name = document.getElementById('dr-name').value.trim();
+            const cnh = document.getElementById('dr-cnh').value.trim();
+            const cnhCategory = document.getElementById('dr-cnh-category').value.trim();
+            const phone = document.getElementById('dr-phone').value.trim();
+
+            if (!name || !cnh || !cnhCategory) {
+                alert('Por favor, preencha nome, CNH e categoria.');
+                return;
+            }
+
+            const driver = {
+                id: id || getID(),
+                name,
+                cnh,
+                cnhCategory,
+                phone: phone || null,
+                status: 'active',
+                createdAt: id ? db.drivers.find(d => d.id === id)?.createdAt || new Date().toISOString() : new Date().toISOString()
+            };
+
+            if (id) {
+                const index = db.drivers.findIndex(d => d.id === id);
+                if (index !== -1) {
+                    db.drivers[index] = driver;
+                }
+            } else {
+                db.drivers.push(driver);
+            }
+
+            save();
+            closeModal('driverModal');
+            renderDrivers();
+            showNotification('Motorista salvo com sucesso!', 'success');
+        }
+
+        function submitTrip(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('tr-id').value;
+            const date = document.getElementById('tr-date').value;
+            const vehicleId = document.getElementById('tr-vehicle').value;
+            const driverId = document.getElementById('tr-driver').value;
+            const origin = document.getElementById('tr-origin').value.trim();
+            const destination = document.getElementById('tr-destination').value.trim();
+            const kmStart = parseInt(document.getElementById('tr-km-start').value) || 0;
+            const kmEnd = parseInt(document.getElementById('tr-km-end').value) || 0;
+            const notes = document.getElementById('tr-notes').value.trim();
+
+            if (!vehicleId || !driverId || !origin || !destination || kmEnd <= kmStart) {
+                alert('Por favor, preencha todos os campos corretamente. O KM final deve ser maior que o KM inicial.');
+                return;
+            }
+
+            const trip = {
+                id: id || getID(),
+                date,
+                vehicleId,
+                driverId,
+                origin,
+                destination,
+                kmStart,
+                kmEnd,
+                notes,
+                createdAt: new Date().toISOString()
+            };
+
+            // Update vehicle KM
+            const vehicle = db.vehicles.find(v => v.id === vehicleId);
+            if (vehicle) {
+                vehicle.km = kmEnd;
+            }
+
+            if (id) {
+                const index = db.trips.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    db.trips[index] = trip;
+                }
+            } else {
+                db.trips.push(trip);
+            }
+
+            save();
+            closeModal('tripModal');
+            renderTrips();
+            renderVehicles();
+            if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                renderDashboard();
+            }
+            showNotification('Viagem registrada com sucesso!', 'success');
+        }
+
+        function submitMaintenance(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('mt-id').value;
+            const date = document.getElementById('mt-date').value;
+            const vehicleId = document.getElementById('mt-vehicle').value;
+            const type = document.getElementById('mt-type').value;
+            const description = document.getElementById('mt-description').value.trim();
+            const cost = parseFloat(document.getElementById('mt-cost').value) || 0;
+            const nextKm = parseInt(document.getElementById('mt-next-km').value) || null;
+
+            if (!vehicleId || !description || cost <= 0) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+
+            const maintenance = {
+                id: id || getID(),
+                date,
+                vehicleId,
+                type,
+                description,
+                cost,
+                nextKm,
+                createdAt: new Date().toISOString()
+            };
+
+            // Create expense record
+            const expense = {
+                id: getID(),
+                date,
+                description: `Manutenção: ${description}`,
+                category: 'maintenance',
+                vehicleId,
+                amount: cost,
+                createdAt: new Date().toISOString()
+            };
+            db.expenses.push(expense);
+
+            if (id) {
+                const index = db.maintenance.findIndex(m => m.id === id);
+                if (index !== -1) {
+                    db.maintenance[index] = maintenance;
+                }
+            } else {
+                db.maintenance.push(maintenance);
+            }
+
+            save();
+            closeModal('maintenanceModal');
+            renderMaintenance();
+            if (document.getElementById('view-finance').classList.contains('hide') === false) {
+                renderFinance();
+            }
+            if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                renderDashboard();
+            }
+            showNotification('Manutenção registrada com sucesso!', 'success');
+        }
+
+        function submitFuel(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('fl-id').value;
+            const date = document.getElementById('fl-date').value;
+            const vehicleId = document.getElementById('fl-vehicle').value;
+            const type = document.getElementById('fl-type').value;
+            const liters = parseFloat(document.getElementById('fl-liters').value) || 0;
+            const amount = parseFloat(document.getElementById('fl-amount').value) || 0;
+            const kmPrevious = parseInt(document.getElementById('fl-km-previous').value) || 0;
+            const kmCurrent = parseInt(document.getElementById('fl-km-current').value) || 0;
+
+            if (!vehicleId || liters <= 0 || amount <= 0 || kmCurrent <= kmPrevious) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            const fuel = {
+                id: id || getID(),
+                date,
+                vehicleId,
+                type,
+                liters,
+                amount,
+                kmPrevious,
+                kmCurrent,
+                createdAt: new Date().toISOString()
+            };
+
+            // Create expense record
+            const expense = {
+                id: getID(),
+                date,
+                description: `Abastecimento ${type === 'gasoline' ? 'Gasolina' : type === 'ethanol' ? 'Etanol' : type === 'diesel' ? 'Diesel' : 'GNV'}`,
+                category: 'fuel',
+                vehicleId,
+                amount,
+                createdAt: new Date().toISOString()
+            };
+            db.expenses.push(expense);
+
+            if (id) {
+                const index = db.fuel.findIndex(f => f.id === id);
+                if (index !== -1) {
+                    db.fuel[index] = fuel;
+                }
+            } else {
+                db.fuel.push(fuel);
+            }
+
+            save();
+            closeModal('fuelModal');
+            renderFuel();
+            if (document.getElementById('view-finance').classList.contains('hide') === false) {
+                renderFinance();
+            }
+            showNotification('Abastecimento registrado com sucesso!', 'success');
+        }
+
+        function submitExpense(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('ex-id').value;
+            const description = document.getElementById('ex-description').value.trim();
+            const category = document.getElementById('ex-category').value;
+            const vehicleId = document.getElementById('ex-vehicle').value;
+            const amount = parseFloat(document.getElementById('ex-amount').value) || 0;
+            const date = document.getElementById('ex-date').value;
+
+            if (!description || amount <= 0) {
+                alert('Por favor, preencha descrição e valor.');
+                return;
+            }
+
+            const expense = {
+                id: id || getID(),
+                description,
+                category,
+                vehicleId,
+                amount,
+                date,
+                createdAt: new Date().toISOString()
+            };
+
+            if (id) {
+                const index = db.expenses.findIndex(e => e.id === id);
+                if (index !== -1) {
+                    db.expenses[index] = expense;
+                }
+            } else {
+                db.expenses.push(expense);
+            }
+
+            save();
+            closeModal('expenseModal');
+            renderFinance();
+            if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                renderDashboard();
+            }
+            showNotification('Despesa registrada com sucesso!', 'success');
+        }
+
+        // EDIT FUNCTIONS
+        function editVehicle(id) {
+            const vehicle = db.vehicles.find(v => v.id === id);
+            if (vehicle) {
+                openVehicleModal(vehicle);
+            }
+        }
+
+        function editDriver(id) {
+            const driver = db.drivers.find(d => d.id === id);
+            if (driver) {
+                openDriverModal(driver);
+            }
+        }
+
+        function editMaintenance(id) {
+            const maintenance = db.maintenance.find(m => m.id === id);
+            if (maintenance) {
+                document.getElementById('mt-id').value = maintenance.id;
+                document.getElementById('mt-date').value = maintenance.date;
+                document.getElementById('mt-vehicle').value = maintenance.vehicleId;
+                document.getElementById('mt-type').value = maintenance.type;
+                document.getElementById('mt-description').value = maintenance.description;
+                document.getElementById('mt-cost').value = maintenance.cost;
+                document.getElementById('mt-next-km').value = maintenance.nextKm || '';
+                
+                // Populate vehicle select if empty
+                const vehicleSelect = document.getElementById('mt-vehicle');
+                if (vehicleSelect.options.length <= 1) {
+                    vehicleSelect.innerHTML = '<option value="">Selecione...</option>';
+                    db.vehicles.forEach(v => {
+                        const opt = document.createElement('option');
+                        opt.value = v.id;
+                        opt.text = `${v.plate} - ${v.model}`;
+                        vehicleSelect.appendChild(opt);
+                    });
+                }
+                
+                document.getElementById('maintenanceModal').classList.remove('hidden');
+            }
+        }
+
+        function editFuel(id) {
+            const fuel = db.fuel.find(f => f.id === id);
+            if (fuel) {
+                document.getElementById('fl-id').value = fuel.id;
+                document.getElementById('fl-date').value = fuel.date;
+                document.getElementById('fl-vehicle').value = fuel.vehicleId;
+                document.getElementById('fl-type').value = fuel.type;
+                document.getElementById('fl-liters').value = fuel.liters;
+                document.getElementById('fl-amount').value = fuel.amount;
+                document.getElementById('fl-km-previous').value = fuel.kmPrevious;
+                document.getElementById('fl-km-current').value = fuel.kmCurrent;
+                
+                // Calculate and display average
+                const km = fuel.kmCurrent - fuel.kmPrevious;
+                const efficiency = calculateFuelEfficiency(km, fuel.liters);
+                document.getElementById('fl-avg-display').textContent = efficiency.toFixed(1) + ' KM/L';
+                
+                // Populate vehicle select if empty
+                const vehicleSelect = document.getElementById('fl-vehicle');
+                if (vehicleSelect.options.length <= 1) {
+                    vehicleSelect.innerHTML = '<option value="">Selecione...</option>';
+                    db.vehicles.filter(v => v.status === 'active').forEach(v => {
+                        const opt = document.createElement('option');
+                        opt.value = v.id;
+                        opt.text = `${v.plate} - ${v.model}`;
+                        vehicleSelect.appendChild(opt);
+                    });
+                }
+                
+                document.getElementById('fuelModal').classList.remove('hidden');
+            }
+        }
+
+        function editExpense(id) {
+            const expense = db.expenses.find(e => e.id === id);
+            if (expense) {
+                document.getElementById('ex-id').value = expense.id;
+                document.getElementById('ex-description').value = expense.description;
+                document.getElementById('ex-category').value = expense.category;
+                document.getElementById('ex-vehicle').value = expense.vehicleId;
+                document.getElementById('ex-amount').value = expense.amount;
+                document.getElementById('ex-date').value = expense.date;
+                
+                document.getElementById('expenseModal').classList.remove('hidden');
+            }
+        }
+
+        // VIEW FUNCTIONS
+        function viewVehicleDetails(id) {
+            const vehicle = db.vehicles.find(v => v.id === id);
+            if (!vehicle) return;
+
+            const vehicleTrips = db.trips.filter(t => t.vehicleId === id);
+            const vehicleMaintenance = db.maintenance.filter(m => m.vehicleId === id);
+            const vehicleFuel = db.fuel.filter(f => f.vehicleId === id);
+
+            let detailsHTML = `
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 class="font-bold text-xl text-slate-800">${vehicle.plate}</h3>
+                            <p class="text-slate-600">${vehicle.model} • ${vehicle.year} • ${vehicle.color}</p>
+                        </div>
+                        <span class="text-xs font-bold px-2 py-1 rounded ${vehicle.status === 'active' ? 'bg-green-100 text-green-700' : vehicle.status === 'maintenance' ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'}">
+                            ${vehicle.status === 'active' ? 'Ativo' : vehicle.status === 'maintenance' ? 'Em Manutenção' : 'Inativo'}
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-slate-50 p-4 rounded-lg">
+                            <p class="text-xs text-slate-500 uppercase font-bold">KM Atual</p>
+                            <p class="text-2xl font-bold text-slate-800">${vehicle.km.toLocaleString()} KM</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg">
+                            <p class="text-xs text-slate-500 uppercase font-bold">Viagens</p>
+                            <p class="text-2xl font-bold text-slate-800">${vehicleTrips.length}</p>
+                        </div>
+                    </div>
+
+                    ${vehicle.notes ? `
+                        <div class="mb-6">
+                            <p class="text-xs text-slate-500 uppercase font-bold mb-2">Observações</p>
+                            <p class="text-sm text-slate-700">${vehicle.notes}</p>
+                        </div>
+                    ` : ''}
+
+                    <div class="flex gap-3">
+                        <button onclick="editVehicle('${vehicle.id}')"
+                            class="flex-1 bg-plena-blue text-white py-2 rounded-lg text-sm font-bold">
+                            Editar Veículo
+                        </button>
+                        <button onclick="openTripModalForVehicle('${vehicle.id}')"
+                            class="flex-1 bg-green-600 text-white py-2 rounded-lg text-sm font-bold">
+                            Nova Viagem
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Create modal for details
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg font-bold text-slate-800">Detalhes do Veículo</h3>
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                                    class="text-slate-400 hover:text-slate-600">
+                                <i data-lucide="x"></i>
+                            </button>
+                        </div>
+                        ${detailsHTML}
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+            lucide.createIcons();
+        }
+
+        // REPORT FUNCTIONS
+        function generateVehicleReport() {
+            const start = document.getElementById('rep-start').value;
+            const end = document.getElementById('rep-end').value;
+
+            if (!start || !end) {
+                alert('Por favor, selecione um período.');
+                return;
+            }
+
+            const reportResult = document.getElementById('report-result');
+            reportResult.innerHTML = `
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-800 mb-6">Relatório por Veículo</h3>
+                    <div class="space-y-6">
+                        ${db.vehicles.map(vehicle => {
+                            const vehicleTrips = db.trips.filter(t => t.vehicleId === vehicle.id && t.date >= start && t.date <= end);
+                            const vehicleFuel = db.fuel.filter(f => f.vehicleId === vehicle.id && f.date >= start && f.date <= end);
+                            const vehicleMaintenance = db.maintenance.filter(m => m.vehicleId === vehicle.id && m.date >= start && m.date <= end);
+                            const vehicleExpenses = db.expenses.filter(e => e.vehicleId === vehicle.id && e.date >= start && e.date <= end);
+
+                            const totalKm = vehicleTrips.reduce((sum, t) => sum + (t.kmEnd - t.kmStart), 0);
+                            const totalFuelCost = vehicleFuel.reduce((sum, f) => sum + parseFloat(f.amount), 0);
+                            const totalMaintenanceCost = vehicleMaintenance.reduce((sum, m) => sum + parseFloat(m.cost), 0);
+                            const totalOtherCost = vehicleExpenses.filter(e => !['fuel', 'maintenance'].includes(e.category)).reduce((sum, e) => sum + parseFloat(e.amount), 0);
+                            const totalCost = totalFuelCost + totalMaintenanceCost + totalOtherCost;
+
+                            const avgEfficiency = vehicleFuel.reduce((sum, f) => {
+                                const km = f.kmCurrent - f.kmPrevious;
+                                return sum + calculateFuelEfficiency(km, f.liters);
+                            }, 0) / (vehicleFuel.length || 1);
+
+                            return `
+                                <div class="border border-slate-200 rounded-xl p-4">
+                                    <div class="flex justify-between items-center mb-4">
+                                        <h4 class="font-bold text-slate-800">${vehicle.plate} - ${vehicle.model}</h4>
+                                        <span class="text-sm text-slate-500">${vehicleTrips.length} viagens</span>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                        <div>
+                                            <p class="text-slate-500">KM Rodados</p>
+                                            <p class="font-bold">${totalKm.toLocaleString()} KM</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-slate-500">Média</p>
+                                            <p class="font-bold">${avgEfficiency.toFixed(1)} KM/L</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-slate-500">Custo Combustível</p>
+                                            <p class="font-bold text-red-600">${fmtMoney(totalFuelCost)}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-slate-500">Custo Total</p>
+                                            <p class="font-bold text-red-600">${fmtMoney(totalCost)}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500">
+                                        <p>Custo por KM: ${totalKm > 0 ? fmtMoney(totalCost / totalKm) : 'R$ 0,00'}</p>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+
+            reportResult.classList.remove('hide');
+        }
+
+        function generateCostReport() {
+            const start = document.getElementById('rep-start').value;
+            const end = document.getElementById('rep-end').value;
+
+            if (!start || !end) {
+                alert('Por favor, selecione um período.');
+                return;
+            }
+
+            const expensesInPeriod = db.expenses.filter(e => e.date >= start && e.date <= end);
+            
+            const categories = {};
+            expensesInPeriod.forEach(e => {
+                if (!categories[e.category]) {
+                    categories[e.category] = 0;
+                }
+                categories[e.category] += parseFloat(e.amount);
+            });
+
+            const total = Object.values(categories).reduce((sum, val) => sum + val, 0);
+
+            const categoryLabels = {
+                fuel: 'Combustível',
+                maintenance: 'Manutenção',
+                insurance: 'Seguro',
+                tax: 'Impostos',
+                other: 'Outros'
+            };
+
+            const reportResult = document.getElementById('report-result');
+            reportResult.innerHTML = `
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-800 mb-6">Relatório de Custos</h3>
+                    
+                    <div class="mb-8">
+                        <div class="text-center mb-4">
+                            <p class="text-3xl font-bold text-red-600">${fmtMoney(total)}</p>
+                            <p class="text-sm text-slate-500">Total no período</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        ${Object.entries(categories).map(([category, amount]) => {
+                            const percentage = total > 0 ? ((amount / total) * 100).toFixed(1) : 0;
+                            return `
+                                <div class="flex items-center justify-between p-3 border border-slate-200 rounded-lg">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 rounded-full mr-3 ${
+                                            category === 'fuel' ? 'bg-red-500' :
+                                            category === 'maintenance' ? 'bg-orange-500' :
+                                            category === 'insurance' ? 'bg-blue-500' :
+                                            category === 'tax' ? 'bg-purple-500' : 'bg-gray-500'
+                                        }"></div>
+                                        <span class="font-medium">${categoryLabels[category] || category}</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-bold text-red-600">${fmtMoney(amount)}</p>
+                                        <p class="text-xs text-slate-500">${percentage}% do total</p>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-slate-50 rounded-lg">
+                        <p class="text-sm text-slate-600">
+                            Período: ${fmtDate(start)} até ${fmtDate(end)}
+                        </p>
+                    </div>
+                </div>
+            `;
+
+            reportResult.classList.remove('hide');
+        }
+
+        function generateMaintenanceReport() {
+            const start = document.getElementById('rep-start').value;
+            const end = document.getElementById('rep-end').value;
+
+            if (!start || !end) {
+                alert('Por favor, selecione um período.');
+                return;
+            }
+
+            const maintenanceInPeriod = db.maintenance.filter(m => m.date >= start && m.date <= end);
+            const totalCost = maintenanceInPeriod.reduce((sum, m) => sum + parseFloat(m.cost), 0);
+
+            const reportResult = document.getElementById('report-result');
+            reportResult.innerHTML = `
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-800 mb-6">Relatório de Manutenções</h3>
+                    
+                    <div class="mb-8">
+                        <div class="text-center mb-4">
+                            <p class="text-3xl font-bold text-orange-600">${fmtMoney(totalCost)}</p>
+                            <p class="text-sm text-slate-500">Total em manutenções</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-lg font-bold text-slate-800">${maintenanceInPeriod.length} serviços realizados</p>
+                        </div>
+                    </div>
+                    
+                    ${maintenanceInPeriod.length > 0 ? `
+                        <div class="space-y-4">
+                            ${maintenanceInPeriod.map(maintenance => {
+                                const vehicle = db.vehicles.find(v => v.id === maintenance.vehicleId);
+                                const typeText = {
+                                    preventive: 'Preventiva',
+                                    corrective: 'Corretiva',
+                                    tire: 'Pneus',
+                                    oil: 'Óleo',
+                                    other: 'Outro'
+                                };
+
+                                return `
+                                    <div class="border border-slate-200 rounded-lg p-4">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <div>
+                                                <h4 class="font-bold text-slate-800">${maintenance.description}</h4>
+                                                <p class="text-sm text-slate-600">${vehicle ? vehicle.plate : 'N/A'} • ${typeText[maintenance.type]}</p>
+                                            </div>
+                                            <span class="text-sm font-bold text-orange-600">${fmtMoney(maintenance.cost)}</span>
+                                        </div>
+                                        <div class="flex justify-between text-sm text-slate-500">
+                                            <span>${fmtDate(maintenance.date)}</span>
+                                            ${maintenance.nextKm ? `<span>Próxima: ${maintenance.nextKm.toLocaleString()} KM</span>` : ''}
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    ` : `
+                        <div class="text-center py-8">
+                            <i data-lucide="wrench" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
+                            <p class="text-slate-400">Nenhuma manutenção no período</p>
+                        </div>
+                    `}
+                </div>
+            `;
+
+            reportResult.classList.remove('hide');
+        }
+
+        function generateCustomReport() {
+            // Por padrão, gera relatório de custos
+            generateCostReport();
+        }
+
+        function generateMonthReport() {
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+            document.getElementById('rep-start').value = firstDay.toISOString().split('T')[0];
+            document.getElementById('rep-end').value = lastDay.toISOString().split('T')[0];
+
+            generateCostReport();
+        }
+
+        // SETTINGS
+        function saveBusinessInfo() {
+            db.settings.businessName = document.getElementById('biz-name').value;
+            db.settings.businessOwner = document.getElementById('biz-owner').value;
+            db.settings.businessCNPJ = document.getElementById('biz-cnpj').value;
+            db.settings.distanceUnit = document.getElementById('biz-distance-unit').value;
+            save();
+            showNotification('Informações salvas com sucesso!', 'success');
+        }
+
+        // BACKUP E RESTAURAÇÃO
+        function downloadBackup() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "plena_frota_backup.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function restoreBackup(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const backup = JSON.parse(e.target.result);
+                    
+                    // Validação básica
+                    const requiredKeys = ['vehicles', 'drivers', 'trips', 'maintenance', 'fuel', 'expenses', 'settings'];
+                    const isValid = requiredKeys.every(key => key in backup);
+                    
+                    if (isValid) {
+                        db = backup;
+                        save();
+                        alert('Backup restaurado com sucesso! A página será recarregada.');
+                        location.reload();
+                    } else {
+                        alert('Arquivo de backup inválido.');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Erro ao ler arquivo. Verifique se é um backup válido.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function clearAllData() {
+            if (confirm('Tem certeza que deseja limpar TODOS os dados? Esta ação é irreversível!')) {
+                db.trips = [];
+                db.maintenance = [];
+                db.fuel = [];
+                db.expenses = [];
+                save();
+                renderDashboard();
+                renderFinance();
+                showNotification('Dados limpos com sucesso!', 'success');
+            }
+        }
+
+        function factoryReset() {
+            if (confirm('ATENÇÃO: Isso resetará TODO o sistema para as configurações de fábrica. Todos os dados serão perdidos. Tem certeza?')) {
+                localStorage.removeItem(DB_KEY);
+                location.reload();
+            }
+        }
+
+        // UTILITÁRIOS GERAIS
+        function updateDataStatus() {
+            console.log(`Dados atualizados: ${db.vehicles.length} veículos, ${db.drivers.length} motoristas, ${db.trips.length} viagens`);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                    'bg-blue-500 text-white'
+                }`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}" 
+                       class="w-5 h-5 mr-2"></i>
+                    <span>${sanitizeHTML(message)}</span>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // QUICK FUNCTIONS
+        function openQuickTripModal() {
+            openTripModal();
+        }
+
+        function openTripModalForVehicle(vehicleId) {
+            openTripModal();
+            setTimeout(() => {
+                document.getElementById('tr-vehicle').value = vehicleId;
+            }, 100);
+        }
+
+        // EVENT LISTENERS
+        window.addEventListener('online', () => {
+            showNotification('Conexão restaurada!', 'success');
+        });
+
+        window.addEventListener('offline', () => {
+            showNotification('Modo offline ativado. Seus dados estão seguros localmente.', 'warning');
+        });
+
+        // INICIALIZAR APLICATIVO
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+
+    <!-- Service Worker Script -->
+    <script>
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(registration => {
+                    console.log('ServiceWorker registrado com sucesso:', registration.scope);
+                }).catch(error => {
+                    console.log('Falha ao registrar ServiceWorker:', error);
+                });
+            });
+        }
+
+        // Manifest para PWA
+        const manifest = {
+            "name": "Plena Frota",
+            "short_name": "PlenaFrota",
+            "description": "Sistema de gestão de frotas profissional",
+            "start_url": ".",
+            "display": "standalone",
+            "background_color": "#2563EB",
+            "theme_color": "#2563EB",
+            "icons": [
+                {
+                    "src": "icon-192.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                },
+                {
+                    "src": "icon-512.png",
+                    "sizes": "512x512",
+                    "type": "image/png"
+                }
+            ]
+        };
+    </script>
+</body>
+
+</html>

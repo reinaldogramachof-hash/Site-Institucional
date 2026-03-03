@@ -1,0 +1,3334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Plena Obras - Gestão de Construção</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#F97316">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Sistema de gestão de obras offline para construtores - Plena Aplicativos">
+    <link rel="manifest" href="data:application/manifest+json,{}">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        plena: {
+                            orange: '#F97316',
+                            dark: '#C2410C',
+                            black: '#1a1a1a',
+                            blue: '#3B82F6',
+                            green: '#10B981',
+                            red: '#EF4444',
+                            yellow: '#F59E0B'
+                        },
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s infinite',
+                        'slide-in': 'slideIn 0.3s ease-out',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
+
+    <style>
+        :root {
+            --plena-orange: #F97316;
+            --plena-dark: #C2410C;
+            --plena-black: #1a1a1a;
+            --plena-blue: #3B82F6;
+            --plena-green: #10B981;
+            --plena-red: #EF4444;
+            --plena-yellow: #F59E0B;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #FFF7ED;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-10px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Chart Styles */
+        .chart-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 180px;
+            gap: 2%;
+        }
+
+        .bar-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            height: 100%;
+            position: relative;
+        }
+
+        .bar-wrapper {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 2px;
+            height: 100%;
+            width: 100%;
+        }
+
+        .bar {
+            width: 45%;
+            border-radius: 6px 6px 0 0;
+            transition: height 0.5s ease;
+            min-height: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .bar:hover::after {
+            content: attr(data-value);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .x-label {
+            font-size: 10px;
+            color: #666;
+            text-align: center;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s ease;
+        }
+
+        /* Sidebar Mobile */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 50;
+                height: 100vh;
+                width: 280px;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .sidebar {
+                width: 280px;
+                position: fixed;
+                height: 100vh;
+            }
+
+            .main-content {
+                margin-left: 280px;
+            }
+        }
+
+        /* Card Hover Effects */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background-color: #DCFCE7;
+            color: #166534;
+        }
+
+        .badge-warning {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        .badge-danger {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 antialiased">
+
+    <!-- Overlay para sidebar mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+        class="sidebar bg-plena-black text-white transition-transform duration-300 flex flex-col shadow-2xl">
+        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-plena-orange to-plena-dark">
+            <i data-lucide="hard-hat" class="w-8 h-8 mr-3"></i>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight">PLENA OBRAS</h1>
+                <p class="text-xs text-white/90 font-medium">Gestão de Construção Profissional</p>
+            </div>
+        </div>
+
+        <nav class="p-4 space-y-2 flex-1 overflow-y-auto">
+            <button onclick="router('dashboard')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group active-nav"
+                id="nav-dashboard">
+                <i data-lucide="hard-hat" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Dashboard
+            </button>
+            <button onclick="router('projects')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-projects">
+                <i data-lucide="hammer" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i> Minhas Obras
+            </button>
+            <button onclick="router('suppliers')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-suppliers">
+                <i data-lucide="truck" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i> Fornecedores
+            </button>
+            <button onclick="router('finance')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-finance">
+                <i data-lucide="wallet" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i> Caixa Geral
+            </button>
+            <button onclick="router('reports')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-reports">
+                <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i> Relatórios
+            </button>
+            <button onclick="router('settings')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-settings">
+                <i data-lucide="settings" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i> Configurações
+            </button>
+            <button onclick="router('instructions')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-instructions">
+                <i data-lucide="book-open" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i> Manual de Uso
+            </button>
+            <button onclick="router('about')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-about">
+                <i data-lucide="info" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i> Sobre a Plena
+            </button>
+        </nav>
+
+        <div class="p-6 border-t border-white/10 text-center">
+            <p class="text-xs text-gray-500">Todos os Direitos Reservados &copy; 2026</p>
+            <a href="https://www.plenaaplicativos.com.br" target="_blank"
+                class="text-[10px] text-gray-600 hover:text-plena-orange transition-colors mt-1 block decoration-0">
+                Plena Soluções Digitais LTDA
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content min-h-screen flex flex-col">
+        <!-- Header -->
+        <header
+            class="bg-white h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-gray-100">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg text-gray-600">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <div class="flex flex-col">
+                    <h2 id="page-title" class="text-xl font-bold text-gray-800">Dashboard</h2>
+                    <p id="page-subtitle" class="text-xs text-gray-500 hidden"></p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-plena-green/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                    </div>
+                    <button onclick="openClosingModal()"
+                        class="relative flex items-center px-4 py-2.5 bg-gray-800 text-white rounded-lg text-sm font-medium hover:bg-black transition-all shadow-sm active:scale-95">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 sm:mr-2"></i>
+                        <span class="hidden sm:inline">Fechar Caixa</span>
+                        <span class="sm:hidden">Fechar</span>
+                    </button>
+                </div>
+
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-plena-orange/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                    </div>
+                    <button onclick="openProjectModal()"
+                        class="relative flex items-center px-4 py-2.5 bg-plena-orange text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-all shadow-lg shadow-orange-200 active:scale-95">
+                        <i data-lucide="plus" class="w-5 h-5 sm:mr-2"></i>
+                        <span class="hidden sm:inline">Nova Obra</span>
+                        <span class="sm:hidden">Nova</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="p-4 lg:p-8 flex-1 overflow-y-auto">
+
+            <!-- Dashboard View -->
+            <section id="view-dashboard" class="view-section fade-in">
+                <!-- Balance Alert -->
+                <div id="balance-alert"
+                    class="hidden mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                    <div class="flex items-center">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 mr-3"></i>
+                        <div>
+                            <p class="font-bold">Atenção: Saldo Negativo!</p>
+                            <p class="text-sm">Seu saldo está negativo. Considere rever suas despesas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Month Selector -->
+                <div class="mb-6 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-gray-800">Resumo de Obras</h3>
+                    <div class="flex items-center gap-3">
+                        <input type="month" id="month-selector" onchange="renderDashboard()"
+                            class="border rounded-lg p-2 text-sm bg-white">
+                        <button onclick="exportDashboardPDF()"
+                            class="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors">
+                            <i data-lucide="download" class="w-4 h-4"></i> PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Obras Ativas
+                                </p>
+                                <h3 id="dash-active-projects" class="text-3xl font-bold text-gray-900">0</h3>
+                                <p class="text-xs text-gray-500 mt-1">Em andamento</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-plena-orange/10 flex items-center justify-center">
+                                <i data-lucide="hard-hat" class="w-6 h-6 text-plena-orange"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Recebido
+                                    (Geral)</p>
+                                <h3 id="dash-total-received" class="text-2xl font-bold text-green-600">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    <span id="income-growth" class="text-green-500">+0%</span> vs mês anterior
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Gasto (Geral)
+                                </p>
+                                <h3 id="dash-total-spent" class="text-2xl font-bold text-red-600">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    <span id="expense-growth" class="text-red-500">+0%</span> vs mês anterior
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                                <i data-lucide="trending-down" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Lucro Previsto
+                                </p>
+                                <h3 id="dash-profit" class="text-2xl font-bold text-blue-600">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">Média por obra</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i data-lucide="wallet" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts and Analytics -->
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                    <div class="xl:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-bold text-gray-800">Fluxo de Caixa (7 Dias)</h3>
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                    <span class="text-xs text-gray-600">Entradas</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <span class="text-xs text-gray-600">Saídas</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="chart-area" class="chart-container"></div>
+                    </div>
+
+                    <!-- Top Expenses & Categories -->
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                <i data-lucide="alert-triangle" class="w-4 h-4 mr-2 text-plena-orange"></i>
+                                Top Despesas
+                            </h3>
+                            <div id="top-expenses" class="space-y-4">
+                                <!-- Dynamic content -->
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4">Obras por Status</h3>
+                            <div id="project-status" class="space-y-3">
+                                <!-- Dynamic content -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Obras em Andamento -->
+                <div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-gray-800">Obras em Andamento</h3>
+                        <button onclick="router('projects')"
+                            class="text-sm text-plena-orange hover:text-plena-dark font-medium">
+                            Ver todas →
+                        </button>
+                    </div>
+                    <div id="projects-dashboard-list" class="space-y-3">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- PROJECTS LIST -->
+            <section id="view-projects" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Minhas Obras</h2>
+                        <p class="text-sm text-gray-600">Gerencie todas as suas obras e projetos</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="exportProjectsCSV()"
+                            class="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+                            <i data-lucide="download" class="w-4 h-4"></i> Exportar CSV
+                        </button>
+                        <button onclick="printProjects()"
+                            class="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors">
+                            <i data-lucide="printer" class="w-4 h-4"></i> Imprimir
+                        </button>
+                    </div>
+                </div>
+
+                <div id="projects-list-full" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </section>
+
+            <!-- PROJECT DETAIL (Drill-down) -->
+            <section id="view-project-detail" class="view-section hide fade-in">
+                <div class="flex items-center gap-2 mb-6">
+                    <button onclick="router('projects')" class="p-2 hover:bg-gray-100 rounded-full"><i
+                            data-lucide="arrow-left" class="w-5 h-5 text-gray-500"></i></button>
+                    <div>
+                        <h2 id="pd-title" class="text-2xl font-bold text-gray-800">Nome da Obra</h2>
+                        <p id="pd-client" class="text-sm text-gray-500">Cliente: ...</p>
+                    </div>
+                    <span id="pd-status"
+                        class="ml-auto px-3 py-1 rounded-full text-xs font-bold uppercase bg-blue-100 text-blue-800">Em
+                        Andamento</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Orçamento Total</p>
+                        <h3 id="pd-budget" class="text-2xl font-bold text-gray-800">R$ 0,00</h3>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Gastos (Mat + Mão de
+                            Obra)</p>
+                        <h3 id="pd-spent" class="text-2xl font-bold text-red-500">R$ 0,00</h3>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Recebido</p>
+                        <h3 id="pd-received" class="text-2xl font-bold text-green-600">R$ 0,00</h3>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Lucro Atual (Previsto)
+                        </p>
+                        <h3 id="pd-profit" class="text-2xl font-bold text-blue-600">R$ 0,00</h3>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-bold text-gray-800">Lançamentos da Obra</h3>
+                            <div class="flex gap-2">
+                                <button onclick="openProjectTransModal('expense')"
+                                    class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-red-700">
+                                    + Lançar Gasto
+                                </button>
+                                <button onclick="openProjectTransModal('income')"
+                                    class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-green-700">
+                                    + Lançar Recebimento
+                                </button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left font-sm">
+                                <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                                    <tr>
+                                        <th class="px-4 py-3">Data</th>
+                                        <th class="px-4 py-3">Tipo</th>
+                                        <th class="px-4 py-3">Descrição</th>
+                                        <th class="px-4 py-3">Categoria</th>
+                                        <th class="px-4 py-3 text-right">Valor</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pd-trans-list" class="divide-y divide-gray-100 text-sm"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-between items-center">
+                    <button onclick="editProject()"
+                        class="text-plena-orange font-bold text-sm border border-orange-200 px-4 py-2 rounded hover:bg-orange-50">
+                        Editar Obra
+                    </button>
+                    <button onclick="finishProject()"
+                        class="text-red-500 font-bold text-sm border border-red-200 px-4 py-2 rounded hover:bg-red-50">
+                        Encerrar ou Excluir Obra
+                    </button>
+                </div>
+            </section>
+
+            <!-- SUPPLIERS -->
+            <section id="view-suppliers" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Fornecedores</h2>
+                    <p class="text-sm text-gray-600">Gerencie seus fornecedores de material e mão de obra</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-gray-800">Cadastro de Fornecedores</h3>
+                        <button onclick="openSupplierModal()"
+                            class="flex items-center gap-2 px-3 py-1.5 bg-plena-orange text-white text-sm rounded-lg hover:bg-plena-dark">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Novo Fornecedor
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                                <tr>
+                                    <th class="px-6 py-3">Nome</th>
+                                    <th class="px-6 py-3">Contato</th>
+                                    <th class="px-6 py-3">Tipo</th>
+                                    <th class="px-6 py-3">Especialidade</th>
+                                    <th class="px-6 py-3 text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="suppliers-list" class="divide-y divide-gray-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FINANCEIRO GERAL -->
+            <section id="view-finance" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Caixa Geral</h2>
+                        <p class="text-sm text-gray-600">Todas as movimentações financeiras</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="openTransModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-plena-orange text-white rounded-lg text-sm font-bold hover:bg-plena-dark">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Lançamento Avulso
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+                    <div class="p-4 bg-gray-50 grid grid-cols-1 md:grid-cols-4 gap-3 border-b border-gray-200">
+                        <div class="relative">
+                            <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                            <input type="text" id="search-term" onkeyup="renderGeneralFinance()" placeholder="Buscar..."
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-orange outline-none text-sm">
+                        </div>
+                        <div>
+                            <input type="date" id="filter-start" onchange="renderGeneralFinance()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div>
+                            <input type="date" id="filter-end" onchange="renderGeneralFinance()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div class="flex gap-2">
+                            <select id="filter-type" onchange="renderGeneralFinance()"
+                                class="flex-1 px-4 py-2 rounded-lg border border-gray-300 text-sm bg-white outline-none">
+                                <option value="all">Todos</option>
+                                <option value="income">Entradas</option>
+                                <option value="expense">Saídas</option>
+                            </select>
+                            <button onclick="clearFinanceFilters()"
+                                class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm transition-colors">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                                <tr>
+                                    <th class="px-6 py-3">Data</th>
+                                    <th class="px-6 py-3">Obra</th>
+                                    <th class="px-6 py-3">Descrição</th>
+                                    <th class="px-6 py-3">Categoria</th>
+                                    <th class="px-6 py-3 text-right">Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trans-list" class="divide-y divide-gray-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total Entradas</p>
+                        <p id="filter-income" class="text-lg font-bold text-green-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total Saídas</p>
+                        <p id="filter-expense" class="text-lg font-bold text-red-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Saldo Filtrado</p>
+                        <p id="filter-balance" class="text-lg font-bold text-blue-700">R$ 0,00</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- REPORTS VIEW -->
+            <section id="view-reports" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Relatórios Avançados</h2>
+                    <p class="text-sm text-gray-600">Gere relatórios detalhados para análise de obras</p>
+                </div>
+
+                <!-- Report Filters -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
+                    <h3 class="font-bold text-gray-800 mb-4">Configurar Período</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Data Inicial</label>
+                            <input type="date" id="rep-start" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Data Final</label>
+                            <input type="date" id="rep-end" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="generateReport()"
+                                class="flex-1 bg-plena-orange text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                                Gerar Relatório
+                            </button>
+                            <button onclick="generateFullReport()"
+                                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors"
+                                title="Relatório Completo">
+                                <i data-lucide="file-text" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Results -->
+                <div id="report-result" class="hide space-y-6">
+                    <!-- Summary Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="bg-white p-6 rounded-xl text-center border border-gray-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-plena-orange/10 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="hard-hat" class="w-6 h-6 text-plena-orange"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Obras Ativas</p>
+                            <p id="rep-active" class="text-2xl font-bold text-gray-800 mt-2">0</p>
+                        </div>
+                        <div class="bg-green-50 p-6 rounded-xl text-center border border-green-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Entradas</p>
+                            <p id="rep-inc" class="text-2xl font-bold text-green-700 mt-2">R$ 0,00</p>
+                        </div>
+                        <div class="bg-red-50 p-6 rounded-xl text-center border border-red-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="trending-down" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Saídas</p>
+                            <p id="rep-exp" class="text-2xl font-bold text-red-700 mt-2">R$ 0,00</p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-xl text-center border border-blue-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="wallet" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Lucro Total</p>
+                            <p id="rep-bal" class="text-2xl font-bold text-blue-700 mt-2">R$ 0,00</p>
+                        </div>
+                    </div>
+
+                    <!-- Project Breakdown -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="font-bold text-gray-800 mb-4">Análise por Obra</h3>
+                        <div id="project-report" class="space-y-4"></div>
+                    </div>
+
+                    <!-- Category Breakdown -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="font-bold text-gray-800 mb-4">Análise por Categoria</h3>
+                        <div id="category-report" class="space-y-4"></div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button onclick="shareReport()"
+                            class="bg-[#25D366] text-white py-3 rounded-xl font-bold hover:bg-[#128C7E] flex justify-center items-center gap-2">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i> Enviar WhatsApp
+                        </button>
+                        <button onclick="printReport()"
+                            class="bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 flex justify-center items-center gap-2">
+                            <i data-lucide="printer" class="w-4 h-4"></i> Imprimir Relatório
+                        </button>
+                        <button onclick="downloadReportPDF()"
+                            class="bg-gray-800 text-white py-3 rounded-xl font-bold hover:bg-black flex justify-center items-center gap-2">
+                            <i data-lucide="download" class="w-4 h-4"></i> Baixar PDF
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SETTINGS -->
+            <section id="view-settings" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Configurações do Sistema</h2>
+                    <p class="text-sm text-gray-600">Personalize e gerencie suas preferências</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Categories Management -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-bold text-gray-800">Categorias de Gastos</h3>
+                            <button onclick="toggleCatForm()"
+                                class="flex items-center gap-2 px-3 py-1.5 bg-plena-orange text-white text-sm rounded-lg hover:bg-plena-dark">
+                                <i data-lucide="plus" class="w-4 h-4"></i> Nova
+                            </button>
+                        </div>
+
+                        <!-- Category Form -->
+                        <div id="cat-form-box"
+                            class="hidden mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200 slide-in">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <input type="text" id="new-cat-name" placeholder="Nome da categoria"
+                                    class="border p-2 rounded-lg text-sm">
+                                <div class="flex gap-2">
+                                    <select id="new-cat-type" class="flex-1 border p-2 rounded-lg text-sm">
+                                        <option value="expense">Despesa</option>
+                                        <option value="income">Receita</option>
+                                    </select>
+                                    <input type="color" id="new-cat-color" value="#F97316"
+                                        class="h-10 w-10 p-0 border-0 rounded cursor-pointer">
+                                </div>
+                            </div>
+                            <div class="flex gap-2 mt-3">
+                                <button onclick="addCategory()"
+                                    class="flex-1 bg-gray-800 text-white py-2 rounded-lg text-sm font-bold hover:bg-black">
+                                    Salvar Categoria
+                                </button>
+                                <button onclick="toggleCatForm()"
+                                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Categories List -->
+                        <div id="cat-list" class="space-y-2 max-h-60 overflow-y-auto pr-2"></div>
+                    </div>
+
+                    <!-- Data Management -->
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                <i data-lucide="shield-alert" class="w-5 h-5 mr-2 text-plena-orange"></i>
+                                Segurança de Dados
+                            </h3>
+
+                            <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg text-sm text-blue-800 mb-6">
+                                <p class="font-bold mb-2">⚠️ Importante</p>
+                                <p>Seus dados ficam salvos 100% no navegador. Faça backup regularmente para evitar
+                                    perdas!</p>
+                            </div>
+
+                            <div class="space-y-3">
+                                <button onclick="downloadBackup()"
+                                    class="w-full border border-gray-300 py-3 rounded-lg text-sm font-medium hover:bg-gray-50 flex justify-center items-center gap-2">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    Baixar Backup Completo (.json)
+                                </button>
+
+                                <div class="relative">
+                                    <button
+                                        class="w-full bg-gray-800 text-white py-3 rounded-lg text-sm font-medium flex justify-center items-center gap-2">
+                                        <i data-lucide="upload" class="w-4 h-4"></i>
+                                        Restaurar Backup
+                                    </button>
+                                    <input type="file" onchange="restoreBackup(this)" accept=".json"
+                                        class="absolute inset-0 opacity-0 cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Danger Zone -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center text-red-600">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
+                                Zona de Perigo
+                            </h3>
+
+                            <div class="bg-red-50 p-4 rounded-lg border border-red-100 mb-4">
+                                <p class="text-sm text-red-600"><strong>Atenção:</strong> Estas ações são irreversíveis.
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="clearAllTransactions()"
+                                    class="py-2.5 border border-red-300 text-red-600 rounded-lg text-sm hover:bg-red-50 transition-colors">
+                                    Limpar Transações
+                                </button>
+                                <button onclick="factoryReset()"
+                                    class="py-2.5 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition-colors">
+                                    Resetar Sistema
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- INSTRUCTIONS VIEW -->
+            <section id="view-instructions" class="view-section hide fade-in">
+                <div class="max-w-4xl mx-auto">
+                    <!-- Hero Section -->
+                    <div class="text-center mb-10">
+                        <div class="inline-flex items-center justify-center p-3 bg-plena-blue/10 rounded-2xl mb-4">
+                            <i data-lucide="book-open" class="w-8 h-8 text-plena-blue"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-3">Manual de Uso</h2>
+                        <p class="text-gray-600 max-w-lg mx-auto">Guia completo para você dominar todas as funcionalidades do seu sistema de Gestão de Obras e Reformas.</p>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-gray-800">Seu Progresso no Aprendizado</h3>
+                            <span id="tutorial-percent" class="text-plena-blue font-bold">0%</span>
+                        </div>
+                        <div class="progress-bar mb-2">
+                            <div id="tutorial-progress" class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500">Complete a leitura de todos os tópicos para dominar o sistema.</p>
+                    </div>
+
+                    <!-- Manual Navigation Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+                        <div onclick="scrollToSection('instalacao')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-plena-blue cursor-pointer transition-all group">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
+                                    <i data-lucide="smartphone" class="w-5 h-5 text-blue-600"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 group-hover:text-plena-blue">Instalação</h4>
+                            </div>
+                            <p class="text-sm text-gray-500">Como instalar no seu celular.</p>
+                        </div>
+
+                        <div onclick="scrollToSection('config')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-plena-blue cursor-pointer transition-all group">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center">
+                                    <i data-lucide="settings" class="w-5 h-5 text-orange-600"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 group-hover:text-plena-blue">Ajustes</h4>
+                            </div>
+                            <p class="text-sm text-gray-500">Configurações da empresa.</p>
+                        </div>
+
+                        <div onclick="scrollToSection('cadastros')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-plena-blue cursor-pointer transition-all group">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center">
+                                    <i data-lucide="hard-hat" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 group-hover:text-plena-blue">Cadastros</h4>
+                            </div>
+                            <p class="text-sm text-gray-500">Obras e fornecedores.</p>
+                        </div>
+
+                        <div onclick="scrollToSection('operacao')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-plena-blue cursor-pointer transition-all group">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center">
+                                    <i data-lucide="dollar-sign" class="w-5 h-5 text-purple-600"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 group-hover:text-plena-blue">Operação</h4>
+                            </div>
+                            <p class="text-sm text-gray-500">Lançamento de custos e pagamentos.</p>
+                        </div>
+
+                        <div onclick="scrollToSection('relatorios')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-plena-blue cursor-pointer transition-all group">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-10 h-10 rounded-full bg-yellow-50 flex items-center justify-center">
+                                    <i data-lucide="bar-chart-3" class="w-5 h-5 text-yellow-600"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 group-hover:text-plena-blue">Gestão</h4>
+                            </div>
+                            <p class="text-sm text-gray-500">Lucratividade e relatórios.</p>
+                        </div>
+
+                        <div onclick="scrollToSection('seguranca')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-plena-blue cursor-pointer transition-all group">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center">
+                                    <i data-lucide="shield" class="w-5 h-5 text-red-600"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 group-hover:text-plena-blue">Segurança</h4>
+                            </div>
+                            <p class="text-sm text-gray-500">Backup e proteção de dados.</p>
+                        </div>
+
+                        <div onclick="scrollToSection('suporte')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-plena-blue cursor-pointer transition-all group">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center">
+                                    <i data-lucide="help-circle" class="w-5 h-5 text-gray-600"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 group-hover:text-plena-blue">Suporte</h4>
+                            </div>
+                            <p class="text-sm text-gray-500">FAQ e ajuda rápida.</p>
+                        </div>
+
+                        <div onclick="scrollToSection('checklist')" class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-plena-blue cursor-pointer transition-all group">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-10 h-10 rounded-full bg-plena-blue/10 flex items-center justify-center">
+                                    <i data-lucide="check-square" class="w-5 h-5 text-plena-blue"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 group-hover:text-plena-blue">Checklist</h4>
+                            </div>
+                            <p class="text-sm text-gray-500">Rotina diária recomendada.</p>
+                        </div>
+                    </div>
+
+                    <!-- Content Sections -->
+                    <div class="space-y-8">
+                        <!-- 1. Instalação -->
+                        <div id="instalacao" class="scroll-mt-24">
+                            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-2 h-full bg-blue-500"></div>
+                                <div class="flex items-center gap-4 mb-6">
+                                    <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 font-bold text-xl">1</div>
+                                    <h3 class="text-xl font-bold text-gray-800">Instalação do Aplicativo</h3>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="bg-gray-50 p-5 rounded-xl">
+                                        <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                            <i data-lucide="smartphone" class="w-4 h-4 text-blue-600"></i> Android (Chrome)
+                                        </h4>
+                                        <ul class="text-sm text-gray-600 space-y-2 list-disc pl-4">
+                                            <li>Abra o link no <strong>Chrome</strong>.</li>
+                                            <li>Toque nos <strong>três pontos</strong> no canto superior.</li>
+                                            <li>Selecione <strong>Instalar Aplicativo</strong>.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-gray-50 p-5 rounded-xl">
+                                        <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                            <i data-lucide="smartphone" class="w-4 h-4 text-blue-600"></i> iPhone (Safari)
+                                        </h4>
+                                        <ul class="text-sm text-gray-600 space-y-2 list-disc pl-4">
+                                            <li>Abra o link no <strong>Safari</strong>.</li>
+                                            <li>Toque no ícone de <strong>Compartilhar</strong>.</li>
+                                            <li>Toque em <strong>Adicionar à Tela de Início</strong>.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <button onclick="markSectionComplete('instalacao')" class="w-full mt-6 py-3 bg-blue-50 text-blue-600 font-bold rounded-lg hover:bg-blue-100 transition-colors">
+                                    Concluir Etapa
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 2. Configurações -->
+                        <div id="config" class="scroll-mt-24">
+                            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-2 h-full bg-orange-500"></div>
+                                <div class="flex items-center gap-4 mb-6">
+                                    <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 font-bold text-xl">2</div>
+                                    <h3 class="text-xl font-bold text-gray-800">Ajustes Iniciais</h3>
+                                </div>
+                                <p class="text-gray-600 mb-4">Personalize o sistema com os dados da sua empresa ou profissional:</p>
+                                <ul class="space-y-3 text-sm text-gray-600 mb-6">
+                                    <li class="flex items-center gap-3">
+                                        <i data-lucide="check-circle" class="w-4 h-4 text-orange-500"></i>
+                                        Acesse a aba <strong>Configurações</strong>.
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <i data-lucide="check-circle" class="w-4 h-4 text-orange-500"></i>
+                                        Preencha o <strong>Nome da Empresa/Profissional</strong>.
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <i data-lucide="check-circle" class="w-4 h-4 text-orange-500"></i>
+                                        Defina o <strong>Símbolo da Moeda</strong> (ex: R$).
+                                    </li>
+                                </ul>
+                                <button onclick="markSectionComplete('config')" class="w-full py-3 bg-orange-50 text-orange-600 font-bold rounded-lg hover:bg-orange-100 transition-colors">
+                                    Concluir Etapa
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 3. Cadastros -->
+                        <div id="cadastros" class="scroll-mt-24">
+                            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-2 h-full bg-green-500"></div>
+                                <div class="flex items-center gap-4 mb-6">
+                                    <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center text-green-600 font-bold text-xl">3</div>
+                                    <h3 class="text-xl font-bold text-gray-800">Obras e Fornecedores</h3>
+                                </div>
+                                <div class="space-y-4 text-sm text-gray-600 mb-6">
+                                    <div class="p-4 bg-green-50 rounded-xl">
+                                        <h4 class="font-bold text-green-800 mb-2">Criando uma Obra</h4>
+                                        <p>Informe o nome da obra, cliente, orçamento previsto e prazo de entrega. Isso permitirá o acompanhamento da lucratividade.</p>
+                                    </div>
+                                    <div class="p-4 bg-green-50 rounded-xl">
+                                        <h4 class="font-bold text-green-800 mb-2">Base de Fornecedores</h4>
+                                        <p>Cadastre fornecedores frequentes para agilizar o lançamento de despesas com materiais e serviços.</p>
+                                    </div>
+                                </div>
+                                <button onclick="markSectionComplete('cadastros')" class="w-full py-3 bg-green-50 text-green-600 font-bold rounded-lg hover:bg-green-100 transition-colors">
+                                    Concluir Etapa
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 4. Operação -->
+                        <div id="operacao" class="scroll-mt-24">
+                            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-2 h-full bg-purple-500"></div>
+                                <div class="flex items-center gap-4 mb-6">
+                                    <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 font-bold text-xl">4</div>
+                                    <h3 class="text-xl font-bold text-gray-800">Gestão de Custos Diários</h3>
+                                </div>
+                                <div class="space-y-4 text-sm text-gray-600 mb-6">
+                                    <p>Mantenha o controle financeiro rigoroso da obra:</p>
+                                    <ol class="list-decimal pl-5 space-y-2">
+                                        <li>Selecione a obra no dashboard.</li>
+                                        <li>Lance cada nota fiscal ou recibo de <strong>Material</strong>.</li>
+                                        <li>Registre pagamentos de <strong>Mão de Obra</strong>.</li>
+                                        <li>Lançar adiantamentos recebidos do cliente para atualizar o saldo da obra.</li>
+                                    </ol>
+                                </div>
+                                <button onclick="markSectionComplete('operacao')" class="w-full py-3 bg-purple-50 text-purple-600 font-bold rounded-lg hover:bg-purple-100 transition-colors">
+                                    Concluir Etapa
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 5. Gestão -->
+                        <div id="relatorios" class="scroll-mt-24">
+                            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-2 h-full bg-yellow-500"></div>
+                                <div class="flex items-center gap-4 mb-6">
+                                    <div class="w-12 h-12 rounded-xl bg-yellow-50 flex items-center justify-center text-yellow-600 font-bold text-xl">5</div>
+                                    <h3 class="text-xl font-bold text-gray-800">Gestão e Lucratividade</h3>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600 mb-6">
+                                    <div class="p-4 border border-yellow-100 rounded-xl">
+                                        <h4 class="font-bold text-yellow-800 mb-2">Dashboard de Obras</h4>
+                                        <p>Visualize rapidamente quais obras estão dentro do orçamento e quais estão próximas do limite planejado.</p>
+                                    </div>
+                                    <div class="p-4 border border-yellow-100 rounded-xl">
+                                        <h4 class="font-bold text-yellow-800 mb-2">Relatórios Financeiros</h4>
+                                        <p>Extraia relatórios detalhados por obra ou por período para prestar contas ao cliente.</p>
+                                    </div>
+                                </div>
+                                <button onclick="markSectionComplete('relatorios')" class="w-full py-3 bg-yellow-50 text-yellow-600 font-bold rounded-lg hover:bg-yellow-100 transition-colors">
+                                    Concluir Etapa
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 6. Segurança -->
+                        <div id="seguranca" class="scroll-mt-24">
+                            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-2 h-full bg-red-500"></div>
+                                <div class="flex items-center gap-4 mb-6">
+                                    <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-red-600 font-bold text-xl">6</div>
+                                    <h3 class="text-xl font-bold text-gray-800">Segurança de Dados</h3>
+                                </div>
+                                <div class="bg-red-50 p-4 rounded-xl border border-red-100 mb-6">
+                                    <p class="text-sm text-red-800 flex items-start gap-2">
+                                        <i data-lucide="alert-triangle" class="w-5 h-5 flex-shrink-0"></i>
+                                        <strong>IMPORTANTE:</strong> Seus dados são salvos apenas neste dispositivo. Se você trocar de celular ou limpar o histórico do navegador, poderá perder as informações.
+                                    </p>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-4">Recomendamos fazer o backup semanalmente:</p>
+                                <button onclick="downloadBackup()" class="w-full mb-3 py-3 bg-gray-800 text-white font-bold rounded-lg hover:bg-gray-900 transition-colors flex items-center justify-center gap-2">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    Fazer Backup Agora
+                                </button>
+                                <button onclick="markSectionComplete('seguranca')" class="w-full py-3 bg-red-50 text-red-600 font-bold rounded-lg hover:bg-red-100 transition-colors">
+                                    Concluir Etapa
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 7. Suporte -->
+                        <div id="suporte" class="scroll-mt-24">
+                            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-2 h-full bg-gray-500"></div>
+                                <div class="flex items-center gap-4 mb-6">
+                                    <div class="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-gray-600 font-bold text-xl">7</div>
+                                    <h3 class="text-xl font-bold text-gray-800">Suporte e FAQ</h3>
+                                </div>
+                                <div class="space-y-3 mb-6">
+                                    <details class="group bg-gray-50 rounded-xl p-4">
+                                        <summary class="font-bold text-gray-700 cursor-pointer flex justify-between items-center list-none">
+                                            Como funciona o controle de saldo?
+                                            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform group-open:rotate-180"></i>
+                                        </summary>
+                                        <p class="text-sm text-gray-600 mt-2">O saldo da obra é o total recebido do cliente menos todas as despesas lançadas (materiais, mão de obra, etc).</p>
+                                    </details>
+                                    <details class="group bg-gray-50 rounded-xl p-4">
+                                        <summary class="font-bold text-gray-700 cursor-pointer flex justify-between items-center list-none">
+                                            Posso usar offline no canteiro?
+                                            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform group-open:rotate-180"></i>
+                                        </summary>
+                                        <p class="text-sm text-gray-600 mt-2">Sim! O Plena Obras funciona sem internet após o primeiro carregamento, permitindo lançar gastos diretamente do canteiro de obras.</p>
+                                    </details>
+                                </div>
+                                <button onclick="markSectionComplete('suporte')" class="w-full py-3 bg-gray-50 text-gray-600 font-bold rounded-lg hover:bg-gray-100 transition-colors">
+                                    Concluir Etapa
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Checklist -->
+                        <div id="checklist" class="scroll-mt-24">
+                            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                                <div class="flex items-center justify-between mb-6">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-xl bg-plena-blue text-white flex items-center justify-center">
+                                            <i data-lucide="check-square" class="w-6 h-6"></i>
+                                        </div>
+                                        <h3 class="text-xl font-bold text-gray-800">Checklist Diário</h3>
+                                    </div>
+                                    <button onclick="resetChecklist()" class="text-sm text-plena-blue hover:text-plena-dark font-medium">Reiniciar</button>
+                                </div>
+                                <div id="checklist-items" class="space-y-3">
+                                    <!-- Gerado via JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ABOUT VIEW -->
+            <section id="view-about" class="view-section hide fade-in">
+                <div class="max-w-4xl mx-auto pb-12">
+
+                    <!-- 1. Header Institucional -->
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mb-8 text-center">
+                        <div
+                            class="w-20 h-20 rounded-full bg-gradient-to-r from-plena-orange to-plena-dark flex items-center justify-center mx-auto mb-4 shadow-lg shadow-orange-200">
+                            <i data-lucide="shield-check" class="w-10 h-10 text-white"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-1">Central de Segurança e Legalidade</h2>
+                        <p class="text-gray-500 font-medium">Plena Soluções Digitais • Transparência Total</p>
+                    </div>
+
+                    <!-- 2. Grid de Políticas -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <!-- Termos de Uso -->
+                        <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                            <h3 class="font-bold text-gray-800 mb-3 flex items-center text-lg">
+                                <div class="p-2 bg-blue-50 rounded-lg mr-3">
+                                    <i data-lucide="file-text" class="w-5 h-5 text-plena-orange"></i>
+                                </div>
+                                Termos de Uso
+                            </h3>
+                            <p class="text-sm text-gray-600 leading-relaxed text-justify">
+                                A licença concedida é <strong>pessoal, intransferível e não exclusiva</strong>. O software é
+                                fornecido "no estado em que se encontra" (as-is). É estritamente proibida a revenda, cópia,
+                                distribuição não autorizada ou engenharia reversa do código-fonte, sob pena das sanções
+                                previstas na Lei de Propriedade Intelectual (9.610/98).
+                            </p>
+                        </div>
+
+                        <!-- Privacidade e LGPD -->
+                        <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                            <h3 class="font-bold text-gray-800 mb-3 flex items-center text-lg">
+                                <div class="p-2 bg-green-50 rounded-lg mr-3">
+                                    <i data-lucide="lock" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                                Privacidade (LGPD)
+                            </h3>
+                            <p class="text-sm text-gray-600 leading-relaxed text-justify">
+                                Adotamos a arquitetura <strong>Privacy by Design (Local-First)</strong>. Seus dados
+                                financeiros e de clientes ficam salvos <strong>exclusivamente no seu dispositivo</strong>.
+                                A Plena não coleta, não armazena e não tem acesso a nenhuma informação inserida no sistema.
+                                Sua privacidade é absoluta.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 3. Responsabilidade do Usuário (Crítico) -->
+                    <div class="bg-red-50 border border-red-100 p-8 rounded-2xl mb-8 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <i data-lucide="alert-octagon" class="w-32 h-32 text-red-900"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <h3 class="font-bold text-red-800 mb-4 flex items-center text-lg">
+                                <i data-lucide="alert-triangle" class="w-6 h-6 mr-3"></i>
+                                IMPORTANTE: Sua Responsabilidade sobre os Dados
+                            </h3>
+                            <div class="space-y-4 text-sm text-red-900/80 text-justify font-medium">
+                                <p>
+                                    <strong>1. Backup é Obrigatório:</strong> Como não temos acesso aos seus dados,
+                                    <strong>não podemos recuperá-los</strong> em caso de perda, roubo ou dano ao seu
+                                    dispositivo. A realização de cópias de segurança (Backup) é de responsabilidade única e
+                                    exclusiva do usuário.
+                                </p>
+                                <p>
+                                    <strong>2. Isenção de Responsabilidade Técnica:</strong> A Plena exime-se de qualquer
+                                    responsabilidade por prejuízos decorrentes de falhas de hardware, vírus no dispositivo
+                                    do usuário, ou uso incorreto dos cálculos financeiros do sistema. Verifique sempre as
+                                    taxas configuradas.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Suporte e SLA -->
+                    <div class="bg-gradient-to-br from-gray-900 to-plena-dark text-white p-8 rounded-2xl mb-12 shadow-xl">
+                        <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                            <div class="flex-1">
+                                <h3 class="font-bold text-xl mb-2 flex items-center">
+                                    <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-plena-orange"></i>
+                                    Suporte Premium Especializado
+                                </h3>
+                                <p class="text-gray-300 text-sm mb-6 leading-relaxed">
+                                    Precisa de ajuda ou encontrou alguma inconsistência? Nossa equipe técnica está pronta
+                                    para atender você com prioridade. Garantimos a qualidade e a segurança da nossa marca.
+                                </p>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                        <p class="text-xs text-gray-400 uppercase font-bold">Canal Oficial</p>
+                                        <p class="font-bold text-white">E-mail</p>
+                                    </div>
+                                    <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                        <p class="text-xs text-gray-400 uppercase font-bold">Tempo de Resposta (SLA)</p>
+                                        <p class="font-bold text-plena-orange">Até 24h Úteis</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <a href="mailto:tecnologia@plenaaplicativos.com.br"
+                                    class="inline-flex items-center justify-center bg-white text-plena-dark px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-transform transform hover:scale-105 shadow-lg">
+                                    <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+                                    Falar com Suporte
+                                </a>
+                                <p class="text-xs text-center text-gray-400 mt-3">tecnologia@plenaaplicativos.com.br</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Confirmação e Aceite (Travamento) -->
+                    <div class="mt-8 mb-12" id="terms-action-container">
+                        <div class="bg-gray-50 border border-gray-200 p-6 rounded-2xl flex flex-col items-center text-center transition-all duration-300"
+                            id="terms-box">
+                            <i data-lucide="check-circle-2" class="w-12 h-12 text-gray-300 mb-3" id="terms-icon"></i>
+                            <h3 class="font-bold text-gray-800 text-lg mb-2" id="terms-title">Confirmação de Leitura</h3>
+                            <p class="text-sm text-gray-500 mb-6 max-w-lg" id="terms-desc">
+                                Para prosseguir com segurança, confirme que você leu e compreendeu os Termos de Uso, a
+                                Política de Privacidade e sua responsabilidade sobre os backups.
+                            </p>
+
+                            <button onclick="confirmTerms()" id="btn-confirm-terms"
+                                class="bg-plena-orange hover:bg-plena-dark text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-orange-200 transform hover:scale-105 transition-all flex items-center gap-2 group">
+                                <span>Li, Compreendi e Concordo</span>
+                                <i data-lucide="arrow-right"
+                                    class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+
+                            <div id="terms-accepted-badge"
+                                class="hidden flex flex-col items-center animate-in fade-in zoom-in duration-300">
+                                <span
+                                    class="bg-green-100 text-green-700 font-bold px-6 py-2 rounded-full text-sm border border-green-200 flex items-center gap-2 mb-2">
+                                    <i data-lucide="lock" class="w-4 h-4"></i>
+                                    Termos Aceitos e Registrados
+                                </span>
+                                <p class="text-xs text-gray-400 font-mono" id="terms-date">Carregando data...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. Rodapé Legal -->
+                    <div class="text-center border-t border-gray-200 pt-8">
+                        <p class="text-sm font-bold text-gray-800">Plena Soluções Digitais LTDA</p>
+                        <p class="text-xs text-gray-500 mt-1">CNPJ: 17.347.919/0001-59 • Todos os direitos reservados</p>
+                        <p class="text-[10px] text-gray-400 mt-4">
+                            Versão 4.1 Pro • Build 2026.01.07
+                        </p>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- NEW PROJECT MODAL -->
+    <div id="projectModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800" id="project-modal-title">Nova Obra</h3>
+                <button onclick="closeModal('projectModal')" class="text-gray-400"><i data-lucide="x"></i></button>
+            </div>
+            <form onsubmit="submitProject(event)" class="space-y-4">
+                <input type="hidden" id="pj-id">
+                <input type="text" id="pj-name" required placeholder="Nome da Obra (Ex: Reforma Banheiro)"
+                    class="w-full border p-2 rounded-lg">
+                <input type="text" id="pj-client" required placeholder="Nome do Cliente"
+                    class="w-full border p-2 rounded-lg">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Orçamento Total (Valor Cobrado)</label>
+                    <input type="number" step="0.01" id="pj-budget" required class="w-full border p-2 rounded-lg"
+                        placeholder="R$ 0,00">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Previsão Entrega</label>
+                    <input type="date" id="pj-deadline" class="w-full border p-2 rounded-lg">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Status</label>
+                    <select id="pj-status" class="w-full border p-2 rounded-lg">
+                        <option value="active">Em Andamento</option>
+                        <option value="planned">Planejada</option>
+                        <option value="paused">Pausada</option>
+                        <option value="finished">Concluída</option>
+                    </select>
+                </div>
+                <button type="submit"
+                    class="w-full bg-plena-orange text-white py-3 rounded-xl font-bold hover:bg-plena-dark"
+                    id="project-submit-btn">
+                    Criar Obra
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TRANSACTION MODAL (GENERIC & PROJECT SPECIFIC) -->
+    <div id="transModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+            <h3 class="text-lg font-bold text-gray-800 mb-4" id="tm-title">Lançamento Financeiro</h3>
+            <form onsubmit="submitTrans(event)" class="space-y-4">
+                <input type="hidden" id="tr-id">
+                <input type="hidden" id="tr-project-id">
+
+                <div class="grid grid-cols-2 gap-3 p-1 bg-gray-100 rounded-lg">
+                    <label class="cursor-pointer text-center">
+                        <input type="radio" name="tr-type" value="expense" class="peer hidden"
+                            onchange="renderCatOptions()">
+                        <div
+                            class="py-2 text-sm font-bold text-gray-500 rounded-md peer-checked:bg-white peer-checked:text-red-600 shadow-sm transition-all">
+                            Gasto
+                        </div>
+                    </label>
+                    <label class="cursor-pointer text-center">
+                        <input type="radio" name="tr-type" value="income" class="peer hidden"
+                            onchange="renderCatOptions()">
+                        <div
+                            class="py-2 text-sm font-bold text-gray-500 rounded-md peer-checked:bg-white peer-checked:text-green-600 shadow-sm transition-all">
+                            Recebido
+                        </div>
+                    </label>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Valor (R$)</label>
+                    <input type="number" id="tr-amount" step="0.01" min="0.01" required
+                        class="w-full border-2 border-gray-200 p-3 rounded-xl text-lg font-bold focus:border-plena-orange outline-none"
+                        placeholder="0,00">
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Descrição</label>
+                    <input type="text" id="tr-desc" required
+                        class="w-full border p-2 rounded-lg text-sm focus:border-plena-orange outline-none"
+                        placeholder="Ex: Compra de cimento ou Pagamento de cliente">
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Categoria</label>
+                    <select id="tr-cat" class="w-full border p-2 rounded-lg text-sm bg-white outline-none" required>
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Data</label>
+                    <input type="date" id="tr-date" required
+                        class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                </div>
+
+                <div id="project-select-container" class="hidden">
+                    <label class="text-xs font-bold text-gray-500 uppercase">Obra</label>
+                    <select id="tr-project-select" class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+
+                <button type="submit" class="w-full bg-gray-900 text-white py-3 rounded-lg font-bold">
+                    Salvar Lançamento
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SUPPLIER MODAL -->
+    <div id="supplierModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800" id="supplier-modal-title">Novo Fornecedor</h3>
+                <button onclick="closeModal('supplierModal')" class="text-gray-400"><i data-lucide="x"></i></button>
+            </div>
+            <form onsubmit="submitSupplier(event)" class="space-y-4">
+                <input type="hidden" id="sup-id">
+                <input type="text" id="sup-name" required placeholder="Nome do Fornecedor"
+                    class="w-full border p-2 rounded-lg">
+                <input type="text" id="sup-contact" required placeholder="Telefone/WhatsApp"
+                    class="w-full border p-2 rounded-lg">
+                <input type="text" id="sup-email" placeholder="E-mail" class="w-full border p-2 rounded-lg">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Tipo</label>
+                    <select id="sup-type" class="w-full border p-2 rounded-lg">
+                        <option value="material">Material de Construção</option>
+                        <option value="labor">Mão de Obra</option>
+                        <option value="both">Ambos</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Especialidade</label>
+                    <input type="text" id="sup-specialty" placeholder="Ex: Alvenaria, Elétrica, Hidráulica"
+                        class="w-full border p-2 rounded-lg">
+                </div>
+                <button type="submit"
+                    class="w-full bg-plena-orange text-white py-3 rounded-xl font-bold hover:bg-plena-dark">
+                    Salvar Fornecedor
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- CLOSING MODAL -->
+    <div id="closingModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+            <div class="bg-gradient-to-r from-gray-900 to-black p-6 text-center text-white">
+                <h3 class="font-bold text-lg">Fechamento do Dia</h3>
+                <p id="close-date" class="text-sm text-gray-300 mt-1">Hoje</p>
+                <p id="close-time" class="text-xs text-gray-500 mt-0">--:--</p>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4 mb-6">
+                    <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg border border-green-100">
+                        <div class="flex items-center">
+                            <i data-lucide="trending-up" class="w-4 h-4 text-green-600 mr-2"></i>
+                            <span class="text-sm">Entradas</span>
+                        </div>
+                        <span id="close-inc" class="font-bold text-green-700">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg border border-red-100">
+                        <div class="flex items-center">
+                            <i data-lucide="trending-down" class="w-4 h-4 text-red-600 mr-2"></i>
+                            <span class="text-sm">Saídas</span>
+                        </div>
+                        <span id="close-exp" class="font-bold text-red-700">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-4 border-t">
+                        <span class="font-bold text-gray-800">Saldo Final</span>
+                        <span id="close-bal" class="font-bold text-2xl text-gray-900">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <button onclick="shareClosing()"
+                        class="bg-[#25D366] text-white py-2.5 rounded-lg font-bold text-sm hover:bg-[#128C7E] flex justify-center items-center gap-2">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
+                    </button>
+                    <button onclick="printClosing()"
+                        class="bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 flex justify-center items-center gap-2">
+                        <i data-lucide="printer" class="w-4 h-4"></i> Imprimir
+                    </button>
+                </div>
+
+                <button onclick="closeModal('closingModal')"
+                    class="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-bold text-sm hover:bg-gray-200 transition-colors flex justify-center items-center gap-2">
+                    Concluir Fechamento
+                </button>
+
+                <div class="mt-4 pt-4 border-t border-gray-100 text-center">
+                    <a href="https://www.plenaaplicativos.com.br" target="_blank"
+                        class="text-[10px] text-gray-400 hover:text-plena-orange no-underline">
+                        Plena Soluções Digitais &copy; 2026
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // ESTADO GLOBAL
+        const DB_KEY = 'plena_obras_pro_v2';
+        const defaultDB = {
+            projects: [],
+            transactions: [],
+            suppliers: [],
+            categories: [
+                { id: '1', name: 'Material', type: 'expense', color: '#F97316' },
+                { id: '2', name: 'Mão de Obra', type: 'expense', color: '#3B82F6' },
+                { id: '3', name: 'Equipamento', type: 'expense', color: '#8B5CF6' },
+                { id: '4', name: 'Transporte', type: 'expense', color: '#6366F1' },
+                { id: '5', name: 'Pagamento Cliente', type: 'income', color: '#10B981' },
+                { id: '6', name: 'Adiantamento', type: 'income', color: '#F59E0B' }
+            ],
+            settings: {
+                companyName: '',
+                currency: 'R$',
+                theme: 'light',
+                autoBackup: true,
+                termsAccepted: false,
+                termsAcceptedAt: null
+            },
+            tutorial: {
+                completedSteps: [],
+                checklistState: {}
+            }
+        };
+
+        let db = JSON.parse(localStorage.getItem(DB_KEY)) || defaultDB;
+        let currentProjectId = null;
+
+        // UTILITÁRIOS
+        const save = () => {
+            localStorage.setItem(DB_KEY, JSON.stringify(db));
+            updateDataStatus();
+        };
+
+        const fmtMoney = (v) => {
+            return v.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        };
+
+        const fmtDate = (d) => {
+            if (!d) return '--/--/--';
+            const date = new Date(d);
+            return date.toLocaleDateString('pt-BR');
+        };
+
+        const fmtDateInput = (d) => {
+            return new Date(d).toISOString().split('T')[0];
+        };
+
+        const getID = () => {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        };
+
+        const calculatePercentage = (current, previous) => {
+            if (previous === 0) return current > 0 ? 100 : 0;
+            return ((current - previous) / previous * 100).toFixed(1);
+        };
+
+        // INICIALIZAÇÃO
+        // MANUAL & CHECKLIST LOGIC
+        function updateTutorialProgress() {
+            if (!db.tutorial) return;
+            const totalSteps = 7;
+            const completed = db.tutorial.completedSteps.length;
+            const progress = (completed / totalSteps) * 100;
+            
+            const pb = document.getElementById('tutorial-progress');
+            const pt = document.getElementById('tutorial-percent');
+            
+            if (pb) pb.style.width = `${progress}%`;
+            if (pt) pt.textContent = `${Math.round(progress)}%`;
+
+            // Update section buttons
+            db.tutorial.completedSteps.forEach(stepId => {
+                const btn = document.querySelector(`button[onclick="markSectionComplete('${stepId}')"]`);
+                if (btn) {
+                    btn.innerHTML = '<i data-lucide="check" class="w-4 h-4 mr-2"></i>Concluído';
+                    btn.classList.remove('bg-blue-50', 'text-blue-600', 'bg-orange-50', 'text-orange-600', 'bg-green-50', 'text-green-600', 'bg-purple-50', 'text-purple-600', 'bg-yellow-50', 'text-yellow-600', 'bg-red-50', 'text-red-600', 'bg-gray-50', 'text-gray-600');
+                    btn.classList.add('bg-green-100', 'text-green-700');
+                }
+            });
+        }
+
+        function markSectionComplete(sectionId) {
+            if (!db.tutorial) db.tutorial = { completedSteps: [], checklistState: {} };
+            if (!db.tutorial.completedSteps.includes(sectionId)) {
+                db.tutorial.completedSteps.push(sectionId);
+                save();
+                updateTutorialProgress();
+                showNotification('Etapa concluída!', 'success');
+            }
+        }
+
+        const checklistData = [
+            { id: 'chk_app', text: 'Instalar Aplicativo', sub: 'Acessar via ícone na tela inicial' },
+            { id: 'chk_config', text: 'Dados da Empresa', sub: 'Nome e moeda configurados' },
+            { id: 'chk_obra', text: 'Nova Obra', sub: 'Cadastrar sua primeira obra/reforma' },
+            { id: 'chk_gastos', text: 'Lançar Custos', sub: 'Registrar material ou mão de obra' },
+            { id: 'chk_receita', text: 'Registrar Receita', sub: 'Lançar adiantamento do cliente' },
+            { id: 'chk_relatorio', text: 'Relatórios', sub: 'Visualizar lucro da obra' },
+            { id: 'chk_backup', text: 'Backup', sub: 'Cópia de segurança realizada' }
+        ];
+
+        function renderChecklist() {
+            const container = document.getElementById('checklist-items');
+            if (!container || !db.tutorial) return;
+
+            container.innerHTML = checklistData.map(item => {
+                const isDone = db.tutorial.checklistState[item.id];
+                return `
+                    <div onclick="toggleChecklistItem('${item.id}')" class="flex items-start gap-3 p-3 rounded-xl border border-gray-100 hover:border-plena-blue cursor-pointer transition-all ${isDone ? 'bg-gray-50 opacity-75' : 'bg-white shadow-sm'}">
+                        <div class="w-6 h-6 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${isDone ? 'bg-green-500 border-green-500 text-white' : 'border-gray-200'}">
+                            ${isDone ? '<i data-lucide="check" class="w-4 h-4"></i>' : ''}
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-bold text-sm ${isDone ? 'text-gray-400 line-through' : 'text-gray-800'}">${item.text}</p>
+                            <p class="text-xs text-gray-500">${item.sub}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function toggleChecklistItem(id) {
+            if (!db.tutorial) db.tutorial = { completedSteps: [], checklistState: {} };
+            db.tutorial.checklistState[id] = !db.tutorial.checklistState[id];
+            save();
+            renderChecklist();
+        }
+
+        function resetChecklist() {
+            if (confirm('Deseja reiniciar seu checklist diário?')) {
+                db.tutorial.checklistState = {};
+                save();
+                renderChecklist();
+            }
+        }
+
+        function init() {
+            lucide.createIcons();
+
+            // Configurar datas padrão
+            const today = new Date().toISOString().split('T')[0];
+            const firstDay = new Date();
+            firstDay.setDate(1);
+            const firstDayStr = firstDay.toISOString().split('T')[0];
+
+            // Configurar inputs de data
+            document.getElementById('tr-date').value = today;
+            document.getElementById('month-selector').value = today.slice(0, 7);
+            document.getElementById('rep-start').value = firstDayStr;
+            document.getElementById('rep-end').value = today;
+            document.getElementById('filter-start').value = firstDayStr;
+            document.getElementById('filter-end').value = today;
+
+            // Renderizar dados iniciais
+            renderDashboard();
+            renderCats();
+            updateDataStatus();
+
+            // Tutorial e Checklist
+            updateTutorialProgress();
+            renderChecklist();
+
+            // Atualizar Termos
+            if (typeof updateTermsVisuals === 'function') updateTermsVisuals();
+
+            // Configurar periodicidade para salvar
+            setInterval(save, 30000); // Salva a cada 30 segundos
+        }
+
+        // ROTEAMENTO E NAVEGAÇÃO
+        function router(view, param = null) {
+            // Esconder todas as views
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hide'));
+
+            // Remover classe active de todos os nav items
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('bg-white/10', 'text-white');
+                el.classList.add('text-gray-400');
+            });
+
+            // Mostrar view selecionada
+            const viewElement = document.getElementById(`view-${view}`);
+            if (viewElement) {
+                viewElement.classList.remove('hide');
+                viewElement.classList.add('fade-in');
+            }
+
+            // Ativar nav item selecionado
+            const navElement = document.getElementById(`nav-${view}`);
+            if (navElement) {
+                navElement.classList.add('bg-white/10', 'text-white');
+                navElement.classList.remove('text-gray-400');
+            }
+
+            // Atualizar título da página
+            const titles = {
+                dashboard: 'Dashboard',
+                projects: 'Minhas Obras',
+                suppliers: 'Fornecedores',
+                finance: 'Caixa Geral',
+                reports: 'Relatórios',
+                settings: 'Configurações',
+                instructions: 'Manual de Uso',
+                about: 'Sobre a Plena'
+            };
+
+            document.getElementById('page-title').innerText = titles[view] || 'Plena Obras';
+
+            // Fechar sidebar no mobile
+            if (window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+
+            // Renderizar dados específicos da view
+            if (view === 'dashboard') {
+                renderDashboard();
+            } else if (view === 'projects') {
+                renderProjectsList();
+            } else if (view === 'finance') {
+                renderGeneralFinance();
+            } else if (view === 'suppliers') {
+                renderSuppliers();
+            } else if (view === 'settings') {
+                renderCats();
+            }
+
+            // Navegação para detalhes do projeto
+            if (view === 'project-detail' && param) {
+                currentProjectId = param;
+                loadProjectDetail(param);
+            } else {
+                currentProjectId = null;
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('hidden');
+
+            // Bloquear scroll do body quando sidebar aberta
+            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+        }
+
+        // DASHBOARD
+        function renderDashboard() {
+            const monthSelector = document.getElementById('month-selector').value;
+            const currentMonth = monthSelector || new Date().toISOString().slice(0, 7);
+
+            // Filtrar transações do mês atual
+            const monthTrans = db.transactions.filter(t => t.date.startsWith(currentMonth));
+
+            // Calcular totais
+            const income = monthTrans.filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const expense = monthTrans.filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+
+            // Projetos ativos
+            const activeProjects = db.projects.filter(p => p.status === 'active');
+
+            // Calcular lucro médio
+            const totalProfit = db.projects.reduce((sum, p) => {
+                const projTrans = db.transactions.filter(t => t.projectId === p.id);
+                const spent = projTrans.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0);
+                return sum + (p.budget - spent);
+            }, 0);
+            const avgProfit = activeProjects.length > 0 ? totalProfit / activeProjects.length : 0;
+
+            // Atualizar cards
+            document.getElementById('dash-active-projects').innerText = activeProjects.length;
+            document.getElementById('dash-total-received').innerText = fmtMoney(income);
+            document.getElementById('dash-total-spent').innerText = fmtMoney(expense);
+            document.getElementById('dash-profit').innerText = fmtMoney(avgProfit);
+
+            // Calcular e mostrar crescimento
+            const prevMonth = getPreviousMonthData(currentMonth);
+            const incomeGrowth = calculatePercentage(income, prevMonth.income);
+            const expenseGrowth = calculatePercentage(expense, prevMonth.expense);
+
+            document.getElementById('income-growth').innerText = `${incomeGrowth}%`;
+            document.getElementById('expense-growth').innerText = `${expenseGrowth}%`;
+
+            // Atualizar gráfico
+            renderChart(currentMonth);
+
+            // Atualizar top despesas
+            renderTopExpenses(monthTrans);
+
+            // Atualizar status dos projetos
+            renderProjectStatus();
+
+            // Atualizar obras em andamento
+            renderDashboardProjects();
+        }
+
+        function getPreviousMonthData(currentMonth) {
+            const [year, month] = currentMonth.split('-').map(Number);
+            let prevYear = year;
+            let prevMonth = month - 1;
+
+            if (prevMonth === 0) {
+                prevMonth = 12;
+                prevYear--;
+            }
+
+            const prevMonthStr = `${prevYear}-${prevMonth.toString().padStart(2, '0')}`;
+            const prevTrans = db.transactions.filter(t => t.date.startsWith(prevMonthStr));
+
+            return {
+                income: prevTrans.filter(t => t.type === 'income').reduce((a, b) => a + b.amount, 0),
+                expense: prevTrans.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0)
+            };
+        }
+
+        function renderChart(month) {
+            const chartArea = document.getElementById('chart-area');
+            const transactions = db.transactions.filter(t => t.date.startsWith(month));
+
+            // Agrupar por semana
+            const weeks = {};
+            transactions.forEach(t => {
+                const date = new Date(t.date);
+                const weekStart = getWeekStart(date);
+                const weekKey = weekStart.toISOString().split('T')[0];
+
+                if (!weeks[weekKey]) {
+                    weeks[weekKey] = { income: 0, expense: 0, label: `Sem ${getWeekNumber(date)}` };
+                }
+
+                if (t.type === 'income') {
+                    weeks[weekKey].income += t.amount;
+                } else {
+                    weeks[weekKey].expense += t.amount;
+                }
+            });
+
+            // Preparar dados para o gráfico
+            const weeksArray = Object.values(weeks).slice(-4); // Últimas 4 semanas
+            const maxValue = Math.max(...weeksArray.map(w => Math.max(w.income, w.expense)), 100);
+
+            let chartHTML = '';
+            weeksArray.forEach(week => {
+                const incomeHeight = (week.income / maxValue) * 100;
+                const expenseHeight = (week.expense / maxValue) * 100;
+
+                chartHTML += `
+                    <div class="bar-group">
+                        <div class="bar-wrapper">
+                            <div class="bar bg-green-500" 
+                                 style="height:${incomeHeight}%"
+                                 data-value="${fmtMoney(week.income)}"></div>
+                            <div class="bar bg-red-500" 
+                                 style="height:${expenseHeight}%"
+                                 data-value="${fmtMoney(week.expense)}"></div>
+                        </div>
+                        <div class="x-label">${week.label}</div>
+                    </div>
+                `;
+            });
+
+            chartArea.innerHTML = chartHTML || '<p class="text-gray-400 text-sm text-center">Sem dados para exibir</p>';
+        }
+
+        function getWeekStart(date) {
+            const day = date.getDay();
+            const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+            return new Date(date.setDate(diff));
+        }
+
+        function getWeekNumber(date) {
+            const firstDay = new Date(date.getFullYear(), 0, 1);
+            const pastDays = (date - firstDay) / 86400000;
+            return Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
+        }
+
+        function renderTopExpenses(transactions) {
+            const expenseMap = {};
+
+            transactions.filter(t => t.type === 'expense').forEach(t => {
+                const cat = db.categories.find(c => c.id === t.catId);
+                const catName = cat ? cat.name : 'Geral';
+                expenseMap[catName] = (expenseMap[catName] || 0) + t.amount;
+            });
+
+            const topExpenses = Object.entries(expenseMap)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+
+            const container = document.getElementById('top-expenses');
+
+            if (topExpenses.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-sm text-center">Sem despesas este mês</p>';
+                return;
+            }
+
+            const maxExpense = topExpenses[0]?.[1] || 1;
+
+            container.innerHTML = topExpenses.map(([name, value]) => `
+                <div class="space-y-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-medium text-gray-700">${name}</span>
+                        <span class="text-sm font-bold text-red-600">${fmtMoney(value)}</span>
+                    </div>
+                    <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                        <div class="bg-red-400 h-full transition-all duration-500" 
+                             style="width: ${(value / maxExpense) * 100}%"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderProjectStatus() {
+            const statusCount = {
+                active: db.projects.filter(p => p.status === 'active').length,
+                planned: db.projects.filter(p => p.status === 'planned').length,
+                paused: db.projects.filter(p => p.status === 'paused').length,
+                finished: db.projects.filter(p => p.status === 'finished').length
+            };
+
+            const container = document.getElementById('project-status');
+
+            const statusItems = [
+                { label: 'Em Andamento', count: statusCount.active, color: 'bg-green-500' },
+                { label: 'Planejadas', count: statusCount.planned, color: 'bg-blue-500' },
+                { label: 'Pausadas', count: statusCount.paused, color: 'bg-yellow-500' },
+                { label: 'Concluídas', count: statusCount.finished, color: 'bg-gray-500' }
+            ];
+
+            container.innerHTML = statusItems.map(item => `
+                <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 rounded-full mr-2 ${item.color}"></div>
+                        <span class="text-sm text-gray-700">${item.label}</span>
+                    </div>
+                    <span class="text-sm font-bold text-gray-900">${item.count}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderDashboardProjects() {
+            const container = document.getElementById('projects-dashboard-list');
+            const activeProjects = db.projects.filter(p => p.status === 'active').slice(0, 5);
+
+            if (activeProjects.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-sm text-center">Nenhuma obra ativa</p>';
+                return;
+            }
+
+            container.innerHTML = activeProjects.map(p => {
+                const projTrans = db.transactions.filter(t => t.projectId === p.id);
+                const spent = projTrans.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0);
+                const received = projTrans.filter(t => t.type === 'income').reduce((a, b) => a + b.amount, 0);
+                const profit = p.budget - spent;
+
+                return `
+                    <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg border border-gray-100 cursor-pointer" onclick="router('project-detail', '${p.id}')">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-plena-orange/10 flex items-center justify-center mr-3">
+                                <i data-lucide="hard-hat" class="w-4 h-4 text-plena-orange"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">${p.name}</p>
+                                <p class="text-xs text-gray-500">${p.client}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs font-bold ${profit >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                ${fmtMoney(profit)}
+                            </p>
+                            <p class="text-xs text-gray-500">${Math.round((spent / p.budget) * 100)}% gasto</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // PROJETOS
+        function renderProjectsList() {
+            const container = document.getElementById('projects-list-full');
+
+            if (db.projects.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full bg-white p-8 rounded-2xl text-center border border-gray-100">
+                        <i data-lucide="hard-hat" class="w-12 h-12 text-gray-300 mx-auto mb-4"></i>
+                        <h3 class="text-lg font-bold text-gray-800">Nenhuma obra cadastrada</h3>
+                        <p class="text-gray-500 mb-4">Comece criando sua primeira obra</p>
+                        <button onclick="openProjectModal()" class="bg-plena-orange text-white px-4 py-2 rounded-lg">
+                            Criar Primeira Obra
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = db.projects.map(p => {
+                const projTrans = db.transactions.filter(t => t.projectId === p.id);
+                const spent = projTrans.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0);
+                const received = projTrans.filter(t => t.type === 'income').reduce((a, b) => a + b.amount, 0);
+                const progress = p.budget > 0 ? Math.min(100, Math.round((spent / p.budget) * 100)) : 0;
+
+                const statusColors = {
+                    active: 'bg-blue-100 text-blue-800',
+                    planned: 'bg-gray-100 text-gray-800',
+                    paused: 'bg-yellow-100 text-yellow-800',
+                    finished: 'bg-green-100 text-green-800'
+                };
+
+                const statusLabels = {
+                    active: 'Em Andamento',
+                    planned: 'Planejada',
+                    paused: 'Pausada',
+                    finished: 'Concluída'
+                };
+
+                return `
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:border-plena-orange transition-all cursor-pointer card-hover" onclick="router('project-detail', '${p.id}')">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-lg mb-1">${p.name}</h3>
+                                <p class="text-xs text-gray-500">${p.client}</p>
+                            </div>
+                            <span class="text-xs font-bold px-2 py-1 rounded-full ${statusColors[p.status] || 'bg-gray-100 text-gray-800'}">
+                                ${statusLabels[p.status] || p.status}
+                            </span>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="flex justify-between text-xs text-gray-500 mb-1">
+                                <span>Progresso do Orçamento</span>
+                                <span>${progress}%</span>
+                            </div>
+                            <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                                <div class="bg-plena-orange h-full transition-all duration-500" style="width: ${progress}%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div>
+                                <p class="text-xs text-gray-500">Orçamento</p>
+                                <p class="font-bold text-plena-orange">${fmtMoney(p.budget)}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">Gasto</p>
+                                <p class="font-bold text-red-500">${fmtMoney(spent)}</p>
+                            </div>
+                        </div>
+                        
+                        ${p.deadline ? `
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <p class="text-xs text-gray-500">Previsão Entrega</p>
+                                <p class="text-sm font-medium">${fmtDate(p.deadline)}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        function loadProjectDetail(id) {
+            const p = db.projects.find(x => x.id === id);
+            if (!p) return router('projects');
+
+            // Calcular transações
+            const trans = db.transactions.filter(t => t.projectId === id);
+            const spent = trans.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0);
+            const received = trans.filter(t => t.type === 'income').reduce((a, b) => a + b.amount, 0);
+            const profit = p.budget - spent;
+
+            // Atualizar informações
+            document.getElementById('pd-title').innerText = p.name;
+            document.getElementById('pd-client').innerText = `Cliente: ${p.client}`;
+
+            const statusLabels = {
+                active: 'Em Andamento',
+                planned: 'Planejada',
+                paused: 'Pausada',
+                finished: 'Concluída'
+            };
+
+            const statusColors = {
+                active: 'bg-blue-100 text-blue-800',
+                planned: 'bg-gray-100 text-gray-800',
+                paused: 'bg-yellow-100 text-yellow-800',
+                finished: 'bg-green-100 text-green-800'
+            };
+
+            document.getElementById('pd-status').innerText = statusLabels[p.status] || p.status;
+            document.getElementById('pd-status').className = `ml-auto px-3 py-1 rounded-full text-xs font-bold uppercase ${statusColors[p.status] || 'bg-gray-100 text-gray-800'}`;
+
+            document.getElementById('pd-budget').innerText = fmtMoney(p.budget);
+            document.getElementById('pd-spent').innerText = fmtMoney(spent);
+            document.getElementById('pd-received').innerText = fmtMoney(received);
+            document.getElementById('pd-profit').innerText = fmtMoney(profit);
+
+            // Atualizar lista de transações
+            document.getElementById('pd-trans-list').innerHTML = trans.slice().reverse().map(t => {
+                const cat = db.categories.find(c => c.id === t.catId);
+                return `
+                    <tr>
+                        <td class="px-4 py-3 text-gray-500">${fmtDate(t.date)}</td>
+                        <td class="px-4 py-3">
+                            <span class="px-2 py-1 rounded text-[10px] font-bold uppercase ${t.type === 'income' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+                                ${t.type === 'income' ? 'Entrada' : 'Saída'}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3">${t.desc}</td>
+                        <td class="px-4 py-3">
+                            <span class="text-xs ${cat ? '' : 'text-gray-500'}">
+                                ${cat ? cat.name : 'Geral'}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 text-right font-bold ${t.type === 'income' ? 'text-green-600' : 'text-red-600'}">
+                            ${t.type === 'income' ? '+' : '-'} ${fmtMoney(t.amount)}
+                        </td>
+                        <td class="px-4 py-3 text-center">
+                            <button onclick="deleteTransaction('${t.id}')" class="text-gray-300 hover:text-red-500 transition-colors">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('') || `
+                <tr>
+                    <td colspan="6" class="px-4 py-8 text-center text-gray-400">
+                        <i data-lucide="file-text" class="w-8 h-8 mx-auto mb-2"></i>
+                        <p>Nenhum lançamento registrado</p>
+                    </td>
+                </tr>
+            `;
+
+            lucide.createIcons();
+        }
+
+        // FORNECEDORES
+        function renderSuppliers() {
+            const container = document.getElementById('suppliers-list');
+
+            if (db.suppliers.length === 0) {
+                container.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="px-6 py-8 text-center text-gray-400">
+                            <i data-lucide="truck" class="w-8 h-8 mx-auto mb-2"></i>
+                            <p>Nenhum fornecedor cadastrado</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            container.innerHTML = db.suppliers.map(s => {
+                const typeLabels = {
+                    material: 'Material',
+                    labor: 'Mão de Obra',
+                    both: 'Ambos'
+                };
+
+                return `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 font-medium">${s.name}</td>
+                        <td class="px-6 py-4 text-gray-600">${s.contact}</td>
+                        <td class="px-6 py-4">
+                            <span class="px-2 py-1 rounded-full text-xs ${s.type === 'material' ? 'bg-orange-100 text-orange-800' : s.type === 'labor' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'}">
+                                ${typeLabels[s.type]}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-gray-600">${s.specialty || '-'}</td>
+                        <td class="px-6 py-4 text-center">
+                            <button onclick="editSupplier('${s.id}')" class="text-gray-400 hover:text-blue-500 transition-colors mr-2">
+                                <i data-lucide="edit" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="deleteSupplier('${s.id}')" class="text-gray-400 hover:text-red-500 transition-colors">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // FINANCEIRO GERAL
+        function renderGeneralFinance() {
+            const term = document.getElementById('search-term').value.toLowerCase();
+            const filter = document.getElementById('filter-type').value;
+            const start = document.getElementById('filter-start').value;
+            const end = document.getElementById('filter-end').value;
+
+            // Filtrar transações
+            let filtered = db.transactions.filter(t => {
+                const matchesTerm = t.desc.toLowerCase().includes(term);
+                const matchesType = filter === 'all' || t.type === filter;
+                const matchesDate = (!start || t.date >= start) && (!end || t.date <= end);
+
+                return matchesTerm && matchesType && matchesDate;
+            });
+
+            // Ordenar por data (mais recente primeiro)
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            // Atualizar tabela
+            const tbody = document.getElementById('trans-list');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="px-6 py-8 text-center text-gray-400">
+                            <i data-lucide="file-text" class="w-8 h-8 mx-auto mb-2"></i>
+                            <p>Nenhuma transação encontrada</p>
+                        </td>
+                    </tr>
+                `;
+                updateFinanceSummary(0, 0);
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(t => {
+                const proj = t.projectId ? db.projects.find(p => p.id === t.projectId) : null;
+                const cat = db.categories.find(c => c.id === t.catId);
+
+                return `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 text-gray-500">${fmtDate(t.date)}</td>
+                        <td class="px-6 py-4">
+                            ${proj ? `
+                                <span class="text-sm text-gray-700">${proj.name}</span>
+                                <div class="text-xs text-gray-400">${proj.client}</div>
+                            ` : '<span class="text-gray-400">-</span>'}
+                        </td>
+                        <td class="px-6 py-4">${t.desc}</td>
+                        <td class="px-6 py-4">
+                            <span class="text-xs ${cat ? '' : 'text-gray-500'}">
+                                ${cat ? cat.name : 'Geral'}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-right font-bold ${t.type === 'income' ? 'text-green-600' : 'text-red-600'}">
+                            ${t.type === 'income' ? '+' : '-'} ${fmtMoney(t.amount)}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            updateFinanceSummary(filtered);
+        }
+
+        function updateFinanceSummary(transactions) {
+            const income = transactions.filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const expense = transactions.filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const balance = income - expense;
+
+            document.getElementById('filter-income').textContent = fmtMoney(income);
+            document.getElementById('filter-expense').textContent = fmtMoney(expense);
+            document.getElementById('filter-balance').textContent = fmtMoney(balance);
+        }
+
+        function clearFinanceFilters() {
+            const firstDay = new Date();
+            firstDay.setDate(1);
+            const firstDayStr = firstDay.toISOString().split('T')[0];
+            const today = new Date().toISOString().split('T')[0];
+
+            document.getElementById('search-term').value = '';
+            document.getElementById('filter-type').value = 'all';
+            document.getElementById('filter-start').value = firstDayStr;
+            document.getElementById('filter-end').value = today;
+
+            renderGeneralFinance();
+        }
+
+        // MODAIS
+        function openProjectModal(project = null) {
+            const modal = document.getElementById('projectModal');
+            const title = modal.querySelector('h3');
+            const btn = modal.querySelector('button[type="submit"]');
+            const form = modal.querySelector('form');
+
+            if (project) {
+                // Modo edição
+                title.textContent = 'Editar Obra';
+                btn.textContent = 'Atualizar Obra';
+                document.getElementById('pj-id').value = project.id;
+                document.getElementById('pj-name').value = project.name;
+                document.getElementById('pj-client').value = project.client;
+                document.getElementById('pj-budget').value = project.budget;
+                document.getElementById('pj-deadline').value = project.deadline || '';
+                document.getElementById('pj-status').value = project.status;
+            } else {
+                // Modo criação
+                title.textContent = 'Nova Obra';
+                btn.textContent = 'Criar Obra';
+                form.reset();
+                document.getElementById('pj-id').value = '';
+                document.getElementById('pj-deadline').value = new Date().toISOString().split('T')[0];
+                document.getElementById('pj-status').value = 'active';
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function openTransModal(type = null) {
+            renderCatOptions();
+            renderProjectOptions();
+
+            const modal = document.getElementById('transModal');
+            const form = modal.querySelector('form');
+
+            form.reset();
+            document.getElementById('tr-id').value = '';
+            document.getElementById('tr-project-id').value = currentProjectId || '';
+            document.getElementById('tr-date').value = new Date().toISOString().split('T')[0];
+
+            // Configurar título baseado no contexto
+            if (currentProjectId) {
+                const project = db.projects.find(p => p.id === currentProjectId);
+                document.getElementById('tm-title').innerText = type === 'income' ? 'Lançar Recebimento' : 'Lançar Gasto';
+                document.getElementById('project-select-container').classList.add('hidden');
+            } else {
+                document.getElementById('tm-title').innerText = 'Lançamento Avulso (Geral)';
+                document.getElementById('project-select-container').classList.remove('hidden');
+            }
+
+            // Configurar tipo padrão
+            if (type) {
+                document.querySelector(`input[name="tr-type"][value="${type}"]`).checked = true;
+            } else {
+                document.querySelector('input[name="tr-type"][value="expense"]').checked = true;
+            }
+
+            renderCatOptions();
+            modal.classList.remove('hidden');
+        }
+
+        function openProjectTransModal(type) {
+            openTransModal(type);
+        }
+
+        function openSupplierModal(supplier = null) {
+            const modal = document.getElementById('supplierModal');
+            const title = modal.querySelector('h3');
+            const form = modal.querySelector('form');
+
+            if (supplier) {
+                title.textContent = 'Editar Fornecedor';
+                document.getElementById('sup-id').value = supplier.id;
+                document.getElementById('sup-name').value = supplier.name;
+                document.getElementById('sup-contact').value = supplier.contact;
+                document.getElementById('sup-email').value = supplier.email || '';
+                document.getElementById('sup-type').value = supplier.type;
+                document.getElementById('sup-specialty').value = supplier.specialty || '';
+            } else {
+                title.textContent = 'Novo Fornecedor';
+                form.reset();
+                document.getElementById('sup-id').value = '';
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function openClosingModal() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayTrans = db.transactions.filter(t => t.date === today);
+
+            const income = todayTrans.filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const expense = todayTrans.filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const balance = income - expense;
+
+            document.getElementById('close-inc').textContent = fmtMoney(income);
+            document.getElementById('close-exp').textContent = fmtMoney(expense);
+            document.getElementById('close-bal').textContent = fmtMoney(balance);
+            document.getElementById('close-date').textContent = fmtDate(today);
+            document.getElementById('close-time').textContent = new Date().toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            document.getElementById('closingModal').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function renderCatOptions() {
+            const type = document.querySelector('input[name="tr-type"]:checked')?.value || 'expense';
+            const select = document.getElementById('tr-cat');
+
+            const filteredCats = db.categories.filter(c => c.type === type);
+
+            select.innerHTML = filteredCats.map(c =>
+                `<option value="${c.id}">${c.name}</option>`
+            ).join('');
+        }
+
+        function renderProjectOptions() {
+            const select = document.getElementById('tr-project-select');
+            select.innerHTML = `
+                <option value="">Selecionar Obra (Opcional)</option>
+                ${db.projects.map(p => `<option value="${p.id}">${p.name} - ${p.client}</option>`).join('')}
+            `;
+        }
+
+        // CRUD PROJETOS
+        function submitProject(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('pj-id').value;
+            const name = document.getElementById('pj-name').value.trim();
+            const client = document.getElementById('pj-client').value.trim();
+            const budget = parseFloat(document.getElementById('pj-budget').value) || 0;
+            const deadline = document.getElementById('pj-deadline').value;
+            const status = document.getElementById('pj-status').value;
+
+            if (!name || !client) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+
+            const project = {
+                id: id || getID(),
+                name,
+                client,
+                budget,
+                deadline: deadline || null,
+                status,
+                created: id ? undefined : new Date().toISOString(),
+                updated: new Date().toISOString()
+            };
+
+            if (id) {
+                // Editar projeto existente
+                const index = db.projects.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    db.projects[index] = { ...db.projects[index], ...project };
+                }
+            } else {
+                // Adicionar novo projeto
+                db.projects.push(project);
+            }
+
+            save();
+            closeModal('projectModal');
+
+            // Atualizar views
+            if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                renderDashboard();
+            }
+            if (document.getElementById('view-projects').classList.contains('hide') === false) {
+                renderProjectsList();
+            }
+
+            // Se estiver na view de detalhes, atualizar
+            if (currentProjectId === project.id) {
+                loadProjectDetail(project.id);
+            }
+
+            showNotification(id ? 'Obra atualizada com sucesso!' : 'Obra criada com sucesso!', 'success');
+        }
+
+        function editProject() {
+            if (!currentProjectId) return;
+            const project = db.projects.find(p => p.id === currentProjectId);
+            if (project) {
+                openProjectModal(project);
+            }
+        }
+
+        function finishProject() {
+            if (!currentProjectId) return;
+
+            if (confirm('Deseja encerrar esta obra? Ela será movida para o status "Concluída".')) {
+                const index = db.projects.findIndex(p => p.id === currentProjectId);
+                if (index !== -1) {
+                    db.projects[index].status = 'finished';
+                    save();
+                    router('projects');
+                    showNotification('Obra encerrada com sucesso!', 'success');
+                }
+            }
+        }
+
+        // CRUD TRANSAÇÕES
+        function submitTrans(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('tr-id').value;
+            const type = document.querySelector('input[name="tr-type"]:checked').value;
+            const amount = parseFloat(document.getElementById('tr-amount').value);
+            const desc = document.getElementById('tr-desc').value.trim();
+            const catId = document.getElementById('tr-cat').value;
+            const date = document.getElementById('tr-date').value;
+
+            // Determinar projectId
+            let projectId = document.getElementById('tr-project-id').value;
+            if (!projectId) {
+                projectId = document.getElementById('tr-project-select').value || null;
+            }
+
+            if (!desc || !amount || amount <= 0) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            const transaction = {
+                id: id || getID(),
+                type,
+                amount,
+                desc,
+                catId,
+                date,
+                projectId: projectId || null
+            };
+
+            if (id) {
+                // Editar transação existente
+                const index = db.transactions.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    db.transactions[index] = transaction;
+                }
+            } else {
+                // Adicionar nova transação
+                db.transactions.push(transaction);
+            }
+
+            save();
+            closeModal('transModal');
+
+            // Resetar formulário
+            e.target.reset();
+            document.getElementById('tr-date').value = new Date().toISOString().split('T')[0];
+
+            // Atualizar views
+            if (currentProjectId) {
+                loadProjectDetail(currentProjectId);
+            } else if (document.getElementById('view-finance').classList.contains('hide') === false) {
+                renderGeneralFinance();
+            } else if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                renderDashboard();
+            }
+
+            showNotification('Lançamento salvo com sucesso!', 'success');
+        }
+
+        function deleteTransaction(id) {
+            if (confirm('Tem certeza que deseja excluir este lançamento?')) {
+                db.transactions = db.transactions.filter(t => t.id !== id);
+                save();
+
+                // Atualizar views
+                if (currentProjectId) {
+                    loadProjectDetail(currentProjectId);
+                } else if (document.getElementById('view-finance').classList.contains('hide') === false) {
+                    renderGeneralFinance();
+                } else if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                    renderDashboard();
+                }
+
+                showNotification('Lançamento excluído com sucesso!', 'success');
+            }
+        }
+
+        // CRUD FORNECEDORES
+        function submitSupplier(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('sup-id').value;
+            const name = document.getElementById('sup-name').value.trim();
+            const contact = document.getElementById('sup-contact').value.trim();
+            const email = document.getElementById('sup-email').value.trim();
+            const type = document.getElementById('sup-type').value;
+            const specialty = document.getElementById('sup-specialty').value.trim();
+
+            if (!name || !contact) {
+                alert('Por favor, preencha os campos obrigatórios.');
+                return;
+            }
+
+            const supplier = {
+                id: id || getID(),
+                name,
+                contact,
+                email: email || null,
+                type,
+                specialty: specialty || null
+            };
+
+            if (id) {
+                // Editar fornecedor existente
+                const index = db.suppliers.findIndex(s => s.id === id);
+                if (index !== -1) {
+                    db.suppliers[index] = supplier;
+                }
+            } else {
+                // Adicionar novo fornecedor
+                db.suppliers.push(supplier);
+            }
+
+            save();
+            closeModal('supplierModal');
+            renderSuppliers();
+            showNotification(id ? 'Fornecedor atualizado!' : 'Fornecedor cadastrado!', 'success');
+        }
+
+        function editSupplier(id) {
+            const supplier = db.suppliers.find(s => s.id === id);
+            if (supplier) {
+                openSupplierModal(supplier);
+            }
+        }
+
+        function deleteSupplier(id) {
+            if (confirm('Tem certeza que deseja excluir este fornecedor?')) {
+                db.suppliers = db.suppliers.filter(s => s.id !== id);
+                save();
+                renderSuppliers();
+                showNotification('Fornecedor excluído com sucesso!', 'success');
+            }
+        }
+
+        // RELATÓRIOS
+        function generateReport() {
+            const start = document.getElementById('rep-start').value;
+            const end = document.getElementById('rep-end').value;
+
+            if (!start || !end) {
+                alert('Por favor, selecione um período.');
+                return;
+            }
+
+            // Filtrar transações do período
+            const transactions = db.transactions.filter(t => t.date >= start && t.date <= end);
+            const income = transactions.filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const expense = transactions.filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const balance = income - expense;
+
+            // Projetos ativos no período
+            const activeProjects = db.projects.filter(p => {
+                if (!p.created) return false;
+                return p.created <= end && (p.status === 'active' || p.status === 'finished');
+            });
+
+            document.getElementById('rep-active').textContent = activeProjects.length;
+            document.getElementById('rep-inc').textContent = fmtMoney(income);
+            document.getElementById('rep-exp').textContent = fmtMoney(expense);
+            document.getElementById('rep-bal').textContent = fmtMoney(balance);
+
+            // Gerar análise por obra
+            renderProjectReport(transactions);
+
+            // Gerar análise por categoria
+            renderCategoryReport(transactions);
+
+            document.getElementById('report-result').classList.remove('hide');
+        }
+
+        function generateFullReport() {
+            // Configurar período do mês atual
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+
+            document.getElementById('rep-start').value = firstDay.toISOString().split('T')[0];
+            document.getElementById('rep-end').value = today.toISOString().split('T')[0];
+
+            generateReport();
+        }
+
+        function renderProjectReport(transactions) {
+            const projectMap = {};
+
+            transactions.forEach(t => {
+                if (!t.projectId) return;
+
+                const project = db.projects.find(p => p.id === t.projectId);
+                if (!project) return;
+
+                if (!projectMap[project.id]) {
+                    projectMap[project.id] = {
+                        name: project.name,
+                        client: project.client,
+                        income: 0,
+                        expense: 0
+                    };
+                }
+
+                if (t.type === 'income') {
+                    projectMap[project.id].income += t.amount;
+                } else {
+                    projectMap[project.id].expense += t.amount;
+                }
+            });
+
+            const container = document.getElementById('project-report');
+            const projects = Object.values(projectMap);
+
+            if (projects.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center">Sem dados por obra no período</p>';
+                return;
+            }
+
+            container.innerHTML = projects.map(p => {
+                const profit = p.income - p.expense;
+                return `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div>
+                            <p class="text-sm font-medium text-gray-800">${p.name}</p>
+                            <p class="text-xs text-gray-500">${p.client}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-bold ${profit >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                ${fmtMoney(profit)}
+                            </p>
+                            <p class="text-xs text-gray-500">${fmtMoney(p.income)} / ${fmtMoney(p.expense)}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderCategoryReport(transactions) {
+            const categoryMap = {};
+
+            transactions.forEach(t => {
+                const cat = db.categories.find(c => c.id === t.catId);
+                const catName = cat ? cat.name : 'Geral';
+                const catType = cat ? cat.type : t.type;
+
+                if (!categoryMap[catName]) {
+                    categoryMap[catName] = {
+                        income: 0,
+                        expense: 0,
+                        color: cat?.color || '#6B7280',
+                        type: catType
+                    };
+                }
+
+                if (t.type === 'income') {
+                    categoryMap[catName].income += t.amount;
+                } else {
+                    categoryMap[catName].expense += t.amount;
+                }
+            });
+
+            const container = document.getElementById('category-report');
+            const sortedCategories = Object.entries(categoryMap)
+                .sort((a, b) => (b[1].income + b[1].expense) - (a[1].income + a[1].expense));
+
+            if (sortedCategories.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center">Sem dados por categoria no período</p>';
+                return;
+            }
+
+            container.innerHTML = sortedCategories.map(([name, data]) => {
+                const total = data.income + data.expense;
+                return `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full mr-3" style="background:${data.color}"></div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">${name}</p>
+                                <p class="text-xs text-gray-500">${data.type === 'income' ? 'Receita' : 'Despesa'}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-bold ${data.type === 'income' ? 'text-green-600' : 'text-red-600'}">
+                                ${data.type === 'income' ? '+' : '-'}${fmtMoney(total)}
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // EXPORTAÇÃO E COMPARTILHAMENTO
+        function exportProjectsCSV() {
+            const headers = ['Nome', 'Cliente', 'Orçamento', 'Status', 'Data Criação', 'Previsão Entrega'];
+            const rows = db.projects.map(p => [
+                `"${p.name}"`,
+                `"${p.client}"`,
+                p.budget.toFixed(2).replace('.', ','),
+                p.status,
+                fmtDate(p.created),
+                p.deadline ? fmtDate(p.deadline) : ''
+            ]);
+
+            const csv = [headers, ...rows].map(row => row.join(';')).join('\n');
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+
+            a.href = url;
+            a.download = `obras_plena_${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+
+            URL.revokeObjectURL(url);
+            showNotification('CSV exportado com sucesso!', 'success');
+        }
+
+        function shareReport() {
+            const start = document.getElementById('rep-start').value;
+            const end = document.getElementById('rep-end').value;
+            const income = document.getElementById('rep-inc').textContent;
+            const expense = document.getElementById('rep-exp').textContent;
+            const balance = document.getElementById('rep-bal').textContent;
+
+            const message = `*📊 Relatório de Obras - Plena Obras*%0A%0A` +
+                `*Período:* ${fmtDate(start)} à ${fmtDate(end)}%0A%0A` +
+                `✅ *Entradas:* ${income}%0A` +
+                `🔻 *Saídas:* ${expense}%0A` +
+                `💰 *Saldo:* ${balance}%0A%0A` +
+                `_Gerado em ${new Date().toLocaleDateString('pt-BR')}_`;
+
+            window.open(`https://wa.me/?text=${message}`, '_blank');
+        }
+
+        function shareClosing() {
+            const today = new Date().toISOString().split('T')[0];
+            const income = document.getElementById('close-inc').textContent;
+            const expense = document.getElementById('close-exp').textContent;
+            const balance = document.getElementById('close-bal').textContent;
+
+            const message = `*🔒 Fechamento de Caixa*%0A%0A` +
+                `*Data:* ${fmtDate(today)}%0A` +
+                `*Hora:* ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}%0A%0A` +
+                `✅ *Entradas:* ${income}%0A` +
+                `🔻 *Saídas:* ${expense}%0A` +
+                `💰 *Saldo Final:* ${balance}%0A%0A` +
+                `_Plena Obras - Gestão de Construção_`;
+
+            window.open(`https://wa.me/?text=${message}`, '_blank');
+        }
+
+        function printReport() {
+            const printContent = document.getElementById('report-result').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = `
+                <div style="padding: 20px; font-family: sans-serif;">
+                    <h1 style="text-align: center; color: #F97316;">Relatório de Obras</h1>
+                    <div style="margin: 20px 0;">${printContent}</div>
+                    <p style="text-align: center; color: #666; font-size: 12px; margin-top: 30px;">
+                        Gerado por Plena Obras • ${new Date().toLocaleDateString('pt-BR')}
+                    </p>
+                </div>
+            `;
+
+            window.print();
+            document.body.innerHTML = originalContent;
+            router('reports');
+        }
+
+        function printProjects() {
+            const printContent = document.getElementById('view-projects').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = `
+                <div style="padding: 20px; font-family: sans-serif;">
+                    <h1 style="text-align: center; color: #F97316;">Lista de Obras</h1>
+                    <div style="margin: 20px 0;">${printContent}</div>
+                    <p style="text-align: center; color: #666; font-size: 12px; margin-top: 30px;">
+                        Gerado por Plena Obras • ${new Date().toLocaleDateString('pt-BR')}
+                    </p>
+                </div>
+            `;
+
+            window.print();
+            document.body.innerHTML = originalContent;
+            router('projects');
+        }
+
+        function printClosing() {
+            const printContent = document.getElementById('closingModal').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = `
+                <div style="padding: 20px; font-family: sans-serif;">
+                    <h1 style="text-align: center; color: #F97316;">Fechamento de Caixa</h1>
+                    <div style="margin: 20px 0;">${printContent}</div>
+                    <p style="text-align: center; color: #666; font-size: 12px; margin-top: 30px;">
+                        Gerado por Plena Obras • ${new Date().toLocaleDateString('pt-BR')}
+                    </p>
+                </div>
+            `;
+
+            window.print();
+            document.body.innerHTML = originalContent;
+        }
+
+        function exportDashboardPDF() {
+            // Simular exportação PDF
+            showNotification('Exportação PDF simulada (em produção, use biblioteca como jsPDF)', 'info');
+        }
+
+        function downloadReportPDF() {
+            // Simular download PDF
+            showNotification('Download PDF simulada (em produção, use biblioteca como jsPDF)', 'info');
+        }
+
+        // CONFIGURAÇÕES
+        function toggleCatForm() {
+            const formBox = document.getElementById('cat-form-box');
+            formBox.classList.toggle('hidden');
+
+            if (!formBox.classList.contains('hidden')) {
+                document.getElementById('new-cat-name').focus();
+            }
+        }
+
+        function renderCats() {
+            const container = document.getElementById('cat-list');
+
+            if (db.categories.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-sm text-center">Nenhuma categoria cadastrada</p>';
+                return;
+            }
+
+            container.innerHTML = db.categories.map(cat => `
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 rounded-full mr-3" style="background:${cat.color}"></div>
+                        <div>
+                            <span class="text-sm font-medium text-gray-800">${cat.name}</span>
+                            <span class="text-xs ${cat.type === 'income' ? 'text-green-600' : 'text-red-600'} ml-2">
+                                ${cat.type === 'income' ? 'Receita' : 'Despesa'}
+                            </span>
+                        </div>
+                    </div>
+                    <button onclick="deleteCategory('${cat.id}')" 
+                            class="text-gray-400 hover:text-red-500 transition-colors">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        function addCategory() {
+            const name = document.getElementById('new-cat-name').value.trim();
+            const type = document.getElementById('new-cat-type').value;
+            const color = document.getElementById('new-cat-color').value;
+
+            if (!name) {
+                alert('Por favor, insira um nome para a categoria.');
+                return;
+            }
+
+            // Verificar se já existe categoria com mesmo nome e tipo
+            const exists = db.categories.some(c =>
+                c.name.toLowerCase() === name.toLowerCase() && c.type === type
+            );
+
+            if (exists) {
+                alert('Já existe uma categoria com este nome e tipo.');
+                return;
+            }
+
+            db.categories.push({
+                id: getID(),
+                name,
+                type,
+                color
+            });
+
+            save();
+            renderCats();
+            toggleCatForm();
+
+            // Limpar formulário
+            document.getElementById('new-cat-name').value = '';
+            document.getElementById('new-cat-color').value = '#F97316';
+
+            showNotification('Categoria adicionada com sucesso!', 'success');
+        }
+
+        function deleteCategory(id) {
+            if (confirm('Tem certeza que deseja excluir esta categoria? Lançamentos associados serão movidos para "Geral".')) {
+                // Mover transações para categoria "Geral"
+                db.transactions = db.transactions.map(t => {
+                    if (t.catId === id) {
+                        return { ...t, catId: '' };
+                    }
+                    return t;
+                });
+
+                // Remover categoria
+                db.categories = db.categories.filter(c => c.id !== id);
+
+                save();
+                renderCats();
+                showNotification('Categoria removida com sucesso!', 'success');
+            }
+        }
+
+        // BACKUP E RESTAURAÇÃO
+        function downloadBackup() {
+            const backupData = {
+                ...db,
+                exportedAt: new Date().toISOString(),
+                version: 'plena_obras_v2'
+            };
+
+            const dataStr = JSON.stringify(backupData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+            const exportFileName = `plena_obras_backup_${new Date().toISOString().slice(0, 10)}.json`;
+
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileName);
+            linkElement.click();
+
+            showNotification('Backup baixado com sucesso!', 'success');
+        }
+
+        function restoreBackup(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const backup = JSON.parse(e.target.result);
+
+                    // Validar backup
+                    if (!backup.projects || !backup.transactions) {
+                        throw new Error('Arquivo de backup inválido');
+                    }
+
+                    if (confirm('Restaurar backup substituirá todos os dados atuais. Tem certeza?')) {
+                        db = backup;
+                        save();
+                        location.reload();
+                    }
+                } catch (error) {
+                    alert('Erro ao restaurar backup: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function clearAllTransactions() {
+            if (confirm('Tem certeza que deseja limpar TODAS as transações? Esta ação é irreversível!')) {
+                db.transactions = [];
+                save();
+                renderDashboard();
+                renderGeneralFinance();
+                if (currentProjectId) {
+                    loadProjectDetail(currentProjectId);
+                }
+                showNotification('Todas as transações foram removidas!', 'success');
+            }
+        }
+
+        function factoryReset() {
+            if (confirm('ATENÇÃO: Isso resetará TODO o sistema para as configurações de fábrica. Todos os dados serão perdidos. Tem certeza?')) {
+                localStorage.removeItem(DB_KEY);
+                location.reload();
+            }
+        }
+
+        // UTILITÁRIOS GERAIS
+        function updateDataStatus() {
+            const total = db.transactions.length;
+            const income = db.transactions.filter(t => t.type === 'income').length;
+            const expense = db.transactions.filter(t => t.type === 'expense').length;
+
+            console.log(`Dados atualizados: ${total} transações (${income} receitas, ${expense} despesas)`);
+        }
+
+        function showNotification(message, type = 'info') {
+            // Criar elemento de notificação
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                    'bg-blue-500 text-white'
+                }`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}" 
+                       class="w-5 h-5 mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+            lucide.createIcons();
+
+            // Remover após 3 segundos
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // --- FUNÇÕES DE TERMOS DE USO ---
+        function confirmTerms() {
+            if (!confirm('Tem certeza que leu e concorda com todos os termos apresentados?')) return;
+
+            // Update DB
+            db.settings.termsAccepted = true;
+            db.settings.termsAcceptedAt = new Date().toISOString();
+            save();
+
+            // Update Visuals
+            updateTermsVisuals();
+
+            // Celebration Effect
+            const btn = document.getElementById('btn-confirm-terms');
+            if (btn) {
+                alert('Obrigado! Seu aceite foi registrado com sucesso.');
+            }
+        }
+
+        function updateTermsVisuals() {
+            const hasAccepted = db.settings.termsAccepted;
+            const termsBox = document.getElementById('terms-box');
+            const btn = document.getElementById('btn-confirm-terms');
+            const badge = document.getElementById('terms-accepted-badge');
+            const icon = document.getElementById('terms-icon');
+            const title = document.getElementById('terms-title');
+            const desc = document.getElementById('terms-desc');
+
+            if (hasAccepted && termsBox) {
+                // Change Box Style
+                termsBox.classList.remove('bg-gray-50', 'border-gray-200');
+                termsBox.classList.add('bg-green-50', 'border-green-200');
+
+                // Hide Button / Show Badge
+                if (btn) btn.classList.add('hidden');
+                if (badge) {
+                    badge.classList.remove('hidden');
+                    badge.classList.add('flex');
+                }
+
+                // Update Date
+                const dateElement = document.getElementById('terms-date');
+                if (dateElement && db.settings.termsAcceptedAt) {
+                    const dateObj = new Date(db.settings.termsAcceptedAt);
+                    dateElement.textContent = 'Confirmado em: ' + dateObj.toLocaleString('pt-BR');
+                }
+
+                // Update Icon and Text
+                if (icon) {
+                    icon.setAttribute('class', 'w-16 h-16 text-green-500 mb-3 transition-colors duration-500');
+                    icon.setAttribute('data-lucide', 'shield-check');
+                    if (window.lucide) lucide.createIcons();
+                }
+                if (title) {
+                    title.textContent = 'Termos Aceitos e Válidos';
+                    title.classList.add('text-green-800');
+                }
+                if (desc) {
+                    desc.textContent = 'Obrigado por sua transparência e confiança. Seu uso está regularizado.';
+                    desc.classList.add('text-green-700');
+                }
+            }
+        }
+
+        // PWA INSTALL PROMPT
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Mostrar botão de instalação
+            const installButton = document.createElement('button');
+            installButton.className = 'fixed bottom-4 right-4 bg-plena-orange text-white px-4 py-2 rounded-lg shadow-lg z-40';
+            installButton.innerHTML = '<i data-lucide="download" class="w-4 h-4 inline mr-2"></i>Instalar App';
+            installButton.onclick = () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(() => {
+                    deferredPrompt = null;
+                    installButton.remove();
+                });
+            };
+
+            document.body.appendChild(installButton);
+            lucide.createIcons();
+        });
+
+        // OFFLINE SUPPORT
+        window.addEventListener('online', () => {
+            showNotification('Conexão restaurada!', 'success');
+        });
+
+        window.addEventListener('offline', () => {
+            showNotification('Modo offline ativado. Seus dados estão seguros localmente.', 'warning');
+        });
+
+        // SECURITY LOCK
+        setInterval(() => {
+            const footer = document.querySelector('.sidebar .border-t');
+            if (footer && !footer.innerText.includes('Plena')) {
+                document.body.innerHTML = '<div style="background:#111;color:red;height:100vh;display:flex;align-items:center;justify-content:center;"><h1>VIOLAÇÃO DE SEGURANÇA</h1></div>';
+                throw new Error("Piracy");
+            }
+        }, 8000);
+
+        // INICIALIZAR APLICATIVO
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+    <script>
+        // CONTEXT AWARENESS FOR IFRAMES
+        if (window.self !== window.top) {
+            document.body.classList.add('in-iframe');
+        }
+    </script>
+</body>
+
+</html>

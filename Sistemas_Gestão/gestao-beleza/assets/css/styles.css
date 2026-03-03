@@ -1,0 +1,227 @@
+/* ==========================================
+   GESTÃO BELEZA | Premium Dark Rose Theme
+   Padrão Ouro v1.0 — FULL PREMIUM CSS
+   ========================================== */
+
+/* ===[ ROOT VARIABLES ]=== */
+:root {
+    --brand-blue: #e11d48;
+    --brand-dark: #881337;
+    --brand-black: #0B0F19;
+    --body-bg: #0B0F19;
+    --text-main: #F8FAFC;
+    --card-bg: #131825;
+    --card-elevated: #1A2035;
+    --brand: #e11d48;
+}
+
+.dark {
+    --body-bg: #0B0F19;
+    --text-main: #F8FAFC;
+    --card-bg: #131825;
+    --glass-bg: rgba(19, 24, 37, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.05);
+}
+
+/* ===[ BODY ]=== */
+body {
+    background-color: #0B0F19;
+    background-image:
+        radial-gradient(at 0% 0%, rgba(225, 29, 72, 0.06) 0px, transparent 50%),
+        radial-gradient(at 100% 50%, rgba(225, 29, 72, 0.04) 0px, transparent 50%);
+    background-attachment: fixed;
+    font-family: 'Inter', 'Outfit', sans-serif;
+}
+
+/* ===[ SCROLLBAR ]=== */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+/* Dark Mode Scrollbar */
+.dark ::-webkit-scrollbar-thumb {
+    background: #334155;
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: #0B0F19;
+}
+
+/* ===[ GLASSMORPHISM ]=== */
+.glass {
+    background: rgba(19, 24, 37, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-dark {
+    background: rgba(11, 15, 25, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ===[ ANIMATIONS ]=== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.98) translateY(5px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.fade-in {
+    animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes toastSlide {
+    from { transform: translateX(100%); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+}
+
+.toast-enter {
+    animation: toastSlide 0.3s ease-out forwards;
+}
+
+/* ===[ NAV & INTERACTIONS ]=== */
+.nav-item {
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+    transform: translateX(4px);
+}
+
+.active-nav {
+    background: rgba(225, 29, 72, 0.08) !important;
+    border-left: 3px solid #D4AF37;
+    color: white !important;
+    box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -8px rgba(225, 29, 72, 0.12);
+    border-color: rgba(225, 29, 72, 0.2);
+}
+
+/* ===[ SIDEBAR RESPONSIVE ]=== */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 18rem;
+    z-index: 30;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+@media (min-width: 1024px) {
+    .sidebar {
+        position: static;
+        transform: translateX(0);
+    }
+}
+
+.sidebar.open {
+    transform: translateX(0);
+}
+
+/* ===[ HIDE UTILITY ]=== */
+.hide {
+    display: none !important;
+}
+
+/* ===[ MODAL ]=== */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+}
+
+/* ===[ PROGRESS BAR ]=== */
+.progress-bar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e11d48, #fb7185);
+    border-radius: 99px;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ===[ BADGES ]=== */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.badge-success { background: rgba(16,185,129,0.12); color: #34d399; }
+.badge-danger  { background: rgba(239,68,68,0.12); color: #f87171; }
+.badge-info    { background: rgba(59,130,246,0.12); color: #60a5fa; }
+.badge-warn    { background: rgba(245,158,11,0.12); color: #fbbf24; }
+
+/* ===[ MANUAL ACCORDION ]=== */
+.manual-section .manual-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+.manual-section.open .manual-content {
+    max-height: 2000px;
+}
+
+.manual-section .manual-chevron {
+    transition: transform 0.3s ease;
+}
+
+.manual-section.open .manual-chevron {
+    transform: rotate(180deg);
+}
+
+/* ===[ PRINT STYLES ]=== */
+@media print {
+    .sidebar, header, nav, button, .no-print {
+        display: none !important;
+    }
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    .glass, .glass-dark {
+        background: white !important;
+        border: 1px solid #e5e7eb !important;
+    }
+}

@@ -1,0 +1,1587 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+
+<head>
+    <script src="lock.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão Beleza | Sistema Premium</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/tailwind_config.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#e11d48">
+</head>
+
+
+
+<body class="bg-surface text-white overflow-x-hidden antialiased selection:bg-brand selection:text-white">
+
+
+    <!-- ======== AIRLOCK / VIEW-LOGIN ======== -->
+    <div id="view-login" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950
+         bg-[radial-gradient(at_20%_50%,_rgba(225,29,72,0.15)_0px,_transparent_60%)] p-4">
+        <div class="w-full max-w-md">
+            <div class="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 shadow-2xl text-center">
+                <!-- Icon -->
+                <div class="w-20 h-20 bg-gradient-to-br from-rose-500 to-rose-700 rounded-3xl
+                     flex items-center justify-center mx-auto mb-6 shadow-lg shadow-rose-500/30">
+                    <i data-lucide="sparkles" class="w-10 h-10 text-white"></i>
+                </div>
+                <!-- Title -->
+                <h1 class="text-2xl font-black text-white mb-1">Gestão Beleza</h1>
+                <p class="text-sm text-slate-400 mb-8">Insira sua licença para ativar o sistema</p>
+                <!-- Form -->
+                <form id="activation-form" onsubmit="activateLicense(event)" class="space-y-4 text-left">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">E-mail</label>
+                        <input type="email" id="license-email" required placeholder="seu@email.com"
+                            class="w-full bg-white/5 border border-white/10 text-white px-4 py-3.5 rounded-xl text-sm
+                                   focus:border-rose-500 focus:ring-1 focus:ring-rose-500 outline-none transition-all
+                                   placeholder-slate-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Chave de Licença</label>
+                        <input type="text" id="license-key" required placeholder="XXXX-XXXX-XXXX"
+                            class="w-full bg-white/5 border border-white/10 text-white px-4 py-3.5 rounded-xl text-sm
+                                   font-mono focus:border-rose-500 focus:ring-1 focus:ring-rose-500 outline-none
+                                   transition-all placeholder-slate-600 uppercase tracking-widest">
+                    </div>
+                    <p id="activation-error" class="hidden text-xs text-red-400 font-medium text-center pb-1"></p>
+                    <button type="submit" id="btn-activate"
+                        class="w-full bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400
+                               text-white py-4 rounded-xl font-black text-sm shadow-lg shadow-rose-500/30
+                               transition-all transform hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
+                        <i data-lucide="key" class="w-5 h-5"></i>
+                        Desbloquear Acesso
+                    </button>
+                </form>
+                <!-- Footer -->
+                <p class="text-[10px] text-slate-600 mt-6">Airlock Security • Gestão Beleza PRO • Standalone</p>
+            </div>
+        </div>
+    </div>
+    <!-- ======== /AIRLOCK ======== -->
+
+    <!-- Script de controle do Airlock -->
+    <script>
+        (function checkAirlockOnLoad() {
+            const key = localStorage.getItem('plena_license');
+            const email = localStorage.getItem('ml_license_email');
+            const loginView = document.getElementById('view-login');
+            if (!loginView) return;
+            if (key && email) {
+                loginView.style.display = 'none';
+            } else {
+                loginView.style.display = 'flex';
+            }
+        })();
+    </script>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-[100] space-y-3 flex flex-col items-end pointer-events-none">
+    </div>
+
+    <!-- Mobile Overlay -->
+    <div id="overlay" onclick="toggleSidebar()"
+        class="fixed inset-0 bg-black/50 z-20 hidden lg:hidden backdrop-blur-sm transition-opacity"></div>
+
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- Sidebar -->
+        <aside id="sidebar"
+            class="sidebar fixed lg:static inset-y-0 left-0 z-30 w-72 h-full glass flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-300 shadow-2xl border-r border-white/5">
+            <!-- Brand - DNA Plena -->
+            <div
+                class="h-24 flex items-center px-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-b border-rose-500/15">
+                <div
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center mr-3 shadow-lg shadow-rose-500/20 flex-shrink-0">
+                    <i data-lucide="crown" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight text-white">Gestão<span
+                            class="text-rose-400">Beleza</span></h1>
+                    <p class="text-[11px] text-amber-300/70 font-medium tracking-wide">Sistema PRO • Gestão Completa</p>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+                <!-- Visão Geral -->
+                <button onclick="router('dashboard')" id="nav-dashboard"
+                    class="nav-item w-full flex items-center gap-3 px-4 py-3.5 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Visão Geral</span>
+                </button>
+
+                <!-- Operacional -->
+                <div class="pt-4 mt-3">
+                    <p class="px-4 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-600">Operacional</p>
+                    <button onclick="router('agenda')" id="nav-agenda"
+                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
+                        <i data-lucide="calendar" class="w-5 h-5"></i>
+                        <span>Agenda</span>
+                    </button>
+                    <button onclick="router('clients')" id="nav-clients"
+                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
+                        <i data-lucide="contact" class="w-5 h-5"></i>
+                        <span>Clientes</span>
+                    </button>
+                </div>
+
+                <!-- Gestão -->
+                <div class="pt-4 mt-2 border-t border-white/5">
+                    <p class="px-4 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-600">Gestão</p>
+                    <button onclick="router('team')" id="nav-team"
+                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
+                        <i data-lucide="users" class="w-5 h-5"></i>
+                        <span>Profissionais</span>
+                    </button>
+                    <button onclick="router('services')" id="nav-services"
+                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                        <span>Serviços</span>
+                    </button>
+                    <button onclick="router('finance')" id="nav-finance"
+                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
+                        <i data-lucide="wallet" class="w-5 h-5"></i>
+                        <span>Financeiro</span>
+                    </button>
+                    <button onclick="router('reports')" id="nav-reports"
+                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
+                        <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                        <span>Relatórios</span>
+                    </button>
+                    <button onclick="router('inventory')" id="nav-inventory"
+                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-rose-300">
+                        <i data-lucide="package" class="w-5 h-5"></i>
+                        <span>Estoque</span>
+                    </button>
+                </div>
+
+                <!-- Sistema -->
+                <div class="pt-4 mt-2 border-t border-white/5">
+                    <p class="px-4 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-600">Sistema</p>
+
+                    <button onclick="router('about')" id="nav-about" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-slate-200">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                        <span>Informacoes Legais</span>
+                    </button>
+                    <button onclick="router('settings')" id="nav-settings"
+                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-slate-200">
+                        <i data-lucide="settings" class="w-5 h-5"></i>
+                        <span>Configurações</span>
+                    </button>
+                    <button onclick="router('instructions')" id="nav-instructions"
+                        class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-white/5 hover:text-slate-200">
+                        <i data-lucide="book-open" class="w-5 h-5"></i>
+                        <span>Manual de Uso</span>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Footer - DNA Plena -->
+            <div class="p-4 border-t border-white/5 text-center">
+                <div
+                    class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/10 to-amber-600/5 px-3 py-1.5 rounded-full border border-amber-500/20 mb-2">
+                    <i data-lucide="gem" class="w-3 h-3 text-amber-400"></i>
+                    <span class="text-[11px] font-bold text-amber-400 tracking-wide">LICENÇA VITALÍCIA</span>
+                </div>
+                <p class="text-[10px] text-slate-500">v7.0 PRO • Gestão Beleza</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+            <!-- Header -->
+            <header
+                class="glass sticky top-0 z-10 px-6 py-4 flex justify-between items-center shadow-sm border-b border-white/5">
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleSidebar()"
+                        class="lg:hidden p-2 hover:bg-white/5 rounded-xl text-slate-400 transition-colors">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                    <div>
+                        <h2 id="page-title" class="text-xl font-bold text-white">Visão Geral</h2>
+                        <p id="current-date" class="text-xs text-slate-500 font-medium hidden sm:block">...</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button id="pwa-install-btn"
+                        class="hidden bg-slate-800 hover:bg-slate-700 text-white px-4 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 text-sm border border-white/10">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span class="hidden sm:inline">Instalar App</span>
+                    </button>
+                    <button onclick="openApptModal()"
+                        class="bg-brand hover:bg-brand-dark text-white px-5 py-2.5 rounded-xl font-bold shadow-glow hover:shadow-lg transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2 text-sm">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span class="hidden sm:inline">Novo Agendamento</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Scrollable Content Area -->
+            <div id="main-content" class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 pb-32">
+
+                <!-- 1. DASHBOARD -->
+                <section id="view-dashboard" class="view-section fade-in max-w-7xl mx-auto">
+                    <!-- Stats Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div
+                            class="bg-surface-card dark:bg-slate-900/60 p-6 rounded-2xl shadow-sm border border-white/5 dark:border-white/8 card-hover relative overflow-hidden group">
+                            <div
+                                class="absolute right-0 top-0 w-24 h-24 bg-rose-500/10 rounded-bl-full opacity-50 transition-transform group-hover:scale-110 duration-500">
+                            </div>
+                            <div class="relative z-10">
+                                <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Agendamentos
+                                </p>
+                                <h3 id="dash-appt-today" class="text-3xl font-black text-white dark:text-white">0</h3>
+                                <div
+                                    class="mt-3 flex items-center text-xs font-bold text-rose-400 bg-rose-500/10 w-max px-2.5 py-1 rounded-lg">
+                                    <i data-lucide="calendar" class="w-3 h-3 mr-1.5"></i>
+                                    <span>Hoje</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-surface-card dark:bg-slate-900/60 p-6 rounded-2xl shadow-sm border border-white/5 dark:border-white/8 card-hover relative overflow-hidden group">
+                            <div
+                                class="absolute right-0 top-0 w-24 h-24 bg-emerald-500/10 rounded-bl-full opacity-50 transition-transform group-hover:scale-110 duration-500">
+                            </div>
+                            <div class="relative z-10">
+                                <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Faturamento
+                                </p>
+                                <h3 id="dash-rev-today" class="text-3xl font-black text-white dark:text-white">R$ 0,00</h3>
+                                <div
+                                    class="mt-3 flex items-center text-xs font-bold text-emerald-400 bg-emerald-500/10 w-max px-2.5 py-1 rounded-lg">
+                                    <i data-lucide="trending-up" class="w-3 h-3 mr-1.5"></i>
+                                    <span>Hoje</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-surface-card dark:bg-slate-900/60 p-6 rounded-2xl shadow-sm border border-white/5 dark:border-white/8 card-hover relative overflow-hidden group">
+                            <div
+                                class="absolute right-0 top-0 w-24 h-24 bg-blue-500/10 rounded-bl-full opacity-50 transition-transform group-hover:scale-110 duration-500">
+                            </div>
+                            <div class="relative z-10">
+                                <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Comissões</p>
+                                <h3 id="dash-comm-pending" class="text-3xl font-black text-white dark:text-white">R$ 0,00</h3>
+                                <div
+                                    class="mt-3 flex items-center text-xs font-bold text-blue-400 bg-blue-500/10 w-max px-2.5 py-1 rounded-lg">
+                                    <i data-lucide="hourglass" class="w-3 h-3 mr-1.5"></i>
+                                    <span>Pendente</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dark Card -->
+                        <div
+                            class="bg-gradient-to-br from-rose-900/40 to-rose-950/60 p-6 rounded-2xl shadow-xl border border-rose-500/10 text-white card-hover relative overflow-hidden group">
+                            <div
+                                class="absolute right-0 top-0 w-32 h-32 bg-rose-500/5 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-125 duration-700">
+                            </div>
+                            <div class="relative z-10">
+                                <p class="text-xs font-bold text-rose-300/60 uppercase tracking-wider mb-4">Ações
+                                    Rápidas</p>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <button onclick="openClosingModal()"
+                                        class="bg-white/5 hover:bg-white/10 p-3 rounded-xl transition-colors text-center border border-white/5">
+                                        <i data-lucide="lock" class="w-5 h-5 mx-auto mb-1 text-rose-300"></i>
+                                        <span class="text-[10px] font-bold">Fechar Caixa</span>
+                                    </button>
+                                    <button onclick="router('finance')"
+                                        class="bg-white/5 hover:bg-white/10 p-3 rounded-xl transition-colors text-center border border-white/5">
+                                        <i data-lucide="pie-chart" class="w-5 h-5 mx-auto mb-1 text-emerald-300"></i>
+                                        <span class="text-[10px] font-bold">Relatórios</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <!-- Upcoming List -->
+                        <div
+                            class="col-span-2 bg-surface-card rounded-2xl shadow-sm border border-white/5 overflow-hidden">
+                            <div
+                                class="p-6 border-b border-white/5 flex justify-between items-center bg-surface-elevated/30">
+                                <h3 class="font-bold text-lg text-white flex items-center gap-2">
+                                    <i data-lucide="clock" class="w-5 h-5 text-rose-400"></i>
+                                    Próximos Agendamentos
+                                </h3>
+                                <button onclick="router('agenda')"
+                                    class="text-xs font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 px-3 py-1.5 rounded-lg transition-colors">
+                                    Ver todos
+                                </button>
+                            </div>
+                            <div id="upcoming-appts" class="p-6 space-y-4">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Revenue Chart Section -->
+                        <div
+                            class="bg-surface-card rounded-2xl shadow-sm border border-white/5 overflow-hidden flex flex-col">
+                            <div class="p-6 border-b border-white/5">
+                                <h3 class="font-bold text-lg text-white dark:text-white">Tendência Semanal</h3>
+                                <p class="text-xs text-slate-500">Receita nos últimos 7 dias</p>
+                            </div>
+                            <div class="flex-1 p-6 flex items-end justify-center pb-2 relative min-h-[200px]"
+                                id="mini-chart-container">
+                                <!-- SVG Chart Injected Here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. TEAM MANAGEMENT -->
+                <section id="view-team" class="view-section hide fade-in max-w-7xl mx-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-lg text-white dark:text-white">Profissionais</h3>
+                        <button onclick="openTeamModal()"
+                            class="bg-brand text-white px-4 py-2 rounded-xl text-sm font-bold shadow-glow hover:bg-brand-dark transition-colors">
+                            <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Adicionar
+                        </button>
+                    </div>
+                    <div id="team-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </section>
+
+                <!-- 3. SERVICES MANAGEMENT -->
+                <section id="view-services" class="view-section hide fade-in max-w-7xl mx-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-lg text-white dark:text-white">Serviços</h3>
+                        <button onclick="openServiceModal()"
+                            class="bg-brand text-white px-4 py-2 rounded-xl text-sm font-bold shadow-glow hover:bg-brand-dark transition-colors">
+                            <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Adicionar
+                        </button>
+                    </div>
+                    <div id="services-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </section>
+
+                <!-- 4. FINANCE MANAGEMENT -->
+                <section id="view-finance" class="view-section hide fade-in max-w-7xl mx-auto">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                        <h3 class="font-bold text-lg text-white">Financeiro</h3>
+                        <div class="flex gap-2">
+                            <button onclick="openClosingModal()"
+                                class="bg-surface-card border border-white/10 text-slate-300 px-4 py-2 rounded-xl text-sm font-bold hover:bg-white/10 transition-colors">
+                                <i data-lucide="lock" class="w-4 h-4 inline mr-1"></i> Fechar Caixa
+                            </button>
+                            <button onclick="openExpenseModal()"
+                                class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-lg shadow-rose-500/20 transition-colors">
+                                <i data-lucide="plus-circle" class="w-4 h-4 inline mr-1"></i> Lançamento
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Summary Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-surface-card p-5 rounded-2xl border border-white/5 dark:border-white/8 shadow-sm card-hover">
+                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Receita do Mês
+                            </p>
+                            <h3 id="fin-income" class="text-2xl font-black text-emerald-400 mt-2">R$ 0,00</h3>
+                        </div>
+                        <div class="bg-surface-card p-5 rounded-2xl border border-white/5 dark:border-white/8 shadow-sm card-hover">
+                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Despesas do Mês
+                            </p>
+                            <h3 id="fin-expense" class="text-2xl font-black text-rose-400 mt-2">R$ 0,00</h3>
+                        </div>
+                        <div class="bg-surface-card p-5 rounded-2xl border border-white/5 dark:border-white/8 shadow-sm card-hover">
+                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Comissões do Mês
+                            </p>
+                            <h3 id="fin-commission" class="text-2xl font-black text-blue-400 mt-2">R$ 0,00</h3>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div
+                        class="bg-surface-card p-4 rounded-2xl border border-white/5 mb-6 flex flex-wrap gap-3 items-center">
+                        <input type="text" id="search-term" placeholder="Buscar..."
+                            class="flex-1 min-w-[150px] bg-white/5 border border-white/10 px-3 py-2 rounded-xl text-sm text-white focus:border-rose-500 outline-none"
+                            oninput="renderFinance()">
+                        <select id="filter-type"
+                            class="bg-white/5 border border-white/10 px-3 py-2 rounded-xl text-sm text-slate-300 focus:border-rose-500 outline-none"
+                            onchange="renderFinance()">
+                            <option value="all">Todos</option>
+                            <option value="income">Entradas</option>
+                            <option value="expense">Saídas</option>
+                        </select>
+                        <input type="date" id="filter-start"
+                            class="bg-white/5 border border-white/10 px-3 py-2 rounded-xl text-sm text-slate-300 focus:border-rose-500 outline-none"
+                            onchange="renderFinance()">
+                        <input type="date" id="filter-end"
+                            class="bg-white/5 border border-white/10 px-3 py-2 rounded-xl text-sm text-slate-300 focus:border-rose-500 outline-none"
+                            onchange="renderFinance()">
+                        <button onclick="clearFinanceFilters()"
+                            class="text-xs font-bold text-slate-500 hover:text-rose-400 px-3 py-2 rounded-xl hover:bg-white/5 transition-colors">
+                            <i data-lucide="x-circle" class="w-4 h-4 inline mr-1"></i>Limpar
+                        </button>
+                    </div>
+
+                    <!-- Transactions Table -->
+                    <div class="bg-surface-card rounded-2xl shadow-sm border border-white/5 overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-surface-elevated/50 border-b border-white/5">
+                                <tr>
+                                    <th class="p-4 font-bold text-slate-400">Data</th>
+                                    <th class="p-4 font-bold text-slate-400">Descrição</th>
+                                    <th class="p-4 font-bold text-slate-400">Profissional</th>
+                                    <th class="p-4 font-bold text-slate-400">Tipo</th>
+                                    <th class="p-4 font-bold text-slate-400 text-right">Valor</th>
+                                    <th class="p-4 font-bold text-slate-400 text-right">Comissão</th>
+                                    <th class="p-4 font-bold text-slate-400 text-right"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="finance-list" class="divide-y divide-white/5"></tbody>
+                        </table>
+                        <div id="finance-empty" class="hidden text-center py-12 text-slate-600">
+                            <i data-lucide="receipt" class="w-12 h-12 mx-auto mb-3 opacity-40"></i>
+                            <p class="text-sm font-medium">Nenhuma transação encontrada</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. REPORTS -->
+                <section id="view-reports" class="view-section hide fade-in max-w-7xl mx-auto">
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+                        <h3 class="font-bold text-lg text-white">Relatórios</h3>
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="flex gap-2 bg-surface-card p-2 rounded-xl shadow-sm border border-white/5">
+                                <input type="date" id="rep-start"
+                                    class="text-sm border-none outline-none text-slate-300 bg-transparent">
+                                <span class="text-slate-600">–</span>
+                                <input type="date" id="rep-end"
+                                    class="text-sm border-none outline-none text-slate-300 bg-transparent">
+                                <button onclick="generateReport()"
+                                    class="bg-brand text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-brand-dark transition-colors">Filtrar</button>
+                            </div>
+                            <button onclick="shareReport()"
+                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-xl font-bold transition-colors shadow-lg flex items-center gap-2">
+                                <i data-lucide="message-circle" class="w-4 h-4"></i> <span
+                                    class="hidden md:inline">Compartilhar</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div
+                            class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm text-center card-hover">
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Receita Total</p>
+                            <h3 id="rep-total-rev" class="text-3xl font-black text-emerald-400 mt-2">R$ 0,00</h3>
+                        </div>
+                        <div
+                            class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm text-center card-hover">
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Despesas</p>
+                            <h3 id="rep-total-exp" class="text-3xl font-black text-rose-400 mt-2">R$ 0,00</h3>
+                        </div>
+                        <div
+                            class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm text-center card-hover">
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Lucro Líquido</p>
+                            <h3 id="rep-net-profit" class="text-3xl font-black text-brand mt-2">R$ 0,00</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-20">
+                        <div class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm">
+                            <h4 class="font-bold text-white mb-4 flex items-center gap-2"><i data-lucide="scissors"
+                                    class="w-4 h-4 text-rose-400"></i> Top Serviços</h4>
+                            <div id="rep-top-services" class="space-y-3"></div>
+                        </div>
+                        <div class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm">
+                            <h4 class="font-bold text-white mb-4 flex items-center gap-2"><i data-lucide="users"
+                                    class="w-4 h-4 text-emerald-400"></i> Top Clientes</h4>
+                            <div id="rep-top-clients" class="space-y-3"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. CLIENTS -->
+                <section id="view-clients" class="view-section hide fade-in max-w-7xl mx-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-lg text-white">Clientes</h3>
+                        <button onclick="openClientModal()"
+                            class="bg-brand text-white px-4 py-2 rounded-xl text-sm font-bold shadow-glow hover:bg-brand-dark transition-colors">
+                            <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Adicionar
+                        </button>
+                    </div>
+                    <div id="clients-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </section>
+
+                <!-- 7. SETTINGS -->
+                <section id="view-settings" class="view-section hide fade-in max-w-7xl mx-auto">
+                    <h3 class="font-bold text-lg text-white mb-6">Configurações do Sistema</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bg-surface-card p-8 rounded-2xl shadow-sm border border-white/5">
+                            <h4 class="font-bold text-slate-200 mb-6 flex items-center gap-2">
+                                <i data-lucide="store" class="w-5 h-5 text-rose-400"></i> Informações
+                            </h4>
+                            <form onsubmit="saveSettings(event)" class="space-y-5">
+                                <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1.5 ml-1">Nome do
+                                        Negócio</label><input type="text" id="set-name"
+                                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-all">
+                                </div>
+                                <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1.5 ml-1">Horário
+                                        de Funcionamento</label><input type="text" id="set-hours"
+                                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-all">
+                                </div>
+                                <button type="submit"
+                                    class="bg-brand hover:bg-brand-dark text-white px-6 py-3 rounded-xl font-bold text-sm shadow-glow transition-all w-full md:w-auto">Salvar
+                                    Alterações</button>
+                            </form>
+                        </div>
+                        <div class="bg-surface-card p-8 rounded-2xl shadow-sm border border-white/5">
+                            <h4 class="font-bold text-slate-200 mb-6 flex items-center gap-2">
+                                <i data-lucide="database" class="w-5 h-5 text-rose-400"></i> Dados e Segurança
+                            </h4>
+                            <div class="space-y-4">
+                                <button onclick="downloadBackup()"
+                                    class="w-full border border-white/10 hover:bg-white/5 text-slate-300 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors"><i
+                                        data-lucide="download"></i> Fazer Backup (Download)</button>
+                                <div class="relative">
+                                    <input type="file" id="restore-file" onchange="restoreBackup(this)" class="hidden">
+                                    <label for="restore-file"
+                                        class="w-full bg-white/10 hover:bg-white/15 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-lg"><i
+                                            data-lucide="upload"></i> Restaurar Backup</label>
+                                </div>
+                                <button onclick="resetSystem()"
+                                    class="w-full border border-rose-500/20 text-rose-400 hover:bg-rose-500/10 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors"><i
+                                        data-lucide="trash-2"></i> Resetar Fábrica</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- AGENDA VIEW -->
+                <section id="view-agenda" class="view-section hide fade-in max-w-7xl mx-auto">
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                        <h3 class="font-bold text-lg text-white flex items-center gap-2">
+                            <i data-lucide="calendar-heart" class="text-rose-400"></i> Agenda Diária
+                        </h3>
+                        <div class="flex gap-3 bg-surface-card p-2 rounded-2xl shadow-sm border border-white/5">
+                            <button onclick="changeAgendaDate(-1)"
+                                class="p-2 hover:bg-white/5 rounded-xl transition-colors"><i data-lucide="chevron-left"
+                                    class="w-5 h-5 text-slate-400"></i></button>
+                            <input type="date" id="agenda-date"
+                                class="border-none text-slate-300 font-bold text-sm focus:ring-0 outline-none bg-transparent"
+                                onchange="renderAgenda()">
+                            <button onclick="changeAgendaDate(1)"
+                                class="p-2 hover:bg-white/5 rounded-xl transition-colors"><i data-lucide="chevron-right"
+                                    class="w-5 h-5 text-slate-400"></i></button>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-surface-card rounded-3xl shadow-sm border border-white/5 overflow-hidden relative min-h-[500px]">
+                        <div id="agenda-header"
+                            class="grid divide-x divide-white/5 bg-surface-elevated border-b border-white/5 sticky top-0 z-10 w-full">
+                        </div>
+                        <div id="agenda-body" class="relative w-full"></div>
+                    </div>
+                </section>
+
+                <!-- 9. ESTOQUE -->
+                <section id="view-inventory" class="view-section hide fade-in max-w-7xl mx-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-lg text-white flex items-center gap-2">
+                            <i data-lucide="package" class="text-rose-400"></i> Estoque
+                        </h3>
+                        <div class="flex gap-2">
+                            <button onclick="openMovementModal()"
+                                class="border border-white/10 hover:bg-white/5 text-slate-300 px-4 py-2 rounded-xl text-sm font-bold transition-colors">
+                                <i data-lucide="arrow-left-right" class="w-4 h-4 inline mr-1"></i> Movimentar
+                            </button>
+                            <button onclick="openProductModal()"
+                                class="bg-brand text-white px-4 py-2 rounded-xl text-sm font-bold shadow-glow hover:bg-brand-dark transition-colors">
+                                <i data-lucide="plus" class="w-4 h-4 inline mr-1"></i> Novo Produto
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Summary Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div
+                            class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm text-center card-hover">
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Produtos</p>
+                            <h3 id="inv-total-products" class="text-3xl font-black text-white mt-2">0</h3>
+                        </div>
+                        <div
+                            class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm text-center card-hover">
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Valor em Estoque</p>
+                            <h3 id="inv-total-value" class="text-3xl font-black text-emerald-400 mt-2">R$ 0,00</h3>
+                        </div>
+                        <div
+                            class="bg-surface-card p-6 rounded-2xl border border-white/5 shadow-sm text-center card-hover">
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Estoque Baixo</p>
+                            <h3 id="inv-low-stock" class="text-3xl font-black text-amber-400 mt-2">0</h3>
+                        </div>
+                    </div>
+
+                    <!-- Product Grid -->
+                    <div id="inventory-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"></div>
+
+                    <!-- Movements History -->
+                    <div class="bg-surface-card rounded-2xl shadow-sm border border-white/5 overflow-hidden">
+                        <div class="p-6 border-b border-white/5 bg-surface-elevated/30">
+                            <h3 class="font-bold text-lg text-white flex items-center gap-2">
+                                <i data-lucide="arrow-left-right" class="w-5 h-5 text-rose-400"></i> Movimentações
+                                Recentes
+                            </h3>
+                        </div>
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-surface-elevated/50 border-b border-white/5">
+                                <tr>
+                                    <th class="p-3 font-bold text-slate-400">Data</th>
+                                    <th class="p-3 font-bold text-slate-400">Produto</th>
+                                    <th class="p-3 font-bold text-slate-400">Tipo</th>
+                                    <th class="p-3 font-bold text-slate-400 text-center">Qtd</th>
+                                    <th class="p-3 font-bold text-slate-400">Motivo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stock-movements-list" class="divide-y divide-white/5"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 10. MANUAL DE USO -->
+                
+                    <!-- Tutorial Progress (Padrao Ouro) -->
+                    <div class="mb-6 bg-white/5 p-4 rounded-2xl border border-white/8">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Progresso do Manual</span>
+                            <span id="tutorial-progress-text" class="text-xs font-bold text-rose-400">0 / 5 seções</span>
+                        </div>
+                        <div class="progress-bar w-full">
+                            <div class="progress-fill" id="tutorial-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                <section id="view-instructions" class="view-section hide fade-in max-w-4xl mx-auto">
+                    <div class="mb-8">
+                        <h3 class="font-bold text-2xl text-white flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center">
+                                <i data-lucide="book-open" class="w-5 h-5 text-rose-400"></i>
+                            </div>
+                            Manual de Uso
+                        </h3>
+                        <p class="text-sm text-slate-500">Guia completo para operar o Gestão Beleza</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Section 1 -->
+                        <div class="manual-section bg-surface-card rounded-2xl border border-white/5 overflow-hidden">
+                            <button
+                                class="manual-header w-full p-5 flex items-center justify-between text-left hover:bg-white/[0.02] transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <span
+                                        class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-400 font-bold text-sm">1</span>
+                                    <span class="font-bold text-white">Primeiros Passos</span>
+                                </div>
+                                <i data-lucide="chevron-down" class="manual-chevron w-5 h-5 text-slate-500"></i>
+                            </button>
+                            <div class="manual-content">
+                                <div class="px-5 pb-5 text-sm text-slate-400 space-y-3 border-t border-white/5 pt-4">
+                                    <p>Bem-vinda ao <strong class="text-white">Gestão Beleza</strong>! Seu sistema
+                                        completo para gerenciar o salão de beleza.</p>
+                                    <ul class="list-disc list-inside space-y-1">
+                                        <li>Acesse <strong class="text-rose-400">Configurações</strong> e defina o nome
+                                            do seu salão e horário de funcionamento.</li>
+                                        <li>Cadastre sua equipe em <strong class="text-rose-400">Profissionais</strong>
+                                            com nome e comissão.</li>
+                                        <li>Registre seus serviços em <strong class="text-rose-400">Serviços</strong>
+                                            com nome e preço.</li>
+                                        <li>Faça um backup inicial em Configurações → Dados e Segurança.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2 -->
+                        <div class="manual-section bg-surface-card rounded-2xl border border-white/5 overflow-hidden">
+                            <button
+                                class="manual-header w-full p-5 flex items-center justify-between text-left hover:bg-white/[0.02] transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <span
+                                        class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-400 font-bold text-sm">2</span>
+                                    <span class="font-bold text-white">Agenda e Agendamentos</span>
+                                </div>
+                                <i data-lucide="chevron-down" class="manual-chevron w-5 h-5 text-slate-500"></i>
+                            </button>
+                            <div class="manual-content">
+                                <div class="px-5 pb-5 text-sm text-slate-400 space-y-3 border-t border-white/5 pt-4">
+                                    <p>A Agenda mostra a grade diária com os horários de cada profissional.</p>
+                                    <ul class="list-disc list-inside space-y-1">
+                                        <li>Clique em um horário livre na grade para abrir o formulário de agendamento.
+                                        </li>
+                                        <li>Ou use o botão <strong class="text-rose-400">Novo Agendamento</strong> no
+                                            topo da tela.</li>
+                                        <li>Agendamentos geram automaticamente uma entrada financeira.</li>
+                                        <li>Cancelamentos estornam o valor automaticamente.</li>
+                                        <li>Navegue entre dias com as setas ou selecionando a data.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3 -->
+                        <div class="manual-section bg-surface-card rounded-2xl border border-white/5 overflow-hidden">
+                            <button
+                                class="manual-header w-full p-5 flex items-center justify-between text-left hover:bg-white/[0.02] transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <span
+                                        class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-400 font-bold text-sm">3</span>
+                                    <span class="font-bold text-white">Financeiro e Relatórios</span>
+                                </div>
+                                <i data-lucide="chevron-down" class="manual-chevron w-5 h-5 text-slate-500"></i>
+                            </button>
+                            <div class="manual-content">
+                                <div class="px-5 pb-5 text-sm text-slate-400 space-y-3 border-t border-white/5 pt-4">
+                                    <p>Controle entradas e saídas do seu salão de forma automática.</p>
+                                    <ul class="list-disc list-inside space-y-1">
+                                        <li><strong class="text-emerald-400">Entradas</strong> são geradas
+                                            automaticamente ao confirmar agendamentos.</li>
+                                        <li><strong class="text-rose-400">Despesas</strong> podem ser lançadas
+                                            manualmente (aluguel, produtos, etc).</li>
+                                        <li>Compras de estoque também geram despesas automaticamente.</li>
+                                        <li>Use <strong class="text-rose-400">Relatórios</strong> para filtrar por
+                                            período e ver receita, despesas e lucro líquido.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 4 -->
+                        <div class="manual-section bg-surface-card rounded-2xl border border-white/5 overflow-hidden">
+                            <button
+                                class="manual-header w-full p-5 flex items-center justify-between text-left hover:bg-white/[0.02] transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <span
+                                        class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-400 font-bold text-sm">4</span>
+                                    <span class="font-bold text-white">Estoque e Produtos</span>
+                                </div>
+                                <i data-lucide="chevron-down" class="manual-chevron w-5 h-5 text-slate-500"></i>
+                            </button>
+                            <div class="manual-content">
+                                <div class="px-5 pb-5 text-sm text-slate-400 space-y-3 border-t border-white/5 pt-4">
+                                    <p>Gerencie seus produtos de beleza (shampoos, tinturas, cremes, etc).</p>
+                                    <ul class="list-disc list-inside space-y-1">
+                                        <li>Cadastre produtos com nome, categoria, preço e estoque mínimo.</li>
+                                        <li>Use <strong class="text-rose-400">Movimentar</strong> para registrar
+                                            entradas e saídas.</li>
+                                        <li>Compras e vendas criam transações financeiras automaticamente.</li>
+                                        <li>O sistema alerta quando o estoque estiver baixo ou esgotado.</li>
+                                        <li>Cards mudam de cor: 🟢 Normal, 🟡 Baixo, 🔴 Esgotado.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 5 -->
+                        <div class="manual-section bg-surface-card rounded-2xl border border-white/5 overflow-hidden">
+                            <button
+                                class="manual-header w-full p-5 flex items-center justify-between text-left hover:bg-white/[0.02] transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <span
+                                        class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-400 font-bold text-sm">5</span>
+                                    <span class="font-bold text-white">Backup e Segurança</span>
+                                </div>
+                                <i data-lucide="chevron-down" class="manual-chevron w-5 h-5 text-slate-500"></i>
+                            </button>
+                            <div class="manual-content">
+                                <div class="px-5 pb-5 text-sm text-slate-400 space-y-3 border-t border-white/5 pt-4">
+                                    <p>Proteja seus dados com backups regulares.</p>
+                                    <ul class="list-disc list-inside space-y-1">
+                                        <li><strong class="text-white">Fazer Backup</strong>: Baixa um arquivo JSON com
+                                            todos os dados.</li>
+                                        <li><strong class="text-white">Restaurar Backup</strong>: Carrega um backup
+                                            salvo anteriormente.</li>
+                                        <li><strong class="text-rose-400">Resetar Fábrica</strong>: Apaga TODOS os
+                                            dados. Use com cuidado!</li>
+                                        <li>Recomendamos fazer backup ao menos uma vez por semana.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- View: Informacoes Legais -->
+                <section id="view-about" class="view-section hide fade-in max-w-4xl mx-auto">
+                    <div class="mb-8 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center">
+                            <i data-lucide="shield-check" class="w-5 h-5 text-rose-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-black text-white dark:text-white">Informacoes Legais</h2>
+                            <p class="text-sm text-slate-500">Termos de uso, privacidade e suporte.</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="glass p-6 rounded-2xl border border-white/5">
+                            <h3 class="font-bold text-white dark:text-white mb-3 flex items-center gap-2">
+                                <i data-lucide="file-text" class="w-5 h-5 text-rose-400"></i> Termos de Uso
+                            </h3>
+                            <p class="text-sm text-slate-400 dark:text-slate-400">Este software e licenciado de forma vitalicia e pessoal. A redistribuicao, revenda ou transferencia nao autorizada e proibida. Todos os dados sao armazenados localmente no seu dispositivo.</p>
+                        </div>
+                        <div class="glass p-6 rounded-2xl border border-white/5">
+                            <h3 class="font-bold text-white dark:text-white mb-3 flex items-center gap-2">
+                                <i data-lucide="lock" class="w-5 h-5 text-rose-400"></i> Privacidade (LGPD)
+                            </h3>
+                            <p class="text-sm text-slate-400 dark:text-slate-400">Privacy by Design. Seus dados nunca saem do seu dispositivo. Faca backups regulares em Configuracoes.</p>
+                        </div>
+                    </div>
+                    <div class="glass p-5 rounded-2xl border border-rose-500/20">
+                        <p class="text-sm font-bold text-rose-300 dark:text-rose-300 flex items-center gap-2">
+                            <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                            Seus dados sao 100% locais — Faca backup regularmente!
+                        </p>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODALS -->
+
+    <!-- Generic Modal Wrapper Structure reused for all forms -->
+
+    <!-- Appointment Modal -->
+    <div id="apptModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div
+            class="glass-dark rounded-3xl shadow-2xl w-full max-w-md p-6 relative border border-white/10 text-white transform transition-all scale-100">
+            <button onclick="closeModal('apptModal')"
+                class="absolute top-5 right-5 text-gray-400 hover:text-white transition-colors"><i data-lucide="x"
+                    class="w-6 h-6"></i></button>
+            <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2"><i data-lucide="calendar-plus"
+                    class="text-brand"></i> Novo Agendamento</h3>
+            <form onsubmit="submitAppt(event)" class="space-y-4">
+                <input type="hidden" id="ap-id">
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Cliente</label><input
+                        type="text" id="ap-client" required
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-all text-white placeholder-gray-500"
+                        placeholder="Nome do cliente"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Data</label><input
+                            type="date" id="ap-date" required
+                            class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm focus:border-brand text-white outline-none">
+                    </div>
+                    <div><label
+                            class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Horário</label><input
+                            type="time" id="ap-time" required
+                            class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm focus:border-brand text-white outline-none">
+                    </div>
+                </div>
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Serviço</label><select
+                        id="ap-service" required
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm focus:border-brand text-white outline-none [&>option]:text-black"></select>
+                </div>
+                <div><label
+                        class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Profissional</label><select
+                        id="ap-pro" required
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm focus:border-brand text-white outline-none [&>option]:text-black"></select>
+                </div>
+                <button type="submit"
+                    class="w-full bg-brand text-white py-4 rounded-xl font-bold shadow-glow hover:bg-brand-dark transition-all mt-4 transform active:scale-95">Confirmar
+                    Agendamento</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="teamModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="glass-dark rounded-3xl shadow-2xl w-full max-w-sm p-6 relative border border-white/10 text-white">
+            <button onclick="closeModal('teamModal')" class="absolute top-5 right-5 text-gray-400 hover:text-white"><i
+                    data-lucide="x" class="w-6 h-6"></i></button>
+            <h3 class="text-xl font-bold text-white mb-6">Profissional</h3>
+            <form onsubmit="submitTeam(event)" class="space-y-4"><input type="hidden" id="tm-id">
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Nome</label><input
+                        type="text" id="tm-name" required
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Comissão
+                            (%)</label><input type="number" id="tm-comm" required min="0" max="100"
+                            class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                    </div>
+                    <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Contrato</label>
+                        <select id="tm-contract"
+                            class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                            <option value="PJ">PJ</option>
+                            <option value="CLT">CLT</option>
+                            <option value="MEI">MEI</option>
+                            <option value="Freelancer">Freelancer</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label
+                            class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Telefone</label><input
+                            type="tel" id="tm-phone" placeholder="(11) 99999-0000"
+                            class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                    </div>
+                    <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Data
+                            Início</label><input type="date" id="tm-start"
+                            class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                    </div>
+                </div>
+                <button type="submit"
+                    class="w-full bg-brand hover:bg-brand-dark text-white py-4 rounded-xl font-bold transition-all shadow-glow mt-2">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Commission Modal -->
+    <div id="commissionModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="glass-dark rounded-3xl shadow-2xl w-full max-w-sm p-6 relative border border-white/10 text-white">
+            <button onclick="closeModal('commissionModal')"
+                class="absolute top-5 right-5 text-gray-400 hover:text-white"><i data-lucide="x"
+                    class="w-6 h-6"></i></button>
+            <h3 class="text-xl font-bold text-white mb-6">Pagamento de Comissão</h3>
+            <div class="space-y-4">
+                <div class="bg-white/5 rounded-2xl p-5 text-center border border-white/10">
+                    <p class="text-xs text-slate-400 uppercase font-bold tracking-widest mb-2">Profissional</p>
+                    <p id="comm-pro-name" class="text-lg font-black text-white">—</p>
+                </div>
+                <div class="bg-rose-500/10 rounded-2xl p-5 text-center border border-rose-500/20">
+                    <p class="text-xs text-rose-300 uppercase font-bold tracking-widest mb-2">Valor a Pagar</p>
+                    <p id="comm-value" class="text-3xl font-black text-rose-400">R$ 0,00</p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="confirmCommissionPayment()"
+                        class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-xl font-bold transition-colors shadow-lg">
+                        <i data-lucide="check-circle" class="w-4 h-4 inline mr-1"></i> Confirmar
+                    </button>
+                    <button onclick="shareCommissionWhatsApp()"
+                        class="py-3.5 px-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold transition-colors">
+                        <i data-lucide="message-circle" class="w-4 h-4 inline"></i>
+                    </button>
+                    <button onclick="printCommissionReceipt()"
+                        class="py-3.5 px-4 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl font-bold transition-colors border border-white/5"
+                        title="Imprimir Recibo">
+                        <i data-lucide="printer" class="w-4 h-4 inline"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="serviceModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="glass-dark rounded-3xl shadow-2xl w-full max-w-sm p-6 relative border border-white/10 text-white">
+            <button onclick="closeModal('serviceModal')"
+                class="absolute top-5 right-5 text-gray-400 hover:text-white"><i data-lucide="x"
+                    class="w-6 h-6"></i></button>
+            <h3 class="text-xl font-bold text-white mb-6">Serviço</h3>
+            <form onsubmit="submitService(event)" class="space-y-4"><input type="hidden" id="svc-id">
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Nome</label><input
+                        type="text" id="svc-name" required
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                </div>
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Preço (R$)</label><input
+                        type="number" id="svc-price" required min="0" step="0.01"
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                </div><button type="submit"
+                    class="w-full bg-brand hover:bg-brand-dark text-white py-4 rounded-xl font-bold transition-all shadow-glow mt-2">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="expenseModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="glass-dark rounded-3xl shadow-2xl w-full max-w-sm p-6 relative border border-white/10 text-white">
+            <button onclick="closeModal('expenseModal')"
+                class="absolute top-5 right-5 text-gray-400 hover:text-white"><i data-lucide="x"
+                    class="w-6 h-6"></i></button>
+            <h3 id="expense-modal-title" class="text-xl font-bold text-white mb-6">Lançar Movimentação</h3>
+            <form onsubmit="submitExpense(event)" class="space-y-4"><input type="hidden" id="exp-id">
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Tipo</label>
+                    <select id="exp-type" required
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-rose-500 outline-none">
+                        <option value="expense">Despesa (Saída)</option>
+                        <option value="income">Receita (Entrada)</option>
+                    </select>
+                </div>
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Descrição</label><input
+                        type="text" id="exp-desc" required
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-rose-500 outline-none">
+                </div>
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Valor (R$)</label><input
+                        type="number" id="exp-amount" required min="0" step="0.01"
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-rose-500 outline-none">
+                </div>
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Categoria</label>
+                    <select id="exp-category"
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-rose-500 outline-none">
+                        <option value="outros">Outros</option>
+                        <option value="servico">Serviço</option>
+                        <option value="comissao">Comissão</option>
+                        <option value="estoque">Estoque</option>
+                        <option value="aluguel">Aluguel</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="manutencao">Manutenção</option>
+                    </select>
+                </div>
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Data</label><input
+                        type="date" id="exp-date" required
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-rose-500 outline-none">
+                </div><button type="submit" id="expense-submit-btn"
+                    class="w-full bg-rose-600 hover:bg-rose-700 text-white py-4 rounded-xl font-bold transition-colors mt-2 shadow-lg shadow-rose-900/20">Salvar
+                    Lançamento</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="clientModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="glass-dark rounded-3xl shadow-2xl w-full max-w-sm p-6 relative border border-white/10 text-white">
+            <button onclick="closeModal('clientModal')" class="absolute top-5 right-5 text-gray-400 hover:text-white"><i
+                    data-lucide="x" class="w-6 h-6"></i></button>
+            <h3 class="text-xl font-bold text-white mb-6">Cliente</h3>
+            <form onsubmit="submitClient(event)" class="space-y-4"><input type="hidden" id="cli-id">
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Nome</label><input
+                        type="text" id="cli-name" required
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label
+                            class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Telefone</label><input
+                            type="text" id="cli-phone" placeholder="(11) 99999-9999"
+                            class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                    </div>
+                    <div><label
+                            class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Nascimento</label><input
+                            type="date" id="cli-birth"
+                            class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                    </div>
+                </div>
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Email</label><input
+                        type="email" id="cli-email"
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                </div>
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Endereço</label><input
+                        type="text" id="cli-address"
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                </div>
+                <div><label
+                        class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Observações</label><textarea
+                        id="cli-notes"
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none h-24"></textarea>
+                </div><button type="submit"
+                    class="w-full bg-brand hover:bg-brand-dark text-white py-4 rounded-xl font-bold transition-all shadow-glow mt-2">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Client Details Modal (CRM) -->
+    <div id="clientDetailsModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div
+            class="glass-dark rounded-3xl shadow-2xl w-full max-w-lg p-6 relative border border-white/10 text-white max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('clientDetailsModal')"
+                class="absolute top-5 right-5 text-gray-400 hover:text-white"><i data-lucide="x"
+                    class="w-6 h-6"></i></button>
+            <div id="client-details-content"></div>
+        </div>
+    </div>
+
+    <!-- Closing Modal -->
+    <div id="closingModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="glass-dark rounded-3xl shadow-2xl w-full max-w-md p-6 relative border border-white/10 text-white">
+            <button onclick="closeModal('closingModal')"
+                class="absolute top-5 right-5 text-gray-400 hover:text-white"><i data-lucide="x"
+                    class="w-6 h-6"></i></button>
+            <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2"><i data-lucide="lock"
+                    class="w-5 h-5 text-rose-400"></i> Fechamento de Caixa</h3>
+            <div class="space-y-3" id="closing-content">
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/10">
+                    <p class="text-xs text-slate-400 uppercase font-bold tracking-widest mb-3">Resumo do Dia</p>
+                    <div class="space-y-2">
+                        <div class="flex justify-between"><span class="text-slate-400">Data:</span><span id="close-date"
+                                class="font-bold text-white">—</span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Atendimentos:</span><span
+                                id="close-services" class="font-bold text-white">0</span></div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-emerald-500/10 p-4 rounded-2xl border border-emerald-500/20 text-center">
+                        <p class="text-[10px] text-emerald-300 uppercase font-bold mb-1">Receitas</p>
+                        <p id="close-income" class="text-xl font-black text-emerald-400">R$ 0,00</p>
+                    </div>
+                    <div class="bg-rose-500/10 p-4 rounded-2xl border border-rose-500/20 text-center">
+                        <p class="text-[10px] text-rose-300 uppercase font-bold mb-1">Despesas</p>
+                        <p id="close-expense" class="text-xl font-black text-rose-400">R$ 0,00</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-blue-500/10 p-4 rounded-2xl border border-blue-500/20 text-center">
+                        <p class="text-[10px] text-blue-300 uppercase font-bold mb-1">Comissões</p>
+                        <p id="close-commission" class="text-xl font-black text-blue-400">R$ 0,00</p>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-2xl border border-white/10 text-center">
+                        <p class="text-[10px] text-slate-400 uppercase font-bold mb-1">Líquido</p>
+                        <p id="close-net" class="text-xl font-black text-white">R$ 0,00</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button onclick="shareClosing()"
+                    class="py-3.5 px-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold transition-colors">
+                    <i data-lucide="message-circle" class="w-4 h-4 inline"></i>
+                </button>
+                <button onclick="printClosing()"
+                    class="py-3.5 px-4 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl font-bold transition-colors border border-white/5"
+                    title="Imprimir Relatório">
+                    <i data-lucide="printer" class="w-4 h-4 inline"></i>
+                </button>
+                <button onclick="closeModal('closingModal')"
+                    class="flex-1 bg-brand hover:bg-brand-dark text-white py-3.5 rounded-xl font-bold shadow-glow transition-colors">
+                    Fechar Caixa
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="glass-dark rounded-3xl shadow-2xl w-full max-w-sm p-6 relative border border-white/10 text-white">
+            <button onclick="closeModal('productModal')"
+                class="absolute top-5 right-5 text-gray-400 hover:text-white"><i data-lucide="x"
+                    class="w-6 h-6"></i></button>
+            <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2"><i data-lucide="package"
+                    class="text-rose-400"></i> Produto</h3>
+            <form onsubmit="submitProduct(event)" class="space-y-4"><input type="hidden" id="prod-id">
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Nome</label><input
+                        type="text" id="prod-name" required
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                </div>
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Categoria</label><input
+                        type="text" id="prod-category" placeholder="Ex: Coloração, Hidratação..."
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                </div>
+                <div class="grid grid-cols-3 gap-3">
+                    <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Preço
+                            (R$)</label><input type="number" id="prod-price" required min="0" step="0.01"
+                            class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                    </div>
+                    <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Qtd</label><input
+                            type="number" id="prod-quantity" required min="0"
+                            class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                    </div>
+                    <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Mín</label><input
+                            type="number" id="prod-min-stock" min="0" value="5"
+                            class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                    </div>
+                </div>
+                <button type="submit"
+                    class="w-full bg-brand hover:bg-brand-dark text-white py-4 rounded-xl font-bold transition-all shadow-glow mt-2">Salvar
+                    Produto</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Movement Modal -->
+    <div id="movementModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="glass-dark rounded-3xl shadow-2xl w-full max-w-sm p-6 relative border border-white/10 text-white">
+            <button onclick="closeModal('movementModal')"
+                class="absolute top-5 right-5 text-gray-400 hover:text-white"><i data-lucide="x"
+                    class="w-6 h-6"></i></button>
+            <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2"><i data-lucide="arrow-left-right"
+                    class="text-rose-400"></i> Movimentação</h3>
+            <form onsubmit="submitStockMovement(event)" class="space-y-4">
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Produto</label><select
+                        id="mov-product" required
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none [&>option]:text-black"></select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Tipo</label><select
+                            id="mov-type" required
+                            class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none [&>option]:text-black">
+                            <option value="in">Entrada</option>
+                            <option value="out">Saída</option>
+                        </select></div>
+                    <div><label
+                            class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Quantidade</label><input
+                            type="number" id="mov-quantity" required min="1"
+                            class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none">
+                    </div>
+                </div>
+                <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Motivo</label><select
+                        id="mov-reason"
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none [&>option]:text-black">
+                        <option value="Compra">Compra</option>
+                        <option value="Venda">Venda</option>
+                        <option value="Uso Interno">Uso Interno</option>
+                        <option value="Perda">Perda/Avaria</option>
+                        <option value="Ajuste">Ajuste de Inventário</option>
+                    </select></div>
+                <div><label
+                        class="block text-xs font-bold text-gray-400 uppercase mb-1.5 ml-1">Observações</label><input
+                        type="text" id="mov-notes"
+                        class="w-full bg-white/5 border border-white/10 p-3.5 rounded-xl text-sm text-white focus:border-brand outline-none"
+                        placeholder="Opcional"></div>
+                <button type="submit"
+                    class="w-full bg-brand hover:bg-brand-dark text-white py-4 rounded-xl font-bold transition-all shadow-glow mt-2">Registrar
+                    Movimentação</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/app_core.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', init);
+
+        // PWA Installation Logic
+        let deferredPrompt;
+        const installBtn = document.getElementById('pwa-install-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (installBtn) installBtn.classList.remove('hidden');
+        });
+
+        if (installBtn) {
+            installBtn.addEventListener('click', async () => {
+                if (!deferredPrompt) return;
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    deferredPrompt = null;
+                    installBtn.classList.add('hidden');
+                }
+            });
+        }
+
+        window.addEventListener('appinstalled', () => {
+            if (installBtn) installBtn.classList.add('hidden');
+            deferredPrompt = null;
+            console.log('App installed');
+        });
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(() => console.log('Service Worker Registered'))
+                .catch((err) => console.error('Service Worker Error', err));
+        }
+    </script>
+
+    <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
+    <script>
+        window.activateLicense = async function (e) {
+            if (e) e.preventDefault();
+
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+
+            if (!keyInput || !emailInput) return;
+
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 SENHA MESTRE PARA TESTES
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+
+                if (btn) {
+                    const originalText = btn.innerText;
+                    btn.innerText = '🔓 Acesso Liberado...';
+                    btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
+                    btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
+                }
+
+                setTimeout(() => {
+                    alert('Modo de Teste/Admin Ativado com Sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if (btn) {
+                const originalText = btn.innerText;
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+
+                try {
+                    // Tenta endpoint relativo padrão dos sistemas Gestão
+                    const output = document.getElementById('activation-error');
+                    if (output) output.classList.add('hidden');
+
+                    const response = await fetch('../api_licenca_ml.php?action=activate', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ license_key: key, email: email })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.status === 'success') {
+                        localStorage.setItem('plena_license', key);
+                        localStorage.setItem('ml_license_email', email);
+                        localStorage.removeItem('ml_master_mode');
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    } else {
+                        const msg = data.message || 'Chave inválida ou erro no servidor.';
+                        if (output) {
+                            output.textContent = msg;
+                            output.classList.remove('hidden');
+                        } else {
+                            alert('Erro: ' + msg);
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Erro de conexão com o servidor de validação.');
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            }
+        };
+    
+        function markSectionComplete(el) {
+            var sec = el.closest('[data-tutorial-section]');
+            if (sec) {
+                sec.classList.toggle('tutorial-section-done');
+                el.textContent = sec.classList.contains('tutorial-section-done') ? 'Concluido' : 'Marcar concluido';
+            }
+            var done = document.querySelectorAll('.tutorial-section-done').length;
+            var total = document.querySelectorAll('[data-tutorial-section]').length || 5;
+            var bar = document.getElementById('tutorial-progress');
+            var txt = document.getElementById('tutorial-progress-text');
+            if (bar) bar.style.width = Math.round((done/total)*100) + '%';
+            if (txt) txt.textContent = done + ' / ' + total + ' secoes';
+        }
+        function scrollToSection(id) {
+            var el = document.getElementById(id);
+            if (el) el.scrollIntoView({behavior: 'smooth'});
+        }
+    </script>
+
+
+    <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (RECIBO DIGITAL - ML COMPRA GARANTIDA) -->
+    <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm transition-opacity"></div>
+        <!-- Modal Panel -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1E293B] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200 dark:border-white/10">
+                    <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <h3 class="text-lg font-bold leading-6 text-slate-900 dark:text-white" id="modal-title">
+                                    Confirmação de Acesso
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-slate-500 dark:text-slate-300">
+                                        Para liberar seu acesso completo ao sistema, precisamos que confirme o recebimento do produto digital.
+                                    </p>
+                                    <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-white/5 text-xs text-justify text-slate-600 dark:text-slate-400 italic">
+                                        "Declaro que recebi o acesso ao software conforme anunciado no Mercado Livre, testei seu funcionamento inicial e confirmo a entrega do produto digital."
+                                    </div>
+                                    <p class="mt-4 text-xs text-slate-400">
+                                        Esta ação gera um registro de auditoria para o programa <strong>Compra Garantida</strong>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/80 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button type="button" id="btn-confirm-receipt" onclick="confirmReceipt()"
+                            class="inline-flex w-full justify-center rounded-lg bg-emerald-600 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto transition-colors items-center">
+                            Confirmar Recebimento e Acesso
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔒 SISTEMA DE ATIVAÇÃO E RECIBO DIGITAL V12.1 -->
+    <script>
+        // ==========================================
+        // ATIVAÇÃO DE LICENÇA (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.activateLicense = async function (e) {
+            if (e) e.preventDefault();
+
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+
+            if (!keyInput || !emailInput) return;
+
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 MASTER KEYS (Testes / Admin)
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                localStorage.setItem('ml_receipt_confirmed', 'true');
+
+                if (btn) btn.innerText = '🔓 Acesso Liberado...';
+                setTimeout(() => {
+                    alert('Modo Admin/Teste ativado com sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if (btn) {
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+            }
+
+            try {
+                const output = document.getElementById('activation-error');
+                if (output) output.classList.add('hidden');
+
+                // Gerar device_id único se não existir
+                let deviceId = localStorage.getItem('device_id');
+                if (!deviceId) {
+                    deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+                    localStorage.setItem('device_id', deviceId);
+                }
+
+                const response = await fetch('../api_licenca_ml.php?action=activate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ CAPTAÇÃO DE EMAIL
+                        device_id: deviceId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    // ✅ Salva credenciais localmente
+                    localStorage.setItem('plena_license', key);
+                    localStorage.setItem('ml_license_email', email);
+                    localStorage.removeItem('ml_master_mode');
+
+                    // Exibe modal de recibo ANTES de liberar o app
+                    if (!localStorage.getItem('ml_receipt_confirmed')) {
+                        const loginView = document.getElementById('view-login');
+                        if (loginView) {
+                            loginView.classList.add('hide');
+                            loginView.style.display = 'none';
+                        }
+                        const receiptModal = document.getElementById('welcome-receipt-modal');
+                        if (receiptModal) receiptModal.classList.remove('hidden');
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    } else {
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    }
+                } else {
+                    const msg = data.message || 'Chave inválida ou erro no servidor.';
+                    const output = document.getElementById('activation-error');
+                    if (output) {
+                        output.textContent = msg;
+                        output.classList.remove('hidden');
+                    } else {
+                        alert('Erro: ' + msg);
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão com o servidor de validação.');
+            } finally {
+                if (btn) {
+                    btn.innerText = 'Ativar Licença';
+                    btn.disabled = false;
+                }
+            }
+        };
+
+        // ==========================================
+        // CONFIRMAÇÃO DE RECIBO (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.confirmReceipt = async function () {
+            const btn = document.getElementById('btn-confirm-receipt');
+            if (btn) {
+                btn.innerText = "Registrando...";
+                btn.disabled = true;
+            }
+
+            const key = localStorage.getItem('plena_license');
+            const email = localStorage.getItem('ml_license_email') || '';
+
+            try {
+                const response = await fetch('../api_licenca_ml.php?action=confirm_receipt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ DUPLA CAPTAÇÃO DE EMAIL (garante o registro)
+                        legal_agree: true
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    localStorage.setItem('ml_receipt_confirmed', 'true');
+                    const modal = document.getElementById('welcome-receipt-modal');
+                    if (modal) modal.classList.add('hidden');
+                    alert("Recebimento Confirmado! Bem-vindo ao sistema.");
+                    window.location.reload();
+                } else {
+                    console.error("Erro Recibo:", data);
+                    alert("Atenção: Não foi possível registrar o recibo.\nErro: " + (data.message || "Falha de comunicação."));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerText = "Tentar Novamente";
+                    }
+                }
+            } catch (e) {
+                alert("Erro de conexão. Tente novamente.");
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = "Confirmar Recebimento e Acesso";
+                }
+            }
+        };
+    </script>
+
+</body>

@@ -1,0 +1,3209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Plena Card - Gerenciador de Cartões</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#4F46E5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Sistema de controle de cartões de crédito offline - Plena Aplicativos">
+    <link rel="manifest" href="data:application/manifest+json,{}">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        plena: {
+                            indigo: '#4F46E5',
+                            dark: '#312E81',
+                            black: '#1a1a1a',
+                            green: '#10B981',
+                            red: '#EF4444',
+                            yellow: '#F59E0B',
+                            blue: '#3B82F6'
+                        },
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s infinite',
+                        'slide-in': 'slideIn 0.3s ease-out',
+                    }
+                }
+            }
+        }
+        function confirmTerms() {
+            if (!confirm('Tem certeza que leu e concorda com todos os termos apresentados?')) return;
+
+            // Update DB
+            db.settings.termsAccepted = true;
+            db.settings.termsAcceptedAt = new Date().toISOString();
+            save();
+
+            // Update Visuals
+            updateTermsVisuals();
+
+            // Celebration Effect
+            const btn = document.getElementById('btn-confirm-terms');
+            if (btn) {
+                // Confetti or visual feedback could go here
+                alert('Obrigado! Seu aceite foi registrado com sucesso.');
+            }
+        }
+
+        function updateTermsVisuals() {
+            const hasAccepted = db.settings.termsAccepted;
+            const termsBox = document.getElementById('terms-box');
+            const btn = document.getElementById('btn-confirm-terms');
+            const badge = document.getElementById('terms-accepted-badge');
+            const icon = document.getElementById('terms-icon');
+            const title = document.getElementById('terms-title');
+            const desc = document.getElementById('terms-desc');
+
+            if (hasAccepted && termsBox) {
+                // Change Box Style
+                termsBox.classList.remove('bg-gray-50', 'border-gray-200');
+                termsBox.classList.add('bg-green-50', 'border-green-200');
+
+                // Hide Button / Show Badge
+                if (btn) btn.classList.add('hidden');
+                if (badge) {
+                    badge.classList.remove('hidden');
+                    badge.classList.add('flex');
+                }
+
+                // Update Date
+                const dateElement = document.getElementById('terms-date');
+                if (dateElement && db.settings.termsAcceptedAt) {
+                    const dateObj = new Date(db.settings.termsAcceptedAt);
+                    dateElement.textContent = 'Confirmado em: ' + dateObj.toLocaleString('pt-BR');
+                }
+
+                // Update Icon and Text
+                if (icon) {
+                    icon.setAttribute('class', 'w-16 h-16 text-green-500 mb-3 transition-colors duration-500');
+                    icon.setAttribute('data-lucide', 'shield-check');
+                    if (window.lucide) lucide.createIcons();
+                }
+                if (title) {
+                    title.textContent = 'Termos Aceitos e Válidos';
+                    title.classList.add('text-green-800');
+                }
+                if (desc) {
+                    desc.textContent = 'Obrigado por sua transparência e confiança. Seu uso está regularizado.';
+                    desc.classList.add('text-green-700');
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
+
+    <style>
+        :root {
+            --plena-indigo: #4F46E5;
+            --plena-dark: #312E81;
+            --plena-black: #1a1a1a;
+            --plena-green: #10B981;
+            --plena-red: #EF4444;
+            --plena-yellow: #F59E0B;
+            --plena-blue: #3B82F6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #F3F4F6;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-10px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Gráfico CSS Avançado */
+        .chart-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 180px;
+            gap: 2%;
+        }
+
+        .bar-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            height: 100%;
+            position: relative;
+        }
+
+        .bar-wrapper {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 2px;
+            height: 100%;
+            width: 100%;
+        }
+
+        .bar {
+            width: 45%;
+            border-radius: 6px 6px 0 0;
+            transition: height 0.5s ease;
+            min-height: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .bar:hover::after {
+            content: attr(data-value);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .x-label {
+            font-size: 10px;
+            color: #666;
+            text-align: center;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s ease;
+        }
+
+        /* Sidebar Mobile */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 50;
+                height: 100vh;
+                width: 280px;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .sidebar {
+                width: 280px;
+                position: fixed;
+                height: 100vh;
+            }
+
+            .main-content {
+                margin-left: 280px;
+            }
+        }
+
+        /* Card Hover Effects */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background-color: #DCFCE7;
+            color: #166534;
+        }
+
+        .badge-warning {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        .badge-danger {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        /* Card Gradient */
+        .card-gradient {
+            background: linear-gradient(135deg, #4F46E5 0%, #312E81 100%);
+        }
+
+        /* MANUAL STYLES */
+        .step-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .checklist-item input[type="checkbox"]:checked+span {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .checklist-item.completed {
+            opacity: 0.7;
+        }
+
+        .code-block {
+            background: #1f2937;
+            color: #10b981;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            border-radius: 999px;
+            background: #e5e7eb;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4F46E5, #312E81);
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 antialiased">
+
+    <!-- Overlay para sidebar mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+        class="sidebar bg-plena-black text-white transition-transform duration-300 flex flex-col shadow-2xl">
+        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-plena-indigo to-plena-dark">
+            <i data-lucide="credit-card" class="w-8 h-8 mr-3"></i>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight">PLENA CARD</h1>
+                <p class="text-xs text-white/90 font-medium">Gerenciador de Cartões Inteligente</p>
+            </div>
+        </div>
+
+        <nav class="p-4 space-y-2 flex-1 overflow-y-auto">
+            <button onclick="router('dashboard')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group active-nav"
+                id="nav-dashboard">
+                <i data-lucide="credit-card" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Dashboard
+            </button>
+            <button onclick="router('cards')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-cards">
+                <i data-lucide="wallet-cards" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Meus Cartões
+            </button>
+            <button onclick="router('invoice')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-invoice">
+                <i data-lucide="file-text" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Faturas
+            </button>
+            <button onclick="router('reports')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-reports">
+                <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Relatórios
+            </button>
+            <button onclick="router('settings')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-settings">
+                <i data-lucide="settings" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Configurações
+            </button>
+            <button onclick="router('instructions')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-instructions">
+                <i data-lucide="book-open" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Manual de Uso
+            </button>
+            <button onclick="router('about')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-about">
+                <i data-lucide="info" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Sobre a Plena
+            </button>
+        </nav>
+
+        <div class="p-6 border-t border-white/10 text-center">
+            <p class="text-xs text-gray-500">Todos os Direitos Reservados &copy; 2026</p>
+            <a href="https://www.plenaaplicativos.com.br" target="_blank"
+                class="text-[10px] text-gray-600 hover:text-plena-indigo transition-colors mt-1 block decoration-0">
+                Plena Soluções Digitais LTDA
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content min-h-screen flex flex-col">
+        <!-- Header -->
+        <header
+            class="bg-white h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-gray-100">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg text-gray-600">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <div class="flex flex-col">
+                    <h2 id="page-title" class="text-xl font-bold text-gray-800">Dashboard</h2>
+                    <p id="page-subtitle" class="text-xs text-gray-500 hidden"></p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-plena-green/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                    </div>
+                    <button onclick="openClosingModal()"
+                        class="relative flex items-center px-4 py-2.5 bg-gray-800 text-white rounded-lg text-sm font-medium hover:bg-black transition-all shadow-sm active:scale-95">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 sm:mr-2"></i>
+                        <span class="hidden sm:inline">Fechar Faturas</span>
+                        <span class="sm:hidden">Fechar</span>
+                    </button>
+                </div>
+
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-plena-indigo/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                    </div>
+                    <button onclick="openExpenseModal()"
+                        class="relative flex items-center px-4 py-2.5 bg-plena-indigo text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-all shadow-lg shadow-indigo-200 active:scale-95">
+                        <i data-lucide="plus" class="w-5 h-5 sm:mr-2"></i>
+                        <span class="hidden sm:inline">Nova Compra</span>
+                        <span class="sm:hidden">Nova</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="p-4 lg:p-8 flex-1 overflow-y-auto">
+
+            <!-- Dashboard View -->
+            <section id="view-dashboard" class="view-section fade-in">
+                <!-- Balance Alert -->
+                <div id="balance-alert"
+                    class="hidden mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                    <div class="flex items-center">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 mr-3"></i>
+                        <div>
+                            <p class="font-bold">Atenção: Limite Crítico!</p>
+                            <p class="text-sm">Um ou mais cartões estão com limite próximo do esgotamento.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Month Selector -->
+                <div class="mb-6 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-gray-800">Resumo de Faturas</h3>
+                    <div class="flex items-center gap-3">
+                        <input type="month" id="month-selector" onchange="renderDashboard()"
+                            class="border rounded-lg p-2 text-sm bg-white">
+                        <button onclick="exportDashboardPDF()"
+                            class="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Current Month Invoice Summary -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-gray-800 flex items-center text-lg">
+                            <i data-lucide="calendar-clock" class="mr-2 w-5 h-5 text-plena-indigo"></i>
+                            Faturas Abertas (Mês Atual)
+                        </h3>
+                        <span class="text-xs bg-indigo-100 text-indigo-700 font-bold px-3 py-1 rounded-full uppercase"
+                            id="dash-month-label">JAN/2026</span>
+                    </div>
+
+                    <div id="dash-cards-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Limite Total
+                                    Disponível</p>
+                                <h3 id="dash-limit-available" class="text-3xl font-bold text-gray-900">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">Em todos os cartões</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-plena-indigo/10 flex items-center justify-center">
+                                <i data-lucide="wallet" class="w-6 h-6 text-plena-indigo"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Fatura Atual
+                                </p>
+                                <h3 id="dash-current-invoice" class="text-2xl font-bold text-red-600">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    <span id="invoice-growth" class="text-red-500">+0%</span> vs último mês
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Próximas
+                                    Parcelas
+                                </p>
+                                <h3 id="dash-next-installments" class="text-2xl font-bold text-yellow-600">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">Nos próximos 3 meses</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center">
+                                <i data-lucide="credit-card" class="w-6 h-6 text-yellow-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts and Analytics -->
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
+                    <div class="xl:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-bold text-gray-800">Gastos por Cartão (Mês Atual)</h3>
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 rounded-full bg-plena-indigo"></div>
+                                    <span class="text-xs text-gray-600">Utilizado</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 rounded-full bg-gray-300"></div>
+                                    <span class="text-xs text-gray-600">Disponível</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="chart-area" class="chart-container"></div>
+                    </div>
+
+                    <!-- Top Cards & Best Day -->
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                <i data-lucide="zap" class="w-4 h-4 mr-2 text-plena-indigo"></i>
+                                Melhor Cartão para Hoje
+                            </h3>
+                            <div id="best-card-today" class="space-y-4">
+                                <!-- Dynamic content -->
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4">Limite por Cartão</h3>
+                            <div id="limit-list" class="space-y-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Expenses -->
+                <div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-gray-800">Compras Recentes</h3>
+                        <button onclick="router('invoice')"
+                            class="text-sm text-plena-indigo hover:text-plena-dark font-medium">
+                            Ver todas →
+                        </button>
+                    </div>
+                    <div id="recent-expenses" class="space-y-3">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- CARDS View -->
+            <section id="view-cards" class="view-section hide fade-in">
+                <div class="mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Meus Cartões</h2>
+                        <p class="text-sm text-gray-600">Gerencie todos os seus cartões de crédito</p>
+                    </div>
+                    <button onclick="openCardModal()"
+                        class="flex items-center gap-2 px-4 py-2.5 bg-plena-indigo text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-all">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        Adicionar Cartão
+                    </button>
+                </div>
+
+                <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </section>
+
+            <!-- INVOICE View -->
+            <section id="view-invoice" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Faturas</h2>
+                        <p class="text-sm text-gray-600">Gerencie e visualize suas faturas por período</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="exportInvoiceCSV()"
+                            class="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            Exportar CSV
+                        </button>
+                        <button onclick="printInvoice()"
+                            class="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors">
+                            <i data-lucide="printer" class="w-4 h-4"></i>
+                            Imprimir
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Month Selector -->
+                <div
+                    class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="flex items-center gap-4 w-full md:w-auto">
+                        <button onclick="changeMonth(-1)" class="p-2 hover:bg-gray-100 rounded-full">
+                            <i data-lucide="chevron-left"></i>
+                        </button>
+                        <h3 id="inv-month-display" class="text-xl font-bold text-gray-800 min-w-[150px] text-center">
+                            JANEIRO 2026</h3>
+                        <button onclick="changeMonth(1)" class="p-2 hover:bg-gray-100 rounded-full">
+                            <i data-lucide="chevron-right"></i>
+                        </button>
+                    </div>
+                    <select id="inv-card-select" onchange="renderInvoiceView()"
+                        class="border p-2 rounded-lg text-sm w-full md:w-auto font-bold text-gray-600">
+                        <option value="all">Todos os Cartões</option>
+                    </select>
+                </div>
+
+                <!-- Filters -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+                    <div class="p-4 bg-gray-50 grid grid-cols-1 md:grid-cols-4 gap-3 border-b border-gray-200">
+                        <div class="relative">
+                            <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                            <input type="text" id="search-term" onkeyup="renderInvoiceView()" placeholder="Buscar..."
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-indigo outline-none text-sm">
+                        </div>
+                        <div>
+                            <input type="date" id="filter-start" onchange="renderInvoiceView()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div>
+                            <input type="date" id="filter-end" onchange="renderInvoiceView()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div class="flex gap-2">
+                            <select id="filter-status" onchange="renderInvoiceView()"
+                                class="flex-1 px-4 py-2 rounded-lg border border-gray-300 text-sm bg-white outline-none">
+                                <option value="all">Todos</option>
+                                <option value="paid">Pagas</option>
+                                <option value="unpaid">Abertas</option>
+                            </select>
+                            <button onclick="clearFilters()"
+                                class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm transition-colors">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Invoice Summary -->
+                    <div
+                        class="p-6 border-b border-gray-100 flex flex-col md:flex-row justify-between items-end bg-gray-50">
+                        <div>
+                            <p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Total da Fatura</p>
+                            <h2 class="text-3xl font-bold text-gray-900" id="inv-total">R$ 0,00</h2>
+                        </div>
+                        <div class="flex gap-3 mt-4 md:mt-0">
+                            <button onclick="payInvoice()"
+                                class="text-sm font-bold text-plena-indigo hover:underline px-4 py-2 border border-plena-indigo rounded-lg hover:bg-plena-indigo hover:text-white transition-colors">
+                                Marcar como Paga
+                            </button>
+                            <button onclick="shareInvoice()"
+                                class="flex items-center gap-2 px-4 py-2 bg-[#25D366] text-white rounded-lg text-sm font-bold hover:bg-[#128C7E]">
+                                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                                WhatsApp
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Invoice Items Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                                <tr>
+                                    <th class="px-6 py-3">Dia</th>
+                                    <th class="px-6 py-3">Descrição</th>
+                                    <th class="px-6 py-3">Cartão</th>
+                                    <th class="px-6 py-3">Parc.</th>
+                                    <th class="px-6 py-3 text-right">Valor</th>
+                                    <th class="px-6 py-3"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="inv-items-list" class="divide-y divide-gray-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total de Compras</p>
+                        <p id="filter-count" class="text-lg font-bold text-green-700">0</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Média por Compra</p>
+                        <p id="filter-average" class="text-lg font-bold text-blue-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-xl border border-purple-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Maior Compra</p>
+                        <p id="filter-max" class="text-lg font-bold text-purple-700">R$ 0,00</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- REPORTS View -->
+            <section id="view-reports" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Relatórios Avançados</h2>
+                    <p class="text-sm text-gray-600">Análise detalhada dos seus gastos por cartão e categoria</p>
+                </div>
+
+                <!-- Report Filters -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
+                    <h3 class="font-bold text-gray-800 mb-4">Configurar Período</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Data Inicial</label>
+                            <input type="date" id="rep-start" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Data Final</label>
+                            <input type="date" id="rep-end" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="generateReport()"
+                                class="flex-1 bg-plena-indigo text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                                Gerar Relatório
+                            </button>
+                            <button onclick="generateFullReport()"
+                                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors"
+                                title="Relatório Completo">
+                                <i data-lucide="file-text" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Results -->
+                <div id="report-result" class="hide space-y-6">
+                    <!-- Summary Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-green-50 p-6 rounded-xl text-center border border-green-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="credit-card" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Cartão Mais Usado</p>
+                            <p id="rep-most-used" class="text-2xl font-bold text-green-700 mt-2">-</p>
+                        </div>
+                        <div class="bg-red-50 p-6 rounded-xl text-center border border-red-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Maior Gasto</p>
+                            <p id="rep-highest-expense" class="text-2xl font-bold text-red-700 mt-2">R$ 0,00</p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-xl text-center border border-blue-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="calendar" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Parcelas Futuras</p>
+                            <p id="rep-future-installments" class="text-2xl font-bold text-blue-700 mt-2">R$ 0,00</p>
+                        </div>
+                    </div>
+
+                    <!-- Card Breakdown -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="font-bold text-gray-800 mb-4">Análise por Cartão</h3>
+                        <div id="card-report" class="space-y-4"></div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button onclick="shareReport()"
+                            class="bg-[#25D366] text-white py-3 rounded-xl font-bold hover:bg-[#128C7E] flex justify-center items-center gap-2">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i> Enviar WhatsApp
+                        </button>
+                        <button onclick="printReport()"
+                            class="bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 flex justify-center items-center gap-2">
+                            <i data-lucide="printer" class="w-4 h-4"></i> Imprimir Relatório
+                        </button>
+                        <button onclick="downloadReportPDF()"
+                            class="bg-gray-800 text-white py-3 rounded-xl font-bold hover:bg-black flex justify-center items-center gap-2">
+                            <i data-lucide="download" class="w-4 h-4"></i> Baixar PDF
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SETTINGS View -->
+            <section id="view-settings" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Configurações do Sistema</h2>
+                    <p class="text-sm text-gray-600">Personalize e gerencie suas preferências</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Data Management -->
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                <i data-lucide="shield-check" class="w-5 h-5 mr-2 text-plena-indigo"></i>
+                                Segurança de Dados
+                            </h3>
+
+                            <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg text-sm text-blue-800 mb-6">
+                                <p class="font-bold mb-2">⚠️ Importante</p>
+                                <p>Seus dados ficam salvos 100% no navegador. Faça backup regularmente!</p>
+                            </div>
+
+                            <div class="space-y-3">
+                                <button onclick="downloadBackup()"
+                                    class="w-full border border-gray-300 py-3 rounded-lg text-sm font-medium hover:bg-gray-50 flex justify-center items-center gap-2">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    Baixar Backup (.json)
+                                </button>
+
+                                <div class="relative">
+                                    <button
+                                        class="w-full bg-gray-800 text-white py-3 rounded-lg text-sm font-medium flex justify-center items-center gap-2">
+                                        <i data-lucide="upload" class="w-4 h-4"></i>
+                                        Restaurar Backup
+                                    </button>
+                                    <input type="file" onchange="restoreBackup(this)" accept=".json"
+                                        class="absolute inset-0 opacity-0 cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Danger Zone -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center text-red-600">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
+                                Zona de Perigo
+                            </h3>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="clearAllTransactions()"
+                                    class="py-2.5 border border-red-300 text-red-600 rounded-lg text-sm hover:bg-red-50 transition-colors">
+                                    Limpar Lançamentos
+                                </button>
+                                <button onclick="factoryReset()"
+                                    class="py-2.5 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition-colors">
+                                    Resetar Tudo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Settings -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="font-bold text-gray-800 mb-6">Configurações do Sistema</h3>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-sm font-medium text-gray-700 mb-1 block">Nome da Empresa</label>
+                                <input type="text" id="company-name" placeholder="Opcional"
+                                    class="w-full border p-2 rounded-lg text-sm">
+                            </div>
+
+                            <div>
+                                <label class="text-sm font-medium text-gray-700 mb-1 block">Moeda</label>
+                                <select id="currency-select" class="w-full border p-2 rounded-lg text-sm">
+                                    <option value="BRL">Real Brasileiro (R$)</option>
+                                    <option value="USD">Dólar Americano ($)</option>
+                                    <option value="EUR">Euro (€)</option>
+                                </select>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700">Backup Automático</p>
+                                    <p class="text-xs text-gray-500">Salvar automaticamente a cada 30 segundos</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="auto-backup" class="sr-only peer" checked>
+                                    <div
+                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-plena-indigo">
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700">Notificações</p>
+                                    <p class="text-xs text-gray-500">Alertas de limite e vencimentos</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="notifications" class="sr-only peer" checked>
+                                    <div
+                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-plena-indigo">
+                                    </div>
+                                </label>
+                            </div>
+
+                            <button onclick="saveSettings()"
+                                class="w-full bg-plena-indigo text-white py-3 rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors mt-4">
+                                Salvar Configurações
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- INSTRUCTIONS View -->
+            <section id="view-instructions" class="view-section hide fade-in">
+                <div class="max-w-6xl mx-auto pb-12">
+                    <!-- Hero Header -->
+                    <div class="text-center mb-10 pt-4">
+                        <div
+                            class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-plena-indigo to-plena-dark rounded-2xl mb-4 shadow-lg">
+                            <i data-lucide="credit-card" class="w-12 h-12 text-white"></i>
+                        </div>
+                        <h1 class="text-3xl font-bold text-gray-800 mb-2">Manual Completo de Uso</h1>
+                        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Guia passo a passo para gerenciar seus
+                            cartões como um especialista</p>
+                        <div class="mt-4 flex flex-wrap justify-center gap-2">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">✓
+                                Controle Total</span>
+                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">📱 Mobile &
+                                Desktop</span>
+                            <span class="px-3 py-1 bg-indigo-100 text-plena-indigo rounded-full text-xs font-bold">⚡
+                                Gestão Inteligente</span>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
+                        <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                            <i data-lucide="compass" class="w-5 h-5 mr-2 text-plena-indigo"></i>
+                            Seu Progresso no Aprendizado
+                        </h3>
+                        <div class="mb-4">
+                            <div class="progress-bar">
+                                <div id="tutorial-progress" class="progress-fill" style="width:0%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-500 mt-2">
+                                <span>0% Concluído</span>
+                                <span id="completed-steps">0/7 etapas</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-7 gap-2">
+                            <button onclick="scrollToSection('instalacao')"
+                                class="text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">1.
+                                Instalação</button>
+                            <button onclick="scrollToSection('config')"
+                                class="text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">2.
+                                Configuração</button>
+                            <button onclick="scrollToSection('gestao')"
+                                class="text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">3.
+                                Gestão</button>
+                            <button onclick="scrollToSection('relatorios')"
+                                class="text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">4.
+                                Relatórios</button>
+                            <button onclick="scrollToSection('backup')"
+                                class="text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">5.
+                                Backup</button>
+                            <button onclick="scrollToSection('faq')"
+                                class="text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">6.
+                                FAQ</button>
+                            <button onclick="scrollToSection('checklist')"
+                                class="text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">7.
+                                Checklist</button>
+                        </div>
+                    </div>
+
+                    <!-- Seção 1: Instalação -->
+                    <div id="instalacao"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-indigo to-plena-dark text-white">1
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Instalação no Celular</h3>
+                            </div>
+                            <button onclick="markSectionComplete('instalacao')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+                        <div class="bg-gray-900 rounded-2xl p-6 text-white shadow-lg mb-6">
+                            <h4 class="font-bold text-lg mb-4 flex items-center">
+                                <i data-lucide="download" class="w-5 h-5 mr-2 text-green-400"></i>
+                                Torne o App Disponível OFFLINE
+                            </h4>
+                            <p class="text-gray-300 mb-4">Instale no celular para usar sem internet:</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                                <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+                                    <div class="font-bold text-white mb-3 flex items-center">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center mr-2">
+                                            <i data-lucide="smartphone" class="w-4 h-4"></i>
+                                        </div>
+                                        Android (Chrome)
+                                    </div>
+                                    <ol class="list-decimal pl-5 space-y-3 text-gray-300">
+                                        <li>Abra no <strong>Chrome</strong></li>
+                                        <li>Toque nos <strong>3 pontinhos</strong> (menu)</li>
+                                        <li>Selecione <strong>"Instalar aplicativo"</strong></li>
+                                    </ol>
+                                </div>
+                                <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+                                    <div class="font-bold text-white mb-3 flex items-center">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center mr-2">
+                                            <i data-lucide="apple" class="w-4 h-4"></i>
+                                        </div>
+                                        iPhone (Safari)
+                                    </div>
+                                    <ol class="list-decimal pl-5 space-y-3 text-gray-300">
+                                        <li>Abra no <strong>Safari</strong></li>
+                                        <li>Toque em <strong>Compartilhar</strong> (quadrado com seta)</li>
+                                        <li>Role e toque em <strong>"Adicionar à Tela de Início"</strong></li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Demais Seções Condensadas -->
+                    <div id="config" class="bg-white border rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-indigo to-plena-dark text-white">2
+                                </div>
+                                <h3 class="text-xl font-bold">Configuração & Primeiro Cartão</h3>
+                            </div>
+                            <button onclick="markSectionComplete('config')"
+                                class="text-xs text-gray-500 hover:text-green-600"><i data-lucide="check-circle"
+                                    class="w-4 h-4"></i></button>
+                        </div>
+                        <p class="mb-4 text-gray-600">Cadastre seu primeiro cartão com: Nome, Bandeira, Limite, Dia de
+                            Fechamento e Vencimento.</p>
+                    </div>
+
+                    <div id="gestao" class="bg-white border rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-indigo to-plena-dark text-white">3
+                                </div>
+                                <h3 class="text-xl font-bold">Gestão de Cartões</h3>
+                            </div>
+                            <button onclick="markSectionComplete('gestao')"
+                                class="text-xs text-gray-500 hover:text-green-600"><i data-lucide="check-circle"
+                                    class="w-4 h-4"></i></button>
+                        </div>
+                        <p class="text-gray-600">Sistema identifica automaticamente qual cartão possui melhor data de
+                            compra para maximizar seu prazo de pagamento.</p>
+                    </div>
+
+                    <div id="relatorios" class="bg-white border rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-indigo to-plena-dark text-white">4
+                                </div>
+                                <h3 class="text-xl font-bold">Relatórios</h3>
+                            </div>
+                            <button onclick="markSectionComplete('relatorios')"
+                                class="text-xs text-gray-500 hover:text-green-600"><i data-lucide="check-circle"
+                                    class="w-4 h-4"></i></button>
+                        </div>
+                        <p class="text-gray-600">Gere relatórios personalizados por período, cartão e categoria de
+                            gasto.</p>
+                    </div>
+
+                    <div id="backup"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-indigo to-plena-dark text-white">5
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Backup e Segurança dos Dados</h3>
+                            </div>
+                            <button onclick="markSectionComplete('backup')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-xl mb-6">
+                            <h4 class="font-bold text-red-800 mb-3 flex items-center">
+                                <i data-lucide="alert-octagon" class="w-5 h-5 mr-2"></i>
+                                ATENÇÃO: Leia com Cuidado!
+                            </h4>
+                            <div class="text-sm text-red-800 space-y-2">
+                                <p>📱 <strong>Seus dados ficam APENAS no seu celular/computador.</strong></p>
+                                <p>🔄 <strong>Se você perder o aparelho, formatar ou limpar o navegador, perderá TODOS
+                                        os dados.</strong></p>
+                                <p>💾 <strong>O backup é SUA responsabilidade.</strong> Faça SEMPRE!</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                    <i data-lucide="download" class="w-5 h-5 mr-2 text-green-600"></i>
+                                    Como Fazer Backup (Guia Passo a Passo)
+                                </h4>
+                                <div class="space-y-4">
+                                    <div class="bg-white p-4 rounded-xl border border-green-200">
+                                        <div class="flex items-center mb-2">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                                <span class="font-bold text-green-700">1</span>
+                                            </div>
+                                            <p class="font-bold text-gray-800">Acesse Configurações</p>
+                                        </div>
+                                        <p class="text-sm text-gray-600 ml-11">Menu lateral → Ícone da engrenagem</p>
+                                    </div>
+
+                                    <div class="bg-white p-4 rounded-xl border border-green-200">
+                                        <div class="flex items-center mb-2">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                                <span class="font-bold text-green-700">2</span>
+                                            </div>
+                                            <p class="font-bold text-gray-800">Desça até "Segurança de Dados"</p>
+                                        </div>
+                                        <p class="text-sm text-gray-600 ml-11">Procure pelo ícone do escudo</p>
+                                    </div>
+
+                                    <div class="bg-white p-4 rounded-xl border border-green-200">
+                                        <div class="flex items-center mb-2">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                                <span class="font-bold text-green-700">3</span>
+                                            </div>
+                                            <p class="font-bold text-gray-800">Clique em "Baixar Backup (.json)"</p>
+                                        </div>
+                                        <p class="text-sm text-gray-600 ml-11">Um arquivo será baixado automaticamente
+                                        </p>
+                                    </div>
+
+                                    <div class="bg-white p-4 rounded-xl border border-green-200">
+                                        <div class="flex items-center mb-2">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                                <span class="font-bold text-green-700">4</span>
+                                            </div>
+                                            <p class="font-bold text-gray-800">Salve em 2 Lugares Seguros</p>
+                                        </div>
+                                        <div class="ml-11">
+                                            <p class="text-sm text-gray-600 mb-1"><strong>Recomendado:</strong></p>
+                                            <ul class="text-sm text-gray-600 space-y-1">
+                                                <li>• Google Drive (na pasta "Backup Plena")</li>
+                                                <li>• Envie para você mesmo no WhatsApp</li>
+                                                <li>• Pendrive ou HD externo</li>
+                                                <li>• E-mail (anexe o arquivo)</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                                    <i data-lucide="refresh-cw" class="w-5 h-5 mr-2 text-blue-600"></i>
+                                    Como Restaurar Backup (Se Perder Dados)
+                                </h4>
+                                <div class="bg-blue-50 p-5 rounded-xl border border-blue-100">
+                                    <p class="text-sm text-gray-700 mb-4">Se você perdeu os dados ou comprou um celular
+                                        novo:</p>
+                                    <ol class="space-y-3 text-sm">
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                A</div>
+                                            <div>
+                                                <strong>Baixe o arquivo de backup</strong>
+                                                <p class="text-gray-600 text-xs">Do Google Drive, WhatsApp ou e-mail</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                B</div>
+                                            <div>
+                                                <strong>Acesse as Configurações do app</strong>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                C</div>
+                                            <div>
+                                                <strong>Clique em "Restaurar Backup"</strong>
+                                                <p class="text-gray-600 text-xs">Selecione o arquivo .json baixado</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center mr-2 text-xs font-bold">
+                                                D</div>
+                                            <div>
+                                                <strong>Confirme a restauração</strong>
+                                                <p class="text-gray-600 text-xs">O app será recarregado com seus dados
+                                                    antigos</p>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                    <div class="mt-4 p-3 bg-white rounded-lg border">
+                                        <p class="text-xs font-bold text-gray-800 mb-1">Frequência Recomendada</p>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-xs text-gray-600">Backup Semanal</span>
+                                            <span
+                                                class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">OBRIGATÓRIO</span>
+                                        </div>
+                                        <div class="flex items-center justify-between mt-1">
+                                            <span class="text-xs text-gray-600">Backup Antes de Formatar Celular</span>
+                                            <span
+                                                class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded">CRÍTICO</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-white p-4 rounded-xl border border-gray-200 text-center">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-2">
+                                    <i data-lucide="x-circle" class="w-5 h-5 text-red-600"></i>
+                                </div>
+                                <p class="text-xs font-bold text-gray-800">Não Faça</p>
+                                <p class="text-xs text-gray-600">Limpar histórico/cache do navegador sem backup</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-gray-200 text-center">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-2">
+                                    <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-600"></i>
+                                </div>
+                                <p class="text-xs font-bold text-gray-800">Cuidado</p>
+                                <p class="text-xs text-gray-600">Trocar de celular sem restaurar backup primeiro</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-gray-200 text-center">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+                                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                                <p class="text-xs font-bold text-gray-800">Faça Sempre</p>
+                                <p class="text-xs text-gray-600">Backup após cadastrar novo cartão ou compra</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="faq" class="bg-white border rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-indigo to-plena-dark text-white">6
+                                </div>
+                                <h3 class="text-xl font-bold">Dúvidas Frequentes</h3>
+                            </div>
+                            <button onclick="markSectionComplete('faq')"
+                                class="text-xs text-gray-500 hover:text-green-600"><i data-lucide="check-circle"
+                                    class="w-4 h-4"></i></button>
+                        </div>
+                        <details class="mb-3 border p-4 rounded-lg">
+                            <summary class="font-bold cursor-pointer">Perdi meu celular. Como recupero os dados?
+                            </summary>
+                            <p class="mt-2 text-sm text-gray-600">Apenas se você tiver feito backup. Restaure o arquivo
+                                via Configurações.</p>
+                        </details>
+                        <details class="mb-3 border p-4 rounded-lg">
+                            <summary class="font-bold cursor-pointer">O que é o "Melhor Dia de Compra"?</summary>
+                            <p class="mt-2 text-sm text-gray-600">É o dia seguinte ao fechamento. Comprando nesse dia,
+                                você ganha até 40 dias para pagar!</p>
+                        </details>
+                        <details class="border p-4 rounded-lg">
+                            <summary class="font-bold cursor-pointer">Como funcionam as parcelas?</summary>
+                            <p class="mt-2 text-sm text-gray-600">O sistema divide automaticamente e lança uma parcela
+                                em cada mês futuro.</p>
+                        </details>
+                    </div>
+
+                    <!-- Checklist Interativo -->
+                    <div id="checklist" class="bg-white border rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-indigo to-plena-dark text-white">7
+                                </div>
+                                <h3 class="text-xl font-bold">Checklist - Sua Rotina Financeira</h3>
+                            </div>
+                            <button onclick="markSectionComplete('checklist')"
+                                class="text-xs text-gray-500 hover:text-green-600"><i data-lucide="check-circle"
+                                    class="w-4 h-4"></i></button>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-indigo-900 to-plena-dark p-6 rounded-xl text-white mb-6">
+                            <div class="text-center">
+                                <div class="text-5xl font-bold mb-2" id="checklist-percent">0%</div>
+                                <div class="progress-bar mb-3">
+                                    <div id="checklist-progress" class="progress-fill" style="width:0%"></div>
+                                </div>
+                                <p class="text-sm"><span id="checklist-completed">0</span>/<span
+                                        id="checklist-total">12</span> tarefas completadas</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div class="space-y-4">
+                                <div class="bg-blue-50 p-5 rounded-xl border border-blue-100">
+                                    <h4 class="font-bold text-blue-600 uppercase text-sm mb-3">📊 Gerenciamento</h4>
+                                    <div class="space-y-3">
+                                        <div class="checklist-item flex items-center">
+                                            <input type="checkbox" id="check-1-1" class="w-5 h-5 text-blue-600 rounded"
+                                                onchange="updateChecklist()">
+                                            <label for="check-1-1"
+                                                class="ml-3 text-sm text-gray-700 cursor-pointer">Cadastrar novos
+                                                cartões</label>
+                                        </div>
+                                        <div class="checklist-item flex items-center">
+                                            <input type="checkbox" id="check-1-2" class="w-5 h-5 text-blue-600 rounded"
+                                                onchange="updateChecklist()">
+                                            <label for="check-1-2"
+                                                class="ml-3 text-sm text-gray-700 cursor-pointer">Lançar compras do
+                                                dia</label>
+                                        </div>
+                                        <div class="checklist-item flex items-center">
+                                            <input type="checkbox" id="check-1-3" class="w-5 h-5 text-blue-600 rounded"
+                                                onchange="updateChecklist()">
+                                            <label for="check-1-3"
+                                                class="ml-3 text-sm text-gray-700 cursor-pointer">Conferir parcelas
+                                                futuras</label>
+                                        </div>
+                                        <div class="checklist-item flex items-center">
+                                            <input type="checkbox" id="check-1-4" class="w-5 h-5 text-blue-600 rounded"
+                                                onchange="updateChecklist()">
+                                            <label for="check-1-4"
+                                                class="ml-3 text-sm text-gray-700 cursor-pointer">Atualizar
+                                                limites</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="bg-indigo-50 p-5 rounded-xl border border-indigo-100">
+                                    <h4 class="font-bold text-plena-indigo uppercase text-sm mb-3">💳 Mês Fechando</h4>
+                                    <div class="space-y-3">
+                                        <div class="checklist-item flex items-center">
+                                            <input type="checkbox" id="check-2-1"
+                                                class="w-5 h-5 text-indigo-600 rounded" onchange="updateChecklist()">
+                                            <label for="check-2-1"
+                                                class="ml-3 text-sm text-gray-700 cursor-pointer">Fechar faturas
+                                                vencidas</label>
+                                        </div>
+                                        <div class="checklist-item flex items-center">
+                                            <input type="checkbox" id="check-2-2"
+                                                class="w-5 h-5 text-indigo-600 rounded" onchange="updateChecklist()">
+                                            <label for="check-2-2"
+                                                class="ml-3 text-sm text-gray-700 cursor-pointer">Exportar relatório
+                                                mensal</label>
+                                        </div>
+                                        <div class="checklist-item flex items-center">
+                                            <input type="checkbox" id="check-2-3"
+                                                class="w-5 h-5 text-indigo-600 rounded" onchange="updateChecklist()">
+                                            <label for="check-2-3"
+                                                class="ml-3 text-sm text-gray-700 cursor-pointer">Verificar melhor dia
+                                                compra</label>
+                                        </div>
+                                        <div class="checklist-item flex items-center">
+                                            <input type="checkbox" id="check-2-4"
+                                                class="w-5 h-5 text-indigo-600 rounded" onchange="updateChecklist()">
+                                            <label for="check-2-4"
+                                                class="ml-3 text-sm text-gray-700 cursor-pointer">Planejamento próximo
+                                                mês</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="bg-green-50 p-5 rounded-xl border border-green-100">
+                                    <h4 class="font-bold text-green-600 uppercase text-sm mb-3">🔒 Segurança</h4>
+                                    <div class="space-y-3">
+                                        <div class="checklist-item flex items-center">
+                                            <input type="checkbox" id="check-3-1" class="w-5 h-5 text-green-600 rounded"
+                                                onchange="updateChecklist()">
+                                            <label for="check-3-1"
+                                                class="ml-3 text-sm text-gray-700 cursor-pointer">Fazer backup
+                                                mensal</label>
+                                        </div>
+                                        <div class="checklist-item flex items-center">
+                                            <input type="checkbox" id="check-3-2" class="w-5 h-5 text-green-600 rounded"
+                                                onchange="updateChecklist()">
+                                            <label for="check-3-2"
+                                                class="ml-3 text-sm text-gray-700 cursor-pointer">Guardar em 2
+                                                lugares</label>
+                                        </div>
+                                        <div class="checklist-item flex items-center">
+                                            <input type="checkbox" id="check-3-3" class="w-5 h-5 text-green-600 rounded"
+                                                onchange="updateChecklist()">
+                                            <label for="check-3-3"
+                                                class="ml-3 text-sm text-gray-700 cursor-pointer">Testar
+                                                restauração</label>
+                                        </div>
+                                        <div class="checklist-item flex items-center">
+                                            <input type="checkbox" id="check-3-4" class="w-5 h-5 text-green-600 rounded"
+                                                onchange="updateChecklist()">
+                                            <label for="check-3-4"
+                                                class="ml-3 text-sm text-gray-700 cursor-pointer">Limpar dados
+                                                antigos</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 text-center">
+                            <button onclick="resetChecklist()"
+                                class="px-6 py-2 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700">
+                                <i data-lucide="rotate-ccw" class="w-4 h-4 inline mr-2"></i> Reiniciar Checklist
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="text-center text-gray-500 text-sm mt-12 pb-6">
+                        <p>💡 Dúvidas? Entre em contato:</p>
+                        <a href="mailto:tecnologia@plenaaplicativos.com.br"
+                            class="text-plena-indigo font-bold hover:underline">tecnologia@plenaaplicativos.com.br</a>
+                        <p class="mt-2 text-xs">Plena Card v4.1 Pro • Plena Soluções Digitais</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ABOUT View -->
+            <section id="view-about" class="view-section hide fade-in">
+                <div class="max-w-4xl mx-auto pb-12">
+
+                    <!-- 1. Header Institucional -->
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mb-8 text-center">
+                        <div
+                            class="w-20 h-20 rounded-full bg-gradient-to-r from-plena-indigo to-plena-dark flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-200">
+                            <i data-lucide="shield-check" class="w-10 h-10 text-white"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-1">Central de Segurança e Legalidade</h2>
+                        <p class="text-gray-500 font-medium">Plena Soluções Digitais • Transparência Total</p>
+                    </div>
+
+                    <!-- 2. Grid de Políticas -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <!-- Termos de Uso -->
+                        <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                            <h3 class="font-bold text-gray-800 mb-3 flex items-center text-lg">
+                                <div class="p-2 bg-blue-50 rounded-lg mr-3">
+                                    <i data-lucide="file-text" class="w-5 h-5 text-plena-indigo"></i>
+                                </div>
+                                Termos de Uso
+                            </h3>
+                            <p class="text-sm text-gray-600 leading-relaxed text-justify">
+                                A licença concedida é <strong>pessoal, intransferível e não exclusiva</strong>. O software é
+                                fornecido "no estado em que se encontra" (as-is). É estritamente proibida a revenda, cópia,
+                                distribuição não autorizada ou engenharia reversa do código-fonte, sob pena das sanções
+                                previstas na Lei de Propriedade Intelectual (9.610/98).
+                            </p>
+                        </div>
+
+                        <!-- Privacidade e LGPD -->
+                        <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                            <h3 class="font-bold text-gray-800 mb-3 flex items-center text-lg">
+                                <div class="p-2 bg-green-50 rounded-lg mr-3">
+                                    <i data-lucide="lock" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                                Privacidade (LGPD)
+                            </h3>
+                            <p class="text-sm text-gray-600 leading-relaxed text-justify">
+                                Adotamos a arquitetura <strong>Privacy by Design (Local-First)</strong>. Seus dados
+                                financeiros e de clientes ficam salvos <strong>exclusivamente no seu dispositivo</strong>.
+                                A Plena não coleta, não armazena e não tem acesso a nenhuma informação inserida no sistema.
+                                Sua privacidade é absoluta.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 3. Responsabilidade do Usuário (Crítico) -->
+                    <div class="bg-red-50 border border-red-100 p-8 rounded-2xl mb-8 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <i data-lucide="alert-octagon" class="w-32 h-32 text-red-900"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <h3 class="font-bold text-red-800 mb-4 flex items-center text-lg">
+                                <i data-lucide="alert-triangle" class="w-6 h-6 mr-3"></i>
+                                IMPORTANTE: Sua Responsabilidade sobre os Dados
+                            </h3>
+                            <div class="space-y-4 text-sm text-red-900/80 text-justify font-medium">
+                                <p>
+                                    <strong>1. Backup é Obrigatório:</strong> Como não temos acesso aos seus dados,
+                                    <strong>não podemos recuperá-los</strong> em caso de perda, roubo ou dano ao seu
+                                    dispositivo. A realização de cópias de segurança (Backup) é de responsabilidade única e
+                                    exclusiva do usuário.
+                                </p>
+                                <p>
+                                    <strong>2. Isenção de Responsabilidade Técnica:</strong> A Plena exime-se de qualquer
+                                    responsabilidade por prejuízos decorrentes de falhas de hardware, vírus no dispositivo
+                                    do usuário, ou uso incorreto dos cálculos financeiros do sistema. Verifique sempre as
+                                    taxas configuradas.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Suporte e SLA -->
+                    <div class="bg-gradient-to-br from-gray-900 to-plena-dark text-white p-8 rounded-2xl mb-12 shadow-xl">
+                        <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                            <div class="flex-1">
+                                <h3 class="font-bold text-xl mb-2 flex items-center">
+                                    <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-plena-indigo"></i>
+                                    Suporte Premium Especializado
+                                </h3>
+                                <p class="text-gray-300 text-sm mb-6 leading-relaxed">
+                                    Precisa de ajuda ou encontrou alguma inconsistência? Nossa equipe técnica está pronta
+                                    para atender você com prioridade. Garantimos a qualidade e a segurança da nossa marca.
+                                </p>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                        <p class="text-xs text-gray-400 uppercase font-bold">Canal Oficial</p>
+                                        <p class="font-bold text-white">E-mail</p>
+                                    </div>
+                                    <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                        <p class="text-xs text-gray-400 uppercase font-bold">Tempo de Resposta (SLA)</p>
+                                        <p class="font-bold text-plena-indigo">Até 24h Úteis</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <a href="mailto:tecnologia@plenaaplicativos.com.br"
+                                    class="inline-flex items-center justify-center bg-white text-plena-dark px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-transform transform hover:scale-105 shadow-lg">
+                                    <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+                                    Falar com Suporte
+                                </a>
+                                <p class="text-xs text-center text-gray-400 mt-3">tecnologia@plenaaplicativos.com.br</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Confirmação e Aceite (Travamento) -->
+                    <div class="mt-8 mb-12" id="terms-action-container">
+                        <div class="bg-gray-50 border border-gray-200 p-6 rounded-2xl flex flex-col items-center text-center transition-all duration-300"
+                            id="terms-box">
+                            <i data-lucide="check-circle-2" class="w-12 h-12 text-gray-300 mb-3" id="terms-icon"></i>
+                            <h3 class="font-bold text-gray-800 text-lg mb-2" id="terms-title">Confirmação de Leitura</h3>
+                            <p class="text-sm text-gray-500 mb-6 max-w-lg" id="terms-desc">
+                                Para prosseguir com segurança, confirme que você leu e compreendeu os Termos de Uso, a
+                                Política de Privacidade e sua responsabilidade sobre os backups.
+                            </p>
+
+                            <button onclick="confirmTerms()" id="btn-confirm-terms"
+                                class="bg-plena-indigo hover:bg-plena-dark text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-indigo-200 transform hover:scale-105 transition-all flex items-center gap-2 group">
+                                <span>Li, Compreendi e Concordo</span>
+                                <i data-lucide="arrow-right"
+                                    class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+
+                            <div id="terms-accepted-badge"
+                                class="hidden flex flex-col items-center animate-in fade-in zoom-in duration-300">
+                                <span
+                                    class="bg-green-100 text-green-700 font-bold px-6 py-2 rounded-full text-sm border border-green-200 flex items-center gap-2 mb-2">
+                                    <i data-lucide="lock" class="w-4 h-4"></i>
+                                    Termos Aceitos e Registrados
+                                </span>
+                                <p class="text-xs text-gray-400 font-mono" id="terms-date">Carregando data...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. Rodapé Legal -->
+                    <div class="text-center border-t border-gray-200 pt-8">
+                        <p class="text-sm font-bold text-gray-800">Plena Soluções Digitais LTDA</p>
+                        <p class="text-xs text-gray-500 mt-1">CNPJ: 17.347.919/0001-59 • Todos os direitos reservados</p>
+                        <p class="text-[10px] text-gray-400 mt-4">
+                            Versão 4.1 Pro • Build 2026.01.07
+                        </p>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- CARD MODAL -->
+    <div id="cardModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Novo Cartão</h3>
+                <button onclick="closeModal('cardModal')" class="text-gray-400"><i data-lucide="x"></i></button>
+            </div>
+            <form onsubmit="submitCard(event)" class="space-y-4">
+                <input type="hidden" id="cd-id">
+                <input type="text" id="cd-name" required placeholder="Nome (Ex: Nubank)"
+                    class="w-full border p-2 rounded-lg">
+                <input type="text" id="cd-last4" maxlength="4" placeholder="Últimos 4 dígitos (Opcional)"
+                    class="w-full border p-2 rounded-lg">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Limite Total</label>
+                    <input type="number" step="0.01" id="cd-limit" required class="w-full border p-2 rounded-lg"
+                        placeholder="R$ 0,00">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Dia Fechamento</label>
+                        <input type="number" min="1" max="31" id="cd-close" required
+                            class="w-full border p-2 rounded-lg" placeholder="Dia">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Dia Vencimento</label>
+                        <input type="number" min="1" max="31" id="cd-due" required class="w-full border p-2 rounded-lg"
+                            placeholder="Dia">
+                    </div>
+                </div>
+                <button type="submit"
+                    class="w-full bg-plena-indigo text-white py-3 rounded-xl font-bold hover:bg-plena-dark">
+                    Salvar Cartão
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- EXPENSE MODAL -->
+    <div id="expModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Nova Compra</h3>
+                <button onclick="closeModal('expModal')" class="text-gray-400"><i data-lucide="x"></i></button>
+            </div>
+            <form onsubmit="submitExpense(event)" class="space-y-4">
+                <input type="hidden" id="ex-id">
+                <select id="ex-card" required class="w-full border p-2 rounded-lg bg-gray-50 font-medium">
+                    <option value="">Selecione o Cartão...</option>
+                </select>
+
+                <input type="text" id="ex-desc" required placeholder="O que você comprou?"
+                    class="w-full border p-2 rounded-lg">
+                <input type="number" step="0.01" id="ex-val" required placeholder="Valor Total (R$)"
+                    class="w-full border p-2 rounded-lg text-lg font-bold">
+                <input type="date" id="ex-date" required class="w-full border p-2 rounded-lg">
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Parcelas</label>
+                    <select id="ex-inst" class="w-full border p-2 rounded-lg">
+                        <option value="1">À vista (1x)</option>
+                        <option value="2">2x</option>
+                        <option value="3">3x</option>
+                        <option value="4">4x</option>
+                        <option value="5">5x</option>
+                        <option value="6">6x</option>
+                        <option value="7">7x</option>
+                        <option value="8">8x</option>
+                        <option value="9">9x</option>
+                        <option value="10">10x</option>
+                        <option value="11">11x</option>
+                        <option value="12">12x</option>
+                    </select>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-plena-indigo text-white py-3 rounded-xl font-bold hover:bg-plena-dark">
+                    Confirmar Compra
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- CLOSING MODAL -->
+    <div id="closingModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+            <div class="bg-gradient-to-r from-plena-indigo to-plena-dark p-6 text-center text-white">
+                <h3 class="font-bold text-lg">Fechamento de Faturas</h3>
+                <p id="close-month" class="text-sm text-gray-300 mt-1">Mês Atual</p>
+                <p id="close-time" class="text-xs text-gray-500 mt-0">--:--</p>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4 mb-6">
+                    <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg border border-red-100">
+                        <div class="flex items-center">
+                            <i data-lucide="file-text" class="w-4 h-4 text-red-600 mr-2"></i>
+                            <span class="text-sm">Total Faturas</span>
+                        </div>
+                        <span id="close-total" class="font-bold text-red-700">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg border border-green-100">
+                        <div class="flex items-center">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-green-600 mr-2"></i>
+                            <span class="text-sm">A Pagar</span>
+                        </div>
+                        <span id="close-unpaid" class="font-bold text-green-700">0 faturas</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-4 border-t">
+                        <span class="font-bold text-gray-800">Status</span>
+                        <span id="close-status" class="font-bold text-2xl text-gray-900">Aberto</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <button onclick="shareClosing()"
+                        class="bg-[#25D366] text-white py-2.5 rounded-lg font-bold text-sm hover:bg-[#128C7E] flex justify-center items-center gap-2">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
+                    </button>
+                    <button onclick="printClosing()"
+                        class="bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 flex justify-center items-center gap-2">
+                        <i data-lucide="printer" class="w-4 h-4"></i> Imprimir
+                    </button>
+                </div>
+
+                <button onclick="closeAllInvoices()"
+                    class="w-full bg-plena-indigo text-white py-3 rounded-lg font-bold text-sm hover:bg-plena-dark transition-colors flex justify-center items-center gap-2 mb-3">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+                    Fechar Todas as Faturas
+                </button>
+
+                <button onclick="closeModal('closingModal')"
+                    class="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-bold text-sm hover:bg-gray-200 transition-colors">
+                    Fechar
+                </button>
+
+                <div class="mt-4 pt-4 border-t border-gray-100 text-center">
+                    <a href="https://www.plenaaplicativos.com.br" target="_blank"
+                        class="text-[10px] text-gray-400 hover:text-plena-indigo no-underline">
+                        Plena Soluções Digitais &copy; 2026
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // ESTADO GLOBAL
+        const DB_KEY = 'plena_card_pro_v2';
+        const defaultDB = {
+            cards: [],
+            expenses: [],
+            settings: {
+                companyName: '',
+                currency: 'BRL',
+                theme: 'light',
+                autoBackup: true,
+                notifications: true,
+                termsAccepted: false,
+                termsAcceptedAt: null
+            }
+        };
+
+        let db = JSON.parse(localStorage.getItem(DB_KEY)) || defaultDB;
+        let viewDate = new Date(); // Para navegação por meses
+
+        // UTILITÁRIOS
+        const save = () => {
+            localStorage.setItem(DB_KEY, JSON.stringify(db));
+            updateDataStatus();
+        };
+
+        const fmtMoney = (v) => {
+            const currency = db.settings.currency || 'BRL';
+            const symbols = { BRL: 'R$', USD: '$', EUR: '€' };
+            const symbol = symbols[currency] || 'R$';
+
+            return v.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: currency,
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).replace('R$', symbol);
+        };
+
+        const fmtDate = (d) => {
+            if (!d) return '--/--';
+            const date = new Date(d + 'T12:00:00');
+            return date.toLocaleDateString('pt-BR');
+        };
+
+        const fmtDateInput = (d) => {
+            return new Date(d + 'T12:00:00').toISOString().split('T')[0];
+        };
+
+        const getID = () => {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        };
+
+        const getMonthYear = (d) => `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}`;
+        const getMonthName = (d) => d.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }).toUpperCase();
+
+        const calculatePercentage = (current, previous) => {
+            if (previous === 0) return current > 0 ? 100 : 0;
+            return ((current - previous) / previous * 100).toFixed(1);
+        };
+
+        // INICIALIZAÇÃO
+        function init() {
+            lucide.createIcons();
+
+            // Configurar datas padrão
+            const today = new Date().toISOString().split('T')[0];
+            const firstDay = new Date();
+            firstDay.setDate(1);
+            const firstDayStr = firstDay.toISOString().split('T')[0];
+
+            // Configurar inputs de data
+            document.getElementById('ex-date').value = today;
+            document.getElementById('month-selector').value = today.slice(0, 7);
+            document.getElementById('rep-start').value = firstDayStr;
+            document.getElementById('rep-end').value = today;
+            document.getElementById('filter-start').value = firstDayStr;
+            document.getElementById('filter-end').value = today;
+
+            // Configurar settings
+            document.getElementById('company-name').value = db.settings.companyName || '';
+            document.getElementById('currency-select').value = db.settings.currency || 'BRL';
+            document.getElementById('auto-backup').checked = db.settings.autoBackup !== false;
+            document.getElementById('notifications').checked = db.settings.notifications !== false;
+
+            // Renderizar dados iniciais
+            renderDashboard();
+            updateDataStatus();
+            if (typeof updateTermsVisuals === 'function') updateTermsVisuals();
+
+            // Configurar periodicidade para salvar
+            if (db.settings.autoBackup !== false) {
+                setInterval(save, 30000); // Salva a cada 30 segundos
+            }
+
+            // Iniciar na dashboard
+            router('dashboard');
+        }
+
+        // ROTEAMENTO E NAVEGAÇÃO
+        function router(view) {
+            // Esconder todas as views
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hide'));
+
+            // Remover classe active de todos os nav items
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('bg-white/10', 'text-white');
+                el.classList.add('text-gray-400');
+            });
+
+            // Mostrar view selecionada
+            const viewElement = document.getElementById(`view-${view}`);
+            if (viewElement) {
+                viewElement.classList.remove('hide');
+                viewElement.classList.add('fade-in');
+            }
+
+            // Ativar nav item selecionado
+            const navElement = document.getElementById(`nav-${view}`);
+            if (navElement) {
+                navElement.classList.add('bg-white/10', 'text-white');
+                navElement.classList.remove('text-gray-400');
+            }
+
+            // Atualizar título da página
+            const titles = {
+                dashboard: 'Dashboard',
+                cards: 'Meus Cartões',
+                invoice: 'Faturas',
+                reports: 'Relatórios',
+                settings: 'Configurações',
+                instructions: 'Manual de Uso',
+                about: 'Sobre a Plena'
+            };
+
+            document.getElementById('page-title').innerText = titles[view] || 'Plena Card';
+
+            // Fechar sidebar no mobile
+            if (window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+
+            // Renderizar dados específicos da view
+            if (view === 'dashboard') {
+                renderDashboard();
+            } else if (view === 'cards') {
+                renderCards();
+            } else if (view === 'invoice') {
+                viewDate = new Date();
+                renderInvoiceView();
+            } else if (view === 'settings') {
+                // Configurações já carregadas no init
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('hidden');
+
+            // Bloquear scroll do body quando sidebar aberta
+            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+        }
+
+        // DASHBOARD
+        function renderDashboard() {
+            const monthSelector = document.getElementById('month-selector').value;
+            const currentMonth = monthSelector || getMonthYear(new Date());
+
+            document.getElementById('dash-month-label').innerText = getMonthName(new Date(monthSelector + '-01'));
+
+            // Calcular totais
+            const monthExpenses = db.expenses.filter(e => e.invoiceMonth === currentMonth && !e.paid);
+            const currentInvoice = monthExpenses.reduce((sum, e) => sum + e.val, 0);
+
+            // Calcular limite total disponível
+            let totalLimit = 0;
+            let totalUsed = 0;
+
+            db.cards.forEach(card => {
+                totalLimit += card.limit;
+                const cardExpenses = db.expenses.filter(e => e.cardId === card.id && !e.paid);
+                totalUsed += cardExpenses.reduce((sum, e) => sum + e.val, 0);
+            });
+
+            const limitAvailable = totalLimit - totalUsed;
+
+            // Calcular próximas parcelas (próximos 3 meses)
+            const today = new Date();
+            const futureMonths = [];
+            for (let i = 1; i <= 3; i++) {
+                const date = new Date(today);
+                date.setMonth(today.getMonth() + i);
+                futureMonths.push(getMonthYear(date));
+            }
+
+            const futureInstallments = db.expenses
+                .filter(e => futureMonths.includes(e.invoiceMonth) && !e.paid)
+                .reduce((sum, e) => sum + e.val, 0);
+
+            // Atualizar cards
+            document.getElementById('dash-limit-available').innerText = fmtMoney(limitAvailable);
+            document.getElementById('dash-current-invoice').innerText = fmtMoney(currentInvoice);
+            document.getElementById('dash-next-installments').innerText = fmtMoney(futureInstallments);
+
+            // Atualizar alerta de limite crítico
+            const balanceAlert = document.getElementById('balance-alert');
+            const criticalCards = db.cards.filter(card => {
+                const cardExpenses = db.expenses.filter(e => e.cardId === card.id && !e.paid);
+                const used = cardExpenses.reduce((sum, e) => sum + e.val, 0);
+                return (used / card.limit) > 0.8; // Mais de 80% usado
+            });
+
+            balanceAlert.classList.toggle('hidden', criticalCards.length === 0);
+
+            // Calcular e mostrar crescimento
+            const prevMonth = getPreviousMonthData(currentMonth);
+            const invoiceGrowth = calculatePercentage(currentInvoice, prevMonth.invoice);
+
+            document.getElementById('invoice-growth').innerText = `${invoiceGrowth}%`;
+
+            // Atualizar gráfico
+            renderChart(currentMonth);
+
+            // Atualizar melhor cartão para hoje
+            renderBestCardToday();
+
+            // Atualizar limite por cartão
+            renderLimitList();
+
+            // Atualizar compras recentes
+            renderRecentExpenses();
+
+            // Atualizar resumo de faturas
+            renderInvoiceSummary(currentMonth);
+        }
+
+        function getPreviousMonthData(currentMonth) {
+            const [year, month] = currentMonth.split('-').map(Number);
+            let prevYear = year;
+            let prevMonth = month - 1;
+
+            if (prevMonth === 0) {
+                prevMonth = 12;
+                prevYear--;
+            }
+
+            const prevMonthStr = `${prevYear}-${prevMonth.toString().padStart(2, '0')}`;
+            const prevExpenses = db.expenses.filter(e => e.invoiceMonth === prevMonthStr && !e.paid);
+
+            return {
+                invoice: prevExpenses.reduce((a, b) => a + b.val, 0)
+            };
+        }
+
+        function renderChart(month) {
+            const chartArea = document.getElementById('chart-area');
+
+            if (db.cards.length === 0) {
+                chartArea.innerHTML = '<p class="text-gray-400 text-sm text-center w-full py-8">Adicione cartões para ver o gráfico</p>';
+                return;
+            }
+
+            // Encontrar valor máximo para escala
+            let maxValue = 0;
+            const cardData = db.cards.map(card => {
+                const cardExpenses = db.expenses.filter(e =>
+                    e.cardId === card.id &&
+                    e.invoiceMonth === month &&
+                    !e.paid
+                );
+                const used = cardExpenses.reduce((sum, e) => sum + e.val, 0);
+                const available = Math.max(0, card.limit - used);
+
+                maxValue = Math.max(maxValue, card.limit);
+                return { card, used, available };
+            });
+
+            let chartHTML = '';
+            cardData.forEach(data => {
+                const usedHeight = (data.used / maxValue) * 100;
+                const availableHeight = (data.available / maxValue) * 100;
+
+                chartHTML += `
+                    <div class="bar-group">
+                        <div class="bar-wrapper">
+                            <div class="bar bg-plena-indigo" 
+                                 style="height:${usedHeight}%"
+                                 data-value="${fmtMoney(data.used)} usado"></div>
+                            <div class="bar bg-gray-300" 
+                                 style="height:${availableHeight}%"
+                                 data-value="${fmtMoney(data.available)} disponível"></div>
+                        </div>
+                        <div class="x-label">${data.card.name.substring(0, 8)}</div>
+                    </div>
+                `;
+            });
+
+            chartArea.innerHTML = chartHTML;
+        }
+
+        function renderBestCardToday() {
+            const today = new Date();
+            const todayDay = today.getDate();
+            const container = document.getElementById('best-card-today');
+
+            // Encontrar cartão com melhor data de fechamento
+            let bestCard = null;
+            let daysToClose = Infinity;
+
+            db.cards.forEach(card => {
+                const days = card.closeDay - todayDay;
+                if (days > 0 && days < daysToClose) {
+                    daysToClose = days;
+                    bestCard = card;
+                }
+            });
+
+            if (!bestCard) {
+                // Se não encontrou, pega o que fecha mais distante
+                db.cards.forEach(card => {
+                    const days = (card.closeDay + 30) - todayDay;
+                    if (days < daysToClose) {
+                        daysToClose = days;
+                        bestCard = card;
+                    }
+                });
+            }
+
+            if (!bestCard) {
+                container.innerHTML = '<p class="text-gray-400 text-sm text-center">Adicione cartões para ver recomendações</p>';
+                return;
+            }
+
+            const cardExpenses = db.expenses.filter(e => e.cardId === bestCard.id && !e.paid);
+            const used = cardExpenses.reduce((sum, e) => sum + e.val, 0);
+            const available = bestCard.limit - used;
+
+            container.innerHTML = `
+                <div class="bg-gradient-to-r from-plena-indigo to-plena-dark p-5 rounded-2xl text-white shadow-lg">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="font-bold text-sm opacity-90">${bestCard.name}</span>
+                            <p class="text-xs opacity-70 mt-1">•••• ${bestCard.last4 || '****'}</p>
+                        </div>
+                        <i data-lucide="zap" class="w-5 h-5 opacity-50"></i>
+                    </div>
+                    <p class="text-xs opacity-70 uppercase tracking-wider">Recomendado para Hoje</p>
+                    <h3 class="text-xl font-bold mt-2">${fmtMoney(available)}</h3>
+                    <p class="text-xs opacity-70 mt-2">Fecha dia ${bestCard.closeDay} • Vence dia ${bestCard.dueDay}</p>
+                </div>
+            `;
+        }
+
+        function renderLimitList() {
+            const container = document.getElementById('limit-list');
+
+            if (db.cards.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-sm text-center">Nenhum cartão cadastrado</p>';
+                return;
+            }
+
+            container.innerHTML = db.cards.map(card => {
+                const cardExpenses = db.expenses.filter(e => e.cardId === card.id && !e.paid);
+                const used = cardExpenses.reduce((sum, e) => sum + e.val, 0);
+                const pct = Math.min((used / card.limit) * 100, 100);
+                const available = card.limit - used;
+
+                return `
+                <div>
+                     <div class="flex justify-between text-sm mb-1">
+                        <span class="font-bold text-gray-700">${card.name}</span>
+                        <span class="text-gray-500">${fmtMoney(available)} disp.</span>
+                    </div>
+                    <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <div class="h-full ${pct > 80 ? 'bg-red-500' : pct > 60 ? 'bg-yellow-500' : 'bg-plena-indigo'}" 
+                             style="width: ${pct}%"></div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function renderRecentExpenses() {
+            const container = document.getElementById('recent-expenses');
+            const recent = db.expenses
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 5);
+
+            if (recent.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-sm text-center">Nenhuma compra recente</p>';
+                return;
+            }
+
+            container.innerHTML = recent.map(e => {
+                const card = db.cards.find(c => c.id === e.cardId);
+                return `
+                    <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg border border-gray-100">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center mr-3">
+                                <i data-lucide="shopping-cart" class="w-4 h-4 text-indigo-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">${e.desc}</p>
+                                <p class="text-xs text-gray-500">${fmtDate(e.date)} • ${card?.name || 'Cartão'}</p>
+                            </div>
+                        </div>
+                        <span class="text-sm font-bold text-gray-800">
+                            ${fmtMoney(e.val)}
+                        </span>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        function renderInvoiceSummary(month) {
+            const container = document.getElementById('dash-cards-list');
+
+            if (db.cards.length === 0) {
+                container.innerHTML = '<div class="col-span-3 text-center py-8 text-gray-400">Nenhum cartão cadastrado.</div>';
+                return;
+            }
+
+            container.innerHTML = db.cards.map(card => {
+                const total = db.expenses.filter(e => e.cardId === card.id && e.invoiceMonth === month && !e.paid).reduce((a, b) => a + b.val, 0);
+                return `
+                <div class="card-gradient p-5 rounded-2xl text-white shadow-lg relative overflow-hidden group hover:scale-[1.02] transition-transform cursor-pointer" onclick="router('invoice')">
+                    <div class="absolute right-[-20px] top-[-20px] opacity-10"><i data-lucide="credit-card" class="w-32 h-32"></i></div>
+                    <div class="flex justify-between items-start mb-6">
+                        <span class="font-bold text-sm opacity-80">${card.name} •••• ${card.last4 || '****'}</span>
+                        <i data-lucide="contactless" class="w-5 h-5 opacity-50"></i>
+                    </div>
+                    <p class="text-xs opacity-70 uppercase tracking-wider">Fatura (Vence ${card.dueDay})</p>
+                    <h3 class="text-2xl font-bold">${fmtMoney(total)}</h3>
+                </div>`;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // CARDS MANAGEMENT
+        function renderCards() {
+            document.getElementById('cards-grid').innerHTML = db.cards.map(card => {
+                const cardExpenses = db.expenses.filter(e => e.cardId === card.id && !e.paid);
+                const used = cardExpenses.reduce((sum, e) => sum + e.val, 0);
+                const available = card.limit - used;
+                const pct = Math.min((used / card.limit) * 100, 100);
+
+                return `
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-indigo-50 p-3 rounded-lg text-indigo-600">
+                                <i data-lucide="credit-card"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800">${card.name}</h3>
+                                <p class="text-xs text-gray-500">**** ${card.last4 || '****'}</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="editCard('${card.id}')" class="text-gray-300 hover:text-blue-500">
+                                <i data-lucide="edit" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="deleteCard('${card.id}')" class="text-gray-300 hover:text-red-500">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-500">Utilizado</span>
+                            <span class="font-bold">${fmtMoney(used)}</span>
+                        </div>
+                        <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full ${pct > 80 ? 'bg-red-500' : pct > 60 ? 'bg-yellow-500' : 'bg-plena-indigo'}" 
+                                 style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 text-center border-t pt-4">
+                        <div>
+                            <p class="text-[10px] uppercase font-bold text-gray-400">Limite</p>
+                            <p class="font-bold text-gray-800">${fmtMoney(card.limit)}</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase font-bold text-gray-400">Fecha</p>
+                            <p class="font-bold text-gray-800 underline decoration-red-200">Dia ${card.closeDay}</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase font-bold text-gray-400">Vence</p>
+                            <p class="font-bold text-gray-800 underline decoration-green-200">Dia ${card.dueDay}</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t text-center">
+                        <p class="text-xs text-gray-500">Disponível: <span class="font-bold text-green-600">${fmtMoney(available)}</span></p>
+                    </div>
+                </div>
+            `}).join('');
+            lucide.createIcons();
+        }
+
+        function openCardModal(card = null) {
+            const modal = document.getElementById('cardModal');
+            const form = modal.querySelector('form');
+
+            if (card) {
+                // Modo edição
+                document.querySelector('#cardModal h3').textContent = 'Editar Cartão';
+                document.getElementById('cd-id').value = card.id;
+                document.getElementById('cd-name').value = card.name;
+                document.getElementById('cd-last4').value = card.last4 || '';
+                document.getElementById('cd-limit').value = card.limit;
+                document.getElementById('cd-close').value = card.closeDay;
+                document.getElementById('cd-due').value = card.dueDay;
+            } else {
+                // Modo criação
+                document.querySelector('#cardModal h3').textContent = 'Novo Cartão';
+                form.reset();
+                document.getElementById('cd-id').value = '';
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function editCard(id) {
+            const card = db.cards.find(c => c.id === id);
+            if (card) {
+                openCardModal(card);
+            }
+        }
+
+        function submitCard(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('cd-id').value;
+            const card = {
+                id: id || getID(),
+                name: document.getElementById('cd-name').value,
+                last4: document.getElementById('cd-last4').value,
+                limit: parseFloat(document.getElementById('cd-limit').value) || 0,
+                closeDay: parseInt(document.getElementById('cd-close').value),
+                dueDay: parseInt(document.getElementById('cd-due').value)
+            };
+
+            if (!card.name || !card.limit || !card.closeDay || !card.dueDay) {
+                showNotification('Por favor, preencha todos os campos obrigatórios.', 'error');
+                return;
+            }
+
+            if (id) {
+                // Editar cartão existente
+                const index = db.cards.findIndex(c => c.id === id);
+                if (index !== -1) {
+                    db.cards[index] = card;
+                }
+            } else {
+                // Adicionar novo cartão
+                db.cards.push(card);
+            }
+
+            save();
+            closeModal('cardModal');
+            renderCards();
+
+            if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                renderDashboard();
+            }
+
+            showNotification('Cartão salvo com sucesso!', 'success');
+        }
+
+        function deleteCard(id) {
+            if (confirm('Excluir cartão e todas as compras associadas?')) {
+                db.cards = db.cards.filter(c => c.id !== id);
+                db.expenses = db.expenses.filter(e => e.cardId !== id);
+                save();
+
+                renderCards();
+                if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                    renderDashboard();
+                }
+
+                showNotification('Cartão excluído com sucesso!', 'success');
+            }
+        }
+
+        // EXPENSES MANAGEMENT
+        function openExpenseModal(expense = null) {
+            if (db.cards.length === 0) {
+                showNotification('Cadastre um cartão primeiro na aba "Meus Cartões".', 'warning');
+                return;
+            }
+
+            const modal = document.getElementById('expModal');
+            const form = modal.querySelector('form');
+
+            // Popular select de cartões
+            const cardSelect = document.getElementById('ex-card');
+            cardSelect.innerHTML = '<option value="">Selecione o Cartão...</option>' +
+                db.cards.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+
+            if (expense) {
+                // Modo edição
+                document.querySelector('#expModal h3').textContent = 'Editar Compra';
+                document.getElementById('ex-id').value = expense.id;
+                document.getElementById('ex-card').value = expense.cardId;
+                document.getElementById('ex-desc').value = expense.desc.replace(/ \(\d+\/\d+\)$/, '');
+                document.getElementById('ex-val').value = expense.val * (expense.totalInstallments || 1);
+                document.getElementById('ex-date').value = expense.date;
+                document.getElementById('ex-inst').value = expense.totalInstallments || 1;
+            } else {
+                // Modo criação
+                document.querySelector('#expModal h3').textContent = 'Nova Compra';
+                form.reset();
+                document.getElementById('ex-id').value = '';
+                document.getElementById('ex-date').value = new Date().toISOString().split('T')[0];
+                document.getElementById('ex-inst').value = 1;
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function editExpense(id) {
+            // Encontrar a primeira parcela da compra
+            const expense = db.expenses.find(e => e.id === id);
+            if (expense) {
+                openExpenseModal(expense);
+            }
+        }
+
+        function submitExpense(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('ex-id').value;
+            const cardId = document.getElementById('ex-card').value;
+            const desc = document.getElementById('ex-desc').value;
+            const valTotal = parseFloat(document.getElementById('ex-val').value) || 0;
+            const dateStr = document.getElementById('ex-date').value;
+            const installments = parseInt(document.getElementById('ex-inst').value);
+
+            if (!cardId || !desc || !valTotal || valTotal <= 0 || !dateStr) {
+                showNotification('Por favor, preencha todos os campos corretamente.', 'error');
+                return;
+            }
+
+            const card = db.cards.find(c => c.id === cardId);
+            if (!card) {
+                showNotification('Cartão não encontrado.', 'error');
+                return;
+            }
+
+            // Remover compras antigas se estiver editando
+            if (id) {
+                // Encontrar todas as parcelas desta compra
+                const baseDesc = desc.replace(/ \(\d+\/\d+\)$/, '');
+                db.expenses = db.expenses.filter(e =>
+                    !e.desc.startsWith(baseDesc + ' (') ||
+                    e.id === id // Manter a que está sendo editada para referência
+                );
+            }
+
+            const valPerInst = valTotal / installments;
+            const purchaseDate = new Date(dateStr + 'T12:00:00');
+
+            // Gerar parcelas
+            for (let i = 1; i <= installments; i++) {
+                let targetDate = new Date(purchaseDate);
+
+                // Se comprando no dia de fechamento ou depois, vai para o próximo mês
+                if (targetDate.getDate() >= card.closeDay) {
+                    targetDate.setMonth(targetDate.getMonth() + 1);
+                }
+
+                // Adicionar meses para parcelas 2, 3...
+                targetDate.setMonth(targetDate.getMonth() + (i - 1));
+
+                const invoiceMonth = getMonthYear(targetDate);
+
+                db.expenses.push({
+                    id: getID(),
+                    cardId,
+                    desc: `${desc} (${i}/${installments})`,
+                    val: valPerInst,
+                    date: dateStr,
+                    invoiceMonth: invoiceMonth,
+                    installment: i,
+                    totalInstallments: installments,
+                    paid: false
+                });
+            }
+
+            save();
+            closeModal('expModal');
+
+            // Atualizar views
+            if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                renderDashboard();
+            }
+            if (document.getElementById('view-invoice').classList.contains('hide') === false) {
+                renderInvoiceView();
+            }
+
+            showNotification('Compra registrada com sucesso!', 'success');
+        }
+
+        function deleteExpense(id) {
+            if (confirm('Apagar esta compra e todas as suas parcelas?')) {
+                // Encontrar a descrição base da compra
+                const expense = db.expenses.find(e => e.id === id);
+                if (expense) {
+                    const baseDesc = expense.desc.replace(/ \(\d+\/\d+\)$/, '');
+                    db.expenses = db.expenses.filter(e => !e.desc.startsWith(baseDesc + ' ('));
+                }
+
+                save();
+
+                if (document.getElementById('view-invoice').classList.contains('hide') === false) {
+                    renderInvoiceView();
+                }
+                if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                    renderDashboard();
+                }
+
+                showNotification('Compra excluída com sucesso!', 'success');
+            }
+        }
+
+        // INVOICE MANAGEMENT
+        function changeMonth(delta) {
+            viewDate.setMonth(viewDate.getMonth() + delta);
+            renderInvoiceView();
+        }
+
+        function renderInvoiceView() {
+            // Atualizar select de cartões se necessário
+            const sel = document.getElementById('inv-card-select');
+            if (sel.options.length === 1 && db.cards.length > 0) {
+                db.cards.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.innerText = c.name;
+                    sel.appendChild(opt);
+                });
+            }
+
+            const monthStr = getMonthYear(viewDate);
+            document.getElementById('inv-month-display').innerText = getMonthName(viewDate);
+
+            const selectedCard = sel.value;
+            const searchTerm = document.getElementById('search-term').value.toLowerCase();
+            const filterStatus = document.getElementById('filter-status').value;
+            const filterStart = document.getElementById('filter-start').value;
+            const filterEnd = document.getElementById('filter-end').value;
+
+            // Filtrar despesas
+            let items = db.expenses.filter(e => e.invoiceMonth === monthStr);
+
+            if (selectedCard !== 'all') {
+                items = items.filter(e => e.cardId === selectedCard);
+            }
+
+            if (filterStatus !== 'all') {
+                items = items.filter(e => filterStatus === 'paid' ? e.paid : !e.paid);
+            }
+
+            if (filterStart) {
+                items = items.filter(e => e.date >= filterStart);
+            }
+
+            if (filterEnd) {
+                items = items.filter(e => e.date <= filterEnd);
+            }
+
+            if (searchTerm) {
+                items = items.filter(e => e.desc.toLowerCase().includes(searchTerm));
+            }
+
+            const total = items.reduce((a, b) => a + b.val, 0);
+            document.getElementById('inv-total').innerText = fmtMoney(total);
+
+            // Atualizar estatísticas
+            const count = items.length;
+            const average = count > 0 ? total / count : 0;
+            const max = items.length > 0 ? Math.max(...items.map(e => e.val)) : 0;
+
+            document.getElementById('filter-count').textContent = count;
+            document.getElementById('filter-average').textContent = fmtMoney(average);
+            document.getElementById('filter-max').textContent = fmtMoney(max);
+
+            // Renderizar tabela
+            const tbody = document.getElementById('inv-items-list');
+
+            if (items.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-6 py-8 text-center text-gray-400">
+                            <i data-lucide="file-text" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
+                            <p>Nenhuma compra encontrada para este período.</p>
+                        </td>
+                    </tr>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            tbody.innerHTML = items.sort((a, b) => a.date.localeCompare(b.date)).map(e => {
+                const c = db.cards.find(x => x.id === e.cardId);
+                return `
+                <tr class="${e.paid ? 'opacity-40 bg-gray-50' : ''} hover:bg-gray-50">
+                    <td class="px-6 py-4 text-gray-500 font-mono">${fmtDate(e.date)}</td>
+                    <td class="px-6 py-4">
+                        <div class="font-bold text-gray-800">${e.desc}</div>
+                        ${e.paid ? '<span class="text-xs text-green-600 bg-green-50 px-2 py-1 rounded">PAGA</span>' : ''}
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center text-xs bg-gray-50 px-2 py-1 rounded">
+                            <i data-lucide="credit-card" class="w-3 h-3 mr-1"></i> 
+                            ${c ? c.name : 'Desconhecido'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-center text-xs text-gray-500">${e.installment}/${e.totalInstallments}</td>
+                    <td class="px-6 py-4 text-right font-bold text-gray-800">${fmtMoney(e.val)}</td>
+                    <td class="px-6 py-4 text-right">
+                        <div class="flex justify-end gap-2">
+                            <button onclick="togglePaid('${e.id}')" class="text-gray-300 hover:text-green-500" title="${e.paid ? 'Marcar como aberta' : 'Marcar como paga'}">
+                                <i data-lucide="${e.paid ? 'rotate-ccw' : 'check'}" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="editExpense('${e.id}')" class="text-gray-300 hover:text-blue-500" title="Editar">
+                                <i data-lucide="edit" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="deleteExpense('${e.id}')" class="text-gray-300 hover:text-red-500" title="Excluir">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        function togglePaid(id) {
+            const expense = db.expenses.find(e => e.id === id);
+            if (expense) {
+                expense.paid = !expense.paid;
+                save();
+                renderInvoiceView();
+
+                if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                    renderDashboard();
+                }
+
+                showNotification(`Compra ${expense.paid ? 'marcada como paga' : 'reaberta'}!`, 'success');
+            }
+        }
+
+        function payInvoice() {
+            const monthStr = getMonthYear(viewDate);
+            const selectedCard = document.getElementById('inv-card-select').value;
+
+            if (confirm('Marcar todas as compras desta fatura como Pagas? Isso liberará o limite dos cartões.')) {
+                db.expenses.forEach(e => {
+                    if (e.invoiceMonth === monthStr && (selectedCard === 'all' || e.cardId === selectedCard)) {
+                        e.paid = true;
+                    }
+                });
+
+                save();
+                renderInvoiceView();
+
+                if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                    renderDashboard();
+                }
+
+                showNotification('Fatura marcada como paga!', 'success');
+            }
+        }
+
+        function clearFilters() {
+            const firstDay = new Date();
+            firstDay.setDate(1);
+            const firstDayStr = firstDay.toISOString().split('T')[0];
+            const today = new Date().toISOString().split('T')[0];
+
+            document.getElementById('search-term').value = '';
+            document.getElementById('filter-status').value = 'all';
+            document.getElementById('filter-start').value = firstDayStr;
+            document.getElementById('filter-end').value = today;
+
+            renderInvoiceView();
+        }
+
+        // REPORTS
+        function generateReport() {
+            const start = document.getElementById('rep-start').value;
+            const end = document.getElementById('rep-end').value;
+
+            if (!start || !end) {
+                showNotification('Por favor, selecione um período.', 'warning');
+                return;
+            }
+
+            // Filtrar despesas pelo período
+            const expenses = db.expenses.filter(e => e.date >= start && e.date <= end);
+
+            if (expenses.length === 0) {
+                showNotification('Nenhuma compra encontrada para o período selecionado.', 'info');
+                return;
+            }
+
+            // Encontrar cartão mais usado
+            const cardUsage = {};
+            expenses.forEach(e => {
+                cardUsage[e.cardId] = (cardUsage[e.cardId] || 0) + 1;
+            });
+
+            let mostUsedCard = 'Nenhum';
+            let maxUsage = 0;
+
+            Object.entries(cardUsage).forEach(([cardId, count]) => {
+                if (count > maxUsage) {
+                    maxUsage = count;
+                    const card = db.cards.find(c => c.id === cardId);
+                    mostUsedCard = card ? card.name : 'Desconhecido';
+                }
+            });
+
+            // Encontrar maior gasto
+            const highestExpense = expenses.length > 0 ?
+                Math.max(...expenses.map(e => e.val)) : 0;
+
+            // Calcular parcelas futuras
+            const today = new Date();
+            const futureExpenses = db.expenses.filter(e => {
+                const expenseDate = new Date(e.date + 'T12:00:00');
+                return expenseDate > today && !e.paid;
+            });
+            const futureInstallments = futureExpenses.reduce((sum, e) => sum + e.val, 0);
+
+            // Atualizar cards
+            document.getElementById('rep-most-used').textContent = mostUsedCard;
+            document.getElementById('rep-highest-expense').textContent = fmtMoney(highestExpense);
+            document.getElementById('rep-future-installments').textContent = fmtMoney(futureInstallments);
+
+            // Gerar análise por cartão
+            renderCardReport(expenses);
+
+            document.getElementById('report-result').classList.remove('hide');
+        }
+
+        function generateFullReport() {
+            // Configurar período dos últimos 30 dias
+            const end = new Date();
+            const start = new Date();
+            start.setDate(end.getDate() - 30);
+
+            document.getElementById('rep-start').value = start.toISOString().split('T')[0];
+            document.getElementById('rep-end').value = end.toISOString().split('T')[0];
+
+            generateReport();
+        }
+
+        function renderCardReport(expenses) {
+            const cardMap = {};
+
+            expenses.forEach(e => {
+                const card = db.cards.find(c => c.id === e.cardId);
+                const cardName = card ? card.name : 'Desconhecido';
+
+                if (!cardMap[cardName]) {
+                    cardMap[cardName] = {
+                        total: 0,
+                        count: 0,
+                        paid: 0,
+                        unpaid: 0
+                    };
+                }
+
+                cardMap[cardName].total += e.val;
+                cardMap[cardName].count++;
+
+                if (e.paid) {
+                    cardMap[cardName].paid += e.val;
+                } else {
+                    cardMap[cardName].unpaid += e.val;
+                }
+            });
+
+            const container = document.getElementById('card-report');
+            const sortedCards = Object.entries(cardMap)
+                .sort((a, b) => b[1].total - a[1].total);
+
+            if (sortedCards.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center">Sem dados para o período selecionado</p>';
+                return;
+            }
+
+            const maxTotal = Math.max(...sortedCards.map(([_, data]) => data.total));
+
+            container.innerHTML = sortedCards.map(([name, data]) => {
+                const percentage = maxTotal > 0 ? Math.round((data.total / maxTotal) * 100) : 0;
+
+                return `
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-medium text-gray-800">${name}</span>
+                            <span class="text-sm font-bold text-gray-900">${fmtMoney(data.total)}</span>
+                        </div>
+                        <div class="flex justify-between text-xs text-gray-500">
+                            <span>${data.count} compras</span>
+                            <span>${data.unpaid > 0 ? fmtMoney(data.unpaid) + ' em aberto' : 'Tudo pago'}</span>
+                        </div>
+                        <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                            <div class="bg-plena-indigo h-full transition-all duration-500" 
+                                 style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // EXPORTAÇÃO E COMPARTILHAMENTO
+        function exportInvoiceCSV() {
+            const monthStr = getMonthYear(viewDate);
+            const expenses = db.expenses.filter(e => e.invoiceMonth === monthStr);
+
+            if (expenses.length === 0) {
+                showNotification('Nenhuma compra para exportar.', 'warning');
+                return;
+            }
+
+            const headers = ['Data', 'Descrição', 'Cartão', 'Parcela', 'Valor', 'Status'];
+            const rows = expenses.map(e => {
+                const card = db.cards.find(c => c.id === e.cardId);
+                return [
+                    fmtDate(e.date),
+                    `"${e.desc}"`,
+                    card?.name || 'Desconhecido',
+                    `${e.installment}/${e.totalInstallments}`,
+                    e.val.toFixed(2).replace('.', ','),
+                    e.paid ? 'Paga' : 'Aberta'
+                ];
+            });
+
+            const csv = [headers, ...rows].map(row => row.join(';')).join('\n');
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+
+            a.href = url;
+            a.download = `fatura_${monthStr}_plena.csv`;
+            a.click();
+
+            URL.revokeObjectURL(url);
+            showNotification('CSV exportado com sucesso!', 'success');
+        }
+
+        function shareInvoice() {
+            const monthStr = getMonthYear(viewDate);
+            const selectedCard = document.getElementById('inv-card-select').value;
+            const cardName = selectedCard === 'all' ? 'Todos os Cartões' :
+                db.cards.find(c => c.id === selectedCard)?.name || 'Cartão';
+
+            const expenses = db.expenses.filter(e =>
+                e.invoiceMonth === monthStr &&
+                (selectedCard === 'all' || e.cardId === selectedCard)
+            );
+
+            const total = expenses.reduce((a, b) => a + b.val, 0);
+            const paid = expenses.filter(e => e.paid).reduce((a, b) => a + b.val, 0);
+            const unpaid = total - paid;
+
+            const message = `*📋 Fatura de Cartão - Plena Card*%0A%0A` +
+                `*Cartão:* ${cardName}%0A` +
+                `*Período:* ${getMonthName(viewDate)}%0A%0A` +
+                `💰 *Total:* ${fmtMoney(total)}%0A` +
+                `✅ *Pago:* ${fmtMoney(paid)}%0A` +
+                `🔴 *A Pagar:* ${fmtMoney(unpaid)}%0A%0A` +
+                `_Gerado em ${new Date().toLocaleDateString('pt-BR')}_`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function shareReport() {
+            const start = document.getElementById('rep-start').value;
+            const end = document.getElementById('rep-end').value;
+            const mostUsed = document.getElementById('rep-most-used').textContent;
+            const highest = document.getElementById('rep-highest-expense').textContent;
+            const future = document.getElementById('rep-future-installments').textContent;
+
+            const message = `*📊 Relatório de Cartões - Plena Card*%0A%0A` +
+                `*Período:* ${fmtDate(start)} à ${fmtDate(end)}%0A%0A` +
+                `🏆 *Cartão Mais Usado:* ${mostUsed}%0A` +
+                `📈 *Maior Compra:* ${highest}%0A` +
+                `🔮 *Parcelas Futuras:* ${future}%0A%0A` +
+                `_Gerado em ${new Date().toLocaleDateString('pt-BR')}_`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function openClosingModal() {
+            const today = new Date();
+            const currentMonth = getMonthYear(today);
+            const expenses = db.expenses.filter(e => e.invoiceMonth === currentMonth);
+
+            const total = expenses.reduce((a, b) => a + b.val, 0);
+            const unpaid = expenses.filter(e => !e.paid).length;
+
+            document.getElementById('close-total').textContent = fmtMoney(total);
+            document.getElementById('close-unpaid').textContent = `${unpaid} faturas`;
+            document.getElementById('close-month').textContent = getMonthName(today);
+            document.getElementById('close-time').textContent = new Date().toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            document.getElementById('close-status').textContent = unpaid === 0 ? 'FECHADO' : 'ABERTO';
+            document.getElementById('close-status').className = `font-bold text-2xl ${unpaid === 0 ? 'text-green-600' : 'text-red-600'}`;
+
+            document.getElementById('closingModal').classList.remove('hidden');
+        }
+
+        function shareClosing() {
+            const today = new Date();
+            const currentMonth = getMonthYear(today);
+            const expenses = db.expenses.filter(e => e.invoiceMonth === currentMonth);
+
+            const total = expenses.reduce((a, b) => a + b.val, 0);
+            const paid = expenses.filter(e => e.paid).reduce((a, b) => a + b.val, 0);
+            const unpaid = total - paid;
+
+            const message = `*🔒 Fechamento de Faturas - Plena Card*%0A%0A` +
+                `*Mês:* ${getMonthName(today)}%0A` +
+                `*Data:* ${new Date().toLocaleDateString('pt-BR')}%0A` +
+                `*Hora:* ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}%0A%0A` +
+                `💰 *Total:* ${fmtMoney(total)}%0A` +
+                `✅ *Pago:* ${fmtMoney(paid)}%0A` +
+                `🔴 *A Pagar:* ${fmtMoney(unpaid)}%0A%0A` +
+                `_Plena Card - Controle de Cartões_`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function closeAllInvoices() {
+            const today = new Date();
+            const currentMonth = getMonthYear(today);
+
+            if (confirm('Marcar TODAS as compras deste mês como pagas?')) {
+                db.expenses.forEach(e => {
+                    if (e.invoiceMonth === currentMonth) {
+                        e.paid = true;
+                    }
+                });
+
+                save();
+                closeModal('closingModal');
+
+                if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                    renderDashboard();
+                }
+                if (document.getElementById('view-invoice').classList.contains('hide') === false) {
+                    renderInvoiceView();
+                }
+
+                showNotification('Todas as faturas foram fechadas!', 'success');
+            }
+        }
+
+        function printInvoice() {
+            const printContent = document.getElementById('view-invoice').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = `
+                <div style="padding: 20px; font-family: sans-serif;">
+                    <h1 style="text-align: center; color: #4F46E5;">Fatura de Cartões</h1>
+                    <div style="margin: 20px 0;">${printContent}</div>
+                    <p style="text-align: center; color: #666; font-size: 12px; margin-top: 30px;">
+                        Gerado por Plena Card • ${new Date().toLocaleDateString('pt-BR')}
+                    </p>
+                </div>
+            `;
+
+            window.print();
+            document.body.innerHTML = originalContent;
+            router('invoice');
+        }
+
+        function printReport() {
+            const printContent = document.getElementById('report-result').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = `
+                <div style="padding: 20px; font-family: sans-serif;">
+                    <h1 style="text-align: center; color: #4F46E5;">Relatório de Cartões</h1>
+                    <div style="margin: 20px 0;">${printContent}</div>
+                    <p style="text-align: center; color: #666; font-size: 12px; margin-top: 30px;">
+                        Gerado por Plena Card • ${new Date().toLocaleDateString('pt-BR')}
+                    </p>
+                </div>
+            `;
+
+            window.print();
+            document.body.innerHTML = originalContent;
+            router('reports');
+        }
+
+        function printClosing() {
+            const printContent = document.getElementById('closingModal').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = `
+                <div style="padding: 20px; font-family: sans-serif;">
+                    <h1 style="text-align: center; color: #4F46E5;">Fechamento de Faturas</h1>
+                    <div style="margin: 20px 0;">${printContent}</div>
+                    <p style="text-align: center; color: #666; font-size: 12px; margin-top: 30px;">
+                        Gerado por Plena Card • ${new Date().toLocaleDateString('pt-BR')}
+                    </p>
+                </div>
+            `;
+
+            window.print();
+            document.body.innerHTML = originalContent;
+        }
+
+        // SETTINGS
+        function saveSettings() {
+            db.settings = {
+                companyName: document.getElementById('company-name').value,
+                currency: document.getElementById('currency-select').value,
+                autoBackup: document.getElementById('auto-backup').checked,
+                notifications: document.getElementById('notifications').checked,
+                theme: db.settings.theme || 'light'
+            };
+
+            save();
+            showNotification('Configurações salvas com sucesso!', 'success');
+        }
+
+        // BACKUP E RESTAURAÇÃO
+        function downloadBackup() {
+            const backupData = {
+                ...db,
+                exportedAt: new Date().toISOString(),
+                version: 'plena_card_v2'
+            };
+
+            const dataStr = JSON.stringify(backupData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+            const exportFileName = `plena_card_backup_${new Date().toISOString().slice(0, 10)}.json`;
+
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileName);
+            linkElement.click();
+
+            showNotification('Backup baixado com sucesso!', 'success');
+        }
+
+        function restoreBackup(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const backup = JSON.parse(e.target.result);
+
+                    // Validar backup
+                    if (!backup.cards || !backup.expenses) {
+                        throw new Error('Arquivo de backup inválido');
+                    }
+
+                    if (confirm('Restaurar backup substituirá todos os dados atuais. Tem certeza?')) {
+                        db = backup;
+                        save();
+                        location.reload();
+                    }
+                } catch (error) {
+                    showNotification('Erro ao restaurar backup: ' + error.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function syncToCloud() {
+            const button = document.getElementById('sync-button');
+            const originalText = button.innerHTML;
+
+            button.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Sincronizando...';
+            button.disabled = true;
+
+            // Simular sincronização
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.disabled = false;
+                showNotification('Sincronização simulada com sucesso!', 'success');
+            }, 1500);
+        }
+
+        function clearAllExpenses() {
+            if (confirm('Tem certeza que deseja limpar TODAS as compras? Esta ação é irreversível!')) {
+                db.expenses = [];
+                save();
+
+                if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                    renderDashboard();
+                }
+                if (document.getElementById('view-invoice').classList.contains('hide') === false) {
+                    renderInvoiceView();
+                }
+
+                showNotification('Todas as compras foram removidas!', 'success');
+            }
+        }
+
+        function factoryReset() {
+            if (confirm('ATENÇÃO: Isso resetará TODO o sistema para as configurações de fábrica. Todos os dados serão perdidos. Tem certeza?')) {
+                localStorage.removeItem(DB_KEY);
+                location.reload();
+            }
+        }
+
+        // UTILITÁRIOS GERAIS
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function updateDataStatus() {
+            const totalCards = db.cards.length;
+            const totalExpenses = db.expenses.length;
+            const unpaidExpenses = db.expenses.filter(e => !e.paid).length;
+
+            console.log(`Dados atualizados: ${totalCards} cartões, ${totalExpenses} compras (${unpaidExpenses} em aberto)`);
+        }
+
+        function showNotification(message, type = 'info') {
+            // Criar elemento de notificação
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                    type === 'warning' ? 'bg-yellow-500 text-white' :
+                        'bg-blue-500 text-white'}`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : type === 'warning' ? 'alert-triangle' : 'info'}" 
+                       class="w-5 h-5 mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+            lucide.createIcons();
+
+            // Remover após 3 segundos
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // PWA INSTALL PROMPT
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Mostrar botão de instalação
+            const installButton = document.createElement('button');
+            installButton.className = 'fixed bottom-4 right-4 bg-plena-indigo text-white px-4 py-2 rounded-lg shadow-lg z-40';
+            installButton.innerHTML = '<i data-lucide="download" class="w-4 h-4 inline mr-2"></i>Instalar App';
+            installButton.onclick = () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(() => {
+                    deferredPrompt = null;
+                    installButton.remove();
+                });
+            };
+
+            document.body.appendChild(installButton);
+            lucide.createIcons();
+        });
+
+        // OFFLINE SUPPORT
+        window.addEventListener('online', () => {
+            showNotification('Conexão restaurada!', 'success');
+        });
+
+        window.addEventListener('offline', () => {
+            showNotification('Modo offline ativado. Seus dados estão seguros localmente.', 'warning');
+        });
+
+        // SECURITY LOCK
+        setInterval(() => {
+            const footer = document.querySelector('.sidebar .border-t');
+            if (footer && !footer.innerText.includes('Plena')) {
+                document.body.innerHTML = '<div style="background:#111;color:red;height:100vh;display:flex;align-items:center;justify-content:center;"><h1>VIOLAÇÃO DE SEGURANÇA</h1></div>';
+                throw new Error("Piracy");
+            }
+        }, 8000);
+
+        // MANUAL FUNCTIONS
+        function scrollToSection(sectionId) { const el = document.getElementById(sectionId); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        function markSectionComplete(id) { const c = JSON.parse(localStorage.getItem('tutorial-completed') || '[]'); if (!c.includes(id)) { c.push(id); localStorage.setItem('tutorial-completed', JSON.stringify(c)); updateTutorialProgress(); showNotification('Seção concluída!', 'success'); } }
+        function updateTutorialProgress() { const s = ['instalacao', 'config', 'gestao', 'relatorios', 'backup', 'faq', 'checklist']; const c = JSON.parse(localStorage.getItem('tutorial-completed') || '[]'); const p = (c.length / s.length) * 100; const pb = document.getElementById('tutorial-progress'); const cs = document.getElementById('completed-steps'); if (pb) pb.style.width = `${p}%`; if (cs) cs.textContent = `${c.length}/${s.length} etapas`; }
+        function updateChecklist() { const cbs = document.querySelectorAll('#checklist input[type="checkbox"]'); const t = cbs.length; const ch = document.querySelectorAll('#checklist input[type="checkbox"]:checked').length; const pct = Math.round((ch / t) * 100); document.getElementById('checklist-percent').textContent = `${pct}%`; document.getElementById('checklist-progress').style.width = `${pct}%`; document.getElementById('checklist-completed').textContent = ch; document.getElementById('checklist-total').textContent = t; cbs.forEach(cb => { const it = cb.closest('.checklist-item'); if (cb.checked) it.classList.add('completed'); else it.classList.remove('completed'); }); const st = {}; cbs.forEach(cb => st[cb.id] = cb.checked); localStorage.setItem('checklist-state', JSON.stringify(st)); }
+        function resetChecklist() { if (confirm('Reiniciar checklist?')) { localStorage.removeItem('checklist-state'); document.querySelectorAll('#checklist input[type="checkbox"]').forEach(cb => cb.checked = false); updateChecklist(); } }
+        function loadChecklistState() { const st = JSON.parse(localStorage.getItem('checklist-state') || '{}'); Object.keys(st).forEach(id => { const cb = document.getElementById(id); if (cb) cb.checked = st[id]; }); updateChecklist(); }
+        function showExample(type) { showNotification('Exemplo: ' + type, 'info'); }
+
+        // INICIALIZAR APLICATIVO
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+    <script>
+        // CONTEXT AWARENESS FOR IFRAMES
+        if (window.self !== window.top) {
+            document.body.classList.add('in-iframe');
+        }
+    </script>
+</body>
+
+</html>

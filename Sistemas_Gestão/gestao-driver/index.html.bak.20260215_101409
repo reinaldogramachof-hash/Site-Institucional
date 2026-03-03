@@ -1,0 +1,2771 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Plena Driver - Gestão Profissional para Motoristas</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#F59E0B">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description"
+        content="Sistema de controle financeiro offline para motoristas de aplicativo - Plena Aplicativos">
+    <link rel="manifest" href="data:application/manifest+json,{
+        'name': 'Plena Driver',
+        'short_name': 'Driver',
+        'start_url': '.',
+        'display': 'standalone',
+        'background_color': '#F3F4F6',
+        'theme_color': '#F59E0B',
+        'icons': [{
+            'src': 'https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/car-taxi-front.svg',
+            'sizes': '192x192',
+            'type': 'image/svg+xml'
+        }]
+    }">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        plena: {
+                            orange: '#F59E0B',
+                            dark: '#B45309',
+                            black: '#1a1a1a',
+                            blue: '#3B82F6',
+                            green: '#10B981',
+                            red: '#EF4444',
+                            yellow: '#F59E0B'
+                        },
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s infinite',
+                        'slide-in': 'slideIn 0.3s ease-out',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+
+    <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
+
+
+
+    <style>
+        /* CSS Otimizado */
+        :root {
+            --plena-orange: #F59E0B;
+            --plena-dark: #B45309;
+            --plena-black: #1a1a1a;
+            --plena-blue: #3B82F6;
+            --plena-green: #10B981;
+            --plena-red: #EF4444;
+            --plena-yellow: #F59E0B;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #F3F4F6;
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: none;
+        }
+
+        @media (max-width: 1024px) {
+            body {
+                padding-bottom: 90px;
+            }
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-10px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Gráfico CSS Avançado */
+        .chart-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 180px;
+            gap: 2%;
+        }
+
+        .bar-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            height: 100%;
+            position: relative;
+        }
+
+        .bar-wrapper {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 2px;
+            height: 100%;
+            width: 100%;
+        }
+
+        .bar {
+            width: 45%;
+            border-radius: 6px 6px 0 0;
+            transition: height 0.5s ease;
+            min-height: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .bar:hover::after {
+            content: attr(data-value);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .x-label {
+            font-size: 10px;
+            color: #666;
+            text-align: center;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s ease;
+        }
+
+        /* Sidebar Mobile */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 50;
+                height: 100vh;
+                width: 280px;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .sidebar {
+                width: 280px;
+                position: fixed;
+                height: 100vh;
+            }
+
+            .main-content {
+                margin-left: 280px;
+            }
+        }
+
+        /* Card Hover Effects */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background-color: #DCFCE7;
+            color: #166534;
+        }
+
+        .badge-warning {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        .badge-danger {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 640px) {
+            .stats-card-h {
+                min-height: 120px;
+            }
+
+            .chart-container {
+                height: 150px;
+            }
+
+            input,
+            select,
+            button {
+                font-size: 16px !important;
+                /* Prevent iOS zoom */
+            }
+        }
+
+        /* Bottom Nav & FAB */
+        .bottom-nav {
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .fab-button {
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .bottom-sheet {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(100%);
+            z-index: 50;
+        }
+
+        .bottom-sheet.open {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 antialiased">
+
+    <!-- Overlay para sidebar mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+        class="sidebar bg-plena-black text-white transition-transform duration-300 flex flex-col shadow-2xl">
+        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-plena-orange to-plena-dark">
+            <i data-lucide="car-taxi-front" class="w-8 h-8 mr-3 text-black"></i>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight text-black">PLENA DRIVER</h1>
+                <p class="text-xs text-black/90 font-bold">Gestão Profissional para Motoristas</p>
+            </div>
+        </div>
+
+        <nav class="p-4 space-y-2 flex-1 overflow-y-auto">
+            <button onclick="router('dashboard')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group active-nav"
+                id="nav-dashboard">
+                <i data-lucide="car" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Dashboard
+            </button>
+            <button onclick="router('transactions')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-transactions">
+                <i data-lucide="fuel" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Corridas & Gastos
+            </button>
+            <button onclick="router('reports')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-reports">
+                <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Relatórios
+            </button>
+            <button onclick="router('settings')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-settings">
+                <i data-lucide="settings" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Configurações
+            </button>
+            <button onclick="router('instructions')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-instructions">
+                <i data-lucide="help-circle" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Manual de Uso
+            </button>
+            <button onclick="router('about')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-about">
+                <i data-lucide="info" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Sobre a Plena
+            </button>
+        </nav>
+
+        <div class="p-6 border-t border-white/10 text-center">
+            <p class="text-xs text-gray-500">Todos os Direitos Reservados &copy; 2026</p>
+            <a href="https://www.plenaaplicativos.com.br" target="_blank"
+                class="text-[10px] text-gray-600 hover:text-plena-orange transition-colors mt-1 block decoration-0">
+                Plena Soluções Digitais LTDA
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content min-h-screen flex flex-col">
+        <!-- Header -->
+        <header
+            class="bg-white h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-gray-100">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg text-gray-600">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <h2 id="page-title" class="text-xl font-bold text-gray-800 hidden sm:block">Dashboard</h2>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-plena-green/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                    </div>
+                    <button onclick="openClosingModal()"
+                        class="relative flex items-center px-4 py-2.5 bg-gray-800 text-white rounded-lg text-sm font-medium hover:bg-black transition-all shadow-sm active:scale-95">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 sm:mr-2"></i>
+                        <span class="hidden sm:inline">Fechar Dia</span>
+                        <span class="sm:hidden">Fechar</span>
+                    </button>
+                </div>
+
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-plena-orange/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                    </div>
+                    <button onclick="openTransactionModal()"
+                        class="relative flex items-center px-4 py-2.5 bg-plena-orange text-black rounded-lg text-sm font-bold hover:bg-yellow-500 transition-all shadow-lg shadow-yellow-200 active:scale-95">
+                        <i data-lucide="plus" class="w-5 h-5 sm:mr-2"></i>
+                        <span class="hidden sm:inline">Novo Lançamento</span>
+                        <span class="sm:hidden">Novo</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="p-4 lg:p-8 flex-1 overflow-y-auto">
+
+            <!-- Dashboard View -->
+            <section id="view-dashboard" class="view-section fade-in">
+                <!-- Balance Alert -->
+                <div id="balance-alert"
+                    class="hidden mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                    <div class="flex items-center">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 mr-3"></i>
+                        <div>
+                            <p class="font-bold">Atenção: Saldo Negativo!</p>
+                            <p class="text-sm">Seu lucro está negativo. Considere rever suas despesas e corridas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Month Selector -->
+                <div class="mb-6 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-gray-800">Resumo Financeiro</h3>
+                    <div class="flex items-center gap-3">
+                        <input type="month" id="month-selector" onchange="renderDashboard()"
+                            class="border rounded-lg p-2 text-sm bg-white">
+                        <button onclick="exportDashboardPDF()"
+                            class="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Lucro Líquido
+                                </p>
+                                <h3 id="dash-balance" class="text-3xl font-bold text-gray-900">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">Já descontando combustível</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-plena-orange/10 flex items-center justify-center">
+                                <i data-lucide="wallet" class="w-6 h-6 text-plena-orange"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">KM Rodados
+                                    (Mês)
+                                </p>
+                                <h3 id="dash-km" class="text-2xl font-bold text-blue-600">0 km</h3>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    <span id="km-growth" class="text-blue-500">+0%</span> vs último mês
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i data-lucide="map-pinned" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Lucro por KM
+                                </p>
+                                <h3 id="dash-profit-km" class="text-2xl font-bold text-green-600">R$ 0,00 /km</h3>
+                                <p class="text-xs text-gray-500 mt-1">Eficiência da rodagem</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts and Analytics -->
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                    <div class="xl:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-bold text-gray-800">Faturamento Diário (7 Dias)</h3>
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                    <span class="text-xs text-gray-600">Ganhos</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <span class="text-xs text-gray-600">Gastos</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="chart-area" class="chart-container"></div>
+                    </div>
+
+                    <!-- Top Expenses & Categories -->
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                <i data-lucide="alert-triangle" class="w-4 h-4 mr-2 text-plena-orange"></i>
+                                Maiores Gastos
+                            </h3>
+                            <div id="top-expenses" class="space-y-4">
+                                <!-- Dynamic content -->
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4">Consumo de Combustível</h3>
+                            <div id="fuel-consumption" class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600">Média por KM</span>
+                                    <span id="fuel-avg" class="text-sm font-bold text-yellow-600">0,00 L/km</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600">Total Abastecido</span>
+                                    <span id="fuel-total" class="text-sm font-bold text-yellow-600">0 L</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-gray-800">Corridas Recentes</h3>
+                        <button onclick="router('transactions')"
+                            class="text-sm text-plena-orange hover:text-plena-dark font-medium">
+                            Ver todas →
+                        </button>
+                    </div>
+                    <div id="recent-transactions" class="space-y-3">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Transactions View -->
+            <section id="view-transactions" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Corridas & Gastos</h2>
+                        <p class="text-sm text-gray-600">Gerencie todas as suas corridas e despesas</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="exportCSV()"
+                            class="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            Exportar CSV
+                        </button>
+                        <button onclick="printTransactions()"
+                            class="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors">
+                            <i data-lucide="printer" class="w-4 h-4"></i>
+                            Imprimir
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+                    <div class="p-4 bg-gray-50 grid grid-cols-1 md:grid-cols-4 gap-3 border-b border-gray-200">
+                        <div class="relative">
+                            <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                            <input type="text" id="search-term" onkeyup="renderTransactions()" placeholder="Buscar..."
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-orange outline-none text-sm">
+                        </div>
+                        <div>
+                            <input type="date" id="filter-start" onchange="renderTransactions()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div>
+                            <input type="date" id="filter-end" onchange="renderTransactions()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div class="flex gap-2">
+                            <select id="filter-type" onchange="renderTransactions()"
+                                class="flex-1 px-4 py-2 rounded-lg border border-gray-300 text-sm bg-white outline-none">
+                                <option value="all">Todos</option>
+                                <option value="income">Ganhos</option>
+                                <option value="expense">Custos</option>
+                            </select>
+                            <button onclick="clearFilters()"
+                                class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm transition-colors">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Transactions Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                                <tr>
+                                    <th class="px-6 py-3">Data</th>
+                                    <th class="px-6 py-3">Descrição</th>
+                                    <th class="px-6 py-3">Categoria</th>
+                                    <th class="px-6 py-3">KM / Litros</th>
+                                    <th class="px-6 py-3 text-right">Valor</th>
+                                    <th class="px-6 py-3 text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trans-table-body" class="divide-y divide-gray-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                    <div id="empty-msg" class="hidden p-8 text-center text-gray-400">
+                        <i data-lucide="file-text" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
+                        <p>Nenhum registro encontrado.</p>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total Ganhos</p>
+                        <p id="filter-income" class="text-lg font-bold text-green-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total Gastos</p>
+                        <p id="filter-expense" class="text-lg font-bold text-red-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Lucro Filtrado</p>
+                        <p id="filter-balance" class="text-lg font-bold text-blue-700">R$ 0,00</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports View -->
+            <section id="view-reports" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Relatórios Avançados</h2>
+                    <p class="text-sm text-gray-600">Gere relatórios detalhados para análise de desempenho</p>
+                </div>
+
+                <!-- Report Filters -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
+                    <h3 class="font-bold text-gray-800 mb-4">Configurar Período</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Data Inicial</label>
+                            <input type="date" id="rep-start" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Data Final</label>
+                            <input type="date" id="rep-end" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="generateReport()"
+                                class="flex-1 bg-plena-orange text-black px-6 py-2 rounded-lg text-sm font-bold hover:bg-yellow-500 transition-colors">
+                                Gerar Relatório
+                            </button>
+                            <button onclick="generateFullReport()"
+                                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors"
+                                title="Relatório Completo">
+                                <i data-lucide="file-text" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Results -->
+                <div id="report-result" class="hide space-y-6">
+                    <!-- Summary Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="bg-green-50 p-6 rounded-xl text-center border border-green-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Ganhos</p>
+                            <p id="rep-inc" class="text-2xl font-bold text-green-700 mt-2">R$ 0,00</p>
+                        </div>
+                        <div class="bg-red-50 p-6 rounded-xl text-center border border-red-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="trending-down" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Gastos</p>
+                            <p id="rep-exp" class="text-2xl font-bold text-red-700 mt-2">R$ 0,00</p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-xl text-center border border-blue-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="wallet" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Lucro</p>
+                            <p id="rep-bal" class="text-2xl font-bold text-blue-700 mt-2">R$ 0,00</p>
+                        </div>
+                        <div class="bg-yellow-50 p-6 rounded-xl text-center border border-yellow-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="map-pinned" class="w-6 h-6 text-yellow-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">KM Total</p>
+                            <p id="rep-km" class="text-2xl font-bold text-yellow-700 mt-2">0 km</p>
+                        </div>
+                    </div>
+
+                    <!-- Category Breakdown -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="font-bold text-gray-800 mb-4">Análise por Categoria</h3>
+                        <div id="category-report" class="space-y-4"></div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button onclick="shareReport()"
+                            class="bg-[#25D366] text-white py-3 rounded-xl font-bold hover:bg-[#128C7E] flex justify-center items-center gap-2">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i> Enviar WhatsApp
+                        </button>
+                        <button onclick="printReport()"
+                            class="bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 flex justify-center items-center gap-2">
+                            <i data-lucide="printer" class="w-4 h-4"></i> Imprimir Relatório
+                        </button>
+                        <button onclick="downloadReportPDF()"
+                            class="bg-gray-800 text-white py-3 rounded-xl font-bold hover:bg-black flex justify-center items-center gap-2">
+                            <i data-lucide="download" class="w-4 h-4"></i> Baixar PDF
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings View -->
+            <section id="view-settings" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Configurações do Sistema</h2>
+                    <p class="text-sm text-gray-600">Personalize e gerencie suas preferências</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Categories Management -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-bold text-gray-800">Categorias Personalizadas</h3>
+                            <button onclick="toggleCatForm()"
+                                class="flex items-center gap-2 px-3 py-1.5 bg-plena-orange text-black text-sm rounded-lg hover:bg-yellow-500">
+                                <i data-lucide="plus" class="w-4 h-4"></i> Nova
+                            </button>
+                        </div>
+
+                        <!-- Category Form -->
+                        <div id="cat-form-box"
+                            class="hidden mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200 slide-in">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <input type="text" id="new-cat-name" placeholder="Nome da categoria"
+                                    class="border p-2 rounded-lg text-sm">
+                                <div class="flex gap-2">
+                                    <select id="new-cat-type" class="flex-1 border p-2 rounded-lg text-sm">
+                                        <option value="expense">Despesa</option>
+                                        <option value="income">Receita</option>
+                                    </select>
+                                    <input type="color" id="new-cat-color" value="#F59E0B"
+                                        class="h-10 w-10 p-0 border-0 rounded cursor-pointer">
+                                </div>
+                            </div>
+                            <div class="flex gap-2 mt-3">
+                                <button onclick="addCategory()"
+                                    class="flex-1 bg-gray-800 text-white py-2 rounded-lg text-sm font-bold hover:bg-black">
+                                    Salvar Categoria
+                                </button>
+                                <button onclick="toggleCatForm()"
+                                    class="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Categories List -->
+                        <div id="cat-list" class="space-y-2 max-h-60 overflow-y-auto pr-2"></div>
+                    </div>
+
+                    <!-- Data Management -->
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                <i data-lucide="shield-alert" class="w-5 h-5 mr-2 text-plena-orange"></i>
+                                Segurança de Dados
+                            </h3>
+
+                            <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg text-sm text-blue-800 mb-6">
+                                <p class="font-bold mb-2">⚠️ Importante para Motoristas</p>
+                                <p>Seus dados ficam salvos 100% no navegador. Faça backup regularmente para evitar
+                                    perdas!</p>
+                            </div>
+
+                            <div class="space-y-3">
+                                <button onclick="downloadBackup()"
+                                    class="w-full border border-gray-300 py-3 rounded-lg text-sm font-medium hover:bg-gray-50 flex justify-center items-center gap-2">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    Baixar Backup Completo (.json)
+                                </button>
+
+                                <div class="relative">
+                                    <button
+                                        class="w-full bg-gray-800 text-white py-3 rounded-lg text-sm font-medium flex justify-center items-center gap-2">
+                                        <i data-lucide="upload" class="w-4 h-4"></i>
+                                        Restaurar Backup
+                                    </button>
+                                    <input type="file" onchange="restoreBackup(this)" accept=".json"
+                                        class="absolute inset-0 opacity-0 cursor-pointer">
+                                </div>
+
+                                <button onclick="syncToCloud()" id="sync-button"
+                                    class="w-full bg-green-600 text-white py-3 rounded-lg text-sm font-medium hover:bg-green-700 flex justify-center items-center gap-2">
+                                    <i data-lucide="cloud" class="w-4 h-4"></i>
+                                    Sincronizar com Nuvem
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Danger Zone -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center text-red-600">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
+                                Zona de Perigo
+                            </h3>
+
+                            <div class="bg-red-50 p-4 rounded-lg border border-red-100 mb-4">
+                                <p class="text-sm text-red-600"><strong>Atenção:</strong> Estas ações são irreversíveis.
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="clearAllTransactions()"
+                                    class="py-2.5 border border-red-300 text-red-600 rounded-lg text-sm hover:bg-red-50 transition-colors">
+                                    Limpar Tudo
+                                </button>
+                                <button onclick="factoryReset()"
+                                    class="py-2.5 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition-colors">
+                                    Resetar Sistema
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Instructions View -->
+            <section id="view-instructions" class="view-section hide fade-in">
+                <div class="max-w-6xl mx-auto pb-12">
+                    <!-- Hero Header -->
+                    <div class="text-center mb-10 pt-4">
+                        <div
+                            class="inline-flex items-center justify-center p-3 bg-plena-orange/10 rounded-2xl mb-4 animate-bounce-slow">
+                            <i data-lucide="book-open" class="w-8 h-8 text-plena-orange"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">Manual Completo de Uso</h2>
+                        <p class="text-gray-600 max-w-2xl mx-auto">Otimize suas rotas, controle seus custos e aumente
+                            seus lucros com o Plena Driver.</p>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-gray-800">Seu Progresso no Aprendizado</h3>
+                            <span class="text-sm font-bold text-plena-orange" id="completed-steps">0/7 etapas</span>
+                        </div>
+                        <div class="w-full bg-gray-100 rounded-full h-3">
+                            <div class="bg-plena-orange h-3 rounded-full transition-all duration-500"
+                                id="tutorial-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Cards -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-10">
+                        <button onclick="scrollToSection('instalacao')"
+                            class="p-3 bg-white border border-gray-200 rounded-xl hover:border-plena-orange hover:shadow-md transition-all text-center group">
+                            <div
+                                class="w-8 h-8 mx-auto bg-gray-50 rounded-lg flex items-center justify-center mb-2 group-hover:bg-orange-50">
+                                <i data-lucide="download"
+                                    class="w-4 h-4 text-gray-500 group-hover:text-plena-orange"></i>
+                            </div>
+                            <span class="text-xs font-bold text-gray-700">Instalação</span>
+                        </button>
+                        <button onclick="scrollToSection('config')"
+                            class="p-3 bg-white border border-gray-200 rounded-xl hover:border-plena-orange hover:shadow-md transition-all text-center group">
+                            <div
+                                class="w-8 h-8 mx-auto bg-gray-50 rounded-lg flex items-center justify-center mb-2 group-hover:bg-orange-50">
+                                <i data-lucide="settings"
+                                    class="w-4 h-4 text-gray-500 group-hover:text-plena-orange"></i>
+                            </div>
+                            <span class="text-xs font-bold text-gray-700">Configuração</span>
+                        </button>
+                        <button onclick="scrollToSection('gestao')"
+                            class="p-3 bg-white border border-gray-200 rounded-xl hover:border-plena-orange hover:shadow-md transition-all text-center group">
+                            <div
+                                class="w-8 h-8 mx-auto bg-gray-50 rounded-lg flex items-center justify-center mb-2 group-hover:bg-orange-50">
+                                <i data-lucide="car-front"
+                                    class="w-4 h-4 text-gray-500 group-hover:text-plena-orange"></i>
+                            </div>
+                            <span class="text-xs font-bold text-gray-700">Gestão</span>
+                        </button>
+                        <button onclick="scrollToSection('relatorios')"
+                            class="p-3 bg-white border border-gray-200 rounded-xl hover:border-plena-orange hover:shadow-md transition-all text-center group">
+                            <div
+                                class="w-8 h-8 mx-auto bg-gray-50 rounded-lg flex items-center justify-center mb-2 group-hover:bg-orange-50">
+                                <i data-lucide="bar-chart-3"
+                                    class="w-4 h-4 text-gray-500 group-hover:text-plena-orange"></i>
+                            </div>
+                            <span class="text-xs font-bold text-gray-700">Relatórios</span>
+                        </button>
+                        <button onclick="scrollToSection('backup')"
+                            class="p-3 bg-white border border-gray-200 rounded-xl hover:border-plena-orange hover:shadow-md transition-all text-center group">
+                            <div
+                                class="w-8 h-8 mx-auto bg-gray-50 rounded-lg flex items-center justify-center mb-2 group-hover:bg-orange-50">
+                                <i data-lucide="save" class="w-4 h-4 text-gray-500 group-hover:text-plena-orange"></i>
+                            </div>
+                            <span class="text-xs font-bold text-gray-700">Backup</span>
+                        </button>
+                        <button onclick="scrollToSection('faq')"
+                            class="p-3 bg-white border border-gray-200 rounded-xl hover:border-plena-orange hover:shadow-md transition-all text-center group">
+                            <div
+                                class="w-8 h-8 mx-auto bg-gray-50 rounded-lg flex items-center justify-center mb-2 group-hover:bg-orange-50">
+                                <i data-lucide="help-circle"
+                                    class="w-4 h-4 text-gray-500 group-hover:text-plena-orange"></i>
+                            </div>
+                            <span class="text-xs font-bold text-gray-700">Dúvidas</span>
+                        </button>
+                        <button onclick="scrollToSection('checklist')"
+                            class="p-3 bg-plena-orange text-black rounded-xl shadow-lg shadow-orange-200 transform hover:-translate-y-1 transition-all text-center">
+                            <div class="w-8 h-8 mx-auto bg-white/20 rounded-lg flex items-center justify-center mb-2">
+                                <i data-lucide="check-circle-2" class="w-4 h-4 text-black"></i>
+                            </div>
+                            <span class="text-xs font-bold">Checklist</span>
+                        </button>
+                    </div>
+
+                    <!-- Seção 1: Instalação -->
+                    <div id="instalacao"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="flex-shrink-0 w-10 h-10 rounded-full bg-plena-orange text-white flex items-center justify-center font-bold text-lg">
+                                1</div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h3 class="text-xl font-bold text-gray-800">Instalação no Celular</h3>
+                                    <button onclick="markSectionComplete('instalacao')"
+                                        class="text-xs bg-green-50 text-green-700 px-3 py-1 rounded-full font-bold hover:bg-green-100 transition-colors flex items-center gap-1">
+                                        <i data-lucide="check" class="w-3 h-3"></i> Marcar como concluído
+                                    </button>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="bg-gray-50 p-4 rounded-xl">
+                                        <h4 class="font-bold flex items-center gap-2 mb-3">
+                                            <i data-lucide="smartphone" class="w-4 h-4 text-gray-600"></i> Android
+                                            (Chrome)
+                                        </h4>
+                                        <ol class="list-decimal list-inside text-sm text-gray-600 space-y-2">
+                                            <li>Acesse o link no Chrome.</li>
+                                            <li>Toque nos <strong>3 pontos</strong> no canto superior direito.</li>
+                                            <li>Selecione <strong>"Instalar aplicativo"</strong> ou "Adicionar à Tela
+                                                Inicial".</li>
+                                        </ol>
+                                    </div>
+                                    <div class="bg-gray-50 p-4 rounded-xl">
+                                        <h4 class="font-bold flex items-center gap-2 mb-3">
+                                            <i data-lucide="apple" class="w-4 h-4 text-gray-600"></i> iPhone (Safari)
+                                        </h4>
+                                        <ol class="list-decimal list-inside text-sm text-gray-600 space-y-2">
+                                            <li>Abra no Safari e toque em <strong>Compartilhar</strong>.</li>
+                                            <li>Selecione <strong>"Adicionar à Tela de Início"</strong>.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 2: Configuração -->
+                    <div id="config"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="flex-shrink-0 w-10 h-10 rounded-full bg-plena-orange text-white flex items-center justify-center font-bold text-lg">
+                                2</div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h3 class="text-xl font-bold text-gray-800">Configuração de Gastos</h3>
+                                    <button onclick="markSectionComplete('config')"
+                                        class="text-xs bg-green-50 text-green-700 px-3 py-1 rounded-full font-bold hover:bg-green-100 transition-colors flex items-center gap-1">
+                                        <i data-lucide="check" class="w-3 h-3"></i> Marcar como concluído
+                                    </button>
+                                </div>
+                                <p class="text-gray-600 mb-4">Para calcular seu lucro real, categorize seus custos
+                                    corretamente:</p>
+                                <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                                    <h4 class="font-bold text-purple-800 mb-2">Categorias Importantes</h4>
+                                    <ul class="text-sm text-purple-700 list-disc list-inside space-y-1">
+                                        <li><strong>Combustível:</strong> Gasolina, Etanol, GNV.</li>
+                                        <li><strong>Manutenção:</strong> Óleo, Pneus, Lavagem.</li>
+                                        <li><strong>Alimentação:</strong> Lanches durante o turno.</li>
+                                        <li><strong>Aluguel/Seguro:</strong> Custos fixos do veículo.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 3: Gestão -->
+                    <div id="gestao"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="flex-shrink-0 w-10 h-10 rounded-full bg-plena-orange text-white flex items-center justify-center font-bold text-lg">
+                                3</div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h3 class="text-xl font-bold text-gray-800">Lançamento de Corridas</h3>
+                                    <button onclick="markSectionComplete('gestao')"
+                                        class="text-xs bg-green-50 text-green-700 px-3 py-1 rounded-full font-bold hover:bg-green-100 transition-colors flex items-center gap-1">
+                                        <i data-lucide="check" class="w-3 h-3"></i> Marcar como concluído
+                                    </button>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div
+                                        class="p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                                        <h4 class="font-bold text-gray-800 mb-2">Ganhos de Corrida</h4>
+                                        <p class="text-sm text-gray-600">Registre o valor total recebido dos apps (Uber,
+                                            99) ao finalizar o dia ou a cada corrida.</p>
+                                    </div>
+                                    <div
+                                        class="p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                                        <h4 class="font-bold text-gray-800 mb-2">Quilometragem (KM)</h4>
+                                        <p class="text-sm text-gray-600">Sempre informe o KM rodado. Isso é essencial
+                                            para calcular seu <strong>Lucro por KM</strong>.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 4: Relatórios -->
+                    <div id="relatorios"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="flex-shrink-0 w-10 h-10 rounded-full bg-plena-orange text-white flex items-center justify-center font-bold text-lg">
+                                4</div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h3 class="text-xl font-bold text-gray-800">Análise de Lucro</h3>
+                                    <button onclick="markSectionComplete('relatorios')"
+                                        class="text-xs bg-green-50 text-green-700 px-3 py-1 rounded-full font-bold hover:bg-green-100 transition-colors flex items-center gap-1">
+                                        <i data-lucide="check" class="w-3 h-3"></i> Marcar como concluído
+                                    </button>
+                                </div>
+                                <p class="text-gray-600 mb-4">Entenda seus números:</p>
+                                <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                                    <h4 class="font-bold text-blue-800 mb-2">Resumo Financeiro</h4>
+                                    <p class="text-xs text-blue-700">O sistema deduz automaticamente seus gastos dos
+                                        seus ganhos para mostrar o <strong>Lucro Líquido Real</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 5: Backup -->
+                    <div id="backup"
+                        class="bg-white border-2 border-red-100 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24 border-l-4 border-l-red-500">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="flex-shrink-0 w-10 h-10 rounded-full bg-red-500 text-white flex items-center justify-center font-bold text-lg">
+                                5</div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h3 class="text-xl font-bold text-red-700">Backup e Segurança</h3>
+                                    <button onclick="markSectionComplete('backup')"
+                                        class="text-xs bg-green-50 text-green-700 px-3 py-1 rounded-full font-bold hover:bg-green-100 transition-colors flex items-center gap-1">
+                                        <i data-lucide="check" class="w-3 h-3"></i> Marcar como concluído
+                                    </button>
+                                </div>
+                                <p class="text-sm text-gray-700 mb-4">
+                                    Seus dados ficam salvos apenas neste celular. Se perder o aparelho, perde os dados.
+                                    <strong>Faça backup semanalmente!</strong>
+                                </p>
+                                <button onclick="router('settings')"
+                                    class="bg-red-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-700 text-sm">
+                                    Fazer Backup Agora
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ -->
+                    <div id="faq" class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="flex-shrink-0 w-10 h-10 rounded-full bg-plena-orange text-white flex items-center justify-center font-bold text-lg">
+                                6</div>
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-gray-800 mb-4">Dúvidas Frequentes</h3>
+                                <p class="text-sm text-gray-600">Precisa de internet? Não, funciona 100% offline.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Checklist Interativo -->
+                    <div id="checklist"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                                    <i data-lucide="clipboard-check" class="w-6 h-6 text-plena-orange"></i>
+                                    Checklist Diário
+                                </h3>
+                                <p class="text-gray-500 text-sm">Rotina para antes e depois do trabalho.</p>
+                            </div>
+                            <div class="bg-orange-50 px-4 py-2 rounded-xl text-center">
+                                <span class="block text-2xl font-bold text-plena-orange"
+                                    id="checklist-percent">0%</span>
+                                <span class="text-xs font-bold text-orange-800 uppercase">Concluído</span>
+                            </div>
+                        </div>
+
+                        <div class="w-full bg-gray-100 rounded-full h-2 mb-6">
+                            <div class="bg-plena-orange h-2 rounded-full transition-all duration-300"
+                                id="checklist-progress" style="width: 0%"></div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <label
+                                class="checklist-item flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all select-none group">
+                                <input type="checkbox" id="check-oleo" class="peer sr-only"
+                                    onchange="updateChecklist()">
+                                <div
+                                    class="w-6 h-6 border-2 border-gray-300 rounded-lg peer-checked:bg-plena-orange peer-checked:border-plena-orange transition-all flex items-center justify-center mr-4">
+                                    <i data-lucide="check"
+                                        class="w-4 h-4 text-white opacity-0 peer-checked:opacity-100"></i>
+                                </div>
+                                <span class="font-bold text-gray-700">Verificar Óleo e Água</span>
+                            </label>
+                            <label
+                                class="checklist-item flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all select-none group">
+                                <input type="checkbox" id="check-pneu" class="peer sr-only"
+                                    onchange="updateChecklist()">
+                                <div
+                                    class="w-6 h-6 border-2 border-gray-300 rounded-lg peer-checked:bg-plena-orange peer-checked:border-plena-orange transition-all flex items-center justify-center mr-4">
+                                    <i data-lucide="check"
+                                        class="w-4 h-4 text-white opacity-0 peer-checked:opacity-100"></i>
+                                </div>
+                                <span class="font-bold text-gray-700">Calibrar Pneus</span>
+                            </label>
+                            <label
+                                class="checklist-item flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all select-none group">
+                                <input type="checkbox" id="check-meta" class="peer sr-only"
+                                    onchange="updateChecklist()">
+                                <div
+                                    class="w-6 h-6 border-2 border-gray-300 rounded-lg peer-checked:bg-plena-orange peer-checked:border-plena-orange transition-all flex items-center justify-center mr-4">
+                                    <i data-lucide="check"
+                                        class="w-4 h-4 text-white opacity-0 peer-checked:opacity-100"></i>
+                                </div>
+                                <span class="font-bold text-gray-700">Definir Meta do Dia</span>
+                            </label>
+                            <label
+                                class="checklist-item flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all select-none group">
+                                <input type="checkbox" id="check-limpeza" class="peer sr-only"
+                                    onchange="updateChecklist()">
+                                <div
+                                    class="w-6 h-6 border-2 border-gray-300 rounded-lg peer-checked:bg-plena-orange peer-checked:border-plena-orange transition-all flex items-center justify-center mr-4">
+                                    <i data-lucide="check"
+                                        class="w-4 h-4 text-white opacity-0 peer-checked:opacity-100"></i>
+                                </div>
+                                <span class="font-bold text-gray-700">Limpeza do Veículo</span>
+                            </label>
+                            <label
+                                class="checklist-item flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all select-none group">
+                                <input type="checkbox" id="check-close" class="peer sr-only"
+                                    onchange="updateChecklist()">
+                                <div
+                                    class="w-6 h-6 border-2 border-gray-300 rounded-lg peer-checked:bg-plena-orange peer-checked:border-plena-orange transition-all flex items-center justify-center mr-4">
+                                    <i data-lucide="check"
+                                        class="w-4 h-4 text-white opacity-0 peer-checked:opacity-100"></i>
+                                </div>
+                                <span class="font-bold text-gray-700">Fechamento e Custos</span>
+                            </label>
+                        </div>
+
+                        <div class="mt-6 flex justify-between items-center pt-4 border-t border-gray-100">
+                            <span class="text-sm font-medium text-gray-500">
+                                <span id="checklist-completed">0</span> de <span id="checklist-total">5</span> tarefas
+                            </span>
+                            <button onclick="resetChecklist()"
+                                class="text-sm text-red-500 hover:text-red-700 font-medium hover:underline">
+                                Reiniciar Checklist
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About View -->
+            <section id="view-about" class="view-section hide fade-in">
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                        <!-- Company Header -->
+                        <div class="text-center mb-8">
+                            <div
+                                class="w-20 h-20 bg-gradient-to-br from-plena-orange to-plena-dark rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-orange-200">
+                                <i data-lucide="car-taxi-front" class="w-10 h-10 text-white"></i>
+                            </div>
+                            <h2 class="text-3xl font-bold text-gray-800 mb-2">Plena Driver</h2>
+                            <p class="text-gray-500 font-medium">Soluções Digitais & Inteligência Artificial</p>
+                            <div class="mt-4 flex justify-center gap-2">
+                                <span class="px-3 py-1 bg-gray-100 rounded-full text-xs font-bold text-gray-600">v2.1.0
+                                    Pro</span>
+                                <span
+                                    class="px-3 py-1 bg-green-50 rounded-full text-xs font-bold text-green-700">Sistema
+                                    Oficial</span>
+                            </div>
+                        </div>
+
+                        <!-- Legal Notice -->
+                        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-8">
+                            <div class="flex items-start">
+                                <i data-lucide="shield-alert" class="w-5 h-5 text-red-600 mr-3 mt-0.5"></i>
+                                <div>
+                                    <h3 class="text-sm font-bold text-red-800 uppercase mb-1">Aviso Legal de Propriedade
+                                    </h3>
+                                    <p class="text-sm text-red-700 leading-relaxed">
+                                        Este software é protegido por leis de direitos autorais e tratados
+                                        internacionais. A
+                                        reprodução ou distribuição não autorizada deste programa, ou de qualquer parte
+                                        dele,
+                                        pode resultar em severas penalidades civis e criminais, e será processada na
+                                        máxima
+                                        extensão possível sob a lei.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mission & Values -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                    <i data-lucide="target" class="w-5 h-5 mr-2 text-plena-orange"></i>
+                                    Nossa Missão
+                                </h3>
+                                <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 h-full">
+                                    <p class="text-gray-600 leading-relaxed">
+                                        Empoderar motoristas de aplicativo com ferramentas profissionais de gestão
+                                        financeira,
+                                        permitindo que tomem decisões baseadas em dados e maximizem seus lucros reais
+                                        por KM.
+                                    </p>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                    <i data-lucide="users" class="w-5 h-5 mr-2 text-plena-dark"></i>
+                                    Para Quem Desenvolvemos
+                                </h3>
+                                <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 h-full">
+                                    <ul class="space-y-3">
+                                        <li class="flex items-center text-gray-600">
+                                            <div class="w-2 h-2 bg-plena-orange rounded-full mr-3"></div>
+                                            Motoristas Uber / 99 / InDriver
+                                        </li>
+                                        <li class="flex items-center text-gray-600">
+                                            <div class="w-2 h-2 bg-plena-dark rounded-full mr-3"></div>
+                                            Taxistas Profissionais
+                                        </li>
+                                        <li class="flex items-center text-gray-600">
+                                            <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                                            Entregadores Parceiros
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact -->
+                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                            <h3 class="font-bold text-gray-800 mb-4">Fale Conosco</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <p class="text-sm text-gray-600 mb-3">Para suporte técnico ou parcerias:</p>
+                                    <a href="mailto:tecnologia@plenaaplicativos.com.br"
+                                        class="inline-flex items-center text-plena-orange font-bold hover:underline">
+                                        <i data-lucide="mail" class="w-4 h-4 mr-2"></i>
+                                        tecnologia@plenaaplicativos.com.br
+                                    </a>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600 mb-3">Conheça nossos outros produtos:</p>
+                                    <a href="https://www.plenaaplicativos.com.br" target="_blank"
+                                        class="inline-flex items-center text-plena-orange font-bold hover:underline">
+                                        <i data-lucide="globe" class="w-4 h-4 mr-2"></i>
+                                        www.plenaaplicativos.com.br
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Bottom Navigation (Mobile Only) -->
+    <nav
+        class="lg:hidden fixed bottom-0 left-0 right-0 bg-white h-20 pb-4 bottom-nav z-40 flex items-center justify-between px-2">
+        <button onclick="router('dashboard')"
+            class="nav-item-mobile flex-1 flex flex-col items-center justify-center gap-1 text-gray-400"
+            id="nav-mobile-dashboard">
+            <i data-lucide="car" class="w-6 h-6"></i>
+            <span class="text-[10px] font-medium">Início</span>
+        </button>
+
+        <button onclick="router('transactions')"
+            class="nav-item-mobile flex-1 flex flex-col items-center justify-center gap-1 text-gray-400"
+            id="nav-mobile-transactions">
+            <i data-lucide="list" class="w-6 h-6"></i>
+            <span class="text-[10px] font-medium">Corridas</span>
+        </button>
+
+        <!-- FAB (Floating Action Button) -->
+        <div class="relative -top-6">
+            <button onclick="openTransactionModal()"
+                class="fab-button w-16 h-16 bg-plena-orange rounded-full flex items-center justify-center text-black active:scale-95 transition-transform duration-200">
+                <i data-lucide="plus" class="w-8 h-8"></i>
+            </button>
+        </div>
+
+        <button onclick="router('reports')"
+            class="nav-item-mobile flex-1 flex flex-col items-center justify-center gap-1 text-gray-400"
+            id="nav-mobile-reports">
+            <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+            <span class="text-[10px] font-medium">Relatórios</span>
+        </button>
+
+        <button onclick="toggleSidebar()"
+            class="nav-item-mobile flex-1 flex flex-col items-center justify-center gap-1 text-gray-400"
+            id="nav-mobile-menu">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+            <span class="text-[10px] font-medium">Menu</span>
+        </button>
+    </nav>
+
+    <!-- JavaScript -->
+    <div id="transactionModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Novo Lançamento</h3>
+                <button onclick="closeModal('transactionModal')" class="text-gray-400 hover:text-gray-600">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <form onsubmit="submitTransaction(event)" class="space-y-4">
+                <input type="hidden" id="t-id">
+
+                <div class="grid grid-cols-2 gap-3 p-1 bg-gray-100 rounded-lg">
+                    <label class="cursor-pointer text-center">
+                        <input type="radio" name="t-type" value="income" class="peer hidden"
+                            onchange="renderCatOptions()">
+                        <div
+                            class="py-2 text-sm font-bold text-gray-500 rounded-md peer-checked:bg-white peer-checked:text-green-600 shadow-sm transition-all">
+                            Ganho (+)
+                        </div>
+                    </label>
+                    <label class="cursor-pointer text-center">
+                        <input type="radio" name="t-type" value="expense" class="peer hidden" checked
+                            onchange="renderCatOptions()">
+                        <div
+                            class="py-2 text-sm font-bold text-gray-500 rounded-md peer-checked:bg-white peer-checked:text-red-600 shadow-sm transition-all">
+                            Gasto (-)
+                        </div>
+                    </label>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Valor (R$)</label>
+                    <input type="number" id="t-amount" step="0.01" min="0.01" required
+                        class="w-full border-2 border-gray-200 p-3 rounded-xl text-lg font-bold focus:border-plena-orange outline-none"
+                        placeholder="0,00">
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Descrição</label>
+                    <input type="text" id="t-desc" required
+                        class="w-full border p-2 rounded-lg text-sm focus:border-plena-orange outline-none"
+                        placeholder="Ex: Corrida Uber, Gasolina, Manutenção...">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Categoria</label>
+                        <select id="t-cat" onchange="checkFuel(this)"
+                            class="w-full border p-2 rounded-lg text-sm bg-white outline-none" required>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">KM Rodado</label>
+                        <input type="number" id="t-km" step="0.1" placeholder="KM Rodado"
+                            class="w-full border p-2 rounded-lg text-sm outline-none">
+                    </div>
+                </div>
+
+                <div id="fuel-field" class="hidden">
+                    <label class="text-xs font-bold text-gray-500 uppercase">Litros Abastecidos</label>
+                    <input type="number" id="t-liters" step="0.01" placeholder="0.00 L"
+                        class="w-full border p-2 rounded-lg text-sm outline-none bg-yellow-50 border-yellow-200">
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Data</label>
+                    <input type="date" id="t-date" required
+                        class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-plena-orange text-black py-3 rounded-xl font-bold shadow-lg shadow-yellow-200 hover:bg-yellow-500 transition-all mt-2">
+                    Salvar Lançamento
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Closing Modal -->
+    <div id="closingModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+            <div class="bg-gradient-to-r from-gray-900 to-black p-6 text-center text-white">
+                <h3 class="font-bold text-lg">Fechamento do Dia</h3>
+                <p id="close-date" class="text-sm text-gray-300 mt-1">Hoje</p>
+                <p id="close-time" class="text-xs text-gray-500 mt-0">--:--</p>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4 mb-6">
+                    <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg border border-green-100">
+                        <div class="flex items-center">
+                            <i data-lucide="trending-up" class="w-4 h-4 text-green-600 mr-2"></i>
+                            <span class="text-sm">Ganhos</span>
+                        </div>
+                        <span id="close-inc" class="font-bold text-green-700">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg border border-red-100">
+                        <div class="flex items-center">
+                            <i data-lucide="trending-down" class="w-4 h-4 text-red-600 mr-2"></i>
+                            <span class="text-sm">Custos</span>
+                        </div>
+                        <span id="close-exp" class="font-bold text-red-700">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg border border-yellow-100">
+                        <div class="flex items-center">
+                            <i data-lucide="map-pinned" class="w-4 h-4 text-yellow-600 mr-2"></i>
+                            <span class="text-sm">KM Rodado</span>
+                        </div>
+                        <span id="close-km" class="font-bold text-yellow-700">0 km</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-4 border-t">
+                        <span class="font-bold text-gray-800">Lucro do Dia</span>
+                        <span id="close-bal" class="font-bold text-2xl text-gray-900">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <button onclick="shareClosing()"
+                        class="bg-[#25D366] text-white py-2.5 rounded-lg font-bold text-sm hover:bg-[#128C7E] flex justify-center items-center gap-2">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
+                    </button>
+                    <button onclick="printClosing()"
+                        class="bg-blue-600 text-white py-2.5 rounded-lg font-bold text-sm hover:bg-blue-700 flex justify-center items-center gap-2">
+                        <i data-lucide="printer" class="w-4 h-4"></i> Imprimir
+                    </button>
+                </div>
+
+                <button onclick="closeModal('closingModal')"
+                    class="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-bold text-sm hover:bg-gray-200 transition-colors flex justify-center items-center gap-2">
+                    Concluir Fechamento
+                </button>
+
+                <div class="mt-4 pt-4 border-t border-gray-100 text-center">
+                    <a href="https://www.plenaaplicativos.com.br" target="_blank"
+                        class="text-[10px] text-gray-400 hover:text-plena-orange no-underline">
+                        Plena Soluções Digitais &copy; 2026
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // ESTADO GLOBAL
+        const DB_KEY = 'plena_driver_pro_v2';
+        const defaultDB = {
+            transactions: [],
+            categories: [
+                { id: '1', name: 'Uber', type: 'income', color: '#10B981' },
+                { id: '2', name: '99', type: 'income', color: '#FCD34D' },
+                { id: '3', name: 'Indriver', type: 'income', color: '#3B82F6' },
+                { id: '4', name: 'Particular', type: 'income', color: '#8B5CF6' },
+                { id: '5', name: 'Combustível', type: 'expense', color: '#EF4444' },
+                { id: '6', name: 'Manutenção', type: 'expense', color: '#F97316' },
+                { id: '7', name: 'Aluguel Carro', type: 'expense', color: '#888888' },
+                { id: '8', name: 'Alimentação', type: 'expense', color: '#6366F1' },
+                { id: '9', name: 'Lavagem', type: 'expense', color: '#14B8A6' }
+            ],
+            settings: {
+                companyName: '',
+                currency: 'R$',
+                theme: 'light',
+                autoBackup: true
+            }
+        };
+
+        let db = JSON.parse(localStorage.getItem(DB_KEY)) || defaultDB;
+
+        // UTILITÁRIOS
+        const save = () => {
+            localStorage.setItem(DB_KEY, JSON.stringify(db));
+            updateDataStatus();
+        };
+
+        const fmtMoney = (v) => {
+            return v.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        };
+
+        const fmtDate = (d) => {
+            const date = new Date(d);
+            return date.toLocaleDateString('pt-BR');
+        };
+
+        const fmtDateInput = (d) => {
+            return new Date(d).toISOString().split('T')[0];
+        };
+
+        const getID = () => {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        };
+
+        const calculatePercentage = (current, previous) => {
+            if (previous === 0) return current > 0 ? 100 : 0;
+            return ((current - previous) / previous * 100).toFixed(1);
+        };
+
+        // INICIALIZAÇÃO
+        function init() {
+            lucide.createIcons();
+
+            // Configurar datas padrão
+            const today = new Date().toISOString().split('T')[0];
+            const firstDay = new Date();
+            firstDay.setDate(1);
+            const firstDayStr = firstDay.toISOString().split('T')[0];
+
+            // Configurar inputs de data
+            document.getElementById('t-date').value = today;
+            document.getElementById('month-selector').value = today.slice(0, 7);
+            document.getElementById('rep-start').value = firstDayStr;
+            document.getElementById('rep-end').value = today;
+            document.getElementById('filter-start').value = firstDayStr;
+            document.getElementById('filter-end').value = today;
+
+            // Renderizar dados iniciais
+            renderDashboard();
+            renderCats();
+            updateDataStatus();
+            updateTutorialProgress();
+            loadChecklistState();
+
+            // Configurar periodicidade para salvar
+            setInterval(save, 30000); // Salva a cada 30 segundos
+        }
+
+        // ROTEAMENTO E NAVEGAÇÃO
+        function router(view) {
+            // Esconder todas as views
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hide'));
+
+            // Remover classe active de todos os nav items
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('bg-white/10', 'text-white');
+                el.classList.add('text-gray-400');
+            });
+
+            // Mostrar view selecionada
+            const viewElement = document.getElementById(`view-${view}`);
+            if (viewElement) {
+                viewElement.classList.remove('hide');
+                viewElement.classList.add('fade-in');
+            }
+
+            // Ativar nav item selecionado
+            const navElement = document.getElementById(`nav-${view}`);
+            if (navElement) {
+                navElement.classList.add('bg-white/10', 'text-white');
+                navElement.classList.remove('text-gray-400');
+            }
+
+            // Ativar nav item mobile selecionado
+            document.querySelectorAll('.nav-item-mobile').forEach(el => el.classList.replace('text-plena-orange', 'text-gray-400'));
+            const mobileNavElement = document.getElementById(`nav-mobile-${view}`);
+            if (mobileNavElement) {
+                mobileNavElement.classList.replace('text-gray-400', 'text-plena-orange');
+            }
+
+            // Atualizar título da página
+            const titles = {
+                dashboard: 'Dashboard',
+                transactions: 'Corridas & Gastos',
+                reports: 'Relatórios',
+                settings: 'Configurações',
+                instructions: 'Manual do Motorista',
+                about: 'Sobre a Plena'
+            };
+
+            document.getElementById('page-title').innerText = titles[view] || 'Plena Driver';
+
+            // Fechar sidebar no mobile
+            if (window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+
+            // Renderizar dados específicos da view
+            if (view === 'dashboard') {
+                renderDashboard();
+            } else if (view === 'transactions') {
+                renderTransactions();
+            } else if (view === 'settings') {
+                renderCats();
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+
+            const isOpen = sidebar.classList.toggle('open');
+            overlay.classList.toggle('hidden', !isOpen);
+
+            if (isOpen) {
+                overlay.classList.remove('opacity-0');
+            } else {
+                overlay.classList.add('opacity-0');
+            }
+
+            // Bloquear scroll do body quando sidebar aberta
+            document.body.style.overflow = isOpen ? 'hidden' : '';
+        }
+
+        // DASHBOARD
+        function renderDashboard() {
+            const monthSelector = document.getElementById('month-selector').value;
+            const currentMonth = monthSelector || new Date().toISOString().slice(0, 7);
+
+            // Filtrar transações do mês atual
+            const monthTrans = db.transactions.filter(t => t.date.startsWith(currentMonth));
+
+            // Calcular totais
+            const income = monthTrans.filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const expense = monthTrans.filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const balance = income - expense;
+
+            // Calcular KM e combustível
+            const totalKm = monthTrans.reduce((sum, t) => sum + (Number(t.km) || 0), 0);
+            const fuelTransactions = monthTrans.filter(t => t.liters && t.liters > 0);
+            const totalLiters = fuelTransactions.reduce((sum, t) => sum + (Number(t.liters) || 0), 0);
+            const avgFuel = totalKm > 0 ? (totalLiters / totalKm).toFixed(3) : 0;
+
+            // Lucro por KM
+            const profitPerKm = totalKm > 0 ? (balance / totalKm) : 0;
+
+            // Atualizar cards
+            document.getElementById('dash-balance').innerText = fmtMoney(balance);
+            document.getElementById('dash-km').innerText = totalKm.toFixed(1) + ' km';
+            document.getElementById('dash-profit-km').innerText = fmtMoney(profitPerKm) + ' /km';
+
+            // Atualizar consumo de combustível
+            document.getElementById('fuel-avg').innerText = avgFuel + ' L/km';
+            document.getElementById('fuel-total').innerText = totalLiters.toFixed(1) + ' L';
+
+            // Atualizar alerta de saldo negativo
+            const balanceAlert = document.getElementById('balance-alert');
+            balanceAlert.classList.toggle('hidden', balance >= 0);
+
+            // Calcular e mostrar crescimento
+            const prevMonth = getPreviousMonthData(currentMonth);
+            const kmGrowth = calculatePercentage(totalKm, prevMonth.km);
+
+            document.getElementById('km-growth').innerText = `${kmGrowth}%`;
+
+            // Atualizar gráfico
+            renderChart(currentMonth);
+
+            // Atualizar top despesas
+            renderTopExpenses(monthTrans);
+
+            // Atualizar transações recentes
+            renderRecentTransactions();
+        }
+
+        function getPreviousMonthData(currentMonth) {
+            const [year, month] = currentMonth.split('-').map(Number);
+            let prevYear = year;
+            let prevMonth = month - 1;
+
+            if (prevMonth === 0) {
+                prevMonth = 12;
+                prevYear--;
+            }
+
+            const prevMonthStr = `${prevYear}-${prevMonth.toString().padStart(2, '0')}`;
+            const prevTrans = db.transactions.filter(t => t.date.startsWith(prevMonthStr));
+
+            return {
+                km: prevTrans.reduce((sum, t) => sum + (Number(t.km) || 0), 0)
+            };
+        }
+
+        function renderChart(month) {
+            const chartArea = document.getElementById('chart-area');
+            const transactions = db.transactions.filter(t => t.date.startsWith(month));
+
+            // Preparar dados dos últimos 7 dias
+            const daysData = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const ds = d.toISOString().split('T')[0];
+                const dayTrans = transactions.filter(t => t.date === ds);
+
+                daysData.push({
+                    label: `${d.getDate()}/${d.getMonth() + 1}`,
+                    income: dayTrans.filter(t => t.type === 'income').reduce((a, b) => a + b.amount, 0),
+                    expense: dayTrans.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0)
+                });
+            }
+
+            const maxValue = Math.max(...daysData.map(d => Math.max(d.income, d.expense)), 100);
+
+            let chartHTML = '';
+            daysData.forEach(day => {
+                const incomeHeight = (day.income / maxValue) * 100;
+                const expenseHeight = (day.expense / maxValue) * 100;
+
+                chartHTML += `
+                    <div class="bar-group">
+                        <div class="bar-wrapper">
+                            <div class="bar bg-green-500" 
+                                 style="height:${incomeHeight}%"
+                                 data-value="${fmtMoney(day.income)}"></div>
+                            <div class="bar bg-red-500" 
+                                 style="height:${expenseHeight}%"
+                                 data-value="${fmtMoney(day.expense)}"></div>
+                        </div>
+                        <div class="x-label">${day.label}</div>
+                    </div>
+                `;
+            });
+
+            chartArea.innerHTML = chartHTML || '<p class="text-gray-400 text-sm">Sem dados para exibir</p>';
+        }
+
+        function renderTopExpenses(transactions) {
+            const expenseMap = {};
+
+            transactions.filter(t => t.type === 'expense').forEach(t => {
+                const cat = db.categories.find(c => c.id === t.catId);
+                const catName = cat ? cat.name : 'Geral';
+                expenseMap[catName] = (expenseMap[catName] || 0) + t.amount;
+            });
+
+            const topExpenses = Object.entries(expenseMap)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+
+            const container = document.getElementById('top-expenses');
+
+            if (topExpenses.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-sm text-center">Sem gastos este mês</p>';
+                return;
+            }
+
+            const maxExpense = topExpenses[0]?.[1] || 1;
+
+            container.innerHTML = topExpenses.map(([name, value]) => `
+                <div class="space-y-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-medium text-gray-700">${name}</span>
+                        <span class="text-sm font-bold text-red-600">${fmtMoney(value)}</span>
+                    </div>
+                    <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                        <div class="bg-red-400 h-full transition-all duration-500" 
+                             style="width: ${(value / maxExpense) * 100}%"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderRecentTransactions() {
+            const container = document.getElementById('recent-transactions');
+            const recent = db.transactions
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 5);
+
+            if (recent.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-sm text-center">Nenhuma transação recente</p>';
+                return;
+            }
+
+            container.innerHTML = recent.map(t => {
+                const cat = db.categories.find(c => c.id === t.catId);
+                const kmInfo = t.km ? `• ${t.km} km` : '';
+                const litersInfo = t.liters ? `• ${t.liters} L` : '';
+                return `
+                    <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg border border-gray-100">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full ${t.type === 'income' ? 'bg-green-100' : 'bg-red-100'} flex items-center justify-center mr-3">
+                                <i data-lucide="${t.type === 'income' ? 'arrow-down-right' : 'arrow-up-right'}" 
+                                   class="w-4 h-4 ${t.type === 'income' ? 'text-green-600' : 'text-red-600'}"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">${t.desc}</p>
+                                <p class="text-xs text-gray-500">${fmtDate(t.date)} • ${cat?.name || 'Geral'} ${kmInfo} ${litersInfo}</p>
+                            </div>
+                        </div>
+                        <span class="text-sm font-bold ${t.type === 'income' ? 'text-green-600' : 'text-red-600'}">
+                            ${t.type === 'income' ? '+' : '-'}${fmtMoney(t.amount)}
+                        </span>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // TRANSAÇÕES
+        function renderTransactions() {
+            const term = document.getElementById('search-term').value.toLowerCase();
+            const filter = document.getElementById('filter-type').value;
+            const start = document.getElementById('filter-start').value;
+            const end = document.getElementById('filter-end').value;
+
+            // Filtrar transações
+            let filtered = db.transactions.filter(t => {
+                const matchesTerm = t.desc.toLowerCase().includes(term);
+                const matchesType = filter === 'all' || t.type === filter;
+                const matchesDate = (!start || t.date >= start) && (!end || t.date <= end);
+
+                return matchesTerm && matchesType && matchesDate;
+            });
+
+            // Ordenar por data (mais recente primeiro)
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            const emptyMsg = document.getElementById('empty-msg');
+            const table = document.querySelector('#view-transactions table');
+
+            if (filtered.length === 0) {
+                document.getElementById('trans-table-body').innerHTML = '';
+                const mobileContainer = document.getElementById('trans-cards-mobile');
+                if (mobileContainer) mobileContainer.innerHTML = '';
+
+                emptyMsg.classList.remove('hidden');
+                table.classList.add('hide');
+                updateFilterSummary([]);
+                return;
+            }
+
+            emptyMsg.classList.add('hidden');
+
+            // Renderizar de acordo com a largura da tela
+            if (window.innerWidth < 640) {
+                renderTransactionsMobile(filtered);
+            } else {
+                renderTransactionsDesktop(filtered);
+            }
+
+            lucide.createIcons();
+            updateFilterSummary(filtered);
+        }
+
+        function renderTransactionsDesktop(filtered) {
+            const table = document.querySelector('#view-transactions table');
+            const tbody = document.getElementById('trans-table-body');
+            const mobileContainer = document.getElementById('trans-cards-mobile');
+
+            table.classList.remove('hide');
+            if (mobileContainer) mobileContainer.classList.add('hidden');
+
+            tbody.innerHTML = filtered.map(t => {
+                const cat = db.categories.find(c => c.id === t.catId);
+                const isIncome = t.type === 'income';
+                const kmInfo = t.km ? `<div class="text-xs text-blue-600">${t.km} km</div>` : '';
+                const litersInfo = t.liters ? `<div class="text-xs text-orange-600">${t.liters} L</div>` : '';
+
+                return `
+                    <tr class="hover:bg-gray-50 group border-b border-gray-100">
+                        <td class="px-6 py-4 text-gray-500 whitespace-nowrap">${fmtDate(t.date)}</td>
+                        <td class="px-6 py-4">
+                            <div class="font-medium text-gray-800">${t.desc}</div>
+                            ${litersInfo}
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" 
+                                  style="background:${cat?.color || '#6B7280'}20; color:${cat?.color || '#6B7280'}">
+                                ${cat?.name || 'Geral'}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            ${kmInfo}
+                        </td>
+                        <td class="px-6 py-4 text-right font-bold ${isIncome ? 'text-green-600' : 'text-red-600'}">
+                            ${isIncome ? '+' : '-'} ${fmtMoney(t.amount)}
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="editTransaction('${t.id}')" 
+                                        class="text-gray-400 hover:text-blue-500 transition-colors"
+                                        title="Editar">
+                                    <i data-lucide="edit" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="deleteTransaction('${t.id}')" 
+                                        class="text-gray-400 hover:text-red-500 transition-colors"
+                                        title="Excluir">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderTransactionsMobile(filtered) {
+            const table = document.querySelector('#view-transactions table');
+            let mobileContainer = document.getElementById('trans-cards-mobile');
+
+            table.classList.add('hide');
+
+            if (!mobileContainer) {
+                mobileContainer = document.createElement('div');
+                mobileContainer.id = 'trans-cards-mobile';
+                mobileContainer.className = 'space-y-3 p-1';
+                table.parentNode.insertBefore(mobileContainer, table.nextSibling);
+            }
+
+            mobileContainer.classList.remove('hidden');
+
+            mobileContainer.innerHTML = filtered.map(t => {
+                const cat = db.categories.find(c => c.id === t.catId);
+                const isIncome = t.type === 'income';
+                return `
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 ${isIncome ? 'border-green-500' : 'border-red-500'} active:scale-95 transition-transform" onclick="editTransaction('${t.id}')">
+                        <div class="flex justify-between items-start mb-1">
+                            <div>
+                                <h4 class="font-bold text-gray-800">${t.desc}</h4>
+                                <p class="text-[10px] text-gray-400 uppercase font-bold">${fmtDate(t.date)} • ${cat?.name || 'Geral'}</p>
+                            </div>
+                            <span class="font-bold ${isIncome ? 'text-green-600' : 'text-red-600'}">
+                                ${isIncome ? '+' : '-'}${fmtMoney(t.amount)}
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center mt-2 pt-2 border-t border-gray-50">
+                            <div class="flex gap-4">
+                                <span class="text-xs text-gray-500 flex items-center gap-1">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i> ${t.km || 0} km
+                                </span>
+                                ${t.liters ? `
+                                <span class="text-xs text-orange-500 flex items-center gap-1">
+                                    <i data-lucide="fuel" class="w-3 h-3"></i> ${t.liters} L
+                                </span>
+                                ` : ''}
+                            </div>
+                            <div class="flex gap-3">
+                                <button onclick="event.stopPropagation(); deleteTransaction('${t.id}')" class="text-red-400 p-1">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateFilterSummary(transactions) {
+            const income = transactions.filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const expense = transactions.filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const balance = income - expense;
+
+            document.getElementById('filter-income').textContent = fmtMoney(income);
+            document.getElementById('filter-expense').textContent = fmtMoney(expense);
+            document.getElementById('filter-balance').textContent = fmtMoney(balance);
+        }
+
+        function clearFilters() {
+            const firstDay = new Date();
+            firstDay.setDate(1);
+            const firstDayStr = firstDay.toISOString().split('T')[0];
+            const today = new Date().toISOString().split('T')[0];
+
+            document.getElementById('search-term').value = '';
+            document.getElementById('filter-type').value = 'all';
+            document.getElementById('filter-start').value = firstDayStr;
+            document.getElementById('filter-end').value = today;
+
+            renderTransactions();
+        }
+
+        // MODAIS E FORMULÁRIOS
+        function openTransactionModal(transaction = null) {
+            renderCatOptions();
+
+            const modal = document.getElementById('transactionModal');
+            const title = modal.querySelector('h3');
+            const form = modal.querySelector('form');
+
+            if (transaction) {
+                // Modo edição
+                title.textContent = 'Editar Lançamento';
+                document.getElementById('t-id').value = transaction.id;
+                document.querySelector(`input[name="t-type"][value="${transaction.type}"]`).checked = true;
+                document.getElementById('t-amount').value = transaction.amount;
+                document.getElementById('t-desc').value = transaction.desc;
+                document.getElementById('t-cat').value = transaction.catId;
+                document.getElementById('t-km').value = transaction.km || '';
+                document.getElementById('t-date').value = transaction.date;
+
+                // Verificar se é combustível
+                const cat = db.categories.find(c => c.id === transaction.catId);
+                if (cat && (cat.name.toLowerCase().includes('combust') ||
+                    cat.name.toLowerCase().includes('gasolina') ||
+                    cat.name.toLowerCase().includes('etanol'))) {
+                    document.getElementById('fuel-field').classList.remove('hidden');
+                    document.getElementById('t-liters').value = transaction.liters || '';
+                }
+            } else {
+                // Modo criação
+                title.textContent = 'Novo Lançamento';
+                form.reset();
+                document.getElementById('t-id').value = '';
+                document.getElementById('t-date').value = new Date().toISOString().split('T')[0];
+                document.querySelector('input[name="t-type"][value="expense"]').checked = true;
+                document.getElementById('fuel-field').classList.add('hidden');
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function openClosingModal() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayTrans = db.transactions.filter(t => t.date === today);
+
+            const income = todayTrans.filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const expense = todayTrans.filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const km = todayTrans.reduce((sum, t) => sum + (Number(t.km) || 0), 0);
+            const balance = income - expense;
+
+            document.getElementById('close-inc').textContent = fmtMoney(income);
+            document.getElementById('close-exp').textContent = fmtMoney(expense);
+            document.getElementById('close-km').textContent = km.toFixed(1) + ' km';
+            document.getElementById('close-bal').textContent = fmtMoney(balance);
+            document.getElementById('close-date').textContent = fmtDate(today);
+            document.getElementById('close-time').textContent = new Date().toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            document.getElementById('closingModal').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function checkFuel(select) {
+            const txt = select.options[select.selectedIndex].text.toLowerCase();
+            const field = document.getElementById('fuel-field');
+            if (txt.includes('combust') || txt.includes('gasolina') || txt.includes('etanol')) {
+                field.classList.remove('hidden');
+            } else {
+                field.classList.add('hidden');
+            }
+        }
+
+        function renderCatOptions() {
+            const type = document.querySelector('input[name="t-type"]:checked')?.value || 'expense';
+            const select = document.getElementById('t-cat');
+
+            const filteredCats = db.categories.filter(c => c.type === type);
+
+            select.innerHTML = filteredCats.map(c =>
+                `<option value="${c.id}">${c.name}</option>`
+            ).join('');
+        }
+
+        // CRUD TRANSAÇÕES
+        function submitTransaction(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('t-id').value;
+            const type = document.querySelector('input[name="t-type"]:checked').value;
+            const amount = parseFloat(document.getElementById('t-amount').value);
+            const desc = document.getElementById('t-desc').value.trim();
+            const catId = document.getElementById('t-cat').value;
+            const km = document.getElementById('t-km').value ? parseFloat(document.getElementById('t-km').value) : 0;
+            const date = document.getElementById('t-date').value;
+            const liters = document.getElementById('t-liters').value ? parseFloat(document.getElementById('t-liters').value) : 0;
+
+            if (!desc || !amount || amount <= 0) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            const transaction = {
+                id: id || getID(),
+                type,
+                amount,
+                desc,
+                catId,
+                km,
+                date,
+                liters
+            };
+
+            if (id) {
+                // Editar transação existente
+                const index = db.transactions.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    db.transactions[index] = transaction;
+                }
+            } else {
+                // Adicionar nova transação
+                db.transactions.push(transaction);
+            }
+
+            save();
+            closeModal('transactionModal');
+
+            // Resetar formulário
+            e.target.reset();
+            document.getElementById('t-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('fuel-field').classList.add('hidden');
+
+            // Atualizar views
+            if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                renderDashboard();
+            }
+            if (document.getElementById('view-transactions').classList.contains('hide') === false) {
+                renderTransactions();
+            }
+
+            showNotification('Lançamento salvo com sucesso!', 'success');
+        }
+
+        function editTransaction(id) {
+            const transaction = db.transactions.find(t => t.id === id);
+            if (transaction) {
+                openTransactionModal(transaction);
+            }
+        }
+
+        function deleteTransaction(id) {
+            if (confirm('Tem certeza que deseja excluir este lançamento?')) {
+                db.transactions = db.transactions.filter(t => t.id !== id);
+                save();
+
+                // Atualizar views
+                if (document.getElementById('view-dashboard').classList.contains('hide') === false) {
+                    renderDashboard();
+                }
+                if (document.getElementById('view-transactions').classList.contains('hide') === false) {
+                    renderTransactions();
+                }
+
+                showNotification('Lançamento excluído com sucesso!', 'success');
+            }
+        }
+
+        // RELATÓRIOS
+        function generateReport() {
+            const start = document.getElementById('rep-start').value;
+            const end = document.getElementById('rep-end').value;
+
+            if (!start || !end) {
+                alert('Por favor, selecione um período.');
+                return;
+            }
+
+            const transactions = db.transactions.filter(t => t.date >= start && t.date <= end);
+            const income = transactions.filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const expense = transactions.filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const km = transactions.reduce((sum, t) => sum + (Number(t.km) || 0), 0);
+            const balance = income - expense;
+
+            document.getElementById('rep-inc').textContent = fmtMoney(income);
+            document.getElementById('rep-exp').textContent = fmtMoney(expense);
+            document.getElementById('rep-bal').textContent = fmtMoney(balance);
+            document.getElementById('rep-km').textContent = km.toFixed(1) + ' km';
+
+            // Gerar análise por categoria
+            renderCategoryReport(transactions);
+
+            document.getElementById('report-result').classList.remove('hide');
+        }
+
+        function generateFullReport() {
+            // Configurar período do mês atual
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+
+            document.getElementById('rep-start').value = firstDay.toISOString().split('T')[0];
+            document.getElementById('rep-end').value = today.toISOString().split('T')[0];
+
+            generateReport();
+        }
+
+        function renderCategoryReport(transactions) {
+            const categoryMap = {};
+
+            transactions.forEach(t => {
+                const cat = db.categories.find(c => c.id === t.catId);
+                const catName = cat ? cat.name : 'Geral';
+                const catType = cat ? cat.type : t.type;
+
+                if (!categoryMap[catName]) {
+                    categoryMap[catName] = {
+                        income: 0,
+                        expense: 0,
+                        color: cat?.color || '#6B7280',
+                        type: catType
+                    };
+                }
+
+                if (t.type === 'income') {
+                    categoryMap[catName].income += t.amount;
+                } else {
+                    categoryMap[catName].expense += t.amount;
+                }
+            });
+
+            const container = document.getElementById('category-report');
+            const sortedCategories = Object.entries(categoryMap)
+                .sort((a, b) => (b[1].income + b[1].expense) - (a[1].income + a[1].expense));
+
+            if (sortedCategories.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center">Sem dados para o período selecionado</p>';
+                return;
+            }
+
+            container.innerHTML = sortedCategories.map(([name, data]) => {
+                const total = data.income + data.expense;
+                const percentage = total > 0 ? Math.round((total / (data.type === 'income' ?
+                    sortedCategories.reduce((sum, [_, d]) => sum + d.income, 0) :
+                    sortedCategories.reduce((sum, [_, d]) => sum + d.expense, 0)) * 100)) : 0;
+
+                return `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full mr-3" style="background:${data.color}"></div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">${name}</p>
+                                <p class="text-xs text-gray-500">${data.type === 'income' ? 'Ganho' : 'Gasto'}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-bold ${data.type === 'income' ? 'text-green-600' : 'text-red-600'}">
+                                ${data.type === 'income' ? '+' : '-'}${fmtMoney(total)}
+                            </p>
+                            <p class="text-xs text-gray-500">${percentage}% do total</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // EXPORTAÇÃO E COMPARTILHAMENTO
+        function exportCSV() {
+            const headers = ['Data', 'Descrição', 'Categoria', 'Tipo', 'KM', 'Litros', 'Valor'];
+            const rows = db.transactions.map(t => {
+                const cat = db.categories.find(c => c.id === t.catId);
+                return [
+                    fmtDate(t.date),
+                    `"${t.desc}"`,
+                    cat?.name || 'Geral',
+                    t.type === 'income' ? 'Ganho' : 'Gasto',
+                    t.km || '0',
+                    t.liters || '0',
+                    t.amount.toFixed(2).replace('.', ',')
+                ];
+            });
+
+            const csv = [headers, ...rows].map(row => row.join(';')).join('\n');
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+
+            a.href = url;
+            a.download = `corridas_plena_${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+
+            URL.revokeObjectURL(url);
+            showNotification('CSV exportado com sucesso!', 'success');
+        }
+
+        function shareReport() {
+            const start = document.getElementById('rep-start').value;
+            const end = document.getElementById('rep-end').value;
+            const income = document.getElementById('rep-inc').textContent;
+            const expense = document.getElementById('rep-exp').textContent;
+            const balance = document.getElementById('rep-bal').textContent;
+            const km = document.getElementById('rep-km').textContent;
+
+            const message = `*🚖 Relatório de Desempenho - Plena Driver*%0A%0A` +
+                `*Período:* ${fmtDate(start)} à ${fmtDate(end)}%0A%0A` +
+                `✅ *Ganhos:* ${income}%0A` +
+                `🔻 *Gastos:* ${expense}%0A` +
+                `🛣 *KM Rodados:* ${km}%0A` +
+                `💰 *Lucro Líquido:* ${balance}%0A%0A` +
+                `_Gerado em ${new Date().toLocaleDateString('pt-BR')}_`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function shareClosing() {
+            const today = new Date().toISOString().split('T')[0];
+            const income = document.getElementById('close-inc').textContent;
+            const expense = document.getElementById('close-exp').textContent;
+            const balance = document.getElementById('close-bal').textContent;
+            const km = document.getElementById('close-km').textContent;
+
+            const message = `*🏁 Fechamento do Dia - Driver*%0A%0A` +
+                `*Data:* ${fmtDate(today)}%0A` +
+                `*Hora:* ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}%0A%0A` +
+                `✅ *Ganhos:* ${income}%0A` +
+                `🔻 *Gastos:* ${expense}%0A` +
+                `🛣 *KM Rodado:* ${km}%0A` +
+                `💰 *Lucro do Dia:* ${balance}%0A%0A` +
+                `_Plena Driver - Controle para Motoristas_`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function printReport() {
+            const printContent = document.getElementById('report-result').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = `
+                <div style="padding: 20px; font-family: sans-serif;">
+                    <h1 style="text-align: center; color: #F59E0B;">Relatório de Desempenho</h1>
+                    <div style="margin: 20px 0;">${printContent}</div>
+                    <p style="text-align: center; color: #666; font-size: 12px; margin-top: 30px;">
+                        Gerado por Plena Driver • ${new Date().toLocaleDateString('pt-BR')}
+                    </p>
+                </div>
+            `;
+
+            window.print();
+            document.body.innerHTML = originalContent;
+            router('reports');
+        }
+
+        function printTransactions() {
+            const printContent = document.getElementById('view-transactions').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = `
+                <div style="padding: 20px; font-family: sans-serif;">
+                    <h1 style="text-align: center; color: #F59E0B;">Corridas e Gastos</h1>
+                    <div style="margin: 20px 0;">${printContent}</div>
+                    <p style="text-align: center; color: #666; font-size: 12px; margin-top: 30px;">
+                        Gerado por Plena Driver • ${new Date().toLocaleDateString('pt-BR')}
+                    </p>
+                </div>
+            `;
+
+            window.print();
+            document.body.innerHTML = originalContent;
+            router('transactions');
+        }
+
+        function printClosing() {
+            const printContent = document.getElementById('closingModal').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = `
+                <div style="padding: 20px; font-family: sans-serif;">
+                    <h1 style="text-align: center; color: #F59E0B;">Fechamento do Dia</h1>
+                    <div style="margin: 20px 0;">${printContent}</div>
+                    <p style="text-align: center; color: #666; font-size: 12px; margin-top: 30px;">
+                        Gerado por Plena Driver • ${new Date().toLocaleDateString('pt-BR')}
+                    </p>
+                </div>
+            `;
+
+            window.print();
+            document.body.innerHTML = originalContent;
+        }
+
+        // CONFIGURAÇÕES
+        function toggleCatForm() {
+            const formBox = document.getElementById('cat-form-box');
+            formBox.classList.toggle('hidden');
+
+            if (!formBox.classList.contains('hidden')) {
+                document.getElementById('new-cat-name').focus();
+            }
+        }
+
+        function renderCats() {
+            const container = document.getElementById('cat-list');
+
+            if (db.categories.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-sm text-center">Nenhuma categoria cadastrada</p>';
+                return;
+            }
+
+            container.innerHTML = db.categories.map(cat => `
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 rounded-full mr-3" style="background:${cat.color}"></div>
+                        <div>
+                            <span class="text-sm font-medium text-gray-800">${cat.name}</span>
+                            <span class="text-xs ${cat.type === 'income' ? 'text-green-600' : 'text-red-600'} ml-2">
+                                ${cat.type === 'income' ? 'Ganho' : 'Gasto'}
+                            </span>
+                        </div>
+                    </div>
+                    <button onclick="deleteCategory('${cat.id}')" 
+                            class="text-gray-400 hover:text-red-500 transition-colors">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        function addCategory() {
+            const name = document.getElementById('new-cat-name').value.trim();
+            const type = document.getElementById('new-cat-type').value;
+            const color = document.getElementById('new-cat-color').value;
+
+            if (!name) {
+                alert('Por favor, insira um nome para a categoria.');
+                return;
+            }
+
+            // Verificar se já existe categoria com mesmo nome e tipo
+            const exists = db.categories.some(c =>
+                c.name.toLowerCase() === name.toLowerCase() && c.type === type
+            );
+
+            if (exists) {
+                alert('Já existe uma categoria com este nome e tipo.');
+                return;
+            }
+
+            db.categories.push({
+                id: getID(),
+                name,
+                type,
+                color
+            });
+
+            save();
+            renderCats();
+            toggleCatForm();
+
+            // Limpar formulário
+            document.getElementById('new-cat-name').value = '';
+            document.getElementById('new-cat-color').value = '#F59E0B';
+
+            showNotification('Categoria adicionada com sucesso!', 'success');
+        }
+
+        function deleteCategory(id) {
+            if (confirm('Tem certeza que deseja excluir esta categoria? Transações associadas serão movidas para "Geral".')) {
+                // Mover transações para categoria "Geral"
+                db.transactions = db.transactions.map(t => {
+                    if (t.catId === id) {
+                        return { ...t, catId: '' };
+                    }
+                    return t;
+                });
+
+                // Remover categoria
+                db.categories = db.categories.filter(c => c.id !== id);
+
+                save();
+                renderCats();
+                showNotification('Categoria removida com sucesso!', 'success');
+            }
+        }
+
+        // BACKUP E RESTAURAÇÃO
+        function downloadBackup() {
+            const backupData = {
+                ...db,
+                exportedAt: new Date().toISOString(),
+                version: 'plena_driver_v2'
+            };
+
+            const dataStr = JSON.stringify(backupData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+            const exportFileName = `plena_driver_backup_${new Date().toISOString().slice(0, 10)}.json`;
+
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileName);
+            linkElement.click();
+
+            showNotification('Backup baixado com sucesso!', 'success');
+        }
+
+        function restoreBackup(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const backup = JSON.parse(e.target.result);
+
+                    // Validar backup
+                    if (!backup.transactions || !backup.categories) {
+                        throw new Error('Arquivo de backup inválido');
+                    }
+
+                    if (confirm('Restaurar backup substituirá todos os dados atuais. Tem certeza?')) {
+                        db = backup;
+                        save();
+                        location.reload();
+                    }
+                } catch (error) {
+                    alert('Erro ao restaurar backup: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function syncToCloud() {
+            const button = document.getElementById('sync-button');
+            const originalText = button.innerHTML;
+
+            button.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Sincronizando...';
+            button.disabled = true;
+
+            // Simular sincronização (em produção, isso se conectaria a uma API)
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.disabled = false;
+                showNotification('Sincronização simulada com sucesso!', 'success');
+            }, 1500);
+        }
+
+        function clearAllTransactions() {
+            if (confirm('Tem certeza que deseja limpar TODOS os lançamentos? Esta ação é irreversível!')) {
+                db.transactions = [];
+                save();
+                renderDashboard();
+                renderTransactions();
+                showNotification('Todos os lançamentos foram removidos!', 'success');
+            }
+        }
+
+        function factoryReset() {
+            if (confirm('ATENÇÃO: Isso resetará TODO o sistema para as configurações de fábrica. Todos os dados serão perdidos. Tem certeza?')) {
+                localStorage.removeItem(DB_KEY);
+                location.reload();
+            }
+        }
+
+        // UTILITÁRIOS GERAIS
+        function updateDataStatus() {
+            const total = db.transactions.length;
+            const income = db.transactions.filter(t => t.type === 'income').length;
+            const expense = db.transactions.filter(t => t.type === 'expense').length;
+
+            console.log(`Dados atualizados: ${total} lançamentos (${income} ganhos, ${expense} gastos)`);
+        }
+
+        function showNotification(message, type = 'info') {
+            // Criar elemento de notificação
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                    'bg-blue-500 text-white'
+                }`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}" 
+                       class="w-5 h-5 mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+            lucide.createIcons();
+
+            // Remover após 3 segundos
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // MANUAL FUNCTIONS - PADRONIZAÇÃO PLENA
+        function scrollToSection(sectionId) {
+            const el = document.getElementById(sectionId);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function markSectionComplete(id) {
+            const completed = JSON.parse(localStorage.getItem('driver-tutorial-completed') || '[]');
+            if (!completed.includes(id)) {
+                completed.push(id);
+                localStorage.setItem('driver-tutorial-completed', JSON.stringify(completed));
+                updateTutorialProgress();
+                showNotification('Seção concluída!', 'success');
+            }
+        }
+
+        function updateTutorialProgress() {
+            const sections = ['instalacao', 'config', 'gestao', 'relatorios', 'backup', 'faq', 'checklist'];
+            const completed = JSON.parse(localStorage.getItem('driver-tutorial-completed') || '[]');
+            const progress = (completed.length / sections.length) * 100;
+
+            const progressBar = document.getElementById('tutorial-progress');
+            const completedSteps = document.getElementById('completed-steps');
+
+            if (progressBar) progressBar.style.width = `${progress}%`;
+            if (completedSteps) completedSteps.textContent = `${completed.length}/${sections.length} etapas`;
+        }
+
+        function updateChecklist() {
+            const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+            const total = checkboxes.length;
+            const checked = document.querySelectorAll('#checklist input[type="checkbox"]:checked').length;
+            const percent = Math.round((checked / total) * 100);
+
+            const percentEl = document.getElementById('checklist-percent');
+            const progressEl = document.getElementById('checklist-progress');
+            const completedEl = document.getElementById('checklist-completed');
+            const totalEl = document.getElementById('checklist-total');
+
+            if (percentEl) percentEl.textContent = `${percent}%`;
+            if (progressEl) progressEl.style.width = `${percent}%`;
+            if (completedEl) completedEl.textContent = checked;
+            if (totalEl) totalEl.textContent = total;
+
+            // Visual style update
+            checkboxes.forEach(cb => {
+                const item = cb.closest('.checklist-item');
+                if (cb.checked) {
+                    item.classList.add('bg-orange-50', 'border-plena-orange');
+                    item.classList.remove('border-gray-200');
+                } else {
+                    item.classList.remove('bg-orange-50', 'border-plena-orange');
+                    item.classList.add('border-gray-200');
+                }
+            });
+
+            // Save state
+            const state = {};
+            checkboxes.forEach(cb => state[cb.id] = cb.checked);
+            localStorage.setItem('driver-checklist-state', JSON.stringify(state));
+        }
+
+        function resetChecklist() {
+            if (confirm('Deseja reiniciar seu checklist diário?')) {
+                localStorage.removeItem('driver-checklist-state');
+                document.querySelectorAll('#checklist input[type="checkbox"]').forEach(cb => cb.checked = false);
+                updateChecklist();
+                showNotification('Checklist reiniciado', 'info');
+            }
+        }
+
+        function loadChecklistState() {
+            const state = JSON.parse(localStorage.getItem('driver-checklist-state') || '{}');
+            Object.keys(state).forEach(id => {
+                const cb = document.getElementById(id);
+                if (cb) cb.checked = state[id];
+            });
+            updateChecklist();
+        }
+
+        // PWA INSTALL PROMPT
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Mostrar botão de instalação
+            const installButton = document.createElement('button');
+            installButton.className = 'fixed bottom-4 right-4 bg-plena-orange text-black px-4 py-2 rounded-lg shadow-lg z-40';
+            installButton.innerHTML = '<i data-lucide="download" class="w-4 h-4 inline mr-2"></i>Instalar App';
+            installButton.onclick = () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(() => {
+                    deferredPrompt = null;
+                    installButton.remove();
+                });
+            };
+
+            document.body.appendChild(installButton);
+            lucide.createIcons();
+        });
+
+        // OFFLINE SUPPORT
+        window.addEventListener('online', () => {
+            showNotification('Conexão restaurada!', 'success');
+        });
+
+        window.addEventListener('offline', () => {
+            showNotification('Modo offline ativado. Seus dados estão seguros localmente.', 'warning');
+        });
+
+        // SECURITY: BRAND INTEGRITY LOCK (mantido do original)
+        setInterval(() => {
+            const footer = document.querySelector('.sidebar .border-t');
+            if (footer) {
+                const text = footer.innerText || "";
+                if (!text.includes('Plena')) {
+                    document.body.innerHTML = `
+                        <div style="height:100vh;background:#1a1a1a;color:#ef4444;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:sans-serif;padding:20px;">
+                            <h1 style="font-size:2rem;margin-bottom:20px;font-weight:bold;">⚠️ VIOLAÇÃO DE SEGURANÇA</h1>
+                            <p style="font-size:1.2rem;">A assinatura digital deste software foi modificada ilegalmente.</p>
+                            <p style="margin-top:20px;color:white;font-size:0.9rem;">Entre em contato com o suporte oficial: tecnologia@plenaaplicativos.com.br</p>
+                            <p style="margin-top:10px;color:#666;font-size:0.8rem;">Error Code: INTEGRITY_CHECK_FAILED</p>
+                        </div>
+                    `;
+                    throw new Error("PIRACY DETECTED");
+                }
+            }
+        }, 8000);
+
+        // INICIALIZAR APLICATIVO
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+    <script>
+        // CONTEXT AWARENESS FOR IFRAMES
+        if (window.self !== window.top) {
+            document.body.classList.add('in-iframe');
+        }
+    </script>
+</body>
+
+</html>

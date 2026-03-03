@@ -1,0 +1,2774 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <script src="lock.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Gestão Motorista | Sistema Premium</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#10b981">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => { console.log('SW: Ativo ✅'); })
+                    .catch(err => { console.log('SW: Erro ❌', err); });
+            });
+        }
+    </script>
+
+    <!-- INTER FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS & Lucide Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <!-- TAILWIND CONFIG (Dark Mode + Brand) -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            orange: '#F59E0B',
+                            dark: '#B45309',
+                            black: '#111827',
+                            surface: '#ffffff',
+                            glass: 'rgba(245, 158, 11, 0.15)',
+                            glassDark: 'rgba(245, 158, 11, 0.25)'
+                        },
+                        gray: {
+                            850: '#1f2937',
+                            900: '#111827',
+                            950: '#0b0f19'
+                        }
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
+                        'nav': '0 -4px 20px rgba(0,0,0,0.1)',
+                        'float': '0 8px 25px rgba(245, 158, 11, 0.5)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* BASE & TYPOGRAPHY */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6;
+            -webkit-tap-highlight-color: transparent;
+            padding-bottom: 90px;
+            overscroll-behavior-y: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .dark body {
+            background-color: #111827;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        /* GLASSMORPHISM UTILITIES */
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .dark .glass {
+            background: rgba(17, 24, 39, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark .glass-card {
+            background: rgba(31, 41, 55, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        /* UTILS */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .fade-view {
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* BOTTOM SHEET */
+        .bottom-sheet {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(100%);
+            will-change: transform;
+            z-index: 50;
+            box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .bottom-sheet.open {
+            transform: translateY(0);
+        }
+
+
+
+        /* TOAST */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 90%;
+            max-width: 350px;
+        }
+
+        .toast {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 14px 18px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .dark .toast {
+            background: rgba(31, 41, 55, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success i {
+            color: #10B981;
+        }
+
+        .toast.error i {
+            color: #EF4444;
+        }
+
+        .toast.info i {
+            color: #3B82F6;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 antialiased select-none">
+
+    <!-- TELA DE ATIVAÇÃO (Airlock) -->
+    <section id="view-login"
+        class="hide fixed inset-0 z-[9999] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
+        <div class="w-full max-w-md">
+            <div class="text-center mb-8">
+                <div
+                    class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-2xl mb-4 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                        stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z" />
+                        <path d="M15 3v4a2 2 0 0 0 2 2h4" />
+                        <path d="m9 15 2 2 4-4" />
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-black text-white tracking-tight">Gestão <span
+                        class="text-emerald-400">Motorista</span></h1>
+                <p class="text-slate-400 text-sm mt-2">Sistema Premium</p>
+            </div>
+            <form id="activation-form" onsubmit="activateLicense(event)"
+                class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl space-y-5">
+                <h3 class="text-lg font-bold text-white text-center mb-2">Ativação de Licença</h3>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Chave de
+                        Licença</label>
+                    <input type="text" id="license-key" required placeholder="XXXX-XXXX-XXXX-XXXX"
+                        class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white placeholder-slate-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all text-center tracking-widest font-mono text-lg uppercase">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">E-mail do
+                        Comprador</label>
+                    <input type="email" id="license-email" required placeholder="seu@email.com"
+                        class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white placeholder-slate-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all">
+                </div>
+                <button type="submit" id="btn-activate"
+                    class="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-emerald-900/30 transition-all transform hover:scale-[1.02] active:scale-95">
+                    Ativar Sistema
+                </button>
+                <p id="activation-error" class="text-red-400 text-sm text-center hidden"></p>
+            </form>
+            <p class="text-center text-slate-500 text-xs mt-6">Licença Vitalícia • Uso Offline</p>
+        </div>
+    </section>
+
+
+    <!-- THEME MANAGER -->
+    <script>
+        const themeManager = {
+            init() {
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                    this.updateIcon(true);
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    this.updateIcon(false);
+                }
+            },
+            toggle() {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                this.updateIcon(isDark);
+            },
+            updateIcon(isDark) {
+                const icon = document.getElementById('theme-icon');
+                if (icon) {
+                    icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+                    lucide.createIcons();
+                }
+            }
+        };
+        // Run init after a small delay to ensure Lucide is ready
+        window.addEventListener('load', () => {
+            setTimeout(() => themeManager.init(), 100);
+        });
+    </script>
+
+    <!-- HEADER FIXO (Glassmorphism) -->
+    <header
+        class="fixed top-0 left-0 right-0 h-[calc(4rem+env(safe-area-inset-top))] pt-[env(safe-area-inset-top)] glass z-40 flex items-center justify-between px-4 transition-all duration-300">
+        <div class="flex items-center gap-3">
+            <div
+                class="w-10 h-10 bg-brand-orange text-white rounded-xl flex items-center justify-center shadow-lg shadow-brand-orange/30">
+                <i data-lucide="car-taxi-front" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h1 class="font-extrabold text-gray-900 dark:text-white leading-tight tracking-tight text-lg"
+                    id="header-title">Dashboard</h1>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3 sm:gap-4">
+            <!-- Global Shift Status -->
+            <div id="global-shift-status"></div>
+
+            <!-- Install Button (PWA) -->
+            <button id="install-btn"
+                class="hidden relative flex items-center px-3 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-200 active:scale-95"
+                onclick="installApp()">
+                <i data-lucide="download" class="w-4 h-4 mr-1.5"></i>
+                <span class="hidden xs:inline">Instalar App</span>
+                <span class="xs:hidden">Instalar</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="mt-16 px-4 py-2 min-h-screen">
+
+        <!-- VIEW: DASHBOARD -->
+        <div id="view-dashboard" class="fade-view">
+
+            <!-- DAILY SNAPSHOT CARD -->
+            <div
+                class="bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-2xl p-6 text-white mb-6 shadow-float relative overflow-hidden transition-transform active:scale-[0.99]">
+                <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black z-0"></div>
+                <div
+                    class="absolute top-0 right-0 w-40 h-40 bg-brand-orange opacity-10 rounded-full blur-3xl -mr-16 -mt-16 z-0">
+                </div>
+
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Lucro Líquido (Hoje)</p>
+                        <div id="dash-trend"
+                            class="text-xs font-bold text-green-400 bg-white/5 backdrop-blur-md px-2 py-0.5 rounded-lg border border-white/10 flex items-center gap-1">
+                            <i data-lucide="trending-up" class="w-3 h-3"></i> 0%
+                        </div>
+                    </div>
+
+                    <h2 class="text-5xl font-black text-white tracking-tighter mb-6" id="dash-balance">R$ 0,00</h2>
+
+                    <div class="grid grid-cols-2 gap-4 border-t border-white/10 pt-4">
+                        <div>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Faturamento</p>
+                            <p class="font-bold text-green-400 text-lg" id="dash-income">R$ 0,00</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Custos</p>
+                            <p class="font-bold text-red-400 text-lg" id="dash-expense">R$ 0,00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GOAL PROGRESS -->
+            <div class="glass-card p-4 mb-6 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i data-lucide="target" class="w-12 h-12 text-brand-orange"></i>
+                </div>
+                <div class="relative z-10">
+                    <div class="flex justify-between items-end mb-2">
+                        <div>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Meta Diária</p>
+                            <p class="font-bold text-gray-800 dark:text-white text-lg"><span id="goal-current">R$
+                                    0</span> <span class="text-gray-400 text-xs font-normal">de</span> <span
+                                    id="goal-target" class="text-gray-500 text-sm">R$ 300</span></p>
+                        </div>
+                        <p class="text-xs font-bold text-brand-orange" id="goal-percent">0%</p>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden shadow-inner">
+                        <div id="goal-bar"
+                            class="bg-gradient-to-r from-orange-400 to-brand-orange h-2.5 rounded-full transition-all duration-1000 ease-out relative"
+                            style="width: 0%">
+                            <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-gray-400 mt-2 text-center font-medium" id="goal-msg">Vamos lá! O dia está
+                        apenas começando.</p>
+                </div>
+            </div>
+
+            <!-- KM & EFFICIENCY -->
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="glass-card p-4 flex flex-col justify-between h-28">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center mb-2">
+                        <i data-lucide="map" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase">KM Rodado</p>
+                        <p class="text-xl font-bold text-gray-900 dark:text-white" id="dash-km">0 km</p>
+                    </div>
+                </div>
+                <div class="glass-card p-4 flex flex-col justify-between h-28">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-yellow-500/10 text-yellow-500 flex items-center justify-center mb-2">
+                        <i data-lucide="gauge" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase">R$ / KM</p>
+                        <p class="text-xl font-bold text-gray-900 dark:text-white" id="dash-efficiency">R$ 0,00</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MAINTENANCE ALERT (Dynamic) -->
+            <div id="maintenance-alert"
+                class="hidden glass-card p-4 mb-6 border-l-4 border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20">
+                <div class="flex items-start gap-3">
+                    <div class="p-2 bg-yellow-100 dark:bg-yellow-800 rounded-lg text-yellow-600 dark:text-yellow-400">
+                        <i data-lucide="wrench" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 dark:text-gray-100">Manutenção Próxima</h4>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mt-1" id="maint-msg">Troca de óleo em breve.
+                        </p>
+                        <button onclick="openTransactionModal()"
+                            class="text-[10px] font-bold text-yellow-600 dark:text-yellow-500 mt-2 uppercase tracking-wide">
+                            Registrar Manutenção
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RECENT TRANSACTIONS HEADER -->
+            <div class="flex items-center justify-between mb-4 px-1">
+                <h3 class="font-bold text-gray-800 dark:text-white text-lg">Atividades Recentes</h3>
+                <button onclick="router('transactions')"
+                    class="text-xs text-brand-orange font-bold uppercase tracking-wider hover:text-brand-dark transition-colors">Ver
+                    Extrato</button>
+            </div>
+
+            <div id="dash-list" class="space-y-3 pb-4">
+                <!-- JS populated -->
+            </div>
+        </div>
+
+        <!-- VIEW: TRANSACTIONS (LIST) -->
+        <div id="view-transactions" class="hidden fade-view pb-24">
+            <!-- Filter Bar -->
+            <div class="glass-card p-2 mb-4 sticky top-4 z-10 grid grid-cols-3 gap-1 mx-1">
+                <button onclick="filterTransactions('all')"
+                    class="filter-btn active px-3 py-2.5 rounded-lg text-xs font-bold text-center transition-all bg-brand-orange text-white shadow-lg"
+                    data-filter="all">Todos</button>
+                <button onclick="filterTransactions('income')"
+                    class="filter-btn px-3 py-2.5 rounded-lg text-xs font-bold text-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-all"
+                    data-filter="income">Ganhos</button>
+                <button onclick="filterTransactions('expense')"
+                    class="filter-btn px-3 py-2.5 rounded-lg text-xs font-bold text-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-all"
+                    data-filter="expense">Gastos</button>
+            </div>
+
+            <div id="transactions-list" class="space-y-3 px-1"></div>
+        </div>
+
+        <!-- VIEW: REPORTS -->
+        <div id="view-reports" class="hidden fade-view">
+            <div class="glass-card p-6 mb-6">
+                <h3 class="font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-2">
+                    <i data-lucide="calendar" class="w-4 h-4 text-brand-orange"></i> Resumo Mensal
+                </h3>
+                <div class="space-y-4">
+                    <div
+                        class="flex justify-between items-center p-4 bg-green-500/10 rounded-xl border border-green-500/10">
+                        <span class="text-sm text-gray-600 dark:text-gray-300">Total Ganhos</span>
+                        <span class="font-bold text-green-500" id="rep-income">R$ 0,00</span>
+                    </div>
+                    <div
+                        class="flex justify-between items-center p-4 bg-red-500/10 rounded-xl border border-red-500/10">
+                        <span class="text-sm text-gray-600 dark:text-gray-300">Total Gastos</span>
+                        <span class="font-bold text-red-500" id="rep-expense">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <span class="font-bold text-gray-800 dark:text-white">Saldo Final</span>
+                        <span class="font-bold text-2xl text-blue-500" id="rep-balance">R$ 0,00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHART WEEKLY -->
+            <div class="glass-card p-6 mb-6">
+                <h3 class="font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+                    <i data-lucide="bar-chart-2" class="w-4 h-4 text-brand-orange"></i> Performance Semanal
+                </h3>
+                <div class="flex items-end justify-between h-32 gap-2 mt-4" id="report-chart">
+                    <!-- Bars injected by JS -->
+                </div>
+                <div class="flex justify-between mt-2 text-[10px] text-gray-400 font-bold uppercase" id="report-labels">
+                    <!-- Labels injected by JS -->
+                </div>
+            </div>
+
+            <h3 class="font-bold text-gray-800 dark:text-white mb-4 px-2">Top Despesas</h3>
+            <div id="top-expenses-list" class="space-y-3 mb-8 px-1"></div>
+
+            <button onclick="shareReport()"
+                class="w-full bg-[#25D366] text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 mb-24 shadow-lg active:scale-95 transition-transform">
+                <i data-lucide="share-2" class="w-5 h-5"></i> Compartilhar no WhatsApp
+            </button>
+        </div>
+
+
+        <!-- VIEW: CUSTOMERS (CRM) -->
+        <div id="view-customers" class="hidden fade-view pb-24">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-2xl font-black text-gray-900 dark:text-white">Seus Clientes</h2>
+                    <p class="text-xs text-gray-500 uppercase tracking-widest font-bold">Base VIP Particular</p>
+                </div>
+                <button onclick="openCustomerModal()"
+                    class="w-12 h-12 bg-brand-orange text-white rounded-2xl flex items-center justify-center shadow-float active:scale-90 transition-transform">
+                    <i data-lucide="user-plus" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <div class="glass-card p-2 mb-6 flex items-center gap-3">
+                <i data-lucide="search" class="w-5 h-5 text-gray-400 ml-2"></i>
+                <input type="text" id="customer-search" oninput="renderCustomers()"
+                    class="flex-1 bg-transparent border-none focus:ring-0 text-sm py-3 text-gray-800 dark:text-white placeholder-gray-400"
+                    placeholder="Buscar por nome ou telefone...">
+            </div>
+
+            <div id="customers-list" class="space-y-4">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- MODAL: CUSTOMER (ADD/EDIT) -->
+        <div id="modal-customer" class="fixed inset-0 z-50 hidden">
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeAllModals()"></div>
+            <div class="absolute bottom-0 left-0 right-0 glass-card rounded-t-[32px] p-6 pb-12 translate-y-full transition-transform duration-300"
+                id="customer-sheet">
+                <div class="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-6"></div>
+
+                <h3 class="text-xl font-black text-gray-900 dark:text-white mb-6" id="customer-modal-title">Novo Cliente
+                </h3>
+
+                <form onsubmit="saveCustomer(event)" class="space-y-4">
+                    <input type="hidden" id="cust-id">
+
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Nome Completo</label>
+                        <input type="text" id="cust-name" required
+                            class="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-2xl p-4 text-gray-900 dark:text-white font-bold placeholder-gray-300 focus:ring-2 focus:ring-brand-orange/20">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Telefone /
+                                WhatsApp</label>
+                            <input type="tel" id="cust-phone" required
+                                class="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-2xl p-4 text-gray-900 dark:text-white font-bold placeholder-gray-300 focus:ring-2 focus:ring-brand-orange/20">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Categoria</label>
+                            <select id="cust-status"
+                                class="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-2xl p-4 text-gray-900 dark:text-white font-bold focus:ring-2 focus:ring-brand-orange/20">
+                                <option value="ativo">⚡ Ativo</option>
+                                <option value="vip">💎 VIP</option>
+                                <option value="frequente">🏠 Frequente</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Endereço Preferencial</label>
+                        <input type="text" id="cust-address"
+                            class="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-2xl p-4 text-gray-900 dark:text-white font-bold placeholder-gray-300 focus:ring-2 focus:ring-brand-orange/20"
+                            placeholder="Ex: Trabalho, Casa, Academia">
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase ml-1">Notas / Observações</label>
+                        <textarea id="cust-notes"
+                            class="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-2xl p-4 text-gray-900 dark:text-white font-medium placeholder-gray-300 focus:ring-2 focus:ring-brand-orange/20 h-24"
+                            placeholder="O que o motorista deve saber?"></textarea>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-brand-orange text-white py-4 rounded-2xl font-black shadow-float active:scale-95 transition-transform mt-6">
+                        Salvar Cliente
+                    </button>
+
+                    <button type="button" id="btn-del-customer" onclick="deleteCustomer()"
+                        class="w-full text-red-500 font-bold py-3 mt-2 hidden flex items-center justify-center gap-2">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i> Excluir Cliente
+                    </button>
+
+                    <button type="button" onclick="closeAllModals()"
+                        class="w-full text-gray-400 font-bold py-2 mt-2">Cancelar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- VIEW: MENU (SETTINGS) -->
+        <div id="view-menu" class="hidden fade-view pb-24">
+            <div class="glass-card p-4 mb-6 flex items-center gap-4">
+                <div
+                    class="w-14 h-14 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-400 dark:text-gray-300">
+                    <i data-lucide="user" class="w-7 h-7"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-900 dark:text-white text-lg">Motorista</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Perfil Local</p>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <button onclick="themeManager.toggle()"
+                    class="w-full glass-card p-4 flex items-center justify-between active:bg-gray-50 dark:active:bg-gray-700/50 transition-colors group">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i id="theme-icon" data-lucide="moon" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-gray-700 dark:text-gray-200">Aparência</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 dark:text-gray-600"></i>
+                </button>
+
+                <button onclick="router('profile')"
+                    class="w-full glass-card p-4 flex items-center justify-between active:bg-gray-50 dark:active:bg-gray-700/50 transition-colors group">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-gray-500/10 text-gray-600 dark:text-gray-300 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i data-lucide="user-circle" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-gray-700 dark:text-gray-200">Meu Perfil</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 dark:text-gray-600"></i>
+                </button>
+                <button onclick="router('reports')"
+                    class="w-full glass-card p-4 flex items-center justify-between active:bg-gray-50 dark:active:bg-gray-700/50 transition-colors group">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-green-500/10 text-green-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-gray-700 dark:text-gray-200">Relatórios Financeiros</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 dark:text-gray-600"></i>
+                </button>
+                <button onclick="openGoalModal()"
+                    class="w-full glass-card p-4 flex items-center justify-between active:bg-gray-50 dark:active:bg-gray-700/50 transition-colors group">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i data-lucide="target" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-gray-700 dark:text-gray-200">Definir Meta Diária</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 dark:text-gray-600"></i>
+                </button>
+                <button onclick="router('instructions')"
+                    class="w-full glass-card p-4 flex items-center justify-between active:bg-gray-50 dark:active:bg-gray-700/50 transition-colors group">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i data-lucide="book-open" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-gray-700 dark:text-gray-200">Manual de Uso</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 dark:text-gray-600"></i>
+                </button>
+
+                <button onclick="downloadBackup()"
+                    class="w-full glass-card p-4 flex items-center justify-between active:bg-gray-50 dark:active:bg-gray-700/50 transition-colors group">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-gray-500/10 text-gray-600 dark:text-gray-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-gray-700 dark:text-gray-200">Backup dos Dados</span>
+                    </div>
+                </button>
+
+                <button onclick="openClosingModal()"
+                    class="w-full glass-card p-4 flex items-center justify-between active:bg-gray-50 dark:active:bg-gray-700/50 transition-colors group">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-green-500/10 text-green-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i data-lucide="check-circle" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-gray-700 dark:text-gray-200">Fechar Dia</span>
+                    </div>
+                </button>
+
+                <div class="relative">
+                    <button
+                        class="w-full glass-card p-4 flex items-center justify-between active:bg-gray-50 dark:active:bg-gray-700/50 transition-colors group">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-orange-500/10 text-brand-orange flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <i data-lucide="upload" class="w-5 h-5"></i>
+                            </div>
+                            <span class="font-bold text-gray-700 dark:text-gray-200">Restaurar Backup</span>
+                        </div>
+                    </button>
+                    <input type="file" onchange="restoreBackup(this)" accept=".json"
+                        class="absolute inset-0 opacity-0 cursor-pointer">
+                </div>
+            </div>
+
+            <div class="mt-12 text-center">
+                <p class="text-xs text-gray-400">Gestão Motorista v4.5 Mobile</p>
+                <button onclick="factoryReset()" class="text-[10px] text-red-400 hover:text-red-500 mt-2 p-2">Resetar
+                    App</button>
+            </div>
+        </div>
+
+        <!-- VIEW: PROFILE -->
+        <div id="view-profile" class="hidden fade-view pb-24">
+            <button onclick="router('menu')"
+                class="mb-3 text-gray-400 dark:text-gray-500 flex items-center gap-1.5 font-bold text-sm">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar</button>
+
+            <div class="glass-card p-6">
+                <!-- PHOTO UPLOAD -->
+                <div class="flex flex-col items-center mb-8">
+                    <div class="relative group cursor-pointer"
+                        onclick="document.getElementById('profile-upload').click()">
+                        <div id="profile-preview"
+                            class="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden border-4 border-white dark:border-gray-800 shadow-xl">
+                            <i data-lucide="camera" class="w-8 h-8 text-gray-400"></i>
+                        </div>
+                        <div class="absolute bottom-0 right-0 bg-brand-orange text-white p-2 rounded-full shadow-lg">
+                            <i data-lucide="edit-2" class="w-3 h-3"></i>
+                        </div>
+                        <input type="file" id="profile-upload" accept="image/*" class="hidden"
+                            onchange="handlePhotoUpload(this)">
+                    </div>
+                    <p class="text-xs text-gray-400 mt-3 font-medium">Toque para alterar a foto</p>
+                </div>
+
+                <!-- FORM -->
+                <form onsubmit="saveProfile(event)" class="space-y-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">Nome
+                            Completo</label>
+                        <input type="text" id="prof-name"
+                            class="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-xl p-3 font-bold text-gray-800 dark:text-white focus:ring-2 focus:ring-brand-orange/50 transition-all"
+                            placeholder="Seu nome">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label
+                                class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">Celular</label>
+                            <input type="tel" id="prof-phone"
+                                class="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-xl p-3 font-bold text-gray-800 dark:text-white"
+                                placeholder="(00) 00000-0000">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">Chave
+                                PIX</label>
+                            <input type="text" id="prof-pix"
+                                class="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-xl p-3 font-bold text-gray-800 dark:text-white"
+                                placeholder="CPF/Email...">
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-100 dark:border-gray-800">
+                        <h4 class="font-bold text-red-500 text-sm mb-3 flex items-center gap-2"><i
+                                data-lucide="heart-pulse" class="w-4 h-4"></i> Em Caso de Emergência</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">Nome
+                                    do Contato</label>
+                                <input type="text" id="prof-emergency-name"
+                                    class="w-full bg-red-50 dark:bg-red-900/10 border-none rounded-xl p-3 font-bold text-gray-800 dark:text-white"
+                                    placeholder="Nome (Ex: Esposa, Mãe)">
+                            </div>
+                            <div>
+                                <label
+                                    class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">Telefone
+                                    de Emergência</label>
+                                <input type="tel" id="prof-emergency-phone"
+                                    class="w-full bg-red-50 dark:bg-red-900/10 border-none rounded-xl p-3 font-bold text-gray-800 dark:text-white"
+                                    placeholder="(00) 00000-0000">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-brand-orange text-white py-4 rounded-xl font-bold shadow-lg active:scale-95 transition-transform mt-6">
+                        Salvar Perfil
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- VIEW: INSTRUCTIONS (Professional Manual) -->
+        <div id="view-instructions" class="hidden fade-view pb-24">
+            <button onclick="router('menu')"
+                class="mb-3 text-gray-400 dark:text-gray-500 flex items-center gap-1.5 font-bold text-sm">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar</button>
+
+            <div class="glass-card p-6">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Manual do Motorista</h2>
+
+                <div class="space-y-4">
+                    <!-- 1. Segurança & Backup -->
+                    <details
+                        class="group bg-yellow-50 dark:bg-yellow-900/10 rounded-xl border border-yellow-100 dark:border-yellow-900/30 overflow-hidden cursor-pointer"
+                        open>
+                        <summary
+                            class="flex justify-between items-center p-4 font-bold text-yellow-800 dark:text-yellow-200 list-none">
+                            <span class="flex items-center gap-2"><i data-lucide="shield-alert" class="w-5 h-5"></i>
+                                Segurança de Dados</span>
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 transition-transform group-open:rotate-180"></i>
+                        </summary>
+                        <div
+                            class="p-4 pt-0 text-sm text-gray-600 dark:text-gray-300 space-y-3 border-t border-yellow-100 dark:border-yellow-900/30 mt-2">
+                            <p><strong>ATENÇÃO:</strong> Seus dados ficam salvos <u>apenas neste celular</u>. Se você
+                                perder o aparelho, limpar o cache ou formatar, <strong class="text-red-500">perderá
+                                    tudo</strong>.</p>
+                            <div class="bg-white dark:bg-black/20 p-3 rounded-lg">
+                                <p class="font-bold mb-1">🛡️ Como proteger seus dados:</p>
+                                <ol class="list-decimal pl-4 space-y-1">
+                                    <li>Vá no <strong>Menu</strong> > <strong>Backup dos Dados</strong>.</li>
+                                    <li>Salve o arquivo gerado no seu Google Drive ou envie para você mesmo no WhatsApp.
+                                    </li>
+                                    <li>Repita isso <strong>toda semana</strong>!</li>
+                                </ol>
+                            </div>
+                            <button onclick="downloadBackup()"
+                                class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 rounded-xl mt-2 shadow-sm transition-colors flex items-center justify-center gap-2">
+                                <i data-lucide="download" class="w-4 h-4"></i> Fazer Backup Agora
+                            </button>
+                        </div>
+                    </details>
+
+                    <!-- 2. Rotina Diária -->
+                    <details
+                        class="group bg-blue-50 dark:bg-blue-900/10 rounded-xl border border-blue-100 dark:border-blue-900/30 overflow-hidden cursor-pointer">
+                        <summary
+                            class="flex justify-between items-center p-4 font-bold text-blue-800 dark:text-blue-200 list-none">
+                            <span class="flex items-center gap-2"><i data-lucide="sun" class="w-5 h-5"></i> Rotina
+                                Diária</span>
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 transition-transform group-open:rotate-180"></i>
+                        </summary>
+                        <div
+                            class="p-4 pt-0 text-sm text-gray-600 dark:text-gray-300 space-y-3 border-t border-blue-100 dark:border-blue-900/30 mt-2">
+                            <ul class="space-y-3">
+                                <li class="flex gap-2">
+                                    <span
+                                        class="bg-blue-100 dark:bg-blue-800 text-blue-600 dark:text-blue-200 rounded p-1 w-6 h-6 flex items-center justify-center text-xs font-bold">1</span>
+                                    <span><strong>Iniciar o Dia:</strong> Defina sua Meta Diária no painel tocando na
+                                        barra de progresso.</span>
+                                </li>
+                                <li class="flex gap-2">
+                                    <span
+                                        class="bg-blue-100 dark:bg-blue-800 text-blue-600 dark:text-blue-200 rounded p-1 w-6 h-6 flex items-center justify-center text-xs font-bold">2</span>
+                                    <span><strong>Lançamentos:</strong> Use o botão <strong>+</strong> para registrar
+                                        cada corrida (Ganho) ou abastecimento (Gasto). Informe o KM para calcular seu
+                                        custo por km.</span>
+                                </li>
+                                <li class="flex gap-2">
+                                    <span
+                                        class="bg-blue-100 dark:bg-blue-800 text-blue-600 dark:text-blue-200 rounded p-1 w-6 h-6 flex items-center justify-center text-xs font-bold">3</span>
+                                    <span><strong>Encerrar:</strong> Toque em "Fechar Dia" no Menu. O app gera um resumo
+                                        para você compartilhar no WhatsApp e zera o caixa visualmente.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <!-- 3. Novas Funções V5 -->
+                    <details
+                        class="group bg-purple-50 dark:bg-purple-900/10 rounded-xl border border-purple-100 dark:border-purple-900/30 overflow-hidden cursor-pointer">
+                        <summary
+                            class="flex justify-between items-center p-4 font-bold text-purple-800 dark:text-purple-200 list-none">
+                            <span class="flex items-center gap-2"><i data-lucide="star" class="w-5 h-5"></i> Novidades
+                                V5.0</span>
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 transition-transform group-open:rotate-180"></i>
+                        </summary>
+                        <div
+                            class="p-4 pt-0 text-sm text-gray-600 dark:text-gray-300 space-y-3 border-t border-purple-100 dark:border-purple-900/30 mt-2">
+                            <p><strong>👤 Perfil:</strong> Configure sua foto, chave PIX e contatos de emergência no
+                                Menu > Meu Perfil.</p>
+                            <p><strong>🔧 Alerta de Manutenção:</strong> O sistema avisa quando faltar 1.000km para
+                                trocar o óleo (baseado nos seus lançamentos de despesa "Manutenção").</p>
+                            <p><strong>📊 Relatórios VIP:</strong> Na aba Relatórios, veja gráficos semanais e exporte
+                                um resumo detalhado para o WhatsApp com um clique.</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: CALCULATOR -->
+        <div id="view-calculator" class="hidden fade-view pb-24">
+            <button onclick="router('dashboard')"
+                class="mb-4 text-gray-400 dark:text-gray-500 flex items-center gap-1.5 font-bold text-sm">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i> Voltar
+            </button>
+
+            <div class="glass-card p-5 sm:p-6">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-5 flex items-center gap-2">
+                    <i data-lucide="map" class="w-5 h-5 text-blue-500"></i> Calculadora e GPS
+                </h2>
+
+                <div
+                    class="bg-blue-50 dark:bg-blue-900/10 p-4 rounded-2xl border border-blue-100 dark:border-blue-800 mb-5 text-center">
+                    <label
+                        class="text-[10px] font-bold text-blue-600 dark:text-blue-300 uppercase tracking-widest mb-3 block">Preço
+                        por KM</label>
+                    <div
+                        class="flex items-center justify-center bg-white dark:bg-gray-800 rounded-xl p-1 shadow-sm border border-blue-100 dark:border-gray-700">
+                        <button onclick="adjustPrice(-0.1)"
+                            class="w-10 h-10 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg flex items-center justify-center font-bold text-xl text-gray-400 transition-colors">-</button>
+                        <div class="flex-1 px-2 flex items-center justify-center gap-1">
+                            <span class="text-gray-400 dark:text-gray-500 font-bold text-lg">R$</span>
+                            <input type="number" id="calc-price-km" value="2.50" step="0.10"
+                                class="w-16 text-center bg-transparent border-none font-black text-2xl text-gray-800 dark:text-white focus:ring-0 p-0"
+                                onchange="calculateTrip()">
+                        </div>
+                        <button onclick="adjustPrice(0.1)"
+                            class="w-10 h-10 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg flex items-center justify-center font-bold text-xl text-gray-400 transition-colors">+</button>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">Destino
+                            (GPS)</label>
+                        <input type="text" id="calc-dest"
+                            class="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-xl p-4 font-bold text-gray-800 dark:text-white"
+                            placeholder="Ex: Aeroporto de Guarulhos">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">Distância
+                                (KM)</label>
+                            <input type="number" id="calc-km"
+                                class="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-xl p-4 font-bold text-gray-800 dark:text-white"
+                                placeholder="0" oninput="calculateTrip()">
+                        </div>
+                        <div>
+                            <label
+                                class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">Pedágio/Extra</label>
+                            <input type="number" id="calc-extra"
+                                class="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-xl p-4 font-bold text-gray-800 dark:text-white"
+                                placeholder="0,00" oninput="calculateTrip()">
+                        </div>
+                    </div>
+
+                    <!-- RESULT (Dynamic) -->
+                    <div class="bg-gray-900 dark:bg-black text-white p-4 rounded-2xl shadow-xl mt-2 text-center">
+                        <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Valor Sugerido</p>
+                        <h3 class="text-4xl font-black mt-1 text-green-400" id="calc-total">R$ 0,00</h3>
+                        <div class="flex justify-center mt-4">
+                            <button onclick="copyQuote()"
+                                class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition-colors">
+                                <i data-lucide="copy" class="w-3 h-3"></i> Copiar Orçamento
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ACTIONS -->
+                    <div class="grid grid-cols-2 gap-3 mt-4">
+                        <button onclick="openGPS('waze')"
+                            class="flex items-center justify-center gap-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 py-4 rounded-xl font-bold active:scale-95 transition-transform">
+                            <i data-lucide="navigation" class="w-5 h-5"></i> Waze
+                        </button>
+                        <button onclick="openGPS('maps')"
+                            class="flex items-center justify-center gap-2 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-300 py-4 rounded-xl font-bold active:scale-95 transition-transform">
+                            <i data-lucide="map-pin" class="w-5 h-5"></i> Maps
+                        </button>
+                    </div>
+
+                    <div class="border-t border-gray-100 dark:border-gray-800 pt-4 mt-4">
+                        <p class="text-center text-xs text-gray-400 mb-3">Finalizou a corrida?</p>
+                        <button onclick="saveTrip()"
+                            class="w-full bg-brand-orange text-white py-4 rounded-xl font-bold shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2">
+                            <i data-lucide="check-circle" class="w-5 h-5"></i> Lançar no Caixa agora
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- BOTTOM NAVIGATION (Glassmorphism) -->
+    <nav
+        class="fixed bottom-0 left-0 right-0 glass z-30 flex items-center justify-between px-2 pb-[env(safe-area-inset-bottom)] h-[85px] transition-all duration-300">
+        <button onclick="router('dashboard')"
+            class="nav-btn active flex-1 flex flex-col items-center justify-center gap-1 text-gray-400 dark:text-gray-500 hover:text-brand-orange dark:hover:text-brand-orange transition-colors p-2"
+            id="nav-dashboard">
+            <i data-lucide="car" class="w-6 h-6"></i>
+            <span class="text-[10px] font-medium">Início</span>
+        </button>
+
+        <button onclick="router('transactions')"
+            class="nav-btn flex-1 flex flex-col items-center justify-center gap-1 text-gray-400 dark:text-gray-500 hover:text-brand-orange dark:hover:text-brand-orange transition-colors p-2"
+            id="nav-transactions">
+            <i data-lucide="list" class="w-6 h-6"></i>
+            <span class="text-[10px] font-medium">Corridas</span>
+        </button>
+
+        <!-- FAB (Floating Action Button) -->
+        <div class="relative -top-8 group">
+            <div
+                class="absolute inset-0 bg-brand-orange rounded-full blur-md opacity-40 group-hover:opacity-60 transition-opacity">
+            </div>
+            <button onclick="openTransactionModal()"
+                class="relative w-16 h-16 bg-brand-orange hover:bg-brand-dark rounded-full shadow-2xl flex items-center justify-center text-white active:scale-90 transition-all duration-200 border-4 border-gray-50 dark:border-gray-900">
+                <i data-lucide="plus" class="w-8 h-8"></i>
+            </button>
+        </div>
+
+
+
+        <button onclick="router('customers')"
+            class="nav-btn flex-1 flex flex-col items-center justify-center gap-1 text-gray-400 dark:text-gray-500 hover:text-brand-orange dark:hover:text-brand-orange transition-colors p-2"
+            id="nav-customers">
+            <i data-lucide="users" class="w-6 h-6"></i>
+            <span class="text-[10px] font-medium">Clientes</span>
+        </button>
+
+        <button onclick="router('menu')"
+            class="nav-btn flex-1 flex flex-col items-center justify-center gap-1 text-gray-400 dark:text-gray-500 hover:text-brand-orange dark:hover:text-brand-orange transition-colors p-2"
+            id="nav-menu">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+            <span class="text-[10px] font-medium">Menu</span>
+        </button>
+    </nav>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- OVERLAY -->
+    <div id="overlay" onclick="closeAllModals()"
+        class="fixed inset-0 bg-black/60 z-40 hidden transition-opacity opacity-0 backdrop-blur-sm"></div>
+
+    <!-- TRANSACTION BOTTOM SHEET -->
+    <div id="modal-transaction"
+        class="bottom-sheet fixed bottom-0 left-0 right-0 glass z-50 p-6 h-[85vh] rounded-t-[2rem] overflow-y-auto">
+        <div class="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-8"></div>
+
+        <div class="bg-gray-100 dark:bg-gray-700/50 p-1.5 rounded-2xl flex mb-8">
+            <input type="radio" name="t-type" id="type-inc" value="income" class="hidden segment-input" checked
+                onchange="toggleFuelField()">
+            <label for="type-inc"
+                class="flex-1 py-3 text-center rounded-xl text-sm font-bold text-gray-500 dark:text-gray-400 cursor-pointer transition-all">
+                Ganho (+)
+            </label>
+
+            <input type="radio" name="t-type" id="type-exp" value="expense" class="hidden segment-input"
+                onchange="toggleFuelField()">
+            <label for="type-exp"
+                class="flex-1 py-3 text-center rounded-xl text-sm font-bold text-gray-500 dark:text-gray-400 cursor-pointer transition-all">
+                Gasto (-)
+            </label>
+        </div>
+
+        <form onsubmit="submitTransaction(event)" class="space-y-5">
+            <input type="hidden" id="t-id">
+
+            <!-- Amount Input -->
+            <div class="relative group">
+                <span class="absolute left-4 top-4 text-gray-500 dark:text-gray-400 font-bold text-lg">R$</span>
+                <input type="number" inputmode="decimal" id="t-amount" required
+                    class="w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:border-brand-orange/50 rounded-2xl py-4 pl-12 pr-4 font-black text-3xl text-gray-900 dark:text-white placeholder-gray-300 outline-none transition-all"
+                    placeholder="0,00">
+            </div>
+
+            <input type="text" id="t-desc" required
+                class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600 rounded-xl px-4 py-3.5 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-orange/50 transition-all font-medium"
+                placeholder="Descrição (ex: Uber, Gasolina)">
+
+            <div class="grid grid-cols-2 gap-4">
+                <select id="t-cat" onchange="toggleFuelField()"
+                    class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600 rounded-xl px-4 py-3.5 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-orange/50 transition-all font-medium appearance-none">
+                    <!-- Populated by JS -->
+                </select>
+                <input type="number" inputmode="decimal" id="t-km"
+                    class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600 rounded-xl px-4 py-3.5 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-orange/50 transition-all font-medium"
+                    placeholder="KM (Opcional)">
+            </div>
+
+            <div id="fuel-field" class="hidden animate-fade-in-down">
+                <input type="number" inputmode="decimal" id="t-liters"
+                    class="w-full bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-500/20 rounded-xl p-4 text-orange-800 dark:text-orange-200 font-bold placeholder-orange-300"
+                    placeholder="Litros Abastecidos">
+            </div>
+
+            <!-- New Dynamic Other Campo -->
+            <div id="other-cat-field" class="hidden animate-fade-in-down">
+                <input type="text" id="t-other-name"
+                    class="w-full bg-purple-50 dark:bg-purple-900/10 border border-purple-100 dark:border-purple-500/20 rounded-xl p-4 text-purple-800 dark:text-purple-200 font-bold placeholder-purple-300"
+                    placeholder="Qual outro custo? (Ex: Lava Jato)">
+            </div>
+
+            <input type="date" id="t-date" required
+                class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600 rounded-xl px-4 py-3.5 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-orange/50 transition-all font-medium text-gray-500 dark:text-gray-400">
+
+            <button type="submit"
+                class="w-full bg-brand-black dark:bg-white text-white dark:text-brand-black py-4 rounded-xl font-bold text-lg shadow-lg active:scale-95 transition-transform mt-4">
+                Salvar Lançamento
+            </button>
+
+            <button type="button" id="btn-del-transaction" onclick="deleteTransaction()"
+                class="w-full text-red-500 font-bold py-3 mt-2 hidden flex items-center justify-center gap-2">
+                <i data-lucide="trash-2" class="w-4 h-4"></i> Excluir Lançamento
+            </button>
+        </form>
+    </div>
+
+    <!-- CHOICE MODAL (New Transaction or Trip) -->
+    <div id="modal-choice" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-sm pointer-events-auto transform transition-all scale-95 opacity-0 text-center p-8 space-y-6"
+            id="choice-card">
+            <h3 class="font-bold text-gray-800 dark:text-white text-xl">O que deseja fazer?</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="openTransactionForm()"
+                    class="flex flex-col items-center justify-center gap-3 p-6 bg-green-500/10 hover:bg-green-500/20 rounded-2xl border-2 border-green-500/20 transition-all active:scale-95">
+                    <div
+                        class="w-14 h-14 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg">
+                        <i data-lucide="dollar-sign" class="w-7 h-7"></i>
+                    </div>
+                    <span class="font-bold text-green-700 dark:text-green-400 text-sm">Lançamento<br>Simples</span>
+                </button>
+
+                <button onclick="router('calculator'); closeAllModals()"
+                    class="flex flex-col items-center justify-center gap-3 p-6 bg-blue-500/10 hover:bg-blue-500/20 rounded-2xl border-2 border-blue-500/20 transition-all active:scale-95">
+                    <div
+                        class="w-14 h-14 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg">
+                        <i data-lucide="calculator" class="w-7 h-7"></i>
+                    </div>
+                    <span class="font-bold text-blue-700 dark:text-blue-400 text-sm">Nova<br>Viagem</span>
+                </button>
+            </div>
+            <button onclick="closeAllModals()" class="text-gray-400 text-sm font-bold mt-4">Cancelar</button>
+        </div>
+    </div>
+
+
+    <!-- START DAY MODAL -->
+    <div id="modal-start-day" style="z-index: 99999;"
+        class="fixed inset-0 hidden flex items-center justify-center p-4 min-h-screen">
+        <div class="glass-card w-full max-w-sm pointer-events-auto transform transition-all scale-95 opacity-0 p-6 space-y-4 shadow-2xl bg-white dark:bg-gray-800"
+            id="start-day-card">
+            <h3 class="font-bold text-gray-900 dark:text-white text-xl text-center">Iniciar Dia ☀️</h3>
+
+            <div>
+                <label class="text-xs font-bold text-gray-500 uppercase">KM Inicial</label>
+                <input type="number" id="start-km" placeholder="Ex: 54000" inputmode="decimal"
+                    class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-xl px-4 py-3 text-lg font-bold text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-orange outline-none">
+            </div>
+
+            <div>
+                <label class="text-xs font-bold text-gray-500 uppercase">Saldo Inicial (R$)</label>
+                <input type="number" id="start-balance" placeholder="0.00" inputmode="decimal" step="0.01"
+                    class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-xl px-4 py-3 text-lg font-bold text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-orange outline-none">
+            </div>
+
+            <button onclick="startDay()"
+                class="w-full bg-brand-orange text-white py-3 rounded-xl font-bold shadow-lg shadow-brand-orange/20 active:scale-95 transition-transform">
+                Iniciar Turno
+            </button>
+            <button onclick="closeAllModals()" class="w-full py-3 text-gray-400 font-bold text-sm">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- CLOSING MODAL (Small Dialog) -->
+    <div id="modal-closing" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-sm pointer-events-auto transform transition-all scale-95 opacity-0 overflow-hidden shadow-2xl"
+            id="closing-card">
+            <div class="bg-gray-900 dark:bg-black p-5 text-center">
+                <h3 class="font-bold text-white text-lg">Fechamento do Dia 🌙</h3>
+                <p class="text-xs text-gray-400 mt-1 uppercase tracking-wider" id="close-date">Hoje</p>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <!-- Shift Details -->
+                <div id="shift-details" class="hidden space-y-3 border-b border-gray-100 dark:border-gray-800 pb-4">
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-400 uppercase">KM Final</label>
+                        <input type="number" id="close-km-final" placeholder="Ex: 54200" inputmode="decimal"
+                            onchange="updateClosingSummary()"
+                            class="w-full bg-gray-50 dark:bg-gray-800 border-none rounded-lg px-3 py-2 text-sm font-bold text-gray-900 dark:text-gray-100 focus:ring-1 focus:ring-brand-orange">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div
+                        class="bg-green-50 dark:bg-green-900/20 p-3 rounded-xl border border-green-100 dark:border-green-900/30">
+                        <span class="block text-xs text-green-600 dark:text-green-400 font-bold uppercase">Ganhos</span>
+                        <span class="block text-lg font-black text-green-700 dark:text-green-300" id="close-inc">R$
+                            0,00</span>
+                    </div>
+                    <div
+                        class="bg-red-50 dark:bg-red-900/20 p-3 rounded-xl border border-red-100 dark:border-red-900/30">
+                        <span class="block text-xs text-red-600 dark:text-red-400 font-bold uppercase">Gastos</span>
+                        <span class="block text-lg font-black text-red-700 dark:text-red-300" id="close-exp">R$
+                            0,00</span>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl flex justify-between items-center">
+                    <div>
+                        <span class="block text-xs text-gray-400 font-bold uppercase">KM Rodado</span>
+                        <span class="block text-sm font-bold text-gray-700 dark:text-gray-300" id="close-km">0 km</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="block text-xs text-gray-400 font-bold uppercase">Lucro Líquido</span>
+                        <span class="block text-xl font-black text-gray-900 dark:text-white" id="close-bal">R$
+                            0,00</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-2 pt-2">
+                    <button onclick="shareClosing()"
+                        class="flex-1 bg-[#25D366] text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-green-500/20 active:scale-95 transition-transform">
+                        <i data-lucide="share-2" class="w-4 h-4"></i> WhatsApp
+                    </button>
+                    <button onclick="closeDay()"
+                        class="flex-1 bg-gray-900 dark:bg-white text-white dark:text-black py-3 rounded-xl font-bold shadow-lg active:scale-95 transition-transform">
+                        Fechar Caixa
+                    </button>
+                </div>
+                <button onclick="closeAllModals()"
+                    class="w-full py-2 text-gray-400 text-xs font-bold mt-2">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GOAL MODAL -->
+    <div id="modal-goal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-sm transform transition-all scale-95 opacity-0 overflow-hidden shadow-2xl"
+            id="goal-card">
+            <div class="bg-gray-900 dark:bg-black p-5 text-center">
+                <h3 class="font-bold text-white text-lg">Definir Meta Diária</h3>
+                <p class="text-xs text-gray-400 mt-1 uppercase tracking-wider">Quanto quer lucrar hoje?</p>
+            </div>
+            <form onsubmit="saveGoal(event)" class="p-6 space-y-4">
+                <div class="relative group">
+                    <span class="absolute left-4 top-4 text-gray-500 dark:text-gray-400 font-bold text-lg">R$</span>
+                    <input type="number" inputmode="decimal" id="goal-input" required
+                        class="w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:border-purple-500/50 rounded-2xl py-4 pl-12 pr-4 font-black text-3xl text-gray-900 dark:text-white placeholder-gray-300 outline-none transition-all text-center"
+                        placeholder="300">
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <button type="submit"
+                        class="bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl font-bold text-sm shadow-md active:scale-95 transition-transform">Salvar</button>
+                    <button type="button" onclick="closeAllModals()"
+                        class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white py-3 rounded-xl font-bold text-sm active:scale-95 transition-transform">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- LOGIC -->
+    <script>
+        // --- DATABASE ---
+        const DB_KEY = 'gestao_motorista_v1';
+        const defaultDB = {
+            transactions: [],
+            categories: [
+                { id: '1', name: 'Uber', type: 'income' },
+                { id: '2', name: '99', type: 'income' },
+                { id: '3', name: 'Indriver', type: 'income' },
+                { id: '4', name: 'Particular', type: 'income' },
+                { id: '10', name: 'Outros (Entrada)', type: 'income' },
+                { id: '5', name: 'Combustível', type: 'expense' },
+                { id: '6', name: 'Manutenção', type: 'expense' },
+                { id: '7', name: 'Aluguel Carro', type: 'expense' },
+                { id: '8', name: 'Alimentação', type: 'expense' },
+                { id: '9', name: 'Pedágio/Extras', type: 'expense' },
+                { id: '11', name: 'Outros (Saída)', type: 'expense' }
+            ],
+            customers: [],
+            settings: { name: 'Motorista', goal: 300 }
+        };
+
+        let db = JSON.parse(localStorage.getItem(DB_KEY)) || defaultDB;
+
+        // --- UTILS ---
+        const save = () => localStorage.setItem(DB_KEY, JSON.stringify(db));
+        const fmtMoney = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        const getID = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
+
+        // --- MIGRATION: Ensure categories exist for old users ---
+        function syncCategories() {
+            defaultDB.categories.forEach(defaultCat => {
+                const exists = db.categories.find(c => c.id === defaultCat.id);
+                if (!exists) {
+                    db.categories.push(defaultCat);
+                } else if (exists.name !== defaultCat.name) {
+                    exists.name = defaultCat.name; // Keep naming updated
+                }
+            });
+            save();
+        }
+
+        // --- GLOBAL SHIFT STATUS ---
+        function updateGlobalShiftStatus() {
+            const statusEl = document.getElementById('global-shift-status');
+            if (!statusEl) return;
+            if (db.shift && db.shift.isOpen) {
+                statusEl.innerHTML = '<span class="px-2 py-1 bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-sm"><span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)] animate-pulse"></span> Online</span>';
+            } else {
+                statusEl.innerHTML = '<span class="px-2 py-1 bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-sm"><span class="w-2 h-2 rounded-full bg-red-500"></span> Offline</span>';
+            }
+        }
+        // Redundant top-level call removed. syncCategories() is called in init().
+
+        // --- TOAST NOTIFICATION ---
+        function showToast(msg, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+
+            let icon = 'check-circle';
+            if (type === 'error') icon = 'alert-circle';
+            if (type === 'info') icon = 'info';
+
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i data-lucide="${icon}" class="w-5 h-5"></i>
+                <span class="text-sm font-medium text-gray-800 dark:text-gray-100">${msg}</span>
+            `;
+
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            // Trigger animation
+            requestAnimationFrame(() => {
+                toast.classList.add('show');
+            });
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        // --- PROFILE ---
+        function handlePhotoUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            // Limit size (e.g. 2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                showToast('A foto deve ser menor que 2MB.', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                // Resize image using Canvas to save space
+                const img = new Image();
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    // Max dimension 300px
+                    const maxSize = 300;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > maxSize) {
+                            height *= maxSize / width;
+                            width = maxSize;
+                        }
+                    } else {
+                        if (height > maxSize) {
+                            width *= maxSize / height;
+                            height = maxSize;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+
+                    // Preview
+                    document.getElementById('profile-preview').innerHTML = `<img src="${dataUrl}" class="w-full h-full object-cover">`;
+
+                    // Save to temporary variable (will save to DB on "Salvar Perfil")
+                    // Actually, let's auto-stage it.
+                    if (!db.settings.profile) db.settings.profile = {};
+                    db.settings.profile._tempPhoto = dataUrl;
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveProfile(e) {
+            e.preventDefault();
+            if (!db.settings.profile) db.settings.profile = {};
+
+            db.settings.profile.name = document.getElementById('prof-name').value;
+            db.settings.profile.phone = document.getElementById('prof-phone').value;
+            db.settings.profile.pix = document.getElementById('prof-pix').value;
+            db.settings.profile.emergencyName = document.getElementById('prof-emergency-name').value;
+            db.settings.profile.emergencyPhone = document.getElementById('prof-emergency-phone').value;
+
+            // Commit photo if changed
+            if (db.settings.profile._tempPhoto) {
+                db.settings.profile.photo = db.settings.profile._tempPhoto;
+                delete db.settings.profile._tempPhoto;
+            }
+
+            save();
+            updateMenuProfile();
+            showToast('Perfil atualizado com sucesso!', 'success');
+            router('menu');
+        }
+
+        function updateMenuProfile() {
+            const prof = db.settings.profile || {};
+
+            // Update Menu
+            const menuName = document.querySelector('#view-menu h3');
+            if (menuName) menuName.innerText = prof.name || 'Motorista';
+
+            const menuPhotoContainer = document.querySelector('#view-menu .p-4 .rounded-full');
+            if (menuPhotoContainer) {
+                if (prof.photo) {
+                    menuPhotoContainer.innerHTML = `<img src="${prof.photo}" class="w-full h-full object-cover rounded-full">`;
+                    menuPhotoContainer.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'p-4'); // Remove padding/bg if image
+                } else {
+                    menuPhotoContainer.innerHTML = `<i data-lucide="user" class="w-7 h-7"></i>`;
+                }
+            }
+
+            // Populate Form inputs
+            document.getElementById('prof-name').value = prof.name || '';
+            document.getElementById('prof-phone').value = prof.phone || '';
+            document.getElementById('prof-pix').value = prof.pix || '';
+            document.getElementById('prof-emergency-name').value = prof.emergencyName || '';
+            document.getElementById('prof-emergency-phone').value = prof.emergencyPhone || '';
+
+            // Update Preview in Form
+            const preview = document.getElementById('profile-preview');
+            if (preview && prof.photo) {
+                preview.innerHTML = `<img src="${prof.photo}" class="w-full h-full object-cover">`;
+            }
+            lucide.createIcons();
+        }
+
+        // --- INIT ---
+        function init() {
+            // Check shift existence
+            if (!db.shift) Object.assign(db, { shift: { isOpen: false, startKm: 0, startBalance: 0, startTime: null } });
+
+            syncCategories();
+            updateMenuProfile();
+            updateGlobalShiftStatus();
+            router('dashboard');
+            document.getElementById('t-date').value = new Date().toISOString().split('T')[0];
+
+            // Final icon pass to catch anything missed during initial render
+            setTimeout(() => {
+                lucide.createIcons();
+            }, 500);
+            setTimeout(() => {
+                lucide.createIcons();
+            }, 2000);
+        }
+
+        // --- ROUTER ---
+        function router(viewId) {
+            document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
+
+            const target = document.getElementById(`view-${viewId}`);
+            if (target) {
+                target.classList.remove('hidden');
+                target.classList.add('fade-view');
+            }
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-brand-orange');
+                btn.classList.add('text-gray-400');
+            });
+
+            // If viewing reports, the parent 'menu' tab should be highlighted
+            const highlightId = (viewId === 'reports' || viewId === 'profile' || viewId === 'instructions') ? 'menu' : viewId;
+            const activeBtn = document.getElementById(`nav-${highlightId}`);
+
+            if (activeBtn) {
+                activeBtn.classList.add('text-brand-orange');
+                activeBtn.classList.remove('text-gray-400');
+            }
+
+            if (viewId === 'dashboard') renderDashboard();
+            if (viewId === 'transactions') renderTransactions();
+            if (viewId === 'reports') renderReports();
+            if (viewId === 'customers') renderCustomers();
+
+            // Title Update
+            const titles = {
+                dashboard: 'Dashboard',
+                transactions: 'Histórico',
+                reports: 'Relatórios Mensais',
+                menu: 'Menu Principal',
+                profile: 'Meu Perfil',
+                instructions: 'Manual de Uso',
+                calculator: 'Calculadora',
+                customers: 'Meus Clientes'
+            };
+            document.getElementById('header-title').innerText = titles[viewId] || 'Gestão Motorista';
+
+            // Stabilize icons rendering with multiple passes
+            lucide.createIcons();
+            setTimeout(() => lucide.createIcons(), 100);
+            setTimeout(() => lucide.createIcons(), 500);
+        }
+
+        // --- GOALS ---
+        function openGoalModal() {
+            document.getElementById('goal-input').value = db.settings.goal || 300;
+            document.getElementById('overlay').classList.remove('hidden');
+            document.getElementById('modal-goal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('overlay').classList.remove('opacity-0');
+                document.getElementById('goal-card').classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        }
+
+        function saveGoal(e) {
+            e.preventDefault();
+            const newGoal = parseFloat(document.getElementById('goal-input').value);
+            if (newGoal > 0) {
+                if (!db.settings) db.settings = {};
+                db.settings.goal = newGoal;
+                save();
+                closeAllModals();
+                renderDashboard();
+                showToast('Nova meta definida! 🚀');
+            }
+        }
+
+        // --- DASHBOARD ---
+        function renderDashboard() {
+            const todayStr = new Date().toISOString().split('T')[0];
+            const todayTx = db.transactions.filter(t => t.date === todayStr);
+
+            const inc = todayTx.filter(t => t.type === 'income').reduce((a, b) => a + b.amount, 0);
+            const exp = todayTx.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0);
+            const km = todayTx.reduce((a, b) => a + (b.km || 0), 0);
+
+            document.getElementById('dash-income').innerText = fmtMoney(inc);
+            document.getElementById('dash-expense').innerText = fmtMoney(exp);
+            document.getElementById('dash-balance').innerText = fmtMoney(inc - exp);
+            document.getElementById('dash-km').innerText = km.toFixed(1) + ' km';
+
+            // GOAL LOGIC
+            const profit = inc - exp;
+            const goal = db.settings.goal || 300;
+            const percent = Math.min(100, Math.max(0, Math.round((profit / goal) * 100)));
+
+            document.getElementById('goal-current').innerText = fmtMoney(profit);
+            document.getElementById('goal-target').innerText = fmtMoney(goal);
+            document.getElementById('goal-percent').innerText = percent + '%';
+            document.getElementById('goal-bar').style.width = percent + '%';
+
+            const goalMsg = document.getElementById('goal-msg');
+            if (percent >= 100) {
+                goalMsg.innerText = "Parabéns! Meta batida! 🚀";
+                goalMsg.classList.add('text-green-500', 'font-bold');
+            } else {
+                const remaining = Math.max(0, goal - profit);
+                goalMsg.innerText = `Faltam ${fmtMoney(remaining)} para a meta!`;
+                goalMsg.classList.remove('text-green-500', 'font-bold');
+            }
+
+            // Efficiency (R$/km) - Based on income or profit? Using Profit for reality.
+            const eff = km > 0 ? (inc - exp) / km : 0;
+            document.getElementById('dash-efficiency').innerText = fmtMoney(eff) + '/km';
+
+            // MAINTENANCE LOGIC
+            const maintAlert = document.getElementById('maintenance-alert');
+            const totalKm = km; // km here is only for TODAY. Need global total.
+            const allTx = db.transactions;
+            const globalKm = allTx.reduce((acc, t) => acc + (parseFloat(t.km) || 0), 0);
+
+            const lastMaint = allTx
+                .filter(t => t.catId === '6' || t.desc.toLowerCase().includes('óleo') || t.desc.toLowerCase().includes('revisão'))
+                .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+
+            let kmSince = globalKm;
+            if (lastMaint) {
+                const maintDate = new Date(lastMaint.date);
+                // Calculate KM of transactions AFTER maintenance date
+                kmSince = allTx
+                    .filter(t => new Date(t.date) > maintDate)
+                    .reduce((acc, t) => acc + (parseFloat(t.km) || 0), 0);
+            }
+
+            const limit = 10000;
+            const remaining = limit - kmSince;
+
+            if (remaining <= 1000) {
+                maintAlert.classList.remove('hidden');
+                const msg = document.getElementById('maint-msg');
+                if (remaining <= 0) {
+                    msg.innerText = `Troca de óleo vencida há ${Math.abs(remaining).toFixed(0)} km!`;
+                    maintAlert.classList.remove('border-yellow-500', 'bg-yellow-50', 'dark:bg-yellow-900/20');
+                    maintAlert.classList.add('border-red-500', 'bg-red-50', 'dark:bg-red-900/20');
+                } else {
+                    msg.innerText = `Próxima revisão em ${remaining.toFixed(0)} km.`;
+                    maintAlert.classList.remove('border-red-500', 'bg-red-50', 'dark:bg-red-900/20');
+                    maintAlert.classList.add('border-yellow-500', 'bg-yellow-50', 'dark:bg-yellow-900/20');
+                }
+            } else {
+                maintAlert.classList.add('hidden');
+            }
+
+            // Trend (Simple logic: compared to yesterday same time - placeholder for now)
+            const trendEl = document.getElementById('dash-trend');
+            if (profit > 0) {
+                trendEl.className = 'text-xs font-bold text-green-400 bg-green-400/10 px-2 py-0.5 rounded flex items-center gap-1';
+                trendEl.innerHTML = '<i data-lucide="trending-up" class="w-3 h-3"></i> Positivo';
+            } else {
+                trendEl.className = 'text-xs font-bold text-red-400 bg-red-400/10 px-2 py-0.5 rounded flex items-center gap-1';
+                trendEl.innerHTML = '<i data-lucide="trending-down" class="w-3 h-3"></i> Negativo';
+            }
+
+            // Status de Turno no Cabeçalho (Removido daqui e Centralizado Globalmente)
+            const headerTitle = document.getElementById('header-title');
+            headerTitle.innerText = 'Dashboard';
+
+            // Card de Iniciar/Fechar Turno
+            const dashList = document.getElementById('dash-list');
+            let shiftBtn = document.getElementById('shift-action-btn');
+
+            if (!shiftBtn) {
+                shiftBtn = document.createElement('div');
+                shiftBtn.id = 'shift-action-btn';
+                dashList.parentElement.insertBefore(shiftBtn, dashList);
+            }
+
+            if (db.shift && db.shift.isOpen) {
+                shiftBtn.innerHTML = `
+                    <div onclick="openClosingModal()" class="mb-4 bg-gray-900 dark:bg-gray-800 p-4 rounded-xl flex items-center justify-between shadow-lg cursor-pointer active:scale-95 transition-transform">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-red-500/20 text-red-500 flex items-center justify-center">
+                                <i data-lucide="moon" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white">Fechar Dia</h4>
+                                <p class="text-xs text-gray-400">Finalizar turno e relatório</p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-gray-500"></i>
+                    </div>
+                `;
+            } else {
+                shiftBtn.innerHTML = `
+                    <div onclick="openStartDayModal()" class="mb-4 bg-brand-orange p-4 rounded-xl flex items-center justify-between shadow-lg shadow-brand-orange/20 cursor-pointer active:scale-95 transition-transform">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white/20 text-white flex items-center justify-center">
+                                <i data-lucide="sun" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white">Iniciar Dia</h4>
+                                <p class="text-xs text-brand-orange-50">Registrar KM e saída</p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="text-white"></i>
+                    </div>
+                `;
+            }
+
+            // Recent List
+            const recent = db.transactions.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
+            document.getElementById('dash-list').innerHTML = recent.map(t => createTxCard(t)).join('');
+            lucide.createIcons();
+        }
+
+        function createTxCard(t) {
+            const cat = db.categories.find(c => c.id == t.catId) || { name: 'Geral' };
+            return `
+                <div class="bg-white p-3 rounded-xl shadow-sm flex justify-between items-center border-l-4 ${t.type === 'income' ? 'border-green-500' : 'border-red-500'}">
+                    <div>
+                        <p class="font-bold text-sm text-gray-800">${t.desc}</p>
+                        <p class="text-xs text-gray-500">${new Date(t.date).toLocaleDateString()} • ${cat.name} ${t.km ? '• ' + t.km + 'km' : ''}</p>
+                    </div>
+                    <span class="font-bold text-sm ${t.type === 'income' ? 'text-green-600' : 'text-red-600'}">
+                        ${t.type === 'income' ? '+' : '-'}${fmtMoney(t.amount)}
+                    </span>
+                </div>
+            `;
+        }
+
+        // --- TRANSACTIONS ---
+        let currentFilter = 'all';
+        function renderTransactions() {
+            let list = db.transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+            if (currentFilter !== 'all') {
+                list = list.filter(t => t.type === currentFilter);
+            }
+
+            document.getElementById('transactions-list').innerHTML = list.length ? list.map(t => `
+                <div onclick="editTransaction('${t.id}')" class="cursor-pointer">
+                    ${createTxCard(t)}
+                </div>
+            `).join('') : '<p class="text-center text-gray-400 mt-10">Sem registros.</p>';
+            lucide.createIcons();
+        }
+
+        function filterTransactions(type) {
+            currentFilter = type;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.dataset.filter === type) {
+                    btn.classList.add('bg-gray-100', 'text-black');
+                    btn.classList.remove('text-gray-500');
+                } else {
+                    btn.classList.remove('bg-gray-100', 'text-black');
+                    btn.classList.add('text-gray-500');
+                }
+            });
+            renderTransactions();
+        }
+
+        // --- REPORTS ---
+        function renderReports() {
+            const currentMonth = new Date().toISOString().slice(0, 7);
+            const monthTx = db.transactions.filter(t => t.date.startsWith(currentMonth));
+
+            const inc = monthTx.filter(t => t.type === 'income').reduce((a, b) => a + b.amount, 0);
+            const exp = monthTx.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0);
+
+            document.getElementById('rep-income').innerText = fmtMoney(inc);
+            document.getElementById('rep-expense').innerText = fmtMoney(exp);
+            document.getElementById('rep-balance').innerText = fmtMoney(inc - exp);
+
+            // Top Expenses
+            const expenses = monthTx.filter(t => t.type === 'expense');
+            const catMap = {};
+            expenses.forEach(t => {
+                const cName = (db.categories.find(c => c.id == t.catId) || { name: 'Outros' }).name;
+                catMap[cName] = (catMap[cName] || 0) + t.amount;
+            });
+
+            const sortedExp = Object.entries(catMap).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            document.getElementById('top-expenses-list').innerHTML = sortedExp.map(([name, val]) => `
+                 <div class="flex justify-between items-center p-2 border-b border-gray-100">
+                    <span class="text-sm text-gray-700">${name}</span>
+                    <span class="font-bold text-sm text-gray-900">${fmtMoney(val)}</span>
+                 </div>
+            `).join('');
+            renderChart();
+            lucide.createIcons();
+        }
+
+        function renderChart() {
+            const last7Days = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                last7Days.push(d.toISOString().split('T')[0]);
+            }
+
+            const chartData = last7Days.map(date => {
+                const dailyTx = db.transactions.filter(t => t.date === date);
+                const inc = dailyTx.filter(t => t.type === 'income').reduce((a, b) => a + b.amount, 0);
+                const exp = dailyTx.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0);
+                return { date, profit: inc - exp };
+            });
+
+            const maxVal = Math.max(...chartData.map(d => Math.abs(d.profit)), 1);
+
+            const chartHTML = chartData.map(d => {
+                const h = Math.round((Math.abs(d.profit) / maxVal) * 100);
+                const color = d.profit >= 0 ? 'bg-green-500' : 'bg-red-500';
+                return `
+                    <div class="w-full flex flex-col justify-end items-center group relative h-full" title="${fmtMoney(d.profit)}">
+                       <div class="${color} w-full rounded-t-sm transition-all duration-500 hover:opacity-100 opacity-80" style="height: ${h}%; min-height: 4px;"></div>
+                    </div>
+                `;
+            }).join('');
+
+            const labelsHTML = chartData.map(d => {
+                const day = new Date(d.date + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'narrow' });
+                return `<div class="w-full text-center text-[10px] text-gray-400 font-bold uppercase">${day}</div>`;
+            }).join('');
+
+            const chartEl = document.getElementById('report-chart');
+            const labelsEl = document.getElementById('report-labels');
+
+            if (chartEl) chartEl.innerHTML = chartHTML;
+            if (labelsEl) labelsEl.innerHTML = labelsHTML;
+        }
+
+        // --- FORMS & CALCULATOR ---
+        function openTransactionModal(txId = null) {
+            if (txId) {
+                // Formatting Fix: if editing, skip choice modal
+                openTransactionForm(txId);
+            } else {
+                // Show Choice Modal
+                document.getElementById('overlay').classList.remove('hidden');
+                setTimeout(() => document.getElementById('overlay').classList.remove('opacity-0'), 10);
+                document.getElementById('modal-choice').classList.remove('hidden');
+                setTimeout(() => document.getElementById('choice-card').classList.remove('scale-95', 'opacity-0'), 10);
+            }
+        }
+
+        function openTransactionForm(txId = null) {
+            // Hide choice modal if open
+            if (document.getElementById('modal-choice')) {
+                document.getElementById('modal-choice').classList.add('hidden');
+                document.getElementById('choice-card').classList.add('scale-95', 'opacity-0');
+            }
+
+            document.getElementById('overlay').classList.remove('hidden');
+            setTimeout(() => document.getElementById('overlay').classList.remove('opacity-0'), 10);
+
+            const modal = document.getElementById('modal-transaction');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.add('open'), 10);
+
+            // Populate Categories
+            toggleFuelField(); // Initial render of cats
+
+            const btnDel = document.getElementById('btn-del-transaction');
+            if (btnDel) btnDel.classList.add('hidden');
+
+            if (txId) {
+                // Edit Mode (Handled by editTransaction calling this)
+                if (btnDel) btnDel.classList.remove('hidden');
+            } else {
+                document.getElementById('t-id').value = '';
+                document.getElementById('t-amount').value = '';
+                document.getElementById('t-desc').value = '';
+                document.getElementById('t-km').value = '';
+                document.getElementById('t-liters').value = '';
+                document.getElementById('t-date').value = new Date().toISOString().split('T')[0];
+                // Reset radios
+                if (document.getElementById('type-inc')) document.getElementById('type-inc').checked = true;
+                toggleFuelField();
+            }
+        }
+
+        function openCustomerModal(id = null) {
+            const modal = document.getElementById('modal-customer');
+            const sheet = document.getElementById('customer-sheet');
+            const title = document.getElementById('customer-modal-title');
+            const btnDel = document.getElementById('btn-del-customer');
+
+            // Reset Form
+            document.getElementById('cust-id').value = '';
+            document.getElementById('cust-name').value = '';
+            document.getElementById('cust-phone').value = '';
+            document.getElementById('cust-status').value = 'ativo';
+            document.getElementById('cust-address').value = '';
+            document.getElementById('cust-notes').value = '';
+            if (btnDel) btnDel.classList.add('hidden');
+
+            if (id) {
+                const c = db.customers.find(item => item.id === id);
+                if (c) {
+                    title.innerText = 'Editar Cliente';
+                    document.getElementById('cust-id').value = c.id;
+                    document.getElementById('cust-name').value = c.nome;
+                    document.getElementById('cust-phone').value = c.telefone;
+                    document.getElementById('cust-status').value = c.status || 'ativo';
+                    document.getElementById('cust-address').value = c.endereco || '';
+                    document.getElementById('cust-notes').value = c.notas || '';
+                    if (btnDel) btnDel.classList.remove('hidden');
+                }
+            } else {
+                title.innerText = 'Novo Cliente';
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                sheet.classList.remove('translate-y-full');
+                lucide.createIcons();
+            }, 10);
+        }
+
+        function saveCustomer(e) {
+            e.preventDefault();
+            const id = document.getElementById('cust-id').value;
+            const nome = document.getElementById('cust-name').value;
+            const telefone = document.getElementById('cust-phone').value;
+            const status = document.getElementById('cust-status').value;
+            const endereco = document.getElementById('cust-address').value;
+            const notas = document.getElementById('cust-notes').value;
+
+            if (id) {
+                const idx = db.customers.findIndex(c => c.id === id);
+                db.customers[idx] = { ...db.customers[idx], nome, telefone, status, endereco, notas };
+                showToast('Cliente atualizado!', 'success');
+            } else {
+                db.customers.push({
+                    id: getID(),
+                    nome,
+                    telefone,
+                    status,
+                    endereco,
+                    notas,
+                    total_corridas: 0,
+                    ultima_corrida: null
+                });
+                showToast('Cliente cadastrado!', 'success');
+            }
+
+            save();
+            closeAllModals();
+            renderCustomers();
+        }
+
+        function renderCustomers() {
+            const query = document.getElementById('customer-search').value.toLowerCase();
+            const list = db.customers.filter(c =>
+                c.nome.toLowerCase().includes(query) ||
+                c.telefone.includes(query)
+            ).sort((a, b) => a.nome.localeCompare(b.nome));
+
+            const container = document.getElementById('customers-list');
+            if (!container) return;
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 opacity-50 glass-card">
+                        <i data-lucide="users" class="w-12 h-12 mx-auto mb-3"></i>
+                        <p class="text-sm font-bold uppercase tracking-widest">Nenhum cliente</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = list.map(c => {
+                    const statusColors = {
+                        vip: 'bg-yellow-400 text-yellow-900',
+                        ativo: 'bg-green-400 text-green-900',
+                        frequente: 'bg-blue-400 text-blue-900'
+                    };
+                    const statusLabels = {
+                        vip: '💎 VIP',
+                        ativo: '⚡ Ativo',
+                        frequente: '🏠 Frequente'
+                    };
+
+                    return `
+                        <div class="glass-card p-4 relative group animate-fade-in">
+                            <div class="flex items-center gap-4 mb-3">
+                                <div class="w-12 h-12 rounded-full bg-brand-orange/10 text-brand-orange flex items-center justify-center font-black text-lg">
+                                    ${c.nome.charAt(0).toUpperCase()}
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2">
+                                        <h4 class="font-bold text-gray-900 dark:text-white">${c.nome}</h4>
+                                        <span class="text-[8px] font-black uppercase px-2 py-0.5 rounded-full ${statusColors[c.status] || 'bg-gray-200'}">
+                                            ${statusLabels[c.status] || 'Ativo'}
+                                        </span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 font-medium">${c.telefone}</p>
+                                </div>
+                                <button onclick="openCustomerModal('${c.id}')" class="p-2 text-gray-400 hover:text-brand-orange transition-colors">
+                                    <i data-lucide="edit-3" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+
+                            <div class="flex gap-2 pt-3 border-t border-gray-100 dark:border-gray-800">
+                                <a href="https://wa.me/55${c.telefone.replace(/\D/g, '')}" target="_blank" 
+                                   class="flex-1 flex items-center justify-center gap-2 py-2 bg-[#25D366]/10 text-[#25D366] rounded-xl text-xs font-bold hover:bg-[#25D366]/20 transition-all">
+                                    <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> WhatsApp
+                                </a>
+                                <button onclick="startTripForCustomer('${c.id}')" 
+                                   class="flex-1 flex items-center justify-center gap-2 py-2 bg-brand-orange/10 text-brand-orange rounded-xl text-xs font-bold hover:bg-brand-orange/20 transition-all">
+                                    <i data-lucide="play" class="w-3.5 h-3.5"></i> Iniciar Corrida
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            lucide.createIcons();
+        }
+
+        function deleteCustomer() {
+            const id = document.getElementById('cust-id').value;
+            if (confirm('Tem certeza que deseja excluir este cliente?')) {
+                db.customers = db.customers.filter(c => c.id !== id);
+                save();
+                closeAllModals();
+                renderCustomers();
+                showToast('Cliente removido.', 'info');
+            }
+        }
+
+        function startTripForCustomer(id) {
+            const c = db.customers.find(c => c.id === id);
+            if (c) {
+                router('calculator');
+                document.getElementById('calc-dest').value = c.endereco || '';
+                // Optional: add note about cliente
+                document.getElementById('calc-extra').value = 0;
+                showToast(`Viagem preparada para ${c.nome}`, 'info');
+            }
+        }
+
+        function adjustPrice(delta) {
+            const input = document.getElementById('calc-price-km');
+            let val = parseFloat(input.value) || 0;
+            val = Math.max(0, val + delta);
+            input.value = val.toFixed(2);
+            calculateTrip();
+        }
+
+        function calculateTrip() {
+            const price = parseFloat(document.getElementById('calc-price-km').value) || 0;
+            const km = parseFloat(document.getElementById('calc-km').value) || 0;
+            const extra = parseFloat(document.getElementById('calc-extra').value) || 0;
+
+            const total = (km * price) + extra;
+            document.getElementById('calc-total').innerText = fmtMoney(total);
+        }
+
+        function copyQuote() {
+            const dest = document.getElementById('calc-dest').value || 'Destino';
+            const total = document.getElementById('calc-total').innerText;
+            const km = document.getElementById('calc-km').value;
+
+            const text = `🚗 *Orçamento Particular*%0A📍 Destino: ${dest}%0A📏 Distância: ${km}km%0A💲 *Valor Total: ${total}*`;
+
+            // Copy to clipboard fallback (or open whatsapp directly)
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+
+        function openGPS(app) {
+            const dest = document.getElementById('calc-dest').value;
+            if (!dest) {
+                showToast('Informe o destino!', 'error');
+                return;
+            }
+            const query = encodeURIComponent(dest);
+            if (app === 'waze') window.open(`https://waze.com/ul?q=${query}`, '_blank');
+            if (app === 'maps') window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+        }
+
+        function saveTrip() {
+            const price = parseFloat(document.getElementById('calc-price-km').value) || 0;
+            const km = parseFloat(document.getElementById('calc-km').value) || 0;
+            const extra = parseFloat(document.getElementById('calc-extra').value) || 0;
+            const dest = document.getElementById('calc-dest').value || 'Corrida Particular';
+
+            const amt = (km * price) + extra;
+
+            if (amt <= 0) {
+                showToast('Calcule o valor primeiro.', 'error');
+                return;
+            }
+
+            // 1. Record TOTAL as Income
+            let catInc = db.categories.find(c => c.name === 'Particular' && c.type === 'income');
+            if (!catInc) catInc = db.categories.find(c => c.type === 'income');
+
+            db.transactions.push({
+                id: getID(),
+                type: 'income',
+                amount: amt,
+                desc: dest,
+                catId: catInc.id,
+                km: km,
+                date: new Date().toISOString().split('T')[0]
+            });
+
+            // 2. Record EXTRA as Expense (if any)
+            if (extra > 0) {
+                let catExp = db.categories.find(c => c.name.toLowerCase().includes('pedágio') || c.name.toLowerCase().includes('extra'));
+                if (!catExp) catExp = db.categories.find(c => c.type === 'expense');
+
+                db.transactions.push({
+                    id: getID(),
+                    type: 'expense',
+                    amount: extra,
+                    desc: `Custo Extra: ${dest}`,
+                    catId: catExp.id,
+                    date: new Date().toISOString().split('T')[0]
+                });
+            }
+
+            save();
+            showToast(extra > 0 ? 'Viagem e custos lançados! 💰⬇️' : 'Corrida lançada no caixa! 💰', 'success');
+            renderDashboard();
+            router('dashboard');
+        }
+
+        function toggleFuelField() {
+            const type = document.querySelector('input[name="t-type"]:checked').value;
+            const catSelect = document.getElementById('t-cat');
+            const selectedCatId = catSelect.value;
+
+            // Filter Categories
+            const cats = db.categories.filter(c => c.type === type);
+            catSelect.innerHTML = cats.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+
+            // Restore selection if possible
+            if (selectedCatId) catSelect.value = selectedCatId;
+
+            // Show/Hide Fuel Inputs logic
+            const fuelField = document.getElementById('fuel-field');
+            const otherField = document.getElementById('other-cat-field');
+
+            const selectedCat = db.categories.find(c => c.id === catSelect.value);
+
+            if (fuelField) {
+                if (selectedCat && selectedCat.name === 'Combustível') fuelField.classList.remove('hidden');
+                else fuelField.classList.add('hidden');
+            }
+
+            if (otherField) {
+                if (selectedCat && selectedCat.name.startsWith('Outros')) otherField.classList.remove('hidden');
+                else otherField.classList.add('hidden');
+            }
+        }
+
+        function submitTransaction(e) {
+            e.preventDefault();
+            const id = document.getElementById('t-id').value;
+            const type = document.querySelector('input[name="t-type"]:checked').value;
+            const amt = parseFloat(document.getElementById('t-amount').value);
+            let desc = document.getElementById('t-desc').value;
+            const cat = document.getElementById('t-cat').value;
+            const otherName = document.getElementById('t-other-name').value;
+            const km = document.getElementById('t-km').value ? parseFloat(document.getElementById('t-km').value) : 0;
+            const liters = document.getElementById('t-liters').value ? parseFloat(document.getElementById('t-liters').value) : 0;
+            const date = document.getElementById('t-date').value;
+
+            // If "Outros" is selected, use the custom name as prefix or replacement
+            const selectedCat = db.categories.find(c => c.id === cat);
+            if (selectedCat && selectedCat.name.startsWith('Outros') && otherName) {
+                desc = `${otherName}: ${desc}`;
+            }
+
+            if (id) {
+                const idx = db.transactions.findIndex(t => t.id === id);
+                if (idx !== -1) {
+                    db.transactions[idx] = { ...db.transactions[idx], type, amount: amt, desc, catId: cat, km, liters, date };
+                    showToast('Lançamento atualizado!', 'success');
+                }
+            } else {
+                db.transactions.push({
+                    id: getID(),
+                    type,
+                    amount: amt,
+                    desc,
+                    catId: cat,
+                    km,
+                    liters,
+                    date
+                });
+                showToast('Lançamento realizado!', 'success');
+            }
+
+            save();
+            closeAllModals();
+            e.target.reset();
+            document.getElementById('t-other-name').value = '';
+            renderDashboard();
+        }
+
+        function editTransaction(id) {
+            const t = db.transactions.find(item => item.id === id);
+            if (!t) return;
+
+            openTransactionForm(id);
+
+            document.getElementById('t-id').value = t.id;
+            document.getElementById('t-amount').value = t.amount;
+            document.getElementById('t-desc').value = t.desc;
+            document.getElementById('t-date').value = t.date;
+            document.getElementById('t-km').value = t.km || '';
+            document.getElementById('t-liters').value = t.liters || '';
+
+            // Set type
+            if (t.type === 'income') document.getElementById('type-inc').checked = true;
+            else document.getElementById('type-exp').checked = true;
+
+            toggleFuelField();
+            document.getElementById('t-cat').value = t.catId;
+
+            // Show Delete Button in Transaction Modal?
+            // Let's add it to the UI if not there or just handle it.
+            // For now, let's just make editing work.
+        }
+
+        function deleteTransaction() {
+            const id = document.getElementById('t-id').value;
+            if (id && confirm('Excluir este lançamento?')) {
+                db.transactions = db.transactions.filter(t => t.id !== id);
+                save();
+                closeAllModals();
+                renderDashboard();
+                showToast('Lançamento removido.');
+            }
+        }
+
+        // --- CLOSING ---
+        function openClosingModal() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayTx = db.transactions.filter(t => t.date === today);
+
+            const inc = todayTx.filter(t => t.type === 'income').reduce((a, b) => a + b.amount, 0);
+            const exp = todayTx.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0);
+            const km = todayTx.reduce((a, b) => a + (b.km || 0), 0);
+
+            document.getElementById('close-inc').innerText = fmtMoney(inc);
+            document.getElementById('close-exp').innerText = fmtMoney(exp);
+            document.getElementById('close-km').innerText = km.toFixed(1) + ' km';
+            document.getElementById('close-bal').innerText = fmtMoney(inc - exp);
+            document.getElementById('close-date').innerText = new Date().toLocaleDateString('pt-BR');
+
+            document.getElementById('overlay').classList.remove('hidden');
+            document.getElementById('modal-closing').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('overlay').classList.remove('opacity-0');
+                document.getElementById('closing-card').classList.remove('scale-95', 'opacity-0');
+            }, 10);
+        }
+
+        function shareClosing() {
+            const inc = document.getElementById('close-inc').innerText;
+            const exp = document.getElementById('close-exp').innerText;
+            const bal = document.getElementById('close-bal').innerText;
+            const km = document.getElementById('close-km').innerText;
+            const date = document.getElementById('close-date').innerText;
+
+            let txt = `🏁 *Fechamento Gestão Motorista*\n📅 ${date}\n\n`;
+
+            if (db.shift && db.shift.isOpen) {
+                const startKm = db.shift.startKm || 0;
+                const endKm = parseFloat(document.getElementById('close-km-final').value) || (startKm + parseFloat(km));
+                txt += `🔢 *KM Inicial:* ${startKm}\nCOMB *KM Final:* ${endKm}\n`;
+            }
+
+            txt += `🛣 *Rodado:* ${km}\n\n✅ *Ganho:* ${inc}\n🔻 *Gasto:* ${exp}\n💰 *LUCRO:* ${bal}`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, '_blank');
+        }
+
+        function closeAllModals() {
+            document.getElementById('overlay').classList.add('opacity-0');
+            const cards = ['closing-card', 'goal-card', 'choice-card', 'start-day-card'];
+            cards.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('scale-95', 'opacity-0');
+            });
+
+            // Bottom Sheets Animation
+            const sheets = ['customer-sheet'];
+            sheets.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('translate-y-full');
+            });
+
+            document.querySelectorAll('.bottom-sheet, .modal-side').forEach(el => el.classList.remove('open'));
+
+            setTimeout(() => {
+                document.getElementById('overlay').classList.add('hidden');
+                const modals = ['modal-closing', 'modal-goal', 'modal-choice', 'modal-customer', 'modal-transaction', 'modal-start-day'];
+                modals.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.classList.add('hidden');
+                        el.style.display = ''; // Limpa o flexbox inline injetado no JS
+                    }
+                });
+            }, 300);
+        }
+
+        function downloadBackup() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "backup_plena_driver.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function restoreBackup(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    db = JSON.parse(e.target.result);
+                    save();
+                    location.reload();
+                } catch (error) {
+                    showToast('Erro no arquivo de backup.', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function factoryReset() {
+            if (confirm("Tem certeza que deseja apagar todos os dados?")) {
+                localStorage.removeItem(DB_KEY);
+                location.reload();
+            }
+        }
+
+        function shareReport() {
+            const now = new Date();
+            const currentMonth = now.toISOString().slice(0, 7);
+            const monthName = now.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+
+            // Recalculate stats for the report to ensure freshness
+            const monthTx = db.transactions.filter(t => t.date.startsWith(currentMonth));
+            const inc = monthTx.filter(t => t.type === 'income').reduce((a, b) => a + b.amount, 0);
+            const exp = monthTx.filter(t => t.type === 'expense').reduce((a, b) => a + b.amount, 0);
+            const km = monthTx.reduce((a, b) => a + (b.km || 0), 0);
+            const balance = inc - exp;
+            const efficiency = km > 0 ? (balance / km) : 0;
+
+            // Driver Name
+            const driverName = (db.settings.profile && db.settings.profile.name) ? db.settings.profile.name : 'Motorista';
+
+            // Top Expenses
+            const expenses = monthTx.filter(t => t.type === 'expense');
+            const catMap = {};
+            expenses.forEach(t => {
+                const cName = (db.categories.find(c => c.id == t.catId) || { name: 'Outros' }).name;
+                catMap[cName] = (catMap[cName] || 0) + t.amount;
+            });
+            const topExp = Object.entries(catMap)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3)
+                .map(([name, val], i) => `${i + 1}º ${name}: ${fmtMoney(val)}`)
+                .join('%0A');
+
+            const text = `📊 *Relatório Mensal - Gestão Motorista*%0A` +
+                `👤 *Motorista:* ${driverName}%0A` +
+                `📅 *Mês:* ${monthName.charAt(0).toUpperCase() + monthName.slice(1)}%0A%0A` +
+                `✅ *Ganhos:* ${fmtMoney(inc)}%0A` +
+                `🔻 *Gastos:* ${fmtMoney(exp)}%0A` +
+                `💰 *LUCRO:* ${fmtMoney(balance)}%0A` +
+                `🛣 *KM Rodado:* ${km.toFixed(1)} km%0A` +
+                `⚡ *Eficiência:* ${fmtMoney(efficiency)}/km%0A%0A` +
+                `📉 *Maiores Gastos:*%0A${topExp || 'Nenhum gasto registrado.'}%0A%0A` +
+                `_Gerado por Gestão Motorista App_ 🚗`;
+
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+
+        // --- SHIFT LOGIC ---
+        function openStartDayModal() {
+            if (db.shift && db.shift.isOpen) {
+                showToast('Dia já iniciado!', 'info');
+                return;
+            }
+            document.getElementById('start-km').value = '';
+            document.getElementById('start-balance').value = '';
+
+            const overlay = document.getElementById('overlay');
+            const modal = document.getElementById('modal-start-day');
+            const card = document.getElementById('start-day-card');
+
+            // Force Display
+            overlay.classList.remove('hidden');
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex'; // Força o flexbox caso o hidden falhe
+
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+                card.classList.remove('scale-95', 'opacity-0');
+            }, 50);
+        }
+
+        function startDay() {
+            const km = parseFloat(document.getElementById('start-km').value) || 0;
+            const bal = parseFloat(document.getElementById('start-balance').value) || 0;
+
+            if (km <= 0) {
+                if (!confirm('Iniciar sem KM definido?')) return;
+            }
+
+            db.shift = {
+                isOpen: true,
+                startKm: km,
+                startBalance: bal,
+                startTime: new Date().toISOString()
+            };
+            save();
+            closeAllModals();
+            updateGlobalShiftStatus();
+            renderDashboard();
+            showToast('Bom trabalho! Dia iniciado. ☀️');
+        }
+
+        function closeDay() {
+            if (!db.shift || !db.shift.isOpen) {
+                showToast('Não há dia iniciado para fechar.', 'error');
+                return;
+            }
+            // Logic handled in openClosingModal mostly, checking here for safety
+            if (confirm('Confirmar fechamento do dia?')) {
+                db.shift.isOpen = false;
+                // Preserve history if needed? For now just close.
+                save();
+                closeAllModals();
+                updateGlobalShiftStatus();
+                renderDashboard();
+                showToast('Dia fechado com sucesso! 🌙');
+            }
+        }
+
+        function updateClosingSummary() {
+            const finalKm = parseFloat(document.getElementById('close-km-final').value) || 0;
+            const startKm = (db.shift && db.shift.startKm) ? db.shift.startKm : 0;
+
+            let kmRodado = 0;
+            if (finalKm > startKm) kmRodado = finalKm - startKm;
+            else {
+                // Fallback to transactions sum if meaningful
+                const today = new Date().toISOString().split('T')[0];
+                kmRodado = db.transactions.filter(t => t.date === today).reduce((a, b) => a + (b.km || 0), 0);
+            }
+
+            document.getElementById('close-km').innerText = kmRodado.toFixed(1) + ' km';
+
+            // Calc Eff/Profit
+            const inc = parseFloat(document.getElementById('close-inc').innerText.replace('R$', '').replace('.', '').replace(',', '.')) || 0;
+            const exp = parseFloat(document.getElementById('close-exp').innerText.replace('R$', '').replace('.', '').replace(',', '.')) || 0;
+            // Note: innerText parsing is risky if format changes. Better re-calc from DB.
+        }
+
+        // --- INIT ---
+        function init() {
+            // Check shift existence
+            if (!db.shift) Object.assign(db, { shift: { isOpen: false, startKm: 0, startBalance: 0, startTime: null } });
+
+            syncCategories();
+            updateMenuProfile();
+            router('dashboard');
+            document.getElementById('t-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('header-date').innerText = new Date().toLocaleDateString('pt-BR');
+
+            // Final icon pass to catch anything missed during initial render
+            setTimeout(() => lucide.createIcons(), 500);
+            setTimeout(() => lucide.createIcons(), 2000);
+        }
+    </script>
+
+    <!-- 🔒 MASTER PASSWORD & ACTIVATION LOGIC (INJECTED) -->
+    <script>
+        window.activateLicense = async function (e) {
+            if (e) e.preventDefault();
+
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+
+            if (!keyInput || !emailInput) return;
+
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+
+            if (!key || !email) {
+                showToast('Por favor, preencha todos os campos.', 'info');
+                return;
+            }
+
+            // 🔑 SENHA MESTRE PARA TESTES
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+
+                if (btn) {
+                    const originalText = btn.innerText;
+                    btn.innerText = '🔓 Acesso Liberado...';
+                    btn.classList.remove('from-emerald-600', 'to-emerald-700', 'from-brand-primary', 'to-brand-dark');
+                    btn.classList.add('bg-blue-600', 'text-white'); // Fallback style
+                }
+
+                setTimeout(() => {
+                    showToast('Modo de Teste/Admin Ativado com Sucesso!', 'success');
+                    setTimeout(() => window.location.reload(), 2000);
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if (btn) {
+                const originalText = btn.innerText;
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+
+                try {
+                    // Tenta endpoint relativo padrão dos sistemas Gestão
+                    const output = document.getElementById('activation-error');
+                    if (output) output.classList.add('hidden');
+
+                    const response = await fetch('../api_licenca_ml.php?action=activate', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ license_key: key, email: email })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.status === 'success') {
+                        localStorage.setItem('plena_license', key);
+                        localStorage.setItem('ml_license_email', email);
+                        localStorage.removeItem('ml_master_mode');
+                        showToast('Licença Ativada com Sucesso!', 'success');
+                        setTimeout(() => window.location.reload(), 2000);
+                    } else {
+                        const msg = data.message || 'Chave inválida ou erro no servidor.';
+                        if (output) {
+                            output.textContent = msg;
+                            output.classList.remove('hidden');
+                        } else {
+                            showToast('Erro: ' + msg, 'error');
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                    showToast('Erro de conexão com o servidor de validação.', 'error');
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            }
+        };
+
+        // --- PWA INSTALLATION LOGIC ---
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const installBtn = document.getElementById('install-btn');
+            if (installBtn) {
+                installBtn.classList.remove('hidden');
+                installBtn.classList.add('flex');
+            }
+        });
+
+        window.installApp = async function () {
+            const installBtn = document.getElementById('install-btn');
+            if (installBtn) {
+                installBtn.classList.add('hidden');
+            }
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`SW: Instalação ${outcome}`);
+                deferredPrompt = null;
+            }
+        };
+
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('SW: App instalado com sucesso! 🎉');
+            const installBtn = document.getElementById('install-btn');
+            if (installBtn) installBtn.classList.add('hidden');
+            showToast('Aplicativo instalado com sucesso!', 'success');
+        });
+    </script>
+
+
+    <!-- MODAL DE CONFIRMAÇÃO DE ENTREGA (RECIBO DIGITAL - ML COMPRA GARANTIDA) -->
+    <div id="welcome-receipt-modal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm transition-opacity"></div>
+        <!-- Modal Panel -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1E293B] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200 dark:border-white/10">
+                    <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 sm:mx-0 sm:h-10 sm:w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <h3 class="text-lg font-bold leading-6 text-slate-900 dark:text-white" id="modal-title">
+                                    Confirmação de Acesso
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-slate-500 dark:text-slate-300">
+                                        Para liberar seu acesso completo ao sistema, precisamos que confirme o recebimento do produto digital.
+                                    </p>
+                                    <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-white/5 text-xs text-justify text-slate-600 dark:text-slate-400 italic">
+                                        "Declaro que recebi o acesso ao software conforme anunciado no Mercado Livre, testei seu funcionamento inicial e confirmo a entrega do produto digital."
+                                    </div>
+                                    <p class="mt-4 text-xs text-slate-400">
+                                        Esta ação gera um registro de auditoria para o programa <strong>Compra Garantida</strong>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/80 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button type="button" id="btn-confirm-receipt" onclick="confirmReceipt()"
+                            class="inline-flex w-full justify-center rounded-lg bg-emerald-600 px-3 py-2 text-sm font-bold text-white shadow-sm hover:bg-emerald-500 sm:ml-3 sm:w-auto transition-colors items-center">
+                            Confirmar Recebimento e Acesso
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔒 SISTEMA DE ATIVAÇÃO E RECIBO DIGITAL V12.1 -->
+    <script>
+        // ==========================================
+        // ATIVAÇÃO DE LICENÇA (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.activateLicense = async function (e) {
+            if (e) e.preventDefault();
+
+            const keyInput = document.getElementById('license-key');
+            const emailInput = document.getElementById('license-email');
+            const btn = document.getElementById('btn-activate');
+
+            if (!keyInput || !emailInput) return;
+
+            const key = keyInput.value.trim();
+            const email = emailInput.value.trim();
+
+            if (!key || !email) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // 🔑 MASTER KEYS (Testes / Admin)
+            const MASTER_KEYS = ['MASTER123', 'ADMIN_ML', 'TESTE2026'];
+
+            if (MASTER_KEYS.includes(key.toUpperCase())) {
+                console.log('🔓 Master Access Granted');
+                localStorage.setItem('plena_license', key);
+                localStorage.setItem('ml_license_email', email);
+                localStorage.setItem('ml_master_mode', 'true');
+                localStorage.setItem('ml_receipt_confirmed', 'true');
+
+                if (btn) btn.innerText = '🔓 Acesso Liberado...';
+                setTimeout(() => {
+                    alert('Modo Admin/Teste ativado com sucesso!');
+                    window.location.reload();
+                }, 500);
+                return;
+            }
+
+            // 🌍 FLUXO PADRÃO (API)
+            if (btn) {
+                btn.innerText = 'Verificando...';
+                btn.disabled = true;
+            }
+
+            try {
+                const output = document.getElementById('activation-error');
+                if (output) output.classList.add('hidden');
+
+                // Gerar device_id único se não existir
+                let deviceId = localStorage.getItem('device_id');
+                if (!deviceId) {
+                    deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+                    localStorage.setItem('device_id', deviceId);
+                }
+
+                const response = await fetch('../api_licenca_ml.php?action=activate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ CAPTAÇÃO DE EMAIL
+                        device_id: deviceId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    // ✅ Salva credenciais localmente
+                    localStorage.setItem('plena_license', key);
+                    localStorage.setItem('ml_license_email', email);
+                    localStorage.removeItem('ml_master_mode');
+
+                    // Exibe modal de recibo ANTES de liberar o app
+                    if (!localStorage.getItem('ml_receipt_confirmed')) {
+                        const loginView = document.getElementById('view-login');
+                        if (loginView) {
+                            loginView.classList.add('hide');
+                            loginView.style.display = 'none';
+                        }
+                        const receiptModal = document.getElementById('welcome-receipt-modal');
+                        if (receiptModal) receiptModal.classList.remove('hidden');
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    } else {
+                        alert('Licença Ativada com Sucesso!');
+                        window.location.reload();
+                    }
+                } else {
+                    const msg = data.message || 'Chave inválida ou erro no servidor.';
+                    const output = document.getElementById('activation-error');
+                    if (output) {
+                        output.textContent = msg;
+                        output.classList.remove('hidden');
+                    } else {
+                        alert('Erro: ' + msg);
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão com o servidor de validação.');
+            } finally {
+                if (btn) {
+                    btn.innerText = 'Ativar Licença';
+                    btn.disabled = false;
+                }
+            }
+        };
+
+        // ==========================================
+        // CONFIRMAÇÃO DE RECIBO (COM CAPTAÇÃO DE EMAIL)
+        // ==========================================
+        window.confirmReceipt = async function () {
+            const btn = document.getElementById('btn-confirm-receipt');
+            if (btn) {
+                btn.innerText = "Registrando...";
+                btn.disabled = true;
+            }
+
+            const key = localStorage.getItem('plena_license');
+            const email = localStorage.getItem('ml_license_email') || '';
+
+            try {
+                const response = await fetch('../api_licenca_ml.php?action=confirm_receipt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        license_key: key,
+                        email: email,           // ✅ DUPLA CAPTAÇÃO DE EMAIL (garante o registro)
+                        legal_agree: true
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    localStorage.setItem('ml_receipt_confirmed', 'true');
+                    const modal = document.getElementById('welcome-receipt-modal');
+                    if (modal) modal.classList.add('hidden');
+                    alert("Recebimento Confirmado! Bem-vindo ao sistema.");
+                    window.location.reload();
+                } else {
+                    console.error("Erro Recibo:", data);
+                    alert("Atenção: Não foi possível registrar o recibo.\nErro: " + (data.message || "Falha de comunicação."));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerText = "Tentar Novamente";
+                    }
+                }
+            } catch (e) {
+                alert("Erro de conexão. Tente novamente.");
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = "Confirmar Recebimento e Acesso";
+                }
+            }
+        };
+    </script>
+
+</body>

@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Plena Delivery - Mobile</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#10B981">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="data:application/manifest+json,{
+        'name': 'Plena Delivery',
+        'short_name': 'Plena',
+        'start_url': '.',
+        'display': 'standalone',
+        'background_color': '#F3F4F6',
+        'theme_color': '#10B981',
+        'icons': [{
+            'src': 'https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/bike.svg',
+            'sizes': '192x192',
+            'type': 'image/svg+xml'
+        }]
+    }">
+
+    <!-- Tailwind CSS & Lucide Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
+
+
+
+    <!-- Configuração Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        plena: {
+                            green: '#10B981',
+                            dark: '#059669',
+                            black: '#111827',
+                            surface: '#ffffff'
+                        }
+                    },
+                    boxShadow: {
+                        'nav': '0 -4px 20px rgba(0,0,0,0.05)',
+                        'float': '0 4px 15px rgba(16, 185, 129, 0.4)'
+                    },
+                    screens: {
+                        'xs': '375px'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        /* Mobile Optimizations */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #F3F4F6;
+            -webkit-tap-highlight-color: transparent;
+            padding-bottom: 80px;
+            /* Space for Bottom Nav */
+            overscroll-behavior-y: none;
+            /* Prevent pull-to-refresh on mobile app feel */
+        }
+
+        /* Hide Scrollbar but allow scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Bottom Sheet Animation */
+        .bottom-sheet {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(100%);
+            will-change: transform;
+        }
+
+        .bottom-sheet.open {
+            transform: translateY(0);
+        }
+
+        /* Smooth Fade */
+        .fade-view {
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Inputs for Mobile */
+        input,
+        select,
+        textarea {
+            font-size: 16px !important;
+            /* Prevent iOS zoom */
+        }
+
+        /* Status Badges */
+        .badge {
+            @apply px-2 py-1 rounded-full text-xs font-bold uppercase tracking-wide;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 antialiased select-none">
+
+    <!-- HEADER FIXO -->
+    <header class="fixed top-0 left-0 right-0 h-16 bg-white z-40 flex items-center justify-between px-4 shadow-sm">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-plena-green rounded-lg flex items-center justify-center text-white">
+                <i data-lucide="bike" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-gray-900 leading-tight" id="header-title">Dashboard</h1>
+                <p class="text-[10px] text-gray-500 font-medium flex items-center gap-1" id="header-status">
+                    <i data-lucide="smartphone" class="w-3 h-3 text-plena-green"></i> Sistema Mobile
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <!-- Fuel Indicator (Mini) -->
+            <div class="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-full">
+                <i data-lucide="fuel" class="w-3 h-3 text-orange-500"></i>
+                <span class="text-xs font-bold text-gray-700" id="header-fuel">75%</span>
+            </div>
+
+            <!-- Online Toggle -->
+            <button onclick="toggleOnline()" id="btn-online"
+                class="w-10 h-6 bg-gray-300 rounded-full relative transition-colors duration-300">
+                <div
+                    class="w-4 h-4 bg-white rounded-full absolute top-1 left-1 transition-transform duration-300 shadow-sm">
+                </div>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="mt-16 p-4 min-h-screen">
+
+        <!-- VIEW: DASHBOARD -->
+        <div id="view-dashboard" class="fade-view">
+
+            <!-- ACTIVE DELIVERY CARD (FOCUS MODE) -->
+            <div id="active-delivery-card"
+                class="hidden mb-6 bg-plena-black text-white rounded-2xl p-5 shadow-lg relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-plena-green opacity-10 rounded-full -mr-10 -mt-10">
+                </div>
+
+                <div class="flex justify-between items-start mb-4 relative z-10">
+                    <div>
+                        <span class="bg-plena-green text-white px-2 py-0.5 rounded text-xs font-bold animate-pulse">EM
+                            ANDAMENTO</span>
+                        <h2 class="text-xl font-bold mt-2" id="active-client">Carregando...</h2>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-2xl font-bold text-plena-green" id="active-value">R$ 0,00</p>
+                        <p class="text-xs text-gray-400 uppercase" id="active-payment">Dinheiro</p>
+                    </div>
+                </div>
+
+                <div class="bg-white/10 p-3 rounded-xl mb-4 backdrop-blur-sm">
+                    <p class="text-sm text-gray-300 flex items-start gap-2">
+                        <i data-lucide="map-pin" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                        <span id="active-address" class="font-medium">...</span>
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="openMaps()"
+                        class="bg-white text-plena-black py-3 rounded-xl font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform">
+                        <i data-lucide="navigation" class="w-4 h-4"></i> GPS
+                    </button>
+                    <button onclick="completeActiveDelivery()"
+                        class="bg-plena-green text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform">
+                        <i data-lucide="check" class="w-4 h-4"></i> Entregue
+                    </button>
+                </div>
+            </div>
+
+            <!-- IDLE STATE (STATS) -->
+            <div id="idle-dashboard">
+                <div
+                    class="bg-gradient-to-r from-plena-green to-plena-dark rounded-2xl p-5 text-white mb-6 shadow-float">
+                    <p class="text-sm opacity-90 mb-1">Ganhos Hoje</p>
+                    <div class="flex justify-between items-end">
+                        <h2 class="text-4xl font-bold tracking-tight" id="dash-earnings">R$ 0,00</h2>
+                        <div class="text-right">
+                            <p class="font-bold text-lg" id="dash-count">0</p>
+                            <p class="text-xs opacity-80">entregas</p>
+                        </div>
+                    </div>
+                    <!-- Goal Bar -->
+                    <div class="mt-4 bg-black/20 rounded-full h-1.5 w-full overflow-hidden">
+                        <div id="dash-goal-bar" class="bg-white h-full rounded-full" style="width: 0%"></div>
+                    </div>
+                    <p class="text-[10px] text-center mt-1 opacity-70">Meta Diária: <span id="dash-goal-val">R$
+                            200</span></p>
+                </div>
+
+                <!-- Quick Actions Grid -->
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <button onclick="router('finance')"
+                        class="bg-white p-4 rounded-xl shadow-sm active:bg-gray-50 flex flex-col items-center justify-center gap-2">
+                        <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-600">
+                            <i data-lucide="wallet" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-sm text-gray-700">Financeiro</span>
+                    </button>
+                    <button onclick="router('vehicle')"
+                        class="bg-white p-4 rounded-xl shadow-sm active:bg-gray-50 flex flex-col items-center justify-center gap-2">
+                        <div
+                            class="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center text-orange-600">
+                            <i data-lucide="wrench" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-sm text-gray-700">Veículo</span>
+                    </button>
+                </div>
+
+                <!-- Recent History -->
+                <h3 class="font-bold text-gray-800 mb-3 flex items-center justify-between">
+                    Últimas Entregas
+                    <button onclick="router('deliveries')" class="text-xs text-plena-green font-bold uppercase">Ver
+                        todas</button>
+                </h3>
+                <div id="dash-history" class="space-y-3 pb-20">
+                    <!-- Loaded via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: DELIVERIES (List) -->
+        <div id="view-deliveries" class="hidden fade-view pb-20">
+            <!-- Search & Filter -->
+            <div class="bg-white p-3 rounded-xl shadow-sm mb-4 sticky top-0 z-10">
+                <div class="relative">
+                    <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                    <input type="text" id="delivery-search" onkeyup="renderDeliveriesList()"
+                        placeholder="Buscar cliente ou rua..."
+                        class="w-full bg-gray-100 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-plena-green">
+                </div>
+            </div>
+
+            <div id="deliveries-list" class="space-y-3">
+                <!-- List content -->
+            </div>
+        </div>
+
+        <!-- VIEW: FINANCE -->
+        <div id="view-finance" class="hidden fade-view pb-20">
+            <div class="bg-white rounded-2xl p-5 shadow-sm mb-4">
+                <p class="text-sm text-gray-500 mb-1">Saldo Atual (Mês)</p>
+                <h2 class="text-3xl font-bold text-gray-900" id="fin-balance">R$ 0,00</h2>
+
+                <div class="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-gray-100">
+                    <div>
+                        <p class="text-xs text-gray-400 uppercase">Receitas</p>
+                        <p class="text-lg font-bold text-green-600" id="fin-income">R$ 0,00</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400 uppercase">Despesas</p>
+                        <p class="text-lg font-bold text-red-600" id="fin-expense">R$ 0,00</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-3 mb-6">
+                <button onclick="openModal('modal-income')"
+                    class="flex-1 bg-green-100 text-green-700 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Receita
+                </button>
+                <button onclick="openModal('modal-expense')"
+                    class="flex-1 bg-red-100 text-red-700 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+                    <i data-lucide="minus" class="w-4 h-4"></i> Despesa
+                </button>
+            </div>
+
+            <h3 class="font-bold text-gray-800 mb-3">Extrato</h3>
+            <div id="finance-list" class="space-y-3"></div>
+        </div>
+
+        <!-- VIEW: VEHICLE -->
+        <div id="view-vehicle" class="hidden fade-view pb-20">
+            <!-- Fuel Card -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm mb-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800">Tanque</h3>
+                    <button onclick="updateFuelManual()" class="text-plena-green text-sm font-bold">Ajustar</button>
+                </div>
+
+                <div class="relative h-6 bg-gray-100 rounded-full overflow-hidden mb-2">
+                    <div id="vehicle-fuel-bar"
+                        class="absolute top-0 left-0 h-full bg-gradient-to-r from-orange-400 to-plena-green transition-all duration-500"
+                        style="width: 75%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500 font-medium">
+                    <span>Vazio</span>
+                    <span id="vehicle-fuel-text" class="text-gray-800 font-bold">75%</span>
+                    <span>Cheio</span>
+                </div>
+
+                <button onclick="openModal('modal-expense', 'fuel')"
+                    class="w-full mt-4 bg-orange-50 text-orange-600 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+                    <i data-lucide="fuel" class="w-4 h-4"></i> Registrar Abastecimento
+                </button>
+            </div>
+
+            <!-- Maintenance -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800">Manutenção</h3>
+                    <button onclick="openModal('modal-maintenance')" class="text-plena-green text-sm font-bold">+
+                        Nova</button>
+                </div>
+
+                <div class="flex items-center justify-between bg-gray-50 p-3 rounded-xl mb-4">
+                    <span class="text-gray-600 text-sm">Hodômetro</span>
+                    <span class="font-mono font-bold text-gray-900" id="vehicle-odometer">0 km</span>
+                    <button onclick="updateOdometer()" class="p-1 text-gray-400"><i data-lucide="edit-2"
+                            class="w-4 h-4"></i></button>
+                </div>
+
+                <div id="maintenance-list" class="space-y-3"></div>
+            </div>
+        </div>
+
+        <!-- VIEW: MENU (More) -->
+        <div id="view-menu" class="hidden fade-view pb-20">
+            <div class="bg-white rounded-2xl p-4 shadow-sm mb-4 flex items-center gap-4">
+                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-gray-400">
+                    <i data-lucide="user" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-900" id="menu-rider-name">Motoboy</h3>
+                    <p class="text-xs text-gray-500">Perfil Local</p>
+                </div>
+                <button onclick="editProfile()" class="ml-auto text-gray-400"><i data-lucide="settings"
+                        class="w-5 h-5"></i></button>
+            </div>
+
+            <div class="space-y-2">
+                <button onclick="router('clients')"
+                    class="w-full bg-white p-4 rounded-xl shadow-sm flex items-center justify-between active:bg-gray-50">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center"><i
+                                data-lucide="users" class="w-4 h-4"></i></div>
+                        <span class="font-medium text-gray-700">Meus Clientes</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300"></i>
+                </button>
+
+                <button onclick="router('reports')"
+                    class="w-full bg-white p-4 rounded-xl shadow-sm flex items-center justify-between active:bg-gray-50">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center"><i
+                                data-lucide="bar-chart-3" class="w-4 h-4"></i></div>
+                        <span class="font-medium text-gray-700">Relatórios</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300"></i>
+                </button>
+
+                <button onclick="downloadBackup()"
+                    class="w-full bg-white p-4 rounded-xl shadow-sm flex items-center justify-between active:bg-gray-50">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-gray-50 text-gray-600 flex items-center justify-center"><i
+                                data-lucide="download" class="w-4 h-4"></i></div>
+                        <span class="font-medium text-gray-700">Backup dos Dados</span>
+                    </div>
+                </button>
+
+                <!-- Manual Link -->
+                <button onclick="router('instructions')"
+                    class="w-full bg-white p-4 rounded-xl shadow-sm flex items-center justify-between active:bg-gray-50">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-yellow-50 text-yellow-600 flex items-center justify-center"><i
+                                data-lucide="book-open" class="w-4 h-4"></i></div>
+                        <span class="font-medium text-gray-700">Manual de Uso</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300"></i>
+                </button>
+            </div>
+
+            <div class="mt-8 text-center">
+                <p class="text-xs text-gray-400">Plena Delivery v4.5 Mobile</p>
+                <button onclick="factoryReset()" class="text-[10px] text-red-400 mt-2 p-2">Resetar App</button>
+            </div>
+        </div>
+
+        <!-- VIEW: CLIENTS (Inside Menu) -->
+        <div id="view-clients" class="hidden fade-view pb-20">
+            <div class="flex justify-between items-center mb-4">
+                <button onclick="router('menu')" class="text-gray-500 flex items-center gap-1"><i
+                        data-lucide="arrow-left" class="w-4 h-4"></i> Voltar</button>
+                <button onclick="openModal('modal-client')"
+                    class="bg-plena-green text-white px-3 py-1.5 rounded-lg text-sm font-bold">+ Novo</button>
+            </div>
+            <div id="clients-list" class="space-y-3"></div>
+        </div>
+
+        <!-- VIEW: INSTRUCTIONS (Simplified) -->
+        <div id="view-instructions" class="hidden fade-view pb-20">
+            <button onclick="router('menu')" class="mb-4 text-gray-500 flex items-center gap-1"><i
+                    data-lucide="arrow-left" class="w-4 h-4"></i> Voltar</button>
+            <div class="bg-white p-5 rounded-2xl shadow-sm space-y-4">
+                <h2 class="text-xl font-bold">Guia Rápido</h2>
+                <div class="space-y-3">
+                    <div class="flex gap-3">
+                        <div
+                            class="w-8 h-8 rounded-full bg-plena-green text-white flex items-center justify-center font-bold flex-shrink-0">
+                            1</div>
+                        <p class="text-sm text-gray-600">Para iniciar, toque no botão <strong>+</strong> central para
+                            adicionar uma entrega.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <div
+                            class="w-8 h-8 rounded-full bg-plena-green text-white flex items-center justify-center font-bold flex-shrink-0">
+                            2</div>
+                        <p class="text-sm text-gray-600">Use o botão <strong>GPS</strong> quando a entrega estiver ativa
+                            para abrir o Waze/Maps.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <div
+                            class="w-8 h-8 rounded-full bg-plena-green text-white flex items-center justify-center font-bold flex-shrink-0">
+                            3</div>
+                        <p class="text-sm text-gray-600">Faça <strong>Backup</strong> semanalmente no menu para não
+                            perder seus dados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav
+        class="fixed bottom-0 left-0 right-0 bg-white h-[80px] pb-[10px] shadow-nav z-30 flex items-center justify-between px-2">
+        <button onclick="router('dashboard')"
+            class="nav-btn active flex-1 flex flex-col items-center justify-center gap-1 text-gray-400 p-2"
+            id="nav-dashboard">
+            <i data-lucide="bike" class="w-6 h-6"></i>
+            <span class="text-[10px] font-medium">Início</span>
+        </button>
+
+        <button onclick="router('deliveries')"
+            class="nav-btn flex-1 flex flex-col items-center justify-center gap-1 text-gray-400 p-2"
+            id="nav-deliveries">
+            <i data-lucide="list" class="w-6 h-6"></i>
+            <span class="text-[10px] font-medium">Histórico</span>
+        </button>
+
+        <!-- FAB (Floating Action Button) -->
+        <div class="relative -top-6">
+            <button onclick="openModal('modal-delivery')"
+                class="w-16 h-16 bg-plena-green rounded-full shadow-float flex items-center justify-center text-white active:scale-90 transition-transform duration-200">
+                <i data-lucide="plus" class="w-8 h-8"></i>
+            </button>
+        </div>
+
+        <button onclick="router('finance')"
+            class="nav-btn flex-1 flex flex-col items-center justify-center gap-1 text-gray-400 p-2" id="nav-finance">
+            <i data-lucide="dollar-sign" class="w-6 h-6"></i>
+            <span class="text-[10px] font-medium">Caixa</span>
+        </button>
+
+        <button onclick="router('menu')"
+            class="nav-btn flex-1 flex flex-col items-center justify-center gap-1 text-gray-400 p-2" id="nav-menu">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+            <span class="text-[10px] font-medium">Menu</span>
+        </button>
+    </nav>
+
+    <!-- OVERLAYS & BOTTOM SHEETS -->
+    <div id="overlay" onclick="closeAllModals()"
+        class="fixed inset-0 bg-black/60 z-40 hidden transition-opacity opacity-0 backdrop-blur-sm"></div>
+
+    <!-- NEW DELIVERY SHEET -->
+    <div id="modal-delivery"
+        class="bottom-sheet fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-50 p-6 h-[85vh] overflow-y-auto">
+        <div class="w-12 h-1 bg-gray-200 rounded-full mx-auto mb-6"></div>
+        <h3 class="text-xl font-bold text-gray-900 mb-6">Nova Entrega</h3>
+
+        <form onsubmit="submitDelivery(event)" class="space-y-4">
+            <input type="hidden" id="d-id">
+
+            <!-- Quick Client Selector -->
+            <div>
+                <label class="text-xs font-bold text-gray-500 uppercase">Cliente</label>
+                <div class="relative mt-1">
+                    <select id="d-client-select" onchange="fillClientInfo(this.value)"
+                        class="w-full bg-gray-50 border-0 rounded-xl py-3 px-4 appearance-none font-medium">
+                        <option value="">Novo Cliente</option>
+                    </select>
+                    <i data-lucide="chevron-down"
+                        class="absolute right-4 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Nome</label>
+                    <input type="text" id="d-name" required class="w-full bg-gray-50 border-0 rounded-xl py-3 px-4 mt-1"
+                        placeholder="João">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Valor</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-3 text-gray-500">R$</span>
+                        <input type="number" inputmode="decimal" id="d-value" required
+                            class="w-full bg-gray-50 border-0 rounded-xl py-3 pl-10 pr-4 mt-1 font-bold text-lg"
+                            placeholder="0.00">
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-xs font-bold text-gray-500 uppercase">Endereço</label>
+                <input type="text" id="d-address" required class="w-full bg-gray-50 border-0 rounded-xl py-3 px-4 mt-1"
+                    placeholder="Rua, Número, Bairro">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Pagamento</label>
+                    <select id="d-payment" class="w-full bg-gray-50 border-0 rounded-xl py-3 px-4 mt-1">
+                        <option value="cash">Dinheiro</option>
+                        <option value="pix">Pix</option>
+                        <option value="card">Cartão</option>
+                        <option value="pending">A Receber</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Telefone</label>
+                    <input type="tel" id="d-phone" class="w-full bg-gray-50 border-0 rounded-xl py-3 px-4 mt-1">
+                </div>
+            </div>
+
+            <button type="submit"
+                class="w-full bg-plena-green text-white py-4 rounded-xl font-bold text-lg mt-4 shadow-lg active:scale-95 transition-transform">
+                Lançar e Iniciar
+            </button>
+            <button type="button" onclick="closeAllModals()"
+                class="w-full py-3 text-gray-400 font-medium">Cancelar</button>
+        </form>
+    </div>
+
+    <!-- CLIENT MODAL -->
+    <div id="modal-client" class="bottom-sheet fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-50 p-6">
+        <div class="w-12 h-1 bg-gray-200 rounded-full mx-auto mb-6"></div>
+        <h3 class="text-xl font-bold text-gray-900 mb-6">Gerenciar Cliente</h3>
+        <form onsubmit="submitClient(event)" class="space-y-4">
+            <input type="hidden" id="c-id">
+            <input type="text" id="c-name" placeholder="Nome" class="w-full bg-gray-50 border-0 rounded-xl p-3"
+                required>
+            <input type="tel" id="c-phone" placeholder="Telefone" class="w-full bg-gray-50 border-0 rounded-xl p-3">
+            <input type="text" id="c-address" placeholder="Endereço Padrão"
+                class="w-full bg-gray-50 border-0 rounded-xl p-3">
+            <button type="submit" class="w-full bg-plena-black text-white py-3 rounded-xl font-bold">Salvar
+                Cliente</button>
+        </form>
+    </div>
+
+    <!-- FINANCE MODALS (Combined logic in JS) -->
+    <div id="modal-income" class="bottom-sheet fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-50 p-6">
+        <h3 class="text-xl font-bold text-green-600 mb-4">Nova Receita</h3>
+        <form onsubmit="submitTransaction(event, 'income')" class="space-y-4">
+            <input type="text" id="inc-desc" placeholder="Descrição (ex: Gorjeta)"
+                class="w-full bg-gray-50 border-0 rounded-xl p-3" required>
+            <input type="number" inputmode="decimal" id="inc-val" placeholder="Valor (R$)"
+                class="w-full bg-gray-50 border-0 rounded-xl p-3 font-bold" required>
+            <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold">Adicionar</button>
+        </form>
+    </div>
+
+    <div id="modal-expense" class="bottom-sheet fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-50 p-6">
+        <h3 class="text-xl font-bold text-red-600 mb-4">Nova Despesa</h3>
+        <form onsubmit="submitTransaction(event, 'expense')" class="space-y-4">
+            <input type="text" id="exp-desc" placeholder="Descrição" class="w-full bg-gray-50 border-0 rounded-xl p-3"
+                required>
+            <select id="exp-cat" class="w-full bg-gray-50 border-0 rounded-xl p-3">
+                <option value="fuel">Combustível</option>
+                <option value="maintenance">Manutenção</option>
+                <option value="food">Alimentação</option>
+                <option value="other">Outros</option>
+            </select>
+            <input type="number" inputmode="decimal" id="exp-val" placeholder="Valor (R$)"
+                class="w-full bg-gray-50 border-0 rounded-xl p-3 font-bold" required>
+            <button type="submit" class="w-full bg-red-600 text-white py-3 rounded-xl font-bold">Adicionar</button>
+        </form>
+    </div>
+
+    <div id="modal-maintenance" class="bottom-sheet fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-50 p-6">
+        <h3 class="text-xl font-bold text-orange-600 mb-4">Manutenção</h3>
+        <form onsubmit="submitMaintenance(event)" class="space-y-4">
+            <input type="text" id="m-service" placeholder="Serviço (ex: Troca de Óleo)"
+                class="w-full bg-gray-50 border-0 rounded-xl p-3" required>
+            <input type="number" inputmode="decimal" id="m-cost" placeholder="Custo (R$)"
+                class="w-full bg-gray-50 border-0 rounded-xl p-3 font-bold" required>
+            <input type="text" id="m-km" placeholder="KM Atual" class="w-full bg-gray-50 border-0 rounded-xl p-3">
+            <button type="submit" class="w-full bg-orange-600 text-white py-3 rounded-xl font-bold">Salvar
+                Registro</button>
+        </form>
+    </div>
+
+    <!-- LOGIC -->
+    <script>
+        // --- CORE DATABASE ---
+        const DB_KEY = 'plena_mobile_v2';
+        const defaultDB = {
+            deliveries: [],
+            clients: [],
+            finances: [], // unified array with type 'income' or 'expense'
+            vehicle: { fuel: 75, odometer: 0, maintenance: [] },
+            settings: { name: 'Motoboy', fee: 15.00, online: true },
+            activeDeliveryId: null
+        };
+
+        let db = JSON.parse(localStorage.getItem(DB_KEY)) || defaultDB;
+
+        // --- UTILS ---
+        const save = () => localStorage.setItem(DB_KEY, JSON.stringify(db));
+        const fmtMoney = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        const getID = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
+
+        // --- NAVIGATION & UI ---
+        function init() {
+            lucide.createIcons();
+            router('dashboard'); // Default
+            updateHeader();
+            checkActiveDelivery();
+        }
+
+        function router(viewId) {
+            // Hide all views
+            document.querySelectorAll('[id^="view-"]').forEach(el => {
+                el.classList.add('hidden');
+            });
+
+            // Show selected
+            const target = document.getElementById(`view-${viewId}`);
+            if (target) {
+                target.classList.remove('hidden');
+                target.classList.add('fade-view');
+            }
+
+            // Update Nav State
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-plena-green');
+                btn.classList.add('text-gray-400');
+            });
+            const activeBtn = document.getElementById(`nav-${viewId == 'menu' ? 'menu' : viewId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('text-plena-green');
+                activeBtn.classList.remove('text-gray-400');
+            }
+
+            // Render content based on view
+            if (viewId === 'dashboard') renderDashboard();
+            if (viewId === 'deliveries') renderDeliveriesList();
+            if (viewId === 'finance') renderFinance();
+            if (viewId === 'vehicle') renderVehicle();
+            if (viewId === 'menu') renderMenu();
+            if (viewId === 'clients') renderClients();
+
+            // Set Header Title
+            const titles = {
+                dashboard: 'Dashboard',
+                deliveries: 'Histórico',
+                finance: 'Financeiro',
+                vehicle: 'Meu Veículo',
+                menu: 'Menu',
+                clients: 'Clientes',
+                instructions: 'Manual',
+                reports: 'Relatórios'
+            };
+            document.getElementById('header-title').innerText = titles[viewId] || 'Plena';
+        }
+
+        function toggleOnline() {
+            db.settings.online = !db.settings.online;
+            save();
+            updateHeader();
+        }
+
+        function updateHeader() {
+            const btn = document.getElementById('btn-online');
+            const status = document.getElementById('header-status');
+            const toggle = btn.querySelector('div');
+
+            if (db.settings.online) {
+                btn.className = 'w-10 h-6 bg-plena-green rounded-full relative transition-colors duration-300';
+                toggle.style.transform = 'translateX(16px)';
+                status.innerText = 'Online';
+                status.className = 'text-[10px] text-plena-green font-bold';
+            } else {
+                btn.className = 'w-10 h-6 bg-gray-300 rounded-full relative transition-colors duration-300';
+                toggle.style.transform = 'translateX(0)';
+                status.innerText = 'Offline';
+                status.className = 'text-[10px] text-gray-500 font-medium';
+            }
+            document.getElementById('header-fuel').innerText = db.vehicle.fuel + '%';
+        }
+
+        // --- DASHBOARD LOGIC ---
+        function checkActiveDelivery() {
+            const activeCard = document.getElementById('active-delivery-card');
+            const idleDash = document.getElementById('idle-dashboard');
+
+            // Find active delivery
+            const active = db.deliveries.find(d => d.status === 'active');
+
+            if (active) {
+                activeCard.classList.remove('hidden');
+                activeCard.classList.add('fade-view');
+                idleDash.classList.add('opacity-50', 'pointer-events-none', 'blur-sm'); // Focus mode
+
+                // Populate Card
+                document.getElementById('active-client').innerText = active.clientName;
+                document.getElementById('active-value').innerText = fmtMoney(active.value);
+                document.getElementById('active-payment').innerText = active.payment === 'pending' ? 'Cobrar na Entrega' : 'Pago';
+                document.getElementById('active-address').innerText = active.address;
+
+                db.activeDeliveryId = active.id;
+            } else {
+                activeCard.classList.add('hidden');
+                idleDash.classList.remove('opacity-50', 'pointer-events-none', 'blur-sm');
+                db.activeDeliveryId = null;
+            }
+        }
+
+        function renderDashboard() {
+            checkActiveDelivery();
+            const today = new Date().toLocaleDateString('pt-BR');
+
+            // Calculate Today's Stats
+            const todayDeliveries = db.deliveries.filter(d => new Date(d.date).toLocaleDateString('pt-BR') === today && d.status === 'completed');
+            const earnings = todayDeliveries.reduce((sum, d) => sum + d.value, 0);
+
+            document.getElementById('dash-earnings').innerText = fmtMoney(earnings);
+            document.getElementById('dash-count').innerText = todayDeliveries.length;
+
+            // Goal Bar (Target 200)
+            const pct = Math.min((earnings / 200) * 100, 100);
+            document.getElementById('dash-goal-bar').style.width = pct + '%';
+
+            // History Snippet
+            const history = db.deliveries
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 3);
+
+            document.getElementById('dash-history').innerHTML = history.map(d => `
+                <div class="bg-white p-3 rounded-xl shadow-sm flex justify-between items-center">
+                    <div>
+                        <p class="font-bold text-sm text-gray-800">${d.clientName}</p>
+                        <p class="text-xs text-gray-500">${new Date(d.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                    </div>
+                    <span class="text-sm font-bold ${d.status === 'active' ? 'text-green-500' : 'text-gray-700'}">${fmtMoney(d.value)}</span>
+                </div>
+            `).join('');
+        }
+
+        // --- DELIVERY ACTIONS ---
+        function submitDelivery(e) {
+            e.preventDefault();
+            const name = document.getElementById('d-name').value;
+            const val = parseFloat(document.getElementById('d-value').value);
+            const addr = document.getElementById('d-address').value;
+
+            if (!name || !addr) return;
+
+            // Check if Client exists, if not, create
+            const clientExists = db.clients.find(c => c.name === name);
+            if (!clientExists) {
+                db.clients.push({ id: getID(), name: name, phone: document.getElementById('d-phone').value, address: addr });
+            }
+
+            const newDelivery = {
+                id: getID(),
+                clientName: name,
+                value: val,
+                address: addr,
+                phone: document.getElementById('d-phone').value,
+                payment: document.getElementById('d-payment').value,
+                date: new Date().toISOString(),
+                status: 'active' // Starts active
+            };
+
+            // If another is active, complete it first? No, allow only one active.
+            const currentActive = db.deliveries.find(d => d.status === 'active');
+            if (currentActive) {
+                if (!confirm('Existe uma entrega em andamento. Deseja finalizá-la e iniciar esta?')) return;
+                currentActive.status = 'completed';
+            }
+
+            db.deliveries.push(newDelivery);
+
+            // Add to finance logic
+            if (newDelivery.payment !== 'pending') {
+                db.finances.push({
+                    id: getID(),
+                    type: 'income',
+                    desc: 'Entrega: ' + name,
+                    val: val,
+                    date: new Date().toISOString()
+                });
+            }
+
+            save();
+            closeAllModals();
+            e.target.reset();
+            renderDashboard(); // Will trigger Active Card
+        }
+
+        function completeActiveDelivery() {
+            const active = db.deliveries.find(d => d.status === 'active');
+            if (active) {
+                active.status = 'completed';
+
+                // If payment was pending, now it's collected
+                if (active.payment === 'pending') {
+                    db.finances.push({
+                        id: getID(),
+                        type: 'income',
+                        desc: 'Entrega (Recebido): ' + active.clientName,
+                        val: active.value,
+                        date: new Date().toISOString()
+                    });
+                    active.payment = 'cash'; // Marked as paid
+                }
+
+                save();
+                renderDashboard();
+            }
+        }
+
+        function openMaps() {
+            const active = db.deliveries.find(d => d.status === 'active');
+            if (active) {
+                window.location.href = `https://waze.com/ul?q=${encodeURIComponent(active.address)}`;
+            }
+        }
+
+        function renderDeliveriesList() {
+            const term = document.getElementById('delivery-search').value.toLowerCase();
+            const list = db.deliveries
+                .filter(d => d.clientName.toLowerCase().includes(term) || d.address.toLowerCase().includes(term))
+                .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            document.getElementById('deliveries-list').innerHTML = list.map(d => `
+                <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 ${d.status === 'active' ? 'border-plena-green' : 'border-gray-300'}">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-bold text-gray-800">${d.clientName}</h4>
+                            <p class="text-xs text-gray-500">${new Date(d.date).toLocaleDateString()} - ${new Date(d.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                            <p class="text-sm text-gray-600 mt-1 truncate w-48">${d.address}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-bold text-plena-green">${fmtMoney(d.value)}</span>
+                            <br>
+                            <span class="text-[10px] uppercase font-bold text-gray-400">${d.status === 'active' ? 'Em Rota' : 'Entregue'}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            if (list.length === 0) document.getElementById('deliveries-list').innerHTML = '<p class="text-center text-gray-400 mt-10">Nenhuma entrega encontrada.</p>';
+        }
+
+        // --- CLIENTS ---
+        function renderClients() {
+            document.getElementById('clients-list').innerHTML = db.clients.map(c => `
+                <div class="bg-white p-4 rounded-xl shadow-sm flex justify-between items-center" onclick="useClient('${c.id}')">
+                    <div>
+                        <p class="font-bold text-gray-800">${c.name}</p>
+                        <p class="text-sm text-gray-500">${c.address}</p>
+                    </div>
+                    <button class="bg-gray-100 p-2 rounded-lg text-gray-600"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                </div>
+             `).join('');
+        }
+
+        function submitClient(e) {
+            e.preventDefault();
+            const name = document.getElementById('c-name').value;
+            db.clients.push({
+                id: getID(),
+                name: name,
+                phone: document.getElementById('c-phone').value,
+                address: document.getElementById('c-address').value
+            });
+            save();
+            closeAllModals();
+            if (!document.getElementById('view-clients').classList.contains('hidden')) renderClients();
+        }
+
+        // Helper to populate select
+        function updateClientSelect() {
+            const sel = document.getElementById('d-client-select');
+            sel.innerHTML = '<option value="">Novo Cliente</option>' +
+                db.clients.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+        }
+
+        function fillClientInfo(id) {
+            const client = db.clients.find(c => c.id === id);
+            if (client) {
+                document.getElementById('d-name').value = client.name;
+                document.getElementById('d-phone').value = client.phone || '';
+                document.getElementById('d-address').value = client.address || '';
+            } else {
+                document.getElementById('d-name').value = '';
+                document.getElementById('d-phone').value = '';
+                document.getElementById('d-address').value = '';
+            }
+        }
+
+        // --- FINANCE & VEHICLE ---
+        function renderFinance() {
+            const month = new Date().getMonth();
+            const monthlyTx = db.finances.filter(t => new Date(t.date).getMonth() === month);
+
+            const income = monthlyTx.filter(t => t.type === 'income').reduce((s, t) => s + t.val, 0);
+            const expense = monthlyTx.filter(t => t.type === 'expense').reduce((s, t) => s + t.val, 0);
+
+            document.getElementById('fin-income').innerText = fmtMoney(income);
+            document.getElementById('fin-expense').innerText = fmtMoney(expense);
+            document.getElementById('fin-balance').innerText = fmtMoney(income - expense);
+
+            document.getElementById('finance-list').innerHTML = monthlyTx.sort((a, b) => new Date(b.date) - new Date(a.date)).map(t => `
+                <div class="flex justify-between items-center p-3 bg-white rounded-xl border-l-4 ${t.type === 'income' ? 'border-green-500' : 'border-red-500'}">
+                    <div>
+                        <p class="font-medium text-gray-800">${t.desc}</p>
+                        <p class="text-xs text-gray-400">${new Date(t.date).toLocaleDateString()}</p>
+                    </div>
+                    <span class="font-bold ${t.type === 'income' ? 'text-green-600' : 'text-red-600'}">
+                        ${t.type === 'income' ? '+' : '-'}${fmtMoney(t.val)}
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        function submitTransaction(e, type) {
+            e.preventDefault();
+            const prefix = type === 'income' ? 'inc' : 'exp';
+            const desc = document.getElementById(prefix + '-desc').value;
+            const val = parseFloat(document.getElementById(prefix + '-val').value);
+
+            // Handle Expense Category specific logic
+            if (type === 'expense') {
+                const cat = document.getElementById('exp-cat').value;
+                if (cat === 'fuel') {
+                    // Simple logic: assume filling tank adds 25% for simplicity in this quick add
+                    db.vehicle.fuel = Math.min(100, db.vehicle.fuel + 25);
+                }
+            }
+
+            db.finances.push({
+                id: getID(),
+                type: type,
+                desc: desc,
+                val: val,
+                date: new Date().toISOString()
+            });
+            save();
+            closeAllModals();
+            renderFinance();
+        }
+
+        function renderVehicle() {
+            document.getElementById('vehicle-fuel-bar').style.width = db.vehicle.fuel + '%';
+            document.getElementById('vehicle-fuel-text').innerText = db.vehicle.fuel + '%';
+            document.getElementById('vehicle-odometer').innerText = db.vehicle.odometer + ' km';
+
+            document.getElementById('maintenance-list').innerHTML = db.vehicle.maintenance.map(m => `
+                <div class="bg-gray-50 p-3 rounded-xl flex justify-between">
+                    <div>
+                        <p class="font-bold text-sm text-gray-800">${m.service}</p>
+                        <p class="text-xs text-gray-500">${new Date(m.date).toLocaleDateString()}</p>
+                    </div>
+                    <span class="font-bold text-gray-700">${fmtMoney(m.cost)}</span>
+                </div>
+            `).join('');
+        }
+
+        function submitMaintenance(e) {
+            e.preventDefault();
+            const service = document.getElementById('m-service').value;
+            const cost = parseFloat(document.getElementById('m-cost').value);
+
+            db.vehicle.maintenance.push({
+                id: getID(),
+                service: service,
+                cost: cost,
+                date: new Date().toISOString()
+            });
+
+            // Add as expense too
+            db.finances.push({
+                id: getID(),
+                type: 'expense',
+                desc: 'Manut: ' + service,
+                val: cost,
+                date: new Date().toISOString()
+            });
+
+            save();
+            closeAllModals();
+            renderVehicle();
+        }
+
+        function updateFuelManual() {
+            const n = prompt("Nível de Combustível (0-100):", db.vehicle.fuel);
+            if (n) {
+                db.vehicle.fuel = parseInt(n);
+                save();
+                renderVehicle();
+                updateHeader();
+            }
+        }
+
+        function updateOdometer() {
+            const n = prompt("KM Atual:", db.vehicle.odometer);
+            if (n) {
+                db.vehicle.odometer = parseInt(n);
+                save();
+                renderVehicle();
+            }
+        }
+
+        function renderMenu() {
+            document.getElementById('menu-rider-name').innerText = db.settings.name;
+        }
+
+        function editProfile() {
+            const name = prompt("Seu Nome:", db.settings.name);
+            if (name) {
+                db.settings.name = name;
+                save();
+                renderMenu();
+            }
+        }
+
+        // --- MODAL SYSTEM ---
+        function openModal(id, extraParam) {
+            // Update selects if needed
+            if (id === 'modal-delivery') {
+                updateClientSelect();
+                document.getElementById('d-value').value = db.settings.fee.toFixed(2);
+            }
+            if (id === 'modal-expense' && extraParam === 'fuel') {
+                document.getElementById('exp-desc').value = "Abastecimento";
+                document.getElementById('exp-cat').value = "fuel";
+            }
+
+            document.getElementById('overlay').classList.remove('hidden');
+            setTimeout(() => document.getElementById('overlay').classList.remove('opacity-0'), 10);
+
+            document.getElementById(id).classList.add('open');
+        }
+
+        function closeAllModals() {
+            document.getElementById('overlay').classList.add('opacity-0');
+            setTimeout(() => document.getElementById('overlay').classList.add('hidden'), 300);
+
+            document.querySelectorAll('.bottom-sheet').forEach(el => {
+                el.classList.remove('open');
+            });
+        }
+
+        function factoryReset() {
+            if (confirm("ATENÇÃO: Isso apagará TODOS os dados. Continuar?")) {
+                localStorage.removeItem(DB_KEY);
+                location.reload();
+            }
+        }
+
+        function downloadBackup() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "backup_plena.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        // Start
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>

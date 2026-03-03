@@ -1,0 +1,3176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Plena Orçamentos - Gestão Profissional</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#2563EB">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Sistema de orçamentos offline para prestadores de serviço - Plena Aplicativos">
+    <link rel="manifest" href="data:application/manifest+json,{}">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        plena: {
+                            orange: '#2563EB',
+                            dark: '#1e40af',
+                            black: '#1a1a1a',
+                            blue: '#3B82F6',
+                            green: '#10B981',
+                            red: '#EF4444',
+                            yellow: '#F59E0B'
+                        },
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s infinite',
+                        'slide-in': 'slideIn 0.3s ease-out',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.js"></script>
+
+    <style>
+        :root {
+            --plena-orange: #2563EB;
+            --plena-dark: #1e40af;
+            --plena-black: #1a1a1a;
+            --plena-blue: #3B82F6;
+            --plena-green: #10B981;
+            --plena-red: #EF4444;
+            --plena-yellow: #F59E0B;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #F3F4F6;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-10px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Gráfico CSS Avançado */
+        .chart-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 180px;
+            gap: 2%;
+        }
+
+        .bar-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            height: 100%;
+            position: relative;
+        }
+
+        .bar-wrapper {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 2px;
+            height: 100%;
+            width: 100%;
+        }
+
+        .bar {
+            width: 45%;
+            border-radius: 6px 6px 0 0;
+            transition: height 0.5s ease;
+            min-height: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .bar:hover::after {
+            content: attr(data-value);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .x-label {
+            font-size: 10px;
+            color: #666;
+            text-align: center;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s ease;
+        }
+
+        /* Sidebar Mobile */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 50;
+                height: 100vh;
+                width: 280px;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .sidebar {
+                width: 280px;
+                position: fixed;
+                height: 100vh;
+            }
+
+            .main-content {
+                margin-left: 280px;
+            }
+        }
+
+        /* Card Hover Effects */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background-color: #DCFCE7;
+            color: #166534;
+        }
+
+        .badge-warning {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        .badge-danger {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        /* Print Styles for Quotes */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #invoice-print,
+            #invoice-print * {
+                visibility: visible;
+            }
+
+            #invoice-print {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 antialiased">
+
+    <!-- Overlay para sidebar mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+        class="sidebar bg-plena-black text-white transition-transform duration-300 flex flex-col shadow-2xl">
+        <div class="h-20 flex items-center px-6 bg-gradient-to-r from-plena-orange to-plena-dark">
+            <i data-lucide="clipboard-list" class="w-8 h-8 mr-3"></i>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight">PLENA ORÇAMENTOS</h1>
+                <p class="text-xs text-white/90 font-medium">Gestão Profissional de Orçamentos</p>
+            </div>
+        </div>
+
+        <nav class="p-4 space-y-2 flex-1 overflow-y-auto">
+            <button onclick="router('dashboard')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group active-nav"
+                id="nav-dashboard">
+                <i data-lucide="file-text" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Dashboard
+            </button>
+            <button onclick="router('quotes')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-quotes">
+                <i data-lucide="file-text" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Orçamentos
+            </button>
+            <button onclick="router('transactions')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-transactions">
+                <i data-lucide="wallet" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Fluxo de Caixa
+            </button>
+            <button onclick="router('reports')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-reports">
+                <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Relatórios
+            </button>
+            <button onclick="router('settings')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-settings">
+                <i data-lucide="settings" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Configurações
+            </button>
+            <button onclick="router('instructions')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-instructions">
+                <i data-lucide="book-open" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Manual de Uso
+            </button>
+            <button onclick="router('about')"
+                class="nav-item w-full flex items-center px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+                id="nav-about">
+                <i data-lucide="info" class="w-5 h-5 mr-3 text-gray-400 group-hover:text-white"></i>
+                Sobre a Plena
+            </button>
+        </nav>
+
+        <div class="p-6 border-t border-white/10 text-center">
+            <p class="text-xs text-gray-500">Todos os Direitos Reservados &copy; 2026</p>
+            <a href="https://www.plenaaplicativos.com.br" target="_blank"
+                class="text-[10px] text-gray-600 hover:text-plena-orange transition-colors mt-1 block decoration-0">
+                Plena Soluções Digitais LTDA
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content min-h-screen flex flex-col">
+        <!-- Header -->
+        <header
+            class="bg-white h-20 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm border-b border-gray-100">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg text-gray-600">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <h2 id="page-title" class="text-xl font-bold text-gray-800 hidden sm:block">Dashboard</h2>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-plena-green/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                    </div>
+                    <button onclick="openReportModal()"
+                        class="relative flex items-center px-4 py-2.5 bg-gray-800 text-white rounded-lg text-sm font-medium hover:bg-black transition-all shadow-sm active:scale-95">
+                        <i data-lucide="bar-chart" class="w-4 h-4 sm:mr-2"></i>
+                        <span class="hidden sm:inline">Relatório</span>
+                        <span class="sm:hidden">Relatório</span>
+                    </button>
+                </div>
+
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-plena-orange/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300">
+                    </div>
+                    <button onclick="openQuoteModal()"
+                        class="relative flex items-center px-4 py-2.5 bg-plena-orange text-white rounded-lg text-sm font-bold hover:bg-plena-dark transition-all shadow-lg shadow-blue-200 active:scale-95">
+                        <i data-lucide="plus" class="w-5 h-5 sm:mr-2"></i>
+                        <span class="hidden sm:inline">Novo Orçamento</span>
+                        <span class="sm:hidden">Novo</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="p-4 lg:p-8 flex-1 overflow-y-auto">
+
+            <!-- Dashboard View -->
+            <section id="view-dashboard" class="view-section fade-in">
+                <!-- Balance Alert -->
+                <div id="balance-alert"
+                    class="hidden mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                    <div class="flex items-center">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 mr-3"></i>
+                        <div>
+                            <p class="font-bold">Atenção: Saldo Negativo!</p>
+                            <p class="text-sm">Seu saldo está negativo. Considere rever suas despesas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Month Selector -->
+                <div class="mb-6 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-gray-800">Resumo de Orçamentos</h3>
+                    <div class="flex items-center gap-3">
+                        <input type="month" id="month-selector" onchange="renderDashboard()"
+                            class="border rounded-lg p-2 text-sm bg-white">
+                        <button onclick="exportDashboardPDF()"
+                            class="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Orçamentos
+                                    Pendentes</p>
+                                <h3 id="dash-pending" class="text-3xl font-bold text-yellow-500">0</h3>
+                                <p class="text-xs text-gray-500 mt-1">Aguardando aprovação</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center">
+                                <i data-lucide="clock" class="w-6 h-6 text-yellow-500"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Orçamentos
+                                    Aprovados</p>
+                                <h3 id="dash-approved" class="text-3xl font-bold text-green-600">0</h3>
+                                <p class="text-xs text-gray-500 mt-1">Convertidos em serviços</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                                <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Valor em
+                                    Pendentes</p>
+                                <h3 id="dash-pending-value" class="text-2xl font-bold text-gray-900">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">Potencial de receita</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i data-lucide="dollar-sign" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Saldo de Caixa
+                                </p>
+                                <h3 id="dash-balance" class="text-2xl font-bold text-gray-800">R$ 0,00</h3>
+                                <p class="text-xs text-gray-500 mt-1">Disponível</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-plena-orange/10 flex items-center justify-center">
+                                <i data-lucide="wallet" class="w-6 h-6 text-plena-orange"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts and Analytics -->
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                    <div class="xl:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-bold text-gray-800">Desempenho de Orçamentos (7 Dias)</h3>
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                    <span class="text-xs text-gray-600">Aprovados</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <span class="text-xs text-gray-600">Pendentes</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="chart-area" class="chart-container"></div>
+                    </div>
+
+                    <!-- Top Clients & Status -->
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                <i data-lucide="users" class="w-4 h-4 mr-2 text-plena-orange"></i>
+                                Top Clientes
+                            </h3>
+                            <div id="top-clients" class="space-y-4">
+                                <!-- Dynamic content -->
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4">Distribuição por Status</h3>
+                            <div id="status-distribution" class="space-y-3">
+                                <!-- Dynamic content -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Quotes -->
+                <div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-gray-800">Orçamentos Recentes</h3>
+                        <button onclick="router('quotes')"
+                            class="text-sm text-plena-orange hover:text-plena-dark font-medium">
+                            Ver todos →
+                        </button>
+                    </div>
+                    <div id="recent-quotes" class="space-y-3">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quotes View -->
+            <section id="view-quotes" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Orçamentos</h2>
+                        <p class="text-sm text-gray-600">Gerencie todas as suas propostas comerciais</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="exportQuotesCSV()"
+                            class="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            Exportar CSV
+                        </button>
+                        <button onclick="printQuotes()"
+                            class="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors">
+                            <i data-lucide="printer" class="w-4 h-4"></i>
+                            Imprimir
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+                    <div class="p-4 bg-gray-50 grid grid-cols-1 md:grid-cols-4 gap-3 border-b border-gray-200">
+                        <div class="relative">
+                            <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                            <input type="text" id="quote-search" onkeyup="renderQuotes()"
+                                placeholder="Buscar cliente..."
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-orange outline-none text-sm">
+                        </div>
+                        <div>
+                            <input type="date" id="filter-start" onchange="renderQuotes()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div>
+                            <input type="date" id="filter-end" onchange="renderQuotes()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div class="flex gap-2">
+                            <select id="filter-status" onchange="renderQuotes()"
+                                class="flex-1 px-4 py-2 rounded-lg border border-gray-300 text-sm bg-white outline-none">
+                                <option value="all">Todos</option>
+                                <option value="pending">Pendente</option>
+                                <option value="sent">Enviado</option>
+                                <option value="approved">Aprovado</option>
+                                <option value="rejected">Recusado</option>
+                                <option value="closed">Fechado</option>
+                            </select>
+                            <button onclick="clearQuoteFilters()"
+                                class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm transition-colors">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quotes Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                                <tr>
+                                    <th class="px-6 py-3">Data</th>
+                                    <th class="px-6 py-3">Cliente</th>
+                                    <th class="px-6 py-3">Serviço</th>
+                                    <th class="px-6 py-3">Status</th>
+                                    <th class="px-6 py-3 text-right">Valor</th>
+                                    <th class="px-6 py-3 text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="quotes-table-body" class="divide-y divide-gray-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                    <div id="quotes-empty-msg" class="hidden p-8 text-center text-gray-400">
+                        <i data-lucide="file-text" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
+                        <p>Nenhum orçamento encontrado.</p>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total Orçamentos</p>
+                        <p id="quotes-total" class="text-lg font-bold text-blue-700">0</p>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Valor Pendente</p>
+                        <p id="quotes-pending-value" class="text-lg font-bold text-yellow-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Valor Aprovado</p>
+                        <p id="quotes-approved-value" class="text-lg font-bold text-green-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Taxa de Conversão</p>
+                        <p id="quotes-conversion" class="text-lg font-bold text-gray-700">0%</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Transactions View -->
+            <section id="view-transactions" class="view-section hide fade-in">
+                <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Fluxo de Caixa</h2>
+                        <p class="text-sm text-gray-600">Gerencie todas as movimentações financeiras</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="exportTransactionsCSV()"
+                            class="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            Exportar CSV
+                        </button>
+                        <button onclick="openTransModal()"
+                            class="flex items-center gap-2 px-4 py-2 bg-plena-orange text-white rounded-lg text-sm font-medium hover:bg-plena-dark transition-colors">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            Nova Transação
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+                    <div class="p-4 bg-gray-50 grid grid-cols-1 md:grid-cols-4 gap-3 border-b border-gray-200">
+                        <div class="relative">
+                            <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
+                            <input type="text" id="trans-search" onkeyup="renderTransactions()" placeholder="Buscar..."
+                                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-plena-orange outline-none text-sm">
+                        </div>
+                        <div>
+                            <input type="date" id="trans-start" onchange="renderTransactions()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div>
+                            <input type="date" id="trans-end" onchange="renderTransactions()"
+                                class="w-full border p-2 rounded-lg text-sm bg-white">
+                        </div>
+                        <div class="flex gap-2">
+                            <select id="trans-type" onchange="renderTransactions()"
+                                class="flex-1 px-4 py-2 rounded-lg border border-gray-300 text-sm bg-white outline-none">
+                                <option value="all">Todos</option>
+                                <option value="income">Entradas</option>
+                                <option value="expense">Saídas</option>
+                            </select>
+                            <button onclick="clearTransFilters()"
+                                class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm transition-colors">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Transactions Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                                <tr>
+                                    <th class="px-6 py-3">Data</th>
+                                    <th class="px-6 py-3">Descrição</th>
+                                    <th class="px-6 py-3">Categoria</th>
+                                    <th class="px-6 py-3">Pagamento</th>
+                                    <th class="px-6 py-3 text-right">Valor</th>
+                                    <th class="px-6 py-3 text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trans-table-body" class="divide-y divide-gray-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                    <div id="trans-empty-msg" class="hidden p-8 text-center text-gray-400">
+                        <i data-lucide="wallet" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
+                        <p>Nenhuma transação encontrada.</p>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total Entradas</p>
+                        <p id="trans-income" class="text-lg font-bold text-green-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Total Saídas</p>
+                        <p id="trans-expense" class="text-lg font-bold text-red-700">R$ 0,00</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <p class="text-xs text-gray-500 uppercase font-bold mb-1">Saldo Filtrado</p>
+                        <p id="trans-balance" class="text-lg font-bold text-blue-700">R$ 0,00</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports View -->
+            <section id="view-reports" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Relatórios Avançados</h2>
+                    <p class="text-sm text-gray-600">Gere relatórios detalhados para análise financeira</p>
+                </div>
+
+                <!-- Report Filters -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
+                    <h3 class="font-bold text-gray-800 mb-4">Configurar Período</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Data Inicial</label>
+                            <input type="date" id="rep-start" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase">Data Final</label>
+                            <input type="date" id="rep-end" class="w-full border p-2 rounded-lg text-sm mt-1">
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="generateReport()"
+                                class="flex-1 bg-plena-orange text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                                Gerar Relatório
+                            </button>
+                            <button onclick="generateFullReport()"
+                                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors"
+                                title="Relatório Completo">
+                                <i data-lucide="file-text" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Results -->
+                <div id="report-result" class="hide space-y-6">
+                    <!-- Summary Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-green-50 p-6 rounded-xl text-center border border-green-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Entradas</p>
+                            <p id="rep-inc" class="text-2xl font-bold text-green-700 mt-2">R$ 0,00</p>
+                        </div>
+                        <div class="bg-red-50 p-6 rounded-xl text-center border border-red-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="trending-down" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Saídas</p>
+                            <p id="rep-exp" class="text-2xl font-bold text-red-700 mt-2">R$ 0,00</p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-xl text-center border border-blue-100">
+                            <div
+                                class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="wallet" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">Saldo</p>
+                            <p id="rep-bal" class="text-2xl font-bold text-blue-700 mt-2">R$ 0,00</p>
+                        </div>
+                    </div>
+
+                    <!-- Category Breakdown -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="font-bold text-gray-800 mb-4">Análise por Categoria</h3>
+                        <div id="category-report" class="space-y-4"></div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button onclick="shareReport()"
+                            class="bg-[#25D366] text-white py-3 rounded-xl font-bold hover:bg-[#128C7E] flex justify-center items-center gap-2">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i> Enviar WhatsApp
+                        </button>
+                        <button onclick="printReport()"
+                            class="bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 flex justify-center items-center gap-2">
+                            <i data-lucide="printer" class="w-4 h-4"></i> Imprimir Relatório
+                        </button>
+                        <button onclick="downloadReportPDF()"
+                            class="bg-gray-800 text-white py-3 rounded-xl font-bold hover:bg-black flex justify-center items-center gap-2">
+                            <i data-lucide="download" class="w-4 h-4"></i> Baixar PDF
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings View -->
+            <section id="view-settings" class="view-section hide fade-in">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Configurações do Sistema</h2>
+                    <p class="text-sm text-gray-600">Personalize e gerencie suas preferências</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Company Settings -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="font-bold text-gray-800 mb-4">Configurações da Empresa</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 uppercase">Nome da Empresa</label>
+                                <input type="text" id="company-name" class="w-full border p-2 rounded-lg text-sm mt-1"
+                                    placeholder="Seu nome ou nome da empresa">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 uppercase">Telefone para Contato</label>
+                                <input type="tel" id="company-phone" class="w-full border p-2 rounded-lg text-sm mt-1"
+                                    placeholder="(11) 99999-9999">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 uppercase">E-mail</label>
+                                <input type="email" id="company-email" class="w-full border p-2 rounded-lg text-sm mt-1"
+                                    placeholder="seu@email.com">
+                            </div>
+                            <button onclick="saveCompanySettings()"
+                                class="w-full bg-plena-orange text-white py-3 rounded-lg text-sm font-bold hover:bg-plena-dark transition-colors">
+                                Salvar Configurações
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Data Management -->
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                <i data-lucide="shield-alert" class="w-5 h-5 mr-2 text-plena-orange"></i>
+                                Segurança de Dados
+                            </h3>
+
+                            <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg text-sm text-blue-800 mb-6">
+                                <p class="font-bold mb-2">⚠️ Importante</p>
+                                <p>Seus dados ficam salvos 100% no navegador. Faça backup regularmente para evitar
+                                    perdas!</p>
+                            </div>
+
+                            <div class="space-y-3">
+                                <button onclick="downloadBackup()"
+                                    class="w-full border border-gray-300 py-3 rounded-lg text-sm font-medium hover:bg-gray-50 flex justify-center items-center gap-2">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    Baixar Backup Completo (.json)
+                                </button>
+
+                                <div class="relative">
+                                    <button
+                                        class="w-full bg-gray-800 text-white py-3 rounded-lg text-sm font-medium flex justify-center items-center gap-2">
+                                        <i data-lucide="upload" class="w-4 h-4"></i>
+                                        Restaurar Backup
+                                    </button>
+                                    <input type="file" onchange="restoreBackup(this)" accept=".json"
+                                        class="absolute inset-0 opacity-0 cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Danger Zone -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center text-red-600">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
+                                Zona de Perigo
+                            </h3>
+
+                            <div class="bg-red-50 p-4 rounded-lg border border-red-100 mb-4">
+                                <p class="text-sm text-red-600"><strong>Atenção:</strong> Estas ações são irreversíveis.
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="clearAllData()"
+                                    class="py-2.5 border border-red-300 text-red-600 rounded-lg text-sm hover:bg-red-50 transition-colors">
+                                    Limpar Todos os Dados
+                                </button>
+                                <button onclick="factoryReset()"
+                                    class="py-2.5 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition-colors">
+                                    Resetar Sistema
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Instructions View -->
+            <section id="view-instructions" class="view-section hide fade-in">
+                <div class="max-w-6xl mx-auto pb-12">
+                    <!-- Cabeçalho Hero -->
+                    <div class="text-center mb-10 pt-4">
+                        <div
+                            class="inline-flex items-center justify-center p-4 bg-gradient-to-r from-plena-blue to-plena-dark rounded-2xl mb-4 shadow-lg">
+                            <i data-lucide="file-text" class="w-12 h-12 text-white"
+                                aria-label="Ícone de Orçamentos - Manual de Uso"></i>
+                        </div>
+                        <h1 class="text-3xl font-bold text-gray-800 mb-2">Manual Completo de Uso</h1>
+                        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Guia passo a passo para dominar seu Sistema de Orçamentos e Serviços</p>
+                        <div class="mt-4 flex flex-wrap justify-center gap-2">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">✓ Para
+                                Iniciantes</span>
+                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">📱 Mobile e
+                                Desktop</span>
+                            <span class="px-3 py-1 bg-blue-100 text-plena-blue rounded-full text-xs font-bold">⚡ Rápido
+                                e Prático</span>
+                        </div>
+                    </div>
+
+                    <!-- Barra de Progresso do Tutorial -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
+                        <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                            <i data-lucide="compass" class="w-5 h-5 mr-2 text-plena-blue"></i>
+                            Seu Progresso no Aprendizado
+                        </h3>
+                        <div class="mb-4">
+                            <div class="progress-bar">
+                                <div id="tutorial-progress" class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-500 mt-2">
+                                <span>0% Concluído</span>
+                                <span id="completed-steps">0/7 etapas</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-7 gap-2">
+                            <button onclick="scrollToSection('instalacao')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                1. Instalação
+                            </button>
+                            <button onclick="scrollToSection('config')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                2. Ajustes Iniciais
+                            </button>
+                            <button onclick="scrollToSection('cadastros')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                3. Cadastros
+                            </button>
+                            <button onclick="scrollToSection('operacao')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                4. Operação
+                            </button>
+                            <button onclick="scrollToSection('gestao')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                5. Relatórios
+                            </button>
+                            <button onclick="scrollToSection('seguranca')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                6. Backup
+                            </button>
+                            <button onclick="scrollToSection('checklist')"
+                                class="tutorial-step text-center p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-xs">
+                                7. Checklist
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Seção 1: Instalação -->
+                    <div id="instalacao"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">1
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Instalação do App no Celular</h3>
+                            </div>
+                            <button onclick="markSectionComplete('instalacao')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+
+                        <div class="bg-gray-900 rounded-2xl p-6 text-white shadow-lg mb-6">
+                            <h4 class="font-bold text-lg mb-4 flex items-center">
+                                <i data-lucide="download" class="w-5 h-5 mr-2 text-green-400"></i>
+                                Torne o App Disponível OFFLINE
+                            </h4>
+                            <p class="text-gray-300 mb-4">Instale no celular para usar sem internet, igual um app
+                                normal:</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                                <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+                                    <div class="font-bold text-white mb-3 flex items-center">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center mr-2">
+                                            <i data-lucide="smartphone" class="w-4 h-4"></i>
+                                        </div>
+                                        Android (Chrome)
+                                    </div>
+                                    <ol class="list-decimal pl-5 space-y-3 text-gray-300">
+                                        <li>Abra o link no navegador <strong>Chrome</strong></li>
+                                        <li>Toque nos <strong>três pontos</strong> (canto superior)</li>
+                                        <li>Selecione <strong>"Instalar Aplicativo"</strong></li>
+                                    </ol>
+                                </div>
+                                <div class="bg-white/10 p-4 rounded-xl border border-white/10">
+                                    <div class="font-bold text-white mb-3 flex items-center">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center mr-2">
+                                            <i data-lucide="smartphone" class="w-4 h-4"></i>
+                                        </div>
+                                        iPhone (Safari)
+                                    </div>
+                                    <ol class="list-decimal pl-5 space-y-3 text-gray-300">
+                                        <li>Abra o link no navegador <strong>Safari</strong></li>
+                                        <li>Toque no ícone de <strong>Compartilhar</strong> (seta para cima)</li>
+                                        <li>Toque em <strong>"Adicionar à Tela de Início"</strong></li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 2: Ajustes Iniciais -->
+                    <div id="config"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">2
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Ajustes da sua Empresa</h3>
+                            </div>
+                            <button onclick="markSectionComplete('config')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                            <div class="space-y-4">
+                                <p class="text-gray-600">Personalize os dados que aparecerão nos seus orçamentos:</p>
+                                <ul class="space-y-3 text-sm text-gray-600">
+                                    <li class="flex items-center gap-3">
+                                        <i data-lucide="settings" class="w-5 h-5 text-plena-blue"></i>
+                                        Acesse a aba <strong>Configurações</strong>.
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <i data-lucide="camera" class="w-5 h-5 text-plena-blue"></i>
+                                        Insira sua <strong>Logomarca</strong> (aparecerá no PDF).
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <i data-lucide="building" class="w-5 h-5 text-plena-blue"></i>
+                                        Configure o nome da empresa, telefone e e-mail.
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <i data-lucide="dollar-sign" class="w-5 h-5 text-plena-blue"></i>
+                                        Defina o símbolo da moeda local (R$).
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <i data-lucide="info" class="w-6 h-6 text-plena-blue"></i>
+                                    <h4 class="font-bold text-gray-800">Dica de Profissional</h4>
+                                </div>
+                                <p class="text-sm text-gray-600 leading-relaxed">
+                                    Ter sua logo e dados completos transmite confiança ao cliente e aumenta suas chances de aprovação.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 3: Cadastros -->
+                    <div id="cadastros"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">3
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Clientes e Serviços</h3>
+                            </div>
+                            <button onclick="markSectionComplete('cadastros')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+                        <div class="space-y-6">
+                            <p class="text-gray-600">Organize sua base de dados para ganhar tempo:</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="p-4 border border-gray-100 rounded-xl bg-gray-50">
+                                    <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                                        <i data-lucide="users" class="w-4 h-4 text-blue-600"></i>
+                                        Base de Clientes
+                                    </h4>
+                                    <p class="text-sm text-gray-600">Cadastre nome, WhatsApp e endereço dos seus clientes frequentes.</p>
+                                </div>
+                                <div class="p-4 border border-gray-100 rounded-xl bg-gray-50">
+                                    <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                                        <i data-lucide="list" class="w-4 h-4 text-orange-600"></i>
+                                        Itens e Mão de Obra
+                                    </h4>
+                                    <p class="text-sm text-gray-600">Você pode detalhar materiais e serviços separadamente no orçamento.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 4: Operação -->
+                    <div id="operacao"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">4
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Criando Orçamentos Profissionais</h3>
+                            </div>
+                            <button onclick="markSectionComplete('operacao')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <div class="flex-1 space-y-4">
+                                    <p class="text-gray-600 font-bold italic">O fluxo ideal:</p>
+                                    <ol class="space-y-4">
+                                        <li class="flex items-start gap-3">
+                                            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center flex-shrink-0 text-xs font-bold">1</span>
+                                            <p class="text-sm text-gray-600">Clique em <strong>Novo Orçamento</strong> no dashboard.</p>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center flex-shrink-0 text-xs font-bold">2</span>
+                                            <p class="text-sm text-gray-600">Selecione ou cadastre o <strong>Cliente</strong>.</p>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center flex-shrink-0 text-xs font-bold">3</span>
+                                            <p class="text-sm text-gray-600">Adicione a descrição do serviço e os valores de materiais e mão de obra.</p>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center flex-shrink-0 text-xs font-bold">4</span>
+                                            <p class="text-sm text-gray-600">Defina o <strong>Status</strong> (Pendente, Aprovado, Concluído).</p>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center flex-shrink-0 text-xs font-bold">5</span>
+                                            <p class="text-sm text-gray-600">Clique em <strong>Salvar e Gerar PDF</strong> para enviar ao cliente via WhatsApp.</p>
+                                        </li>
+                                    </ol>
+                                </div>
+                                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 md:w-80">
+                                    <h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                        <i data-lucide="share-2" class="w-5 h-5 text-green-600"></i>
+                                        Envio Rápido
+                                    </h4>
+                                    <p class="text-sm text-gray-600 mb-4">Após salvar, o sistema gera um PDF limpo e profissional pronto para ser compartilhado em segundos.</p>
+                                    <div class="p-3 bg-white rounded-xl border border-gray-200 text-xs text-gray-500 italic">
+                                        "Seu orçamento já está pronto! Segue em anexo para sua análise."
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 5: Gestão -->
+                    <div id="gestao"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">5
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Acompanhamento e Dashboard</h3>
+                            </div>
+                            <button onclick="markSectionComplete('gestao')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
+                                    <i data-lucide="pie-chart" class="w-5 h-5 text-blue-600"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 mb-2">Visão Geral</h4>
+                                <p class="text-sm text-gray-600">Acompanhe quantos orçamentos foram aprovados e o valor total em negociação no mês.</p>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-3">
+                                    <i data-lucide="trending-up" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 mb-2">Fluxo de Caixa</h4>
+                                <p class="text-sm text-gray-600">Controle suas entradas e saídas na aba financeira para saber seu lucro real.</p>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-3">
+                                    <i data-lucide="file-bar-chart" class="w-5 h-5 text-purple-600"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800 mb-2">Relatórios</h4>
+                                <p class="text-sm text-gray-600">Gere resumos mensais de atendimentos e faturamento para organizar seu negócio.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 6: Segurança -->
+                    <div id="seguranca"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">6
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Proteção de Dados (Backup)</h3>
+                            </div>
+                            <button onclick="markSectionComplete('seguranca')"
+                                class="text-xs text-gray-500 hover:text-green-600">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> Marcar como concluído
+                            </button>
+                        </div>
+                        <div class="bg-red-50 p-6 rounded-2xl border border-red-100 mb-6">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="alert-triangle" class="w-6 h-6 text-red-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-red-800 mb-1">Atenção: Seus dados são locais!</h4>
+                                    <p class="text-sm text-red-700 leading-relaxed">
+                                        Para sua privacidade, as informações são salvas apenas no seu aparelho. Se você formatar o celular ou limpar o navegador, poderá perder seus dados.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <h4 class="font-bold text-gray-800 flex items-center gap-2">
+                                    <i data-lucide="download-cloud" class="w-5 h-5 text-blue-600"></i>
+                                    Como fazer Backup?
+                                </h4>
+                                <ol class="text-sm text-gray-600 space-y-3">
+                                    <li>Acesse <strong>Configurações</strong>.</li>
+                                    <li>Clique em <strong>Exportar Backup (JSON)</strong>.</li>
+                                    <li>Salve o arquivo no seu Google Drive ou WhatsApp.</li>
+                                </ol>
+                            </div>
+                            <div class="space-y-4">
+                                <h4 class="font-bold text-gray-800 flex items-center gap-2">
+                                    <i data-lucide="upload-cloud" class="w-5 h-5 text-green-600"></i>
+                                    Como Restaurar?
+                                </h4>
+                                <p class="text-sm text-gray-600">
+                                    Se trocar de celular, basta baixar o arquivo de backup e usar a opção <strong>Importar Backup</strong> na mesma tela de configurações.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção 7: Checklist Diário -->
+                    <div id="checklist"
+                        class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-8 scroll-mt-24">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="step-number bg-gradient-to-r from-plena-blue to-plena-dark text-white">7
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Rotina de Sucesso</h3>
+                            </div>
+                            <button onclick="resetChecklist()" class="text-sm text-plena-blue font-bold hover:underline">
+                                Reiniciar Checklist
+                            </button>
+                        </div>
+                        <p class="text-gray-600 mb-6 text-sm">Siga este roteiro diário para manter sua empresa organizada:</p>
+                        <div id="checklist-items" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <!-- Inserido via JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ABOUT VIEW -->
+            <section id="view-about" class="view-section hide fade-in">
+                <div class="max-w-4xl mx-auto pb-12">
+
+                    <!-- 1. Header Institucional -->
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mb-8 text-center">
+                        <div
+                            class="w-20 h-20 rounded-full bg-gradient-to-r from-plena-blue to-plena-dark flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-200">
+                            <i data-lucide="shield-check" class="w-10 h-10 text-white"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-1">Central de Segurança e Legalidade</h2>
+                        <p class="text-gray-500 font-medium">Plena Soluções Digitais • Transparência Total</p>
+                    </div>
+
+                    <!-- 2. Grid de Políticas -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <!-- Termos de Uso -->
+                        <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                            <h3 class="font-bold text-gray-800 mb-3 flex items-center text-lg">
+                                <div class="p-2 bg-blue-50 rounded-lg mr-3">
+                                    <i data-lucide="file-text" class="w-5 h-5 text-plena-blue"></i>
+                                </div>
+                                Termos de Uso
+                            </h3>
+                            <p class="text-sm text-gray-600 leading-relaxed text-justify">
+                                A licença concedida é <strong>pessoal, intransferível e não exclusiva</strong>. O software é
+                                fornecido "no estado em que se encontra" (as-is). É estritamente proibida a revenda, cópia,
+                                distribuição não autorizada ou engenharia reversa do código-fonte, sob pena das sanções
+                                previstas na Lei de Propriedade Intelectual (9.610/98).
+                            </p>
+                        </div>
+
+                        <!-- Privacidade e LGPD -->
+                        <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                            <h3 class="font-bold text-gray-800 mb-3 flex items-center text-lg">
+                                <div class="p-2 bg-green-50 rounded-lg mr-3">
+                                    <i data-lucide="lock" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                                Privacidade (LGPD)
+                            </h3>
+                            <p class="text-sm text-gray-600 leading-relaxed text-justify">
+                                Adotamos a arquitetura <strong>Privacy by Design (Local-First)</strong>. Seus dados
+                                financeiros e de clientes ficam salvos <strong>exclusivamente no seu dispositivo</strong>.
+                                A Plena não coleta, não armazena e não tem acesso a nenhuma informação inserida no sistema.
+                                Sua privacidade é absoluta.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 3. Responsabilidade do Usuário (Crítico) -->
+                    <div class="bg-red-50 border border-red-100 p-8 rounded-2xl mb-8 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <i data-lucide="alert-octagon" class="w-32 h-32 text-red-900"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <h3 class="font-bold text-red-800 mb-4 flex items-center text-lg">
+                                <i data-lucide="alert-triangle" class="w-6 h-6 mr-3"></i>
+                                IMPORTANTE: Sua Responsabilidade sobre os Dados
+                            </h3>
+                            <div class="space-y-4 text-sm text-red-900/80 text-justify font-medium">
+                                <p>
+                                    <strong>1. Backup é Obrigatório:</strong> Como não temos acesso aos seus dados,
+                                    <strong>não podemos recuperá-los</strong> em caso de perda, roubo ou dano ao seu
+                                    dispositivo. A realização de cópias de segurança (Backup) é de responsabilidade única e
+                                    exclusiva do usuário.
+                                </p>
+                                <p>
+                                    <strong>2. Isenção de Responsabilidade Técnica:</strong> A Plena exime-se de qualquer
+                                    responsabilidade por prejuízos decorrentes de falhas de hardware, vírus no dispositivo
+                                    do usuário, ou uso incorreto dos cálculos financeiros do sistema. Verifique sempre as
+                                    taxas configuradas.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Suporte e SLA -->
+                    <div class="bg-gradient-to-br from-gray-900 to-plena-dark text-white p-8 rounded-2xl mb-12 shadow-xl">
+                        <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                            <div class="flex-1">
+                                <h3 class="font-bold text-xl mb-2 flex items-center">
+                                    <i data-lucide="life-buoy" class="w-6 h-6 mr-3 text-plena-blue"></i>
+                                    Suporte Premium Especializado
+                                </h3>
+                                <p class="text-gray-300 text-sm mb-6 leading-relaxed">
+                                    Precisa de ajuda ou encontrou alguma inconsistência? Nossa equipe técnica está pronta
+                                    para atender você com prioridade. Garantimos a qualidade e a segurança da nossa marca.
+                                </p>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                        <p class="text-xs text-gray-400 uppercase font-bold">Canal Oficial</p>
+                                        <p class="font-bold text-white">E-mail</p>
+                                    </div>
+                                    <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+                                        <p class="text-xs text-gray-400 uppercase font-bold">Tempo de Resposta (SLA)</p>
+                                        <p class="font-bold text-plena-blue">Até 24h Úteis</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <a href="mailto:tecnologia@plenaaplicativos.com.br"
+                                    class="inline-flex items-center justify-center bg-white text-plena-dark px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-transform transform hover:scale-105 shadow-lg">
+                                    <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+                                    Falar com Suporte
+                                </a>
+                                <p class="text-xs text-center text-gray-400 mt-3">tecnologia@plenaaplicativos.com.br</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Confirmação e Aceite (Travamento) -->
+                    <div class="mt-8 mb-12" id="terms-action-container">
+                        <div class="bg-gray-50 border border-gray-200 p-6 rounded-2xl flex flex-col items-center text-center transition-all duration-300"
+                            id="terms-box">
+                            <i data-lucide="check-circle-2" class="w-12 h-12 text-gray-300 mb-3" id="terms-icon"></i>
+                            <h3 class="font-bold text-gray-800 text-lg mb-2" id="terms-title">Confirmação de Leitura</h3>
+                            <p class="text-sm text-gray-500 mb-6 max-w-lg" id="terms-desc">
+                                Para prosseguir com segurança, confirme que você leu e compreendeu os Termos de Uso, a
+                                Política de Privacidade e sua responsabilidade sobre os backups.
+                            </p>
+
+                            <button onclick="confirmTerms()" id="btn-confirm-terms"
+                                class="bg-plena-blue hover:bg-plena-dark text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-200 transform hover:scale-105 transition-all flex items-center gap-2 group">
+                                <span>Li, Compreendi e Concordo</span>
+                                <i data-lucide="arrow-right"
+                                    class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+
+                            <div id="terms-accepted-badge"
+                                class="hidden flex flex-col items-center animate-in fade-in zoom-in duration-300">
+                                <span
+                                    class="bg-green-100 text-green-700 font-bold px-6 py-2 rounded-full text-sm border border-green-200 flex items-center gap-2 mb-2">
+                                    <i data-lucide="lock" class="w-4 h-4"></i>
+                                    Termos Aceitos e Registrados
+                                </span>
+                                <p class="text-xs text-gray-400 font-mono" id="terms-date">Carregando data...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. Rodapé Legal -->
+                    <div class="text-center border-t border-gray-200 pt-8">
+                        <p class="text-sm font-bold text-gray-800">Plena Soluções Digitais LTDA</p>
+                        <p class="text-xs text-gray-500 mt-1">CNPJ: 17.347.919/0001-59 • Todos os direitos reservados</p>
+                        <p class="text-[10px] text-gray-400 mt-4">
+                            Versão 4.1 Pro • Build 2026.01.07
+                        </p>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- NEW QUOTE MODAL -->
+    <div id="quoteModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800" id="modal-title">Novo Orçamento</h3>
+                <button onclick="closeModal('quoteModal')" class="text-gray-400 hover:text-gray-600">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form onsubmit="submitQuote(event)" class="space-y-4">
+                <input type="hidden" id="q-id">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Cliente</label>
+                    <input type="text" id="q-client" required
+                        class="w-full border p-2 rounded-lg focus:border-plena-orange outline-none"
+                        placeholder="Nome do Cliente">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Serviços / Descrição</label>
+                    <textarea id="q-desc" required rows="3"
+                        class="w-full border p-2 rounded-lg focus:border-plena-orange outline-none"
+                        placeholder="Descreva o que será feito..."></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Valor Mão de Obra</label>
+                        <input type="number" step="0.01" id="q-labor" required
+                            class="w-full border p-2 rounded-lg focus:border-plena-orange outline-none"
+                            placeholder="0.00">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Valor Material</label>
+                        <input type="number" step="0.01" id="q-material"
+                            class="w-full border p-2 rounded-lg focus:border-plena-orange outline-none"
+                            placeholder="0.00">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Validade</label>
+                    <input type="date" id="q-validity" required
+                        class="w-full border p-2 rounded-lg focus:border-plena-orange outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Observações (opcional)</label>
+                    <textarea id="q-notes" rows="2"
+                        class="w-full border p-2 rounded-lg focus:border-plena-orange outline-none"
+                        placeholder="Informações adicionais..."></textarea>
+                </div>
+                <button type="submit"
+                    class="w-full bg-plena-orange text-white py-3 rounded-xl font-bold hover:bg-plena-dark transition-all shadow-lg shadow-blue-200">
+                    Gerar Orçamento
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TRANSACTION MODAL -->
+    <div id="transModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Nova Transação</h3>
+                <button onclick="closeModal('transModal')" class="text-gray-400 hover:text-gray-600">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <form onsubmit="submitTrans(event)" class="space-y-4">
+                <input type="hidden" id="tr-id">
+
+                <div class="grid grid-cols-2 gap-3 p-1 bg-gray-100 rounded-lg">
+                    <label class="cursor-pointer text-center">
+                        <input type="radio" name="tr-type" value="income" class="peer hidden" checked>
+                        <div
+                            class="py-2 text-sm font-bold text-gray-500 rounded-md peer-checked:bg-white peer-checked:text-green-600 shadow-sm transition-all">
+                            Entrada
+                        </div>
+                    </label>
+                    <label class="cursor-pointer text-center">
+                        <input type="radio" name="tr-type" value="expense" class="peer hidden">
+                        <div
+                            class="py-2 text-sm font-bold text-gray-500 rounded-md peer-checked:bg-white peer-checked:text-red-600 shadow-sm transition-all">
+                            Saída
+                        </div>
+                    </label>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Valor (R$)</label>
+                    <input type="number" id="tr-amount" step="0.01" min="0.01" required
+                        class="w-full border-2 border-gray-200 p-3 rounded-xl text-lg font-bold focus:border-plena-orange outline-none"
+                        placeholder="0,00">
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Descrição</label>
+                    <input type="text" id="tr-desc" required
+                        class="w-full border p-2 rounded-lg text-sm focus:border-plena-orange outline-none"
+                        placeholder="Ex: Pagamento de cliente ou Compra de material">
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Categoria</label>
+                    <select id="tr-cat"
+                        class="w-full border p-2 rounded-lg text-sm bg-white outline-none focus:border-plena-orange"
+                        required>
+                        <option value="venda">Venda/Serviço</option>
+                        <option value="material">Material</option>
+                        <option value="transporte">Transporte</option>
+                        <option value="ferramentas">Ferramentas</option>
+                        <option value="pessoal">Pessoal</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Método de Pagamento</label>
+                    <select id="tr-method"
+                        class="w-full border p-2 rounded-lg text-sm bg-white outline-none focus:border-plena-orange"
+                        required>
+                        <option value="Dinheiro">Dinheiro</option>
+                        <option value="Pix">Pix</option>
+                        <option value="Débito">Débito</option>
+                        <option value="Crédito">Crédito</option>
+                        <option value="Transferência">Transferência</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Data</label>
+                    <input type="date" id="tr-date" required
+                        class="w-full border p-2 rounded-lg text-sm bg-white outline-none focus:border-plena-orange">
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-plena-orange text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-plena-dark transition-all mt-2">
+                    Salvar Transação
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- QUOTE VIEW MODAL (PRINT) -->
+    <div id="quoteViewModal"
+        class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4 z-[60]">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
+            <button onclick="closeModal('quoteViewModal')"
+                class="absolute right-4 top-4 text-gray-400 hover:text-black">
+                <i data-lucide="x"></i>
+            </button>
+            <div id="invoice-print" class="p-8">
+                <div class="flex justify-between items-start mb-8 border-b pb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold text-plena-orange">ORÇAMENTO</h1>
+                        <p class="text-gray-500 text-sm mt-1" id="qv-id">#000</p>
+                        <p class="text-xs text-gray-400 mt-1" id="qv-company"></p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold text-gray-800" id="qv-provider">Prestador de Serviço</p>
+                        <p class="text-sm text-gray-500" id="qv-date">Data: --/--/----</p>
+                        <p class="text-sm text-gray-500" id="qv-phone"></p>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <p class="text-xs font-bold text-gray-400 uppercase">Cliente</p>
+                    <h3 class="text-lg font-bold text-gray-800" id="qv-client">Nome do Cliente</h3>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-6 mb-8">
+                    <h4 class="font-bold text-gray-800 mb-4 border-b pb-2">Descrição dos Serviços</h4>
+                    <p class="text-gray-600 whitespace-pre-line mb-6" id="qv-desc">...</p>
+
+                    <div id="qv-notes" class="mb-6 p-3 bg-blue-50 rounded border border-blue-100 text-sm text-blue-700">
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm text-gray-600">
+                            <span>Mão de Obra</span>
+                            <span class="font-bold" id="qv-labor">R$ 0,00</span>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-600">
+                            <span>Materiais</span>
+                            <span class="font-bold" id="qv-material">R$ 0,00</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-bold text-plena-orange border-t pt-4 mt-4">
+                            <span>TOTAL</span>
+                            <span id="qv-total">R$ 0,00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center text-xs text-gray-400">
+                    <p>Orçamento válido até <span id="qv-validity" class="font-bold">--/--/----</span></p>
+                    <p class="mt-2 text-[10px]">Gerado por Plena Orçamentos</p>
+                </div>
+            </div>
+
+            <div class="bg-gray-100 p-4 space-y-3">
+                <div class="flex gap-3 items-center bg-white p-2 rounded-lg border border-gray-200">
+                    <span class="text-xs font-bold uppercase text-gray-500 ml-2">Status:</span>
+                    <select id="qv-status" onchange="updateStatus(this.value)"
+                        class="flex-1 border-none bg-transparent font-bold text-gray-800 outline-none cursor-pointer">
+                        <option value="pending">🟡 Pendente</option>
+                        <option value="sent">🔵 Enviado</option>
+                        <option value="approved">✅ Aprovado</option>
+                        <option value="rejected">❌ Recusado</option>
+                        <option value="closed">⚫ Fechado</option>
+                    </select>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="editQuote()"
+                        class="flex-1 bg-white border border-gray-300 text-gray-700 py-3 rounded-lg font-bold hover:bg-gray-50 flex justify-center gap-2">
+                        <i data-lucide="edit-3" class="w-4 h-4"></i> Editar
+                    </button>
+                    <button onclick="shareQuoteWA()"
+                        class="flex-1 bg-[#25D366] text-white py-3 rounded-lg font-bold hover:bg-[#128C7E] flex justify-center gap-2">
+                        <i data-lucide="share-2" class="w-4 h-4"></i> WhatsApp
+                    </button>
+                    <button onclick="window.print()" class="px-4 border border-gray-300 rounded-lg hover:bg-white">
+                        <i data-lucide="printer" class="w-5 h-5 text-gray-600"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REPORT MODAL -->
+    <div id="reportModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+            <h3 class="text-lg font-bold text-gray-800 mb-6">Gerar Relatório Rápido</h3>
+            <form onsubmit="generateQuickReport(event)" class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Tipo de Relatório</label>
+                    <select id="report-type" class="w-full border p-2 rounded-lg text-sm bg-white outline-none">
+                        <option value="monthly">Mensal</option>
+                        <option value="quarterly">Trimestral</option>
+                        <option value="custom">Personalizado</option>
+                    </select>
+                </div>
+
+                <div id="custom-dates" class="hidden space-y-3">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Data Inicial</label>
+                        <input type="date" id="quick-start" class="w-full border p-2 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase">Data Final</label>
+                        <input type="date" id="quick-end" class="w-full border p-2 rounded-lg text-sm">
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="submit"
+                        class="flex-1 bg-plena-orange text-white py-3 rounded-lg font-bold hover:bg-plena-dark">
+                        Gerar
+                    </button>
+                    <button type="button" onclick="closeModal('reportModal')"
+                        class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-lg font-bold hover:bg-gray-200">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // ESTADO GLOBAL
+        const DB_KEY = 'plena_orcamentos_pro_v4';
+        const defaultDB = {
+            quotes: [],
+            transactions: [],
+            settings: {
+                companyName: 'Prestador de Serviço',
+                phone: '',
+                email: '',
+                currency: 'R$',
+                theme: 'light',
+                autoBackup: true
+            },
+            tutorial: {
+                completedSteps: [],
+                checklistState: {}
+            }
+        };
+
+        let db = JSON.parse(localStorage.getItem(DB_KEY)) || defaultDB;
+
+        // UTILITÁRIOS
+        const save = () => {
+            localStorage.setItem(DB_KEY, JSON.stringify(db));
+            updateDataStatus();
+        };
+
+        const fmtMoney = (v) => {
+            return v.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        };
+
+        const fmtDate = (d) => {
+            const date = new Date(d);
+            return date.toLocaleDateString('pt-BR');
+        };
+
+        const fmtDateInput = (d) => {
+            return new Date(d).toISOString().split('T')[0];
+        };
+
+        const getID = () => {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        };
+
+        // --- FUNÇÕES DE TERMOS DE USO ---
+        function confirmTerms() {
+            if (!confirm('Tem certeza que leu e concorda com todos os termos apresentados?')) return;
+
+            // Update DB
+            db.settings.termsAccepted = true;
+            db.settings.termsAcceptedAt = new Date().toISOString();
+            save();
+
+            // Update Visuals
+            updateTermsVisuals();
+
+            // Celebration Effect
+            const btn = document.getElementById('btn-confirm-terms');
+            if (btn) {
+                alert('Obrigado! Seu aceite foi registrado com sucesso.');
+            }
+        }
+
+        function updateTermsVisuals() {
+            const hasAccepted = db.settings.termsAccepted;
+            const termsBox = document.getElementById('terms-box');
+            const btn = document.getElementById('btn-confirm-terms');
+            const badge = document.getElementById('terms-accepted-badge');
+            const icon = document.getElementById('terms-icon');
+            const title = document.getElementById('terms-title');
+            const desc = document.getElementById('terms-desc');
+
+            if (hasAccepted && termsBox) {
+                // Change Box Style
+                termsBox.classList.remove('bg-gray-50', 'border-gray-200');
+                termsBox.classList.add('bg-green-50', 'border-green-200');
+
+                // Hide Button / Show Badge
+                if (btn) btn.classList.add('hidden');
+                if (badge) {
+                    badge.classList.remove('hidden');
+                    badge.classList.add('flex');
+                }
+
+                // Update Date
+                const dateElement = document.getElementById('terms-date');
+                if (dateElement && db.settings.termsAcceptedAt) {
+                    const dateObj = new Date(db.settings.termsAcceptedAt);
+                    dateElement.textContent = 'Confirmado em: ' + dateObj.toLocaleString('pt-BR');
+                }
+
+                // Update Icon and Text
+                if (icon) {
+                    icon.setAttribute('class', 'w-16 h-16 text-green-500 mb-3 transition-colors duration-500');
+                    icon.setAttribute('data-lucide', 'shield-check');
+                    if (window.lucide) lucide.createIcons();
+                }
+                if (title) {
+                    title.textContent = 'Termos Aceitos e Válidos';
+                    title.classList.add('text-green-800');
+                }
+                if (desc) {
+                    desc.textContent = 'Obrigado por sua transparência e confiança. Seu uso está regularizado.';
+                    desc.classList.add('text-green-700');
+                }
+            }
+        }
+
+        // INICIALIZAÇÃO
+        function init() {
+            lucide.createIcons();
+
+            // Configurar datas padrão
+            const today = new Date().toISOString().split('T')[0];
+            const firstDay = new Date();
+            firstDay.setDate(1);
+            const firstDayStr = firstDay.toISOString().split('T')[0];
+            const nextWeek = new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0];
+
+            // Configurar inputs de data
+            document.getElementById('q-validity').value = nextWeek;
+            document.getElementById('tr-date').value = today;
+            document.getElementById('month-selector').value = today.slice(0, 7);
+            document.getElementById('rep-start').value = firstDayStr;
+            document.getElementById('rep-end').value = today;
+            document.getElementById('filter-start').value = firstDayStr;
+            document.getElementById('filter-end').value = today;
+            document.getElementById('trans-start').value = firstDayStr;
+            document.getElementById('trans-end').value = today;
+            document.getElementById('quick-start').value = firstDayStr;
+            document.getElementById('quick-end').value = today;
+
+            // Carregar configurações da empresa
+            document.getElementById('company-name').value = db.settings.companyName || '';
+            document.getElementById('company-phone').value = db.settings.phone || '';
+            document.getElementById('company-email').value = db.settings.email || '';
+
+            // Renderizar dados iniciais
+            renderDashboard();
+            updateDataStatus();
+
+            // Atualizar Termos
+            if (typeof updateTermsVisuals === 'function') updateTermsVisuals();
+
+            // Configurar periodicidade para salvar
+            setInterval(save, 30000);
+
+            // Configurar listener para relatório
+            document.getElementById('report-type').addEventListener('change', function () {
+                document.getElementById('custom-dates').classList.toggle('hidden', this.value !== 'custom');
+            });
+
+            // Inicializar Tutorial e Checklist
+            updateTutorialProgress();
+            renderChecklist();
+        }
+
+        // ROTEAMENTO E NAVEGAÇÃO
+        function router(view) {
+            // Esconder todas as views
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hide'));
+
+            // Remover classe active de todos os nav items
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('bg-white/10', 'text-white');
+                el.classList.add('text-gray-400');
+            });
+
+            // Mostrar view selecionada
+            const viewElement = document.getElementById(`view-${view}`);
+            if (viewElement) {
+                viewElement.classList.remove('hide');
+                viewElement.classList.add('fade-in');
+            }
+
+            // Ativar nav item selecionado
+            const navElement = document.getElementById(`nav-${view}`);
+            if (navElement) {
+                navElement.classList.add('bg-white/10', 'text-white');
+                navElement.classList.remove('text-gray-400');
+            }
+
+            // Atualizar título da página
+            const titles = {
+                dashboard: 'Dashboard',
+                quotes: 'Orçamentos',
+                transactions: 'Fluxo de Caixa',
+                reports: 'Relatórios',
+                settings: 'Configurações',
+                instructions: 'Manual de Uso',
+                about: 'Sobre a Plena'
+            };
+
+            document.getElementById('page-title').innerText = titles[view] || 'Plena Orçamentos';
+
+            // Fechar sidebar no mobile
+            if (window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+
+            // Renderizar dados específicos da view
+            if (view === 'dashboard') {
+                renderDashboard();
+            } else if (view === 'quotes') {
+                renderQuotes();
+            } else if (view === 'transactions') {
+                renderTransactions();
+            } else if (view === 'settings') {
+                loadCompanySettings();
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('hidden');
+
+            // Bloquear scroll do body quando sidebar aberta
+            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+        }
+
+        // DASHBOARD
+        function renderDashboard() {
+            const monthSelector = document.getElementById('month-selector').value;
+            const currentMonth = monthSelector || new Date().toISOString().slice(0, 7);
+
+            // Filtrar orçamentos do mês atual
+            const monthQuotes = db.quotes.filter(q => q.date.startsWith(currentMonth));
+
+            // Calcular estatísticas
+            const pending = monthQuotes.filter(q => ['pending', 'sent'].includes(q.status)).length;
+            const approved = monthQuotes.filter(q => q.status === 'approved').length;
+            const pendingValue = monthQuotes.filter(q => ['pending', 'sent'].includes(q.status))
+                .reduce((sum, q) => sum + q.total, 0);
+            const approvedValue = monthQuotes.filter(q => q.status === 'approved')
+                .reduce((sum, q) => sum + q.total, 0);
+
+            // Calcular saldo total
+            const totalBalance = db.transactions.reduce((sum, t) => {
+                return sum + (t.type === 'income' ? t.amount : -t.amount);
+            }, 0);
+
+            // Atualizar cards
+            document.getElementById('dash-pending').innerText = pending;
+            document.getElementById('dash-approved').innerText = approved;
+            document.getElementById('dash-pending-value').innerText = fmtMoney(pendingValue);
+            document.getElementById('dash-balance').innerText = fmtMoney(totalBalance);
+
+            // Atualizar alerta de saldo negativo
+            const balanceAlert = document.getElementById('balance-alert');
+            balanceAlert.classList.toggle('hidden', totalBalance >= 0);
+
+            // Atualizar gráfico
+            renderChart(currentMonth);
+
+            // Atualizar top clientes
+            renderTopClients(monthQuotes);
+
+            // Atualizar distribuição por status
+            renderStatusDistribution(monthQuotes);
+
+            // Atualizar orçamentos recentes
+            renderRecentQuotes();
+        }
+
+        function renderChart(month) {
+            const chartArea = document.getElementById('chart-area');
+            const quotes = db.quotes.filter(q => q.date.startsWith(month));
+
+            // Agrupar por dia (últimos 7 dias)
+            const last7Days = Array.from({ length: 7 }, (_, i) => {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                return date.toISOString().split('T')[0];
+            }).reverse();
+
+            const dailyData = {};
+            last7Days.forEach(day => {
+                dailyData[day] = { approved: 0, pending: 0 };
+            });
+
+            quotes.forEach(q => {
+                const day = q.date;
+                if (dailyData[day]) {
+                    if (q.status === 'approved') {
+                        dailyData[day].approved += 1;
+                    } else if (['pending', 'sent'].includes(q.status)) {
+                        dailyData[day].pending += 1;
+                    }
+                }
+            });
+
+            const daysArray = last7Days.map(day => {
+                const date = new Date(day);
+                return {
+                    label: date.toLocaleDateString('pt-BR', { weekday: 'short' }),
+                    approved: dailyData[day].approved,
+                    pending: dailyData[day].pending
+                };
+            });
+
+            const maxValue = Math.max(...daysArray.map(d => Math.max(d.approved, d.pending)), 5);
+
+            let chartHTML = '';
+            daysArray.forEach(day => {
+                const approvedHeight = (day.approved / maxValue) * 100;
+                const pendingHeight = (day.pending / maxValue) * 100;
+
+                chartHTML += `
+                    <div class="bar-group">
+                        <div class="bar-wrapper">
+                            <div class="bar bg-green-500" 
+                                 style="height:${approvedHeight}%"
+                                 data-value="${day.approved} aprovados"></div>
+                            <div class="bar bg-yellow-500" 
+                                 style="height:${pendingHeight}%"
+                                 data-value="${day.pending} pendentes"></div>
+                        </div>
+                        <div class="x-label">${day.label}</div>
+                    </div>
+                `;
+            });
+
+            chartArea.innerHTML = chartHTML || '<p class="text-gray-400 text-sm">Sem dados para exibir</p>';
+        }
+
+        function renderTopClients(quotes) {
+            const clientMap = {};
+
+            quotes.forEach(q => {
+                if (!clientMap[q.client]) {
+                    clientMap[q.client] = { count: 0, total: 0 };
+                }
+                clientMap[q.client].count += 1;
+                clientMap[q.client].total += q.total;
+            });
+
+            const topClients = Object.entries(clientMap)
+                .sort((a, b) => b[1].count - a[1].count)
+                .slice(0, 5);
+
+            const container = document.getElementById('top-clients');
+
+            if (topClients.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-sm text-center">Sem clientes este mês</p>';
+                return;
+            }
+
+            container.innerHTML = topClients.map(([name, data]) => `
+                <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                            <i data-lucide="user" class="w-4 h-4 text-blue-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-800 truncate max-w-[120px]">${name}</p>
+                            <p class="text-xs text-gray-500">${data.count} orçamento(s)</p>
+                        </div>
+                    </div>
+                    <span class="text-sm font-bold text-plena-orange">${fmtMoney(data.total)}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderStatusDistribution(quotes) {
+            const statusCounts = {
+                pending: 0,
+                sent: 0,
+                approved: 0,
+                rejected: 0,
+                closed: 0
+            };
+
+            quotes.forEach(q => {
+                statusCounts[q.status] = (statusCounts[q.status] || 0) + 1;
+            });
+
+            const total = quotes.length;
+            const container = document.getElementById('status-distribution');
+
+            if (total === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-sm text-center">Sem orçamentos</p>';
+                return;
+            }
+
+            const statusColors = {
+                pending: 'bg-yellow-100 text-yellow-800',
+                sent: 'bg-blue-100 text-blue-800',
+                approved: 'bg-green-100 text-green-800',
+                rejected: 'bg-red-100 text-red-800',
+                closed: 'bg-gray-100 text-gray-800'
+            };
+
+            const statusLabels = {
+                pending: 'Pendente',
+                sent: 'Enviado',
+                approved: 'Aprovado',
+                rejected: 'Recusado',
+                closed: 'Fechado'
+            };
+
+            container.innerHTML = Object.entries(statusCounts)
+                .filter(([_, count]) => count > 0)
+                .map(([status, count]) => {
+                    const percentage = total > 0 ? Math.round((count / total) * 100) : 0;
+                    return `
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <span class="w-3 h-3 rounded-full mr-2 ${statusColors[status].split(' ')[0]}"></span>
+                                <span class="text-sm text-gray-700">${statusLabels[status]}</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-sm font-bold ${statusColors[status].split(' ')[1]}">${count}</span>
+                                <span class="text-xs text-gray-500 ml-2">${percentage}%</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+        }
+
+        function renderRecentQuotes() {
+            const container = document.getElementById('recent-quotes');
+            const recent = db.quotes
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 5);
+
+            if (recent.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-sm text-center">Nenhum orçamento recente</p>';
+                return;
+            }
+
+            const statusColors = {
+                pending: 'bg-yellow-100 text-yellow-600',
+                sent: 'bg-blue-100 text-blue-600',
+                approved: 'bg-green-100 text-green-600',
+                rejected: 'bg-red-100 text-red-600',
+                closed: 'bg-gray-100 text-gray-600'
+            };
+
+            const statusLabels = {
+                pending: 'Pendente',
+                sent: 'Enviado',
+                approved: 'Aprovado',
+                rejected: 'Recusado',
+                closed: 'Fechado'
+            };
+
+            container.innerHTML = recent.map(q => {
+                return `
+                    <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg border border-gray-100">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-plena-orange/10 flex items-center justify-center mr-3">
+                                <i data-lucide="file-text" class="w-4 h-4 text-plena-orange"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800 truncate max-w-[180px]">${q.client}</p>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${statusColors[q.status]}">
+                                        ${statusLabels[q.status]}
+                                    </span>
+                                    <span class="text-xs text-gray-400">• ${fmtDate(q.date)}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-sm font-bold text-plena-orange">${fmtMoney(q.total)}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ORÇAMENTOS
+        function renderQuotes() {
+            const term = document.getElementById('quote-search').value.toLowerCase();
+            const filter = document.getElementById('filter-status').value;
+            const start = document.getElementById('filter-start').value;
+            const end = document.getElementById('filter-end').value;
+
+            // Filtrar orçamentos
+            let filtered = db.quotes.filter(q => {
+                const matchesTerm = q.client.toLowerCase().includes(term) ||
+                    q.desc.toLowerCase().includes(term);
+                const matchesStatus = filter === 'all' || q.status === filter;
+                const matchesDate = (!start || q.date >= start) && (!end || q.date <= end);
+
+                return matchesTerm && matchesStatus && matchesDate;
+            });
+
+            // Ordenar por data (mais recente primeiro)
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            // Atualizar tabela
+            const tbody = document.getElementById('quotes-table-body');
+            const emptyMsg = document.getElementById('quotes-empty-msg');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
+                updateQuotesSummary(filtered);
+                return;
+            }
+
+            emptyMsg.classList.add('hidden');
+
+            const statusColors = {
+                pending: 'bg-yellow-400',
+                sent: 'bg-blue-500',
+                approved: 'bg-green-500',
+                rejected: 'bg-red-500',
+                closed: 'bg-gray-500'
+            };
+
+            const statusLabels = {
+                pending: 'Pendente',
+                sent: 'Enviado',
+                approved: 'Aprovado',
+                rejected: 'Recusado',
+                closed: 'Fechado'
+            };
+
+            tbody.innerHTML = filtered.map(q => {
+                const statusColor = statusColors[q.status] || 'bg-gray-400';
+                const statusLabel = statusLabels[q.status] || 'Desconhecido';
+
+                return `
+                    <tr class="hover:bg-gray-50 group border-b border-gray-100">
+                        <td class="px-6 py-4 text-gray-500 whitespace-nowrap">${fmtDate(q.date)}</td>
+                        <td class="px-6 py-4">
+                            <div class="font-medium text-gray-800">${q.client}</div>
+                            <div class="text-xs text-gray-400">Válido até: ${fmtDate(q.validity)}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-700 line-clamp-2 max-w-[200px]">${q.desc}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColor} text-white">
+                                ${statusLabel}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-right font-bold text-plena-orange">
+                            ${fmtMoney(q.total)}
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="viewQuote('${q.id}')" 
+                                        class="text-gray-400 hover:text-blue-500 transition-colors"
+                                        title="Visualizar">
+                                    <i data-lucide="eye" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="editQuoteFromList('${q.id}')" 
+                                        class="text-gray-400 hover:text-green-500 transition-colors"
+                                        title="Editar">
+                                    <i data-lucide="edit" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="deleteQuote('${q.id}')" 
+                                        class="text-gray-400 hover:text-red-500 transition-colors"
+                                        title="Excluir">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+            updateQuotesSummary(filtered);
+        }
+
+        function updateQuotesSummary(quotes) {
+            const total = quotes.length;
+            const pendingValue = quotes.filter(q => ['pending', 'sent'].includes(q.status))
+                .reduce((sum, q) => sum + q.total, 0);
+            const approvedValue = quotes.filter(q => q.status === 'approved')
+                .reduce((sum, q) => sum + q.total, 0);
+            const totalQuotes = db.quotes.length;
+            const totalApproved = db.quotes.filter(q => q.status === 'approved').length;
+            const conversionRate = totalQuotes > 0 ? Math.round((totalApproved / totalQuotes) * 100) : 0;
+
+            document.getElementById('quotes-total').textContent = total;
+            document.getElementById('quotes-pending-value').textContent = fmtMoney(pendingValue);
+            document.getElementById('quotes-approved-value').textContent = fmtMoney(approvedValue);
+            document.getElementById('quotes-conversion').textContent = `${conversionRate}%`;
+        }
+
+        function clearQuoteFilters() {
+            const firstDay = new Date();
+            firstDay.setDate(1);
+            const firstDayStr = firstDay.toISOString().split('T')[0];
+            const today = new Date().toISOString().split('T')[0];
+
+            document.getElementById('quote-search').value = '';
+            document.getElementById('filter-status').value = 'all';
+            document.getElementById('filter-start').value = firstDayStr;
+            document.getElementById('filter-end').value = today;
+
+            renderQuotes();
+        }
+
+        // TRANSAÇÕES
+        function renderTransactions() {
+            const term = document.getElementById('trans-search').value.toLowerCase();
+            const filter = document.getElementById('trans-type').value;
+            const start = document.getElementById('trans-start').value;
+            const end = document.getElementById('trans-end').value;
+
+            // Filtrar transações
+            let filtered = db.transactions.filter(t => {
+                const matchesTerm = t.desc.toLowerCase().includes(term);
+                const matchesType = filter === 'all' || t.type === filter;
+                const matchesDate = (!start || t.date >= start) && (!end || t.date <= end);
+
+                return matchesTerm && matchesType && matchesDate;
+            });
+
+            // Ordenar por data (mais recente primeiro)
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            // Atualizar tabela
+            const tbody = document.getElementById('trans-table-body');
+            const emptyMsg = document.getElementById('trans-empty-msg');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
+                updateTransSummary(filtered);
+                return;
+            }
+
+            emptyMsg.classList.add('hidden');
+
+            tbody.innerHTML = filtered.map(t => {
+                const isIncome = t.type === 'income';
+
+                return `
+                    <tr class="hover:bg-gray-50 group border-b border-gray-100">
+                        <td class="px-6 py-4 text-gray-500 whitespace-nowrap">${fmtDate(t.date)}</td>
+                        <td class="px-6 py-4">
+                            <div class="font-medium text-gray-800">${t.desc}</div>
+                            <div class="text-xs text-gray-400">${t.method || 'Não especificado'}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="text-sm text-gray-600">${t.cat || 'Geral'}</span>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500">${t.method || '-'}</td>
+                        <td class="px-6 py-4 text-right font-bold ${isIncome ? 'text-green-600' : 'text-red-600'}">
+                            ${isIncome ? '+' : '-'} ${fmtMoney(t.amount)}
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="editTransaction('${t.id}')" 
+                                        class="text-gray-400 hover:text-blue-500 transition-colors"
+                                        title="Editar">
+                                    <i data-lucide="edit" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="deleteTransaction('${t.id}')" 
+                                        class="text-gray-400 hover:text-red-500 transition-colors"
+                                        title="Excluir">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+            updateTransSummary(filtered);
+        }
+
+        function updateTransSummary(transactions) {
+            const income = transactions.filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const expense = transactions.filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const balance = income - expense;
+
+            document.getElementById('trans-income').textContent = fmtMoney(income);
+            document.getElementById('trans-expense').textContent = fmtMoney(expense);
+            document.getElementById('trans-balance').textContent = fmtMoney(balance);
+        }
+
+        function clearTransFilters() {
+            const firstDay = new Date();
+            firstDay.setDate(1);
+            const firstDayStr = firstDay.toISOString().split('T')[0];
+            const today = new Date().toISOString().split('T')[0];
+
+            document.getElementById('trans-search').value = '';
+            document.getElementById('trans-type').value = 'all';
+            document.getElementById('trans-start').value = firstDayStr;
+            document.getElementById('trans-end').value = today;
+
+            renderTransactions();
+        }
+
+        // MODAIS
+        function openQuoteModal(quote = null) {
+            const modal = document.getElementById('quoteModal');
+            const title = modal.querySelector('h3');
+            const form = modal.querySelector('form');
+
+            if (quote) {
+                // Modo edição
+                title.textContent = 'Editar Orçamento';
+                document.getElementById('q-id').value = quote.id;
+                document.getElementById('q-client').value = quote.client;
+                document.getElementById('q-desc').value = quote.desc;
+                document.getElementById('q-labor').value = quote.labor;
+                document.getElementById('q-material').value = quote.material;
+                document.getElementById('q-validity').value = quote.validity;
+                document.getElementById('q-notes').value = quote.notes || '';
+            } else {
+                // Modo criação
+                title.textContent = 'Novo Orçamento';
+                form.reset();
+                document.getElementById('q-id').value = '';
+                document.getElementById('q-validity').value = new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0];
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function openTransModal(transaction = null) {
+            const modal = document.getElementById('transModal');
+            const form = modal.querySelector('form');
+
+            if (transaction) {
+                // Modo edição
+                document.getElementById('tr-id').value = transaction.id;
+                document.querySelector(`input[name="tr-type"][value="${transaction.type}"]`).checked = true;
+                document.getElementById('tr-amount').value = transaction.amount;
+                document.getElementById('tr-desc').value = transaction.desc;
+                document.getElementById('tr-cat').value = transaction.cat;
+                document.getElementById('tr-method').value = transaction.method;
+                document.getElementById('tr-date').value = transaction.date;
+            } else {
+                // Modo criação
+                form.reset();
+                document.getElementById('tr-id').value = '';
+                document.getElementById('tr-date').value = new Date().toISOString().split('T')[0];
+                document.querySelector('input[name="tr-type"][value="income"]').checked = true;
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function openReportModal() {
+            document.getElementById('reportModal').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // CRUD ORÇAMENTOS
+        function submitQuote(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('q-id').value;
+            const labor = parseFloat(document.getElementById('q-labor').value) || 0;
+            const material = parseFloat(document.getElementById('q-material').value) || 0;
+            const total = labor + material;
+
+            const quoteData = {
+                id: id || getID(),
+                client: document.getElementById('q-client').value.trim(),
+                desc: document.getElementById('q-desc').value.trim(),
+                labor,
+                material,
+                total,
+                validity: document.getElementById('q-validity').value,
+                notes: document.getElementById('q-notes').value.trim(),
+                date: id ? db.quotes.find(x => x.id === id).date : new Date().toISOString().split('T')[0],
+                status: id ? db.quotes.find(x => x.id === id).status : 'pending'
+            };
+
+            if (!quoteData.client || !quoteData.desc) {
+                showNotification('Por favor, preencha todos os campos obrigatórios.', 'error');
+                return;
+            }
+
+            if (id) {
+                // Editar orçamento existente
+                const index = db.quotes.findIndex(q => q.id === id);
+                if (index !== -1) {
+                    db.quotes[index] = quoteData;
+                }
+            } else {
+                // Adicionar novo orçamento
+                db.quotes.push(quoteData);
+            }
+
+            save();
+            closeModal('quoteModal');
+            showNotification('Orçamento salvo com sucesso!', 'success');
+
+            // Resetar formulário
+            e.target.reset();
+            document.getElementById('q-validity').value = new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0];
+
+            // Atualizar views
+            if (!document.getElementById('view-dashboard').classList.contains('hide')) {
+                renderDashboard();
+            }
+            if (!document.getElementById('view-quotes').classList.contains('hide')) {
+                renderQuotes();
+            }
+        }
+
+        let currentQuoteId = null;
+
+        function viewQuote(id) {
+            const q = db.quotes.find(x => x.id === id);
+            if (!q) return;
+
+            currentQuoteId = id;
+
+            // Atualizar informações do orçamento
+            document.getElementById('qv-id').innerText = '#' + q.id.substr(0, 6).toUpperCase();
+            document.getElementById('qv-date').innerText = 'Data: ' + fmtDate(q.date);
+            document.getElementById('qv-client').innerText = q.client;
+            document.getElementById('qv-desc').innerText = q.desc;
+            document.getElementById('qv-labor').innerText = fmtMoney(q.labor);
+            document.getElementById('qv-material').innerText = fmtMoney(q.material);
+            document.getElementById('qv-total').innerText = fmtMoney(q.total);
+            document.getElementById('qv-validity').innerText = fmtDate(q.validity);
+
+            // Atualizar informações da empresa
+            document.getElementById('qv-company').innerText = db.settings.companyName;
+            document.getElementById('qv-provider').innerText = db.settings.companyName;
+            document.getElementById('qv-phone').innerText = db.settings.phone;
+
+            // Atualizar observações
+            const notesEl = document.getElementById('qv-notes');
+            if (q.notes && q.notes.trim()) {
+                notesEl.innerText = `Observações: ${q.notes}`;
+                notesEl.classList.remove('hidden');
+            } else {
+                notesEl.classList.add('hidden');
+            }
+
+            document.getElementById('qv-status').value = q.status;
+            document.getElementById('quoteViewModal').classList.remove('hidden');
+        }
+
+        function editQuoteFromList(id) {
+            const q = db.quotes.find(x => x.id === id);
+            if (q) {
+                closeModal('quoteViewModal');
+                openQuoteModal(q);
+            }
+        }
+
+        function editQuote() {
+            closeModal('quoteViewModal');
+            const q = db.quotes.find(x => x.id === currentQuoteId);
+            if (q) {
+                openQuoteModal(q);
+            }
+        }
+
+        function deleteQuote(id) {
+            if (confirm('Tem certeza que deseja excluir este orçamento?')) {
+                db.quotes = db.quotes.filter(q => q.id !== id);
+                save();
+
+                // Atualizar views
+                if (!document.getElementById('view-dashboard').classList.contains('hide')) {
+                    renderDashboard();
+                }
+                if (!document.getElementById('view-quotes').classList.contains('hide')) {
+                    renderQuotes();
+                }
+
+                showNotification('Orçamento excluído com sucesso!', 'success');
+            }
+        }
+
+        function updateStatus(newStatus) {
+            const q = db.quotes.find(x => x.id === currentQuoteId);
+            if (q) {
+                q.status = newStatus;
+                save();
+
+                // Atualizar views
+                if (!document.getElementById('view-dashboard').classList.contains('hide')) {
+                    renderDashboard();
+                }
+                if (!document.getElementById('view-quotes').classList.contains('hide')) {
+                    renderQuotes();
+                }
+
+                showNotification('Status atualizado!', 'success');
+            }
+        }
+
+        function shareQuoteWA() {
+            const q = db.quotes.find(x => x.id === currentQuoteId);
+            const msg = `*📑 Proposta de Orçamento* %0A%0A` +
+                `*${db.settings.companyName}*%0A` +
+                `----------------------------%0A` +
+                `👤 *Cliente:* ${q.client}%0A` +
+                `🛠 *Serviço:* ${q.desc}%0A` +
+                `----------------------------%0A` +
+                `👷 Mão de Obra: ${fmtMoney(q.labor)}%0A` +
+                `🧱 Material: ${fmtMoney(q.material)}%0A` +
+                `----------------------------%0A` +
+                `💰 *TOTAL: ${fmtMoney(q.total)}*%0A` +
+                `📅 Válido até: ${fmtDate(q.validity)}%0A` +
+                `📞 Contato: ${db.settings.phone}%0A%0A` +
+                `_Gerado por Plena Orçamentos_`;
+
+            if (q.status === 'pending') {
+                q.status = 'sent';
+                save();
+
+                // Atualizar views
+                if (!document.getElementById('view-dashboard').classList.contains('hide')) {
+                    renderDashboard();
+                }
+                if (!document.getElementById('view-quotes').classList.contains('hide')) {
+                    renderQuotes();
+                }
+
+                document.getElementById('qv-status').value = 'sent';
+            }
+
+            window.open(`https://wa.me/?text=${msg}`);
+        }
+
+        // CRUD TRANSAÇÕES
+        function submitTrans(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('tr-id').value;
+            const type = document.querySelector('input[name="tr-type"]:checked').value;
+            const amount = parseFloat(document.getElementById('tr-amount').value);
+            const desc = document.getElementById('tr-desc').value.trim();
+            const cat = document.getElementById('tr-cat').value;
+            const method = document.getElementById('tr-method').value;
+            const date = document.getElementById('tr-date').value;
+
+            if (!desc || !amount || amount <= 0) {
+                showNotification('Por favor, preencha todos os campos corretamente.', 'error');
+                return;
+            }
+
+            const transaction = {
+                id: id || getID(),
+                type,
+                amount,
+                desc,
+                cat,
+                method,
+                date
+            };
+
+            if (id) {
+                // Editar transação existente
+                const index = db.transactions.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    db.transactions[index] = transaction;
+                }
+            } else {
+                // Adicionar nova transação
+                db.transactions.push(transaction);
+            }
+
+            save();
+            closeModal('transModal');
+            showNotification('Transação salva com sucesso!', 'success');
+
+            // Resetar formulário
+            e.target.reset();
+            document.getElementById('tr-date').value = new Date().toISOString().split('T')[0];
+
+            // Atualizar views
+            if (!document.getElementById('view-dashboard').classList.contains('hide')) {
+                renderDashboard();
+            }
+            if (!document.getElementById('view-transactions').classList.contains('hide')) {
+                renderTransactions();
+            }
+        }
+
+        function editTransaction(id) {
+            const transaction = db.transactions.find(t => t.id === id);
+            if (transaction) {
+                openTransModal(transaction);
+            }
+        }
+
+        function deleteTransaction(id) {
+            if (confirm('Tem certeza que deseja excluir esta transação?')) {
+                db.transactions = db.transactions.filter(t => t.id !== id);
+                save();
+
+                // Atualizar views
+                if (!document.getElementById('view-dashboard').classList.contains('hide')) {
+                    renderDashboard();
+                }
+                if (!document.getElementById('view-transactions').classList.contains('hide')) {
+                    renderTransactions();
+                }
+
+                showNotification('Transação excluída com sucesso!', 'success');
+            }
+        }
+
+        // RELATÓRIOS
+        function generateReport() {
+            const start = document.getElementById('rep-start').value;
+            const end = document.getElementById('rep-end').value;
+
+            if (!start || !end) {
+                showNotification('Por favor, selecione um período.', 'error');
+                return;
+            }
+
+            const transactions = db.transactions.filter(t => t.date >= start && t.date <= end);
+            const income = transactions.filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const expense = transactions.filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+            const balance = income - expense;
+
+            document.getElementById('rep-inc').textContent = fmtMoney(income);
+            document.getElementById('rep-exp').textContent = fmtMoney(expense);
+            document.getElementById('rep-bal').textContent = fmtMoney(balance);
+
+            // Gerar análise por categoria
+            renderCategoryReport(transactions);
+
+            document.getElementById('report-result').classList.remove('hide');
+        }
+
+        function generateFullReport() {
+            // Configurar período do mês atual
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+
+            document.getElementById('rep-start').value = firstDay.toISOString().split('T')[0];
+            document.getElementById('rep-end').value = today.toISOString().split('T')[0];
+
+            generateReport();
+        }
+
+        function generateQuickReport(e) {
+            e.preventDefault();
+
+            const type = document.getElementById('report-type').value;
+            let start, end;
+
+            const today = new Date();
+
+            if (type === 'monthly') {
+                start = new Date(today.getFullYear(), today.getMonth(), 1);
+                end = today;
+            } else if (type === 'quarterly') {
+                const quarter = Math.floor(today.getMonth() / 3);
+                start = new Date(today.getFullYear(), quarter * 3, 1);
+                end = today;
+            } else {
+                start = document.getElementById('quick-start').value;
+                end = document.getElementById('quick-end').value;
+
+                if (!start || !end) {
+                    showNotification('Por favor, selecione as datas.', 'error');
+                    return;
+                }
+            }
+
+            // Navegar para relatórios e gerar
+            router('reports');
+
+            if (type !== 'custom') {
+                document.getElementById('rep-start').value = start.toISOString().split('T')[0];
+                document.getElementById('rep-end').value = end.toISOString().split('T')[0];
+            } else {
+                document.getElementById('rep-start').value = start;
+                document.getElementById('rep-end').value = end;
+            }
+
+            setTimeout(() => {
+                generateReport();
+                closeModal('reportModal');
+            }, 300);
+        }
+
+        function renderCategoryReport(transactions) {
+            const categoryMap = {};
+
+            transactions.forEach(t => {
+                if (!categoryMap[t.cat]) {
+                    categoryMap[t.cat] = { income: 0, expense: 0 };
+                }
+
+                if (t.type === 'income') {
+                    categoryMap[t.cat].income += t.amount;
+                } else {
+                    categoryMap[t.cat].expense += t.amount;
+                }
+            });
+
+            const container = document.getElementById('category-report');
+            const sortedCategories = Object.entries(categoryMap)
+                .sort((a, b) => (b[1].income + b[1].expense) - (a[1].income + a[1].expense));
+
+            if (sortedCategories.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center">Sem dados para o período selecionado</p>';
+                return;
+            }
+
+            container.innerHTML = sortedCategories.map(([name, data]) => {
+                const total = data.income + data.expense;
+                const isIncome = data.income > data.expense;
+
+                return `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full mr-3 ${isIncome ? 'bg-green-500' : 'bg-red-500'}"></div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">${name}</p>
+                                <p class="text-xs text-gray-500">${isIncome ? 'Receita' : 'Despesa'}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-bold ${isIncome ? 'text-green-600' : 'text-red-600'}">
+                                ${isIncome ? '+' : '-'}${fmtMoney(total)}
+                            </p>
+                            <p class="text-xs text-gray-500">
+                                ${isIncome ? 'Receita' : 'Despesa'}
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function shareReport() {
+            const start = document.getElementById('rep-start').value;
+            const end = document.getElementById('rep-end').value;
+            const income = document.getElementById('rep-inc').textContent;
+            const expense = document.getElementById('rep-exp').textContent;
+            const balance = document.getElementById('rep-bal').textContent;
+
+            const message = `*📊 Relatório Financeiro - Plena Orçamentos*%0A%0A` +
+                `*${db.settings.companyName}*%0A` +
+                `*Período:* ${fmtDate(start)} à ${fmtDate(end)}%0A%0A` +
+                `✅ *Entradas:* ${income}%0A` +
+                `🔻 *Saídas:* ${expense}%0A` +
+                `💰 *Saldo:* ${balance}%0A%0A` +
+                `_Gerado em ${new Date().toLocaleDateString('pt-BR')}_`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function printReport() {
+            const printContent = document.getElementById('report-result').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = `
+                <div style="padding: 20px; font-family: sans-serif;">
+                    <h1 style="text-align: center; color: #2563EB;">Relatório Financeiro</h1>
+                    <h2 style="text-align: center; color: #666; font-size: 14px;">${db.settings.companyName}</h2>
+                    <div style="margin: 20px 0;">${printContent}</div>
+                    <p style="text-align: center; color: #666; font-size: 12px; margin-top: 30px;">
+                        Gerado por Plena Orçamentos • ${new Date().toLocaleDateString('pt-BR')}
+                    </p>
+                </div>
+            `;
+
+            window.print();
+            document.body.innerHTML = originalContent;
+            router('reports');
+        }
+
+        // CONFIGURAÇÕES
+        function loadCompanySettings() {
+            document.getElementById('company-name').value = db.settings.companyName || '';
+            document.getElementById('company-phone').value = db.settings.phone || '';
+            document.getElementById('company-email').value = db.settings.email || '';
+        }
+
+        function saveCompanySettings() {
+            db.settings.companyName = document.getElementById('company-name').value.trim() || 'Prestador de Serviço';
+            db.settings.phone = document.getElementById('company-phone').value.trim();
+            db.settings.email = document.getElementById('company-email').value.trim();
+
+            save();
+            showNotification('Configurações salvas com sucesso!', 'success');
+        }
+
+        // EXPORTAÇÃO
+        function exportQuotesCSV() {
+            const headers = ['Data', 'Cliente', 'Serviço', 'Mão de Obra', 'Material', 'Total', 'Status', 'Validade'];
+            const rows = db.quotes.map(q => {
+                return [
+                    fmtDate(q.date),
+                    `"${q.client}"`,
+                    `"${q.desc}"`,
+                    q.labor.toFixed(2).replace('.', ','),
+                    q.material.toFixed(2).replace('.', ','),
+                    q.total.toFixed(2).replace('.', ','),
+                    q.status,
+                    fmtDate(q.validity)
+                ];
+            });
+
+            const csv = [headers, ...rows].map(row => row.join(';')).join('\n');
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+
+            a.href = url;
+            a.download = `orcamentos_${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+
+            URL.revokeObjectURL(url);
+            showNotification('Orçamentos exportados com sucesso!', 'success');
+        }
+
+        function exportTransactionsCSV() {
+            const headers = ['Data', 'Descrição', 'Categoria', 'Tipo', 'Pagamento', 'Valor'];
+            const rows = db.transactions.map(t => {
+                return [
+                    fmtDate(t.date),
+                    `"${t.desc}"`,
+                    t.cat || 'Geral',
+                    t.type === 'income' ? 'Receita' : 'Despesa',
+                    t.method || 'Não especificado',
+                    t.amount.toFixed(2).replace('.', ',')
+                ];
+            });
+
+            const csv = [headers, ...rows].map(row => row.join(';')).join('\n');
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+
+            a.href = url;
+            a.download = `transacoes_${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+
+            URL.revokeObjectURL(url);
+            showNotification('Transações exportadas com sucesso!', 'success');
+        }
+
+        function printQuotes() {
+            const printContent = document.getElementById('view-quotes').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = `
+                <div style="padding: 20px; font-family: sans-serif;">
+                    <h1 style="text-align: center; color: #2563EB;">Orçamentos - ${db.settings.companyName}</h1>
+                    <div style="margin: 20px 0;">${printContent}</div>
+                    <p style="text-align: center; color: #666; font-size: 12px; margin-top: 30px;">
+                        Gerado por Plena Orçamentos • ${new Date().toLocaleDateString('pt-BR')}
+                    </p>
+                </div>
+            `;
+
+            window.print();
+            document.body.innerHTML = originalContent;
+            router('quotes');
+        }
+
+        // BACKUP E RESTAURAÇÃO
+        function downloadBackup() {
+            const backupData = {
+                ...db,
+                exportedAt: new Date().toISOString(),
+                version: 'plena_orcamentos_v4'
+            };
+
+            const dataStr = JSON.stringify(backupData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+            const exportFileName = `plena_orcamentos_backup_${new Date().toISOString().slice(0, 10)}.json`;
+
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileName);
+            linkElement.click();
+
+            showNotification('Backup baixado com sucesso!', 'success');
+        }
+
+        function restoreBackup(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const backup = JSON.parse(e.target.result);
+
+                    // Validar backup
+                    if (!backup.quotes || !backup.transactions) {
+                        throw new Error('Arquivo de backup inválido');
+                    }
+
+                    if (confirm('Restaurar backup substituirá todos os dados atuais. Tem certeza?')) {
+                        db = backup;
+                        save();
+                        location.reload();
+                    }
+                } catch (error) {
+                    alert('Erro ao restaurar backup: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function clearAllData() {
+            if (confirm('Tem certeza que deseja limpar TODOS os dados? Esta ação é irreversível!')) {
+                db.quotes = [];
+                db.transactions = [];
+                save();
+                renderDashboard();
+                renderQuotes();
+                renderTransactions();
+                showNotification('Todos os dados foram removidos!', 'success');
+            }
+        }
+
+        function factoryReset() {
+            if (confirm('ATENÇÃO: Isso resetará TODO o sistema para as configurações de fábrica. Todos os dados serão perdidos. Tem certeza?')) {
+                localStorage.removeItem(DB_KEY);
+                location.reload();
+            }
+        }
+
+        // UTILITÁRIOS GERAIS
+        function updateDataStatus() {
+            const totalQuotes = db.quotes.length;
+            const totalTrans = db.transactions.length;
+
+            console.log(`Dados atualizados: ${totalQuotes} orçamentos, ${totalTrans} transações`);
+        }
+
+        function showNotification(message, type = 'info') {
+            // Criar elemento de notificação
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                    'bg-blue-500 text-white'
+                }`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}" 
+                       class="w-5 h-5 mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+            lucide.createIcons();
+
+            // Remover após 3 segundos
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // PWA INSTALL PROMPT
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Mostrar botão de instalação
+            const installButton = document.createElement('button');
+            installButton.className = 'fixed bottom-4 right-4 bg-plena-orange text-white px-4 py-2 rounded-lg shadow-lg z-40';
+            installButton.innerHTML = '<i data-lucide="download" class="w-4 h-4 inline mr-2"></i>Instalar App';
+            installButton.onclick = () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(() => {
+                    deferredPrompt = null;
+                    installButton.remove();
+                });
+            };
+
+            document.body.appendChild(installButton);
+            lucide.createIcons();
+        });
+
+        // OFFLINE SUPPORT
+        window.addEventListener('online', () => {
+            showNotification('Conexão restaurada!', 'success');
+        });
+
+        window.addEventListener('offline', () => {
+            showNotification('Modo offline ativado. Seus dados estão seguros localmente.', 'warning');
+        });
+
+        // MANUAL & CHECKLIST LOGIC
+        function updateTutorialProgress() {
+            if (!db.tutorial) return;
+            const steps = ['instalacao', 'config', 'cadastros', 'operacao', 'gestao', 'seguranca', 'checklist'];
+            const completedCount = db.tutorial.completedSteps.length;
+            const progress = (completedCount / steps.length) * 100;
+
+            const pb = document.getElementById('tutorial-progress');
+            const pt = document.getElementById('completed-steps');
+
+            if (pb) pb.style.width = `${progress}%`;
+            if (pt) pt.textContent = `${completedCount}/${steps.length} etapas`;
+
+            // Update step indicators
+            document.querySelectorAll('.tutorial-step').forEach((btn, index) => {
+                const stepId = steps[index];
+                if (db.tutorial.completedSteps.includes(stepId)) {
+                    btn.classList.add('bg-green-50', 'border-green-200', 'text-green-700');
+                    btn.innerHTML = `<i data-lucide="check" class="w-3 h-3 inline mr-1"></i> ${btn.textContent.trim()}`;
+                }
+            });
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function markSectionComplete(sectionId) {
+            if (!db.tutorial) db.tutorial = { completedSteps: [], checklistState: {} };
+            if (!db.tutorial.completedSteps.includes(sectionId)) {
+                db.tutorial.completedSteps.push(sectionId);
+                save();
+                updateTutorialProgress();
+                showNotification('Etapa concluída!', 'success');
+            }
+        }
+
+        const checklistData = [
+            { id: 'chk_backup', text: 'Backup de Segurança', sub: 'Garantir que os dados estão salvos' },
+            { id: 'chk_quotes', text: 'Revisar Pendentes', sub: 'Checar orçamentos aguardando resposta' },
+            { id: 'chk_clients', text: 'Retornar Clientes', sub: 'Responder dúvidas e solicitações' },
+            { id: 'chk_finance', text: 'Lançar Gastos', sub: 'Registrar compras de materiais do dia' }
+        ];
+
+        function renderChecklist() {
+            const container = document.getElementById('checklist-items');
+            if (!container || !db.tutorial) return;
+
+            container.innerHTML = checklistData.map(item => {
+                const isDone = db.tutorial.checklistState[item.id];
+                return `
+                    <div onclick="toggleChecklistItem('${item.id}')" class="flex items-start gap-3 p-3 rounded-xl border border-gray-100 hover:border-plena-blue cursor-pointer transition-all ${isDone ? 'bg-gray-50 opacity-75' : 'bg-white shadow-sm'}">
+                        <div class="w-6 h-6 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${isDone ? 'bg-green-500 border-green-500 text-white' : 'border-gray-200'}">
+                            ${isDone ? '<i data-lucide="check" class="w-4 h-4"></i>' : ''}
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-bold text-sm ${isDone ? 'text-gray-400 line-through' : 'text-gray-800'}">${item.text}</p>
+                            <p class="text-xs text-gray-500">${item.sub}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function toggleChecklistItem(id) {
+            if (!db.tutorial) db.tutorial = { completedSteps: [], checklistState: {} };
+            db.tutorial.checklistState[id] = !db.tutorial.checklistState[id];
+            save();
+            renderChecklist();
+        }
+
+        function resetChecklist() {
+            if (confirm('Deseja reiniciar seu checklist diário?')) {
+                db.tutorial.checklistState = {};
+                save();
+                renderChecklist();
+            }
+        }
+
+        // INICIALIZAR APLICATIVO
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+    <script>
+        // CONTEXT AWARENESS FOR IFRAMES
+        if (window.self !== window.top) {
+            document.body.classList.add('in-iframe');
+        }
+    </script>
+</body>
+
+</html>
