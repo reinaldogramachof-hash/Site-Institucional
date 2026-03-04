@@ -363,35 +363,111 @@
         class="btn btn-primary w-full text-xs py-2">Falar com Especialista</a>
     </div>
   </div>
-  <main class="pt-24">
+
+  <!-- ANNOUNCEMENT STRIP -->
+  <div id="announcement-strip"
+    class="fixed left-0 right-0 z-40 bg-emerald-900/90 backdrop-blur-sm border-b border-emerald-700/50"
+    style="top: 80px;">
+    <div class="container mx-auto px-4 py-2 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 flex-1 justify-center">
+        <span class="text-white text-xs sm:text-sm font-medium">
+          🔥 Oferta especial: Sistema de Gestão por <strong class="text-emerald-300">R$ 97</strong> — licença vitalícia,
+          sem mensalidade
+        </span>
+        <a href="#sistemas"
+          class="flex-shrink-0 text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-black px-3 py-1 rounded-full transition-colors">
+          Ver sistemas →
+        </a>
+      </div>
+      <button id="strip-close" onclick="closeStrip()"
+        class="flex-shrink-0 text-emerald-200 hover:text-white transition-colors p-1 rounded" aria-label="Fechar aviso">
+        <i class="ph ph-x text-base"></i>
+      </button>
+    </div>
+  </div>
+
+  <main class="pt-32" id="main-content">
 
     <!-- HERO -->
-    <section class="min-h-[60vh] md:min-h-[80vh] flex items-center justify-center relative px-4 md:px-6">
+    <section class="min-h-[60vh] md:min-h-[85vh] flex items-center justify-center relative px-4 md:px-6 py-10 md:py-0">
       <div
         class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[480px] md:w-[600px] md:h-[600px] bg-emerald-500/10 rounded-full blur-[120px] -z-10">
       </div>
 
-      <div class="container mx-auto text-center z-10 max-w-screen-sm md:max-w-3xl">
-        <div
-          class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-900/20 text-emerald-400 text-xs font-mono uppercase">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          Software House • São José dos Campos
-        </div>
+      <div class="container mx-auto z-10 max-w-screen-xl">
+        <div class="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
 
-        <h1 class="text-3xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight tracking-tight">
-          Soluções Digitais<br /><span
-            class="text-transparent bg-clip-text bg-gradient-to-r from-white to-emerald-400">para o seu negócio.</span>
-        </h1>
+          <!-- Coluna esquerda: conteúdo -->
+          <div class="text-center md:text-left">
+            <div
+              class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-900/20 text-emerald-400 text-xs font-mono uppercase">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              Software House • São José dos Campos
+            </div>
 
-        <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
-          Soluções digitais completas, entregues com suporte local e preço justo.
-        </p>
+            <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-tight">
+              Soluções Digitais<br /><span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-white to-emerald-400">para o seu
+                negócio.</span>
+            </h1>
 
-        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <a href="#sistemas" class="btn btn-primary w-full sm:w-auto"><i class="ph ph-app-window text-lg"></i> Ver
-            Sistemas de Gestão</a>
-          <a href="#solucoes" class="btn btn-ghost w-full sm:w-auto"><i class="ph ph-globe text-lg"></i> Soluções
-            Web</a>
+            <p class="text-gray-400 text-lg max-w-lg mb-10 leading-relaxed mx-auto md:mx-0">
+              Soluções digitais completas, entregues com suporte local e preço justo.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start items-center">
+              <a href="#sistemas" class="btn btn-primary w-full sm:w-auto"><i class="ph ph-app-window text-lg"></i> Ver
+                Sistemas de Gestão</a>
+              <a href="#solucoes" class="btn btn-ghost w-full sm:w-auto"><i class="ph ph-globe text-lg"></i> Soluções
+                Web</a>
+            </div>
+          </div>
+
+          <!-- Coluna direita: mockup browser (apenas desktop) -->
+          <div class="hidden md:flex justify-center items-center">
+            <div class="w-full max-w-lg">
+              <!-- Moldura do browser -->
+              <div class="rounded-xl overflow-hidden border border-white/10 shadow-2xl shadow-emerald-900/20"
+                style="background:#0d0d14;">
+                <!-- Barra de título -->
+                <div class="flex items-center gap-2 px-4 py-3 border-b border-white/10" style="background:#111118;">
+                  <div class="flex gap-1.5">
+                    <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+                    <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+                    <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
+                  </div>
+                  <div class="flex-1 mx-3">
+                    <div
+                      class="bg-black/40 rounded-md px-3 py-1 text-xs text-gray-500 font-mono flex items-center gap-2">
+                      <i class="ph ph-lock-simple text-emerald-500 text-xs"></i>
+                      gestao.plenainformatica.com.br
+                    </div>
+                  </div>
+                </div>
+                <!-- Tela do sistema -->
+                <div class="relative" style="height: 340px; overflow: hidden;">
+                  <iframe src="Sistemas_Gestão/gestao-barbearia/index.html" class="w-full border-0"
+                    style="height:600px; transform: scale(0.57); transform-origin: top left; width: 175.4%; pointer-events: none;"
+                    sandbox="allow-scripts allow-same-origin" loading="lazy" title="Preview Gestão Barbearia">
+                  </iframe>
+                  <!-- Overlay para evitar interação -->
+                  <div class="absolute inset-0 cursor-default"
+                    onclick="openSistemaDemo('Gestão Barbearia','Barbearias e salões masculinos','Sistemas_Gestão/gestao-barbearia/index.html')"
+                    title="Clique para ver demo"></div>
+                  <!-- Label no overlay -->
+                  <div class="absolute bottom-3 right-3">
+                    <span
+                      class="text-xs bg-emerald-500/90 text-black font-bold px-3 py-1 rounded-full backdrop-blur-sm">🔥
+                      R$ 97 licença</span>
+                  </div>
+                </div>
+              </div>
+              <p class="text-center text-xs text-gray-500 mt-3">↑ Preview real do Gestão Barbearia — <button
+                  onclick="openSistemaDemo('Gestão Barbearia','Barbearias e salões masculinos','Sistemas_Gestão/gestao-barbearia/index.html')"
+                  class="text-emerald-400 hover:underline">ver demo completo</button></p>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
@@ -445,8 +521,868 @@
       </div>
     </section>
 
+    <!-- COMO FUNCIONA -->
+    <section class="py-14 md:py-20 border-t border-white/5">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+          <span class="text-emerald-400 font-mono text-xs tracking-widest uppercase">Processo simples</span>
+          <h2 class="text-3xl font-bold text-white mt-2">Como funciona?</h2>
+          <p class="text-gray-400 mt-3 text-sm">Da escolha ao acesso, em menos de 10 minutos.</p>
+        </div>
+
+        <!-- Passos -->
+        <div
+          class="relative flex flex-col md:flex-row gap-8 md:gap-0 items-start md:items-center justify-center max-w-4xl mx-auto">
+
+          <!-- Linha conectora (desktop) -->
+          <div
+            class="hidden md:block absolute top-10 left-[calc(16.67%+2rem)] right-[calc(16.67%+2rem)] h-px border-t-2 border-dashed border-emerald-500/30"
+            style="z-index:0;"></div>
+
+          <!-- Passo 1 -->
+          <div class="flex-1 flex flex-col items-center text-center relative z-10">
+            <div
+              class="w-20 h-20 rounded-2xl bg-emerald-900/30 border border-emerald-500/20 flex items-center justify-center mb-4 shadow-lg">
+              <i class="ph ph-magnifying-glass text-3xl text-emerald-400"></i>
+            </div>
+            <div class="text-emerald-400 text-xs font-bold uppercase tracking-widest mb-2">Passo 1</div>
+            <h3 class="font-bold text-white text-base mb-2">Explore o catálogo</h3>
+            <p class="text-xs text-gray-400 max-w-[180px]">Navegue pelos +30 sistemas e escolha o ideal para o seu
+              negócio</p>
+          </div>
+
+          <!-- Passo 2 -->
+          <div class="flex-1 flex flex-col items-center text-center relative z-10">
+            <div
+              class="w-20 h-20 rounded-2xl bg-emerald-900/30 border border-emerald-500/20 flex items-center justify-center mb-4 shadow-lg">
+              <i class="ph ph-credit-card text-3xl text-emerald-400"></i>
+            </div>
+            <div class="text-emerald-400 text-xs font-bold uppercase tracking-widest mb-2">Passo 2</div>
+            <h3 class="font-bold text-white text-base mb-2">Contrate por R$ 97</h3>
+            <p class="text-xs text-gray-400 max-w-[180px]">Pagamento simples via Mercado Pago. Acesso liberado em
+              minutos.</p>
+          </div>
+
+          <!-- Passo 3 -->
+          <div class="flex-1 flex flex-col items-center text-center relative z-10">
+            <div
+              class="w-20 h-20 rounded-2xl bg-emerald-900/30 border border-emerald-500/20 flex items-center justify-center mb-4 shadow-lg">
+              <i class="ph ph-rocket-launch text-3xl text-emerald-400"></i>
+            </div>
+            <div class="text-emerald-400 text-xs font-bold uppercase tracking-widest mb-2">Passo 3</div>
+            <h3 class="font-bold text-white text-base mb-2">Comece a usar</h3>
+            <p class="text-xs text-gray-400 max-w-[180px]">Treinamento incluso. Suporte ativo. Sem mensalidade jamais.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="text-center mt-12">
+          <a href="#sistemas" class="btn btn-primary">
+            <i class="ph ph-app-window text-lg"></i> Ver Sistemas Disponíveis
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARA QUEM É -->
+    <section class="py-14 md:py-20 bg-black/20 border-t border-white/5">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-10">
+          <span class="text-emerald-400 font-mono text-xs tracking-widest uppercase">Público</span>
+          <h2 class="text-3xl font-bold text-white mt-2">Para quem é?</h2>
+          <p class="text-gray-400 mt-3 text-sm">Qualquer negócio pode ter tecnologia de ponta.</p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+          <div class="glass-wet p-6 text-center">
+            <div class="text-4xl mb-3">🏪</div>
+            <h3 class="font-bold text-white text-sm mb-2">Pequenos negócios</h3>
+            <p class="text-xs text-gray-400">Quer organização sem precisar contratar programador</p>
+          </div>
+          <div class="glass-wet p-6 text-center">
+            <div class="text-4xl mb-3">✂️</div>
+            <h3 class="font-bold text-white text-sm mb-2">Prestadores de serviço</h3>
+            <p class="text-xs text-gray-400">Controla agenda, cobranças e clientes no celular</p>
+          </div>
+          <div class="glass-wet p-6 text-center">
+            <div class="text-4xl mb-3">🚗</div>
+            <h3 class="font-bold text-white text-sm mb-2">Autônomos e MEIs</h3>
+            <p class="text-xs text-gray-400">Cresce sem planilhas e sem papelada</p>
+          </div>
+          <div class="glass-wet p-6 text-center">
+            <div class="text-4xl mb-3">🍕</div>
+            <h3 class="font-bold text-white text-sm mb-2">Donos de estabelecimento</h3>
+            <p class="text-xs text-gray-400">Gestão completa no celular, 24h por dia</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- PROVA SOCIAL -->
+    <div class="border-t border-b border-emerald-500/20 bg-emerald-950/50 py-8">
+      <div class="container mx-auto px-6">
+        <div class="flex flex-col sm:flex-row gap-8 sm:gap-0 justify-between items-center text-center">
+          <div>
+            <div class="text-3xl font-bold text-emerald-400 mb-1" data-count="+30">0</div>
+            <div class="text-xs text-gray-400 uppercase tracking-widest">sistemas no catálogo</div>
+          </div>
+          <div class="hidden sm:block w-px h-10 bg-white/10"></div>
+          <div>
+            <div class="text-3xl font-bold text-emerald-400 mb-1" data-count="+200">0</div>
+            <div class="text-xs text-gray-400 uppercase tracking-widest">licenças emitidas</div>
+          </div>
+          <div class="hidden sm:block w-px h-10 bg-white/10"></div>
+          <div>
+            <div class="text-3xl font-bold text-emerald-400 mb-1" data-count="100%">0</div>
+            <div class="text-xs text-gray-400 uppercase tracking-widest">suporte incluso</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SISTEMAS DE GESTÃO -->
+    <section id="sistemas" class="py-14 md:py-24 bg-black/30 border-t border-white/5">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-10">
+          <span class="text-emerald-400 font-mono text-xs tracking-widest uppercase">Software House — Soluções
+            Prontas</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-white mt-2">Sistemas de Gestão por Nicho</h2>
+          <p class="text-gray-400 mt-3 max-w-xl mx-auto text-sm">+ de 50 sistemas PWA prontos para o seu segmento.
+            Licença
+            vitalícia, suporte local e demo disponível agora mesmo.</p>
+        </div>
+        <!-- Filtros -->
+        <div id="cat-filters" class="flex flex-wrap gap-2 justify-center mb-8">
+          <button data-cat="todos"
+            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-emerald-500 text-emerald-400 bg-emerald-500/10 transition-all">Todos
+            (30)
+          </button>
+          <button data-cat="food"
+            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-orange-500/50 hover:text-orange-400 transition-all">🍕
+            Food &amp; Delivery (5)</button>
+          <button data-cat="saude"
+            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-pink-500/50 hover:text-pink-400 transition-all">💆
+            Saúde &amp; Bem-estar (7)</button>
+          <button data-cat="servicos"
+            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-yellow-500/50 hover:text-yellow-400 transition-all">🔧
+            Serviços (6)</button>
+          <button data-cat="logistica"
+            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-blue-500/50 hover:text-blue-400 transition-all">🚚
+            Logística (5)</button>
+          <button data-cat="financas"
+            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-emerald-500/50 hover:text-emerald-400 transition-all">💰
+            Finanças (3)</button>
+          <button data-cat="varejo"
+            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-violet-500/50 hover:text-violet-400 transition-all">🏪
+            Varejo (5)</button>
+        </div>
+        <!-- Carousel -->
+        <!-- Setas de navegação -->
+        <div class="relative">
+          <button id="carousel-prev" aria-label="Anterior" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-3
+                   w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white/70
+                   hover:text-emerald-400 hover:border-emerald-500/40 transition-all flex items-center justify-center
+                   backdrop-blur-sm shadow-lg">
+            <i class="ph ph-caret-left text-lg"></i>
+          </button>
+          <button id="carousel-next" aria-label="Próximo" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-3
+                   w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white/70
+                   hover:text-emerald-400 hover:border-emerald-500/40 transition-all flex items-center justify-center
+                   backdrop-blur-sm shadow-lg">
+            <i class="ph ph-caret-right text-lg"></i>
+          </button>
+
+          <div id="sistemas-carousel" class="overflow-hidden" style="mask-image:linear-gradient(90deg,transparent 0%,black 5%,black 95%,transparent 100%);
+                   -webkit-mask-image:linear-gradient(90deg,transparent 0%,black 5%,black 95%,transparent 100%);">
+            <div id="sistemas-track" class="flex gap-5 transition-none" style="width:max-content">
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0 relative" data-cat="food"
+                onclick="openSistemaDemo('Gestão Hamburgueria','Hamburguerias e lanchonetes','Sistemas_Gestão/gestao-hamburgueria/index.html')">
+                <span
+                  class="absolute top-3 right-3 bg-emerald-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">POPULAR</span>
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i
+                      class="ph ph-hamburger text-xl"></i></div><span
+                    class="text-xs bg-orange-500/10 px-2 py-0.5 rounded text-orange-300">Food</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Hamburgueria</h3>
+                <p class="text-xs text-gray-400 mb-3">Pedidos, estoque, financeiro e relatórios.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-hamburgueria&nome=Gest%C3%A3o+Hamburgueria"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-orange-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="food"
+                onclick="openSistemaDemo('Gestão Pizzaria','Pizzarias e restaurantes','Sistemas_Gestão/gestao-pizzaria/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i
+                      class="ph ph-pizza text-lg"></i></div><span
+                    class="text-xs bg-orange-500/10 px-2 py-0.5 rounded text-orange-300">Food</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Pizzaria</h3>
+                <p class="text-xs text-gray-400 mb-3">Comanda digital, filas e controle de produção.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-pizzaria&nome=Gest%C3%A3o+Pizzaria"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-orange-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="food"
+                onclick="openSistemaDemo('Gestão Sorveteria','Sorveterias e açaí','Sistemas_Gestão/gestao-sorveteria/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-blue-400/20 rounded flex items-center justify-center text-blue-300"><i
+                      class="ph ph-ice-cream text-lg"></i></div><span
+                    class="text-xs bg-orange-500/10 px-2 py-0.5 rounded text-orange-300">Food</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Sorveteria</h3>
+                <p class="text-xs text-gray-400 mb-3">Sabores, estoque e vendas no balcão.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-sorveteria&nome=Gest%C3%A3o+Sorveteria"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-blue-300 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="food"
+                onclick="openSistemaDemo('Gestão Marmita','Marmitarias e quentinhas','Sistemas_Gestão/gestao-marmita/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i
+                      class="ph ph-bowl-food text-lg"></i></div><span
+                    class="text-xs bg-orange-500/10 px-2 py-0.5 rounded text-orange-300">Food</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Marmita</h3>
+                <p class="text-xs text-gray-400 mb-3">Pedidos diários, assinaturas e rotas.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-marmita&nome=Gest%C3%A3o+Marmita"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-orange-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0 relative" data-cat="food"
+                onclick="openSistemaDemo('Gestão Delivery','Delivery e dark kitchen','Sistemas_Gestão/gestao-delivery/index.html')">
+                <span
+                  class="absolute top-3 right-3 bg-emerald-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">POPULAR</span>
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i
+                      class="ph ph-motorcycle text-lg"></i></div><span
+                    class="text-xs bg-orange-500/10 px-2 py-0.5 rounded text-orange-300">Food</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Delivery</h3>
+                <p class="text-xs text-gray-400 mb-3">Pedidos, entregadores e rastreio.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-delivery&nome=Gest%C3%A3o+Delivery"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-orange-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0 relative" data-cat="saude"
+                onclick="openSistemaDemo('Gestão Barbearia','Barbearias e salões masculinos','Sistemas_Gestão/gestao-barbearia/index.html')">
+                <span
+                  class="absolute top-3 right-3 bg-emerald-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">POPULAR</span>
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-pink-500/20 rounded flex items-center justify-center text-pink-400"><i
+                      class="ph ph-scissors text-lg"></i></div><span
+                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Barbearia</h3>
+                <p class="text-xs text-gray-400 mb-3">Agenda, clientes, serviços e financeiro.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-barbearia&nome=Gest%C3%A3o+Barbearia"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-pink-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0 relative" data-cat="saude"
+                onclick="openSistemaDemo('Gestão Beleza','Salões e estúdios de beleza','Sistemas_Gestão/gestao-beleza/index.html')">
+                <span
+                  class="absolute top-3 right-3 bg-emerald-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">POPULAR</span>
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-pink-500/20 rounded flex items-center justify-center text-pink-400"><i
+                      class="ph ph-sparkle text-lg"></i></div><span
+                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Beleza</h3>
+                <p class="text-xs text-gray-400 mb-3">Agendamentos, comissões e fidelidade.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-beleza&nome=Gest%C3%A3o+Beleza"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-pink-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
+                onclick="openSistemaDemo('Gestão Fit','Academias e studios de treino','Sistemas_Gestão/gestao-fit/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-pink-500/20 rounded flex items-center justify-center text-pink-400"><i
+                      class="ph ph-barbell text-lg"></i></div><span
+                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Fit</h3>
+                <p class="text-xs text-gray-400 mb-3">Alunos, treinos, planos e mensalidades.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-fit&nome=Gest%C3%A3o+Fit"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-pink-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
+                onclick="openSistemaDemo('Gestão Nutri','Nutricionistas e clínicas','Sistemas_Gestão/gestao-nutri/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-green-500/20 rounded flex items-center justify-center text-green-400"><i
+                      class="ph ph-leaf text-lg"></i></div><span
+                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Nutri</h3>
+                <p class="text-xs text-gray-400 mb-3">Pacientes, planos alimentares e consultas.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-nutri&nome=Gest%C3%A3o+Nutri"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-green-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
+                onclick="openSistemaDemo('Gestão Odonto','Clínicas odontológicas','Sistemas_Gestão/gestao-odonto/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
+                      class="ph ph-tooth text-lg"></i></div><span
+                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Odonto</h3>
+                <p class="text-xs text-gray-400 mb-3">Prontuários, agenda e orçamentos.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-odonto&nome=Gest%C3%A3o+Odonto"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
+                onclick="openSistemaDemo('Gestão Terapia','Terapeutas e psicólogos','Sistemas_Gestão/gestao-terapia/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-purple-500/20 rounded flex items-center justify-center text-purple-400"><i
+                      class="ph ph-brain text-lg"></i></div><span
+                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Terapia</h3>
+                <p class="text-xs text-gray-400 mb-3">Sessões, prontuários e cobranças.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-terapia&nome=Gest%C3%A3o+Terapia"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-purple-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
+                onclick="openSistemaDemo('Gestão Assistência','Assistências técnicas e consertos','Sistemas_Gestão/gestao-assistencia/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
+                      class="ph ph-wrench text-lg"></i></div><span
+                    class="text-xs bg-yellow-500/10 px-2 py-0.5 rounded text-yellow-300">Serviços</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Assistência</h3>
+                <p class="text-xs text-gray-400 mb-3">Ordens de serviço, peças e clientes.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-assistencia&nome=Gest%C3%A3o+Assist%C3%AAncia"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-yellow-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
+                onclick="openSistemaDemo('Gestão Checklist','Inspeções e auditorias','Sistemas_Gestão/gestao-checklist/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
+                      class="ph ph-check-square text-lg"></i></div><span
+                    class="text-xs bg-yellow-500/10 px-2 py-0.5 rounded text-yellow-300">Serviços</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Checklist</h3>
+                <p class="text-xs text-gray-400 mb-3">Listas de verificação, relatórios e aprovações.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-checklist&nome=Gest%C3%A3o+Checklist"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-yellow-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0 relative"
+                data-cat="servicos"
+                onclick="openSistemaDemo('Gestão Orçamentos','Prestadores de serviços','Sistemas_Gestão/gestao-orcamentos/index.html')">
+                <span
+                  class="absolute top-3 right-3 bg-emerald-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">POPULAR</span>
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
+                      class="ph ph-file-text text-lg"></i></div><span
+                    class="text-xs bg-yellow-500/10 px-2 py-0.5 rounded text-yellow-300">Serviços</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Orçamentos</h3>
+                <p class="text-xs text-gray-400 mb-3">Propostas, aprovações e controle de projetos.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-orcamentos&nome=Gest%C3%A3o+Or%C3%A7amentos"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-yellow-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
+                onclick="openSistemaDemo('Gestão Obras','Construtoras e pedreiros','Sistemas_Gestão/gestao-obras/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-amber-500/20 rounded flex items-center justify-center text-amber-400"><i
+                      class="ph ph-hard-hat text-lg"></i></div><span
+                    class="text-xs bg-yellow-500/10 px-2 py-0.5 rounded text-yellow-300">Serviços</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Obras</h3>
+                <p class="text-xs text-gray-400 mb-3">Etapas, materiais, mão de obra e cronogramas.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-obras&nome=Gest%C3%A3o+Obras"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-amber-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
+                onclick="openSistemaDemo('Gestão Controle','Controle geral de processos','Sistemas_Gestão/gestao-controle/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
+                      class="ph ph-sliders text-lg"></i></div><span
+                    class="text-xs bg-yellow-500/10 px-2 py-0.5 rounded text-yellow-300">Serviços</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Controle</h3>
+                <p class="text-xs text-gray-400 mb-3">Tarefas, prazos e equipes em um painel.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-controle&nome=Gest%C3%A3o+Controle"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-yellow-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
+                onclick="openSistemaDemo('Gestão Driver','Motoristas e transporte particular','Sistemas_Gestão/gestao-driver/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
+                      class="ph ph-steering-wheel text-lg"></i></div><span
+                    class="text-xs bg-blue-500/10 px-2 py-0.5 rounded text-blue-300">Logística</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Driver</h3>
+                <p class="text-xs text-gray-400 mb-3">Corridas, pagamentos e histórico de viagens.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-driver&nome=Gest%C3%A3o+Driver"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
+                onclick="openSistemaDemo('Gestão Entregas','Empresas de entregas locais','Sistemas_Gestão/gestao-entregas/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
+                      class="ph ph-package text-lg"></i></div><span
+                    class="text-xs bg-blue-500/10 px-2 py-0.5 rounded text-blue-300">Logística</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Entregas</h3>
+                <p class="text-xs text-gray-400 mb-3">Romaneios, rotas e confirmação de entrega.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-entregas&nome=Gest%C3%A3o+Entregas"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
+                onclick="openSistemaDemo('Gestão Frota','Frotas e transportadoras','Sistemas_Gestão/gestao-frota/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
+                      class="ph ph-truck text-lg"></i></div><span
+                    class="text-xs bg-blue-500/10 px-2 py-0.5 rounded text-blue-300">Logística</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Frota</h3>
+                <p class="text-xs text-gray-400 mb-3">Veículos, manutenções, abastecimentos e KPIs.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-frota&nome=Gest%C3%A3o+Frota"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
+                onclick="openSistemaDemo('Gestão Motoboy','Motoboys e small delivery','Sistemas_Gestão/gestao-motoboy/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
+                      class="ph ph-motorcycle text-lg"></i></div><span
+                    class="text-xs bg-blue-500/10 px-2 py-0.5 rounded text-blue-300">Logística</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Motoboy</h3>
+                <p class="text-xs text-gray-400 mb-3">Corridas, pontos e comissões de motoboys.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-motoboy&nome=Gest%C3%A3o+Motoboy"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
+                onclick="openSistemaDemo('Gestão Motorista','Motoristas autônomos','Sistemas_Gestão/gestao-motorista/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
+                      class="ph ph-car text-lg"></i></div><span
+                    class="text-xs bg-blue-500/10 px-2 py-0.5 rounded text-blue-300">Logística</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Motorista</h3>
+                <p class="text-xs text-gray-400 mb-3">Viagens, despesas, lucro e desempenho.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-motorista&nome=Gest%C3%A3o+Motorista"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="financas"
+                onclick="openSistemaDemo('Gestão Finanças','Controle financeiro empresarial','Sistemas_Gestão/gestao-financas/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
+                      class="ph ph-chart-line-up text-lg"></i></div><span
+                    class="text-xs bg-emerald-500/10 px-2 py-0.5 rounded text-emerald-300">Finanças</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Finanças</h3>
+                <p class="text-xs text-gray-400 mb-3">Fluxo de caixa, DRE e contas a pagar/receber.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-financas&nome=Gest%C3%A3o+Finan%C3%A7as"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-emerald-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="financas"
+                onclick="openSistemaDemo('Gestão PDV','Ponto de venda e caixa','Sistemas_Gestão/gestao-pdv/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
+                      class="ph ph-cash-register text-lg"></i></div><span
+                    class="text-xs bg-emerald-500/10 px-2 py-0.5 rounded text-emerald-300">Finanças</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão PDV</h3>
+                <p class="text-xs text-gray-400 mb-3">Caixa, vendas, sangria e fechamento diário.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-pdv&nome=Gest%C3%A3o+PDV"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-emerald-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="financas"
+                onclick="openSistemaDemo('Gestão Card','Controle de despesas em cartão','Sistemas_Gestão/gestao-card/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
+                      class="ph ph-credit-card text-lg"></i></div><span
+                    class="text-xs bg-emerald-500/10 px-2 py-0.5 rounded text-emerald-300">Finanças</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Card</h3>
+                <p class="text-xs text-gray-400 mb-3">Controle de gastos em cartão por categoria.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-card&nome=Gest%C3%A3o+Card"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-emerald-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
+                onclick="openSistemaDemo('Gestão Estoque','Comércio e depósitos','Sistemas_Gestão/gestao-estoque/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
+                      class="ph ph-warehouse text-lg"></i></div><span
+                    class="text-xs bg-violet-500/10 px-2 py-0.5 rounded text-violet-300">Varejo</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Estoque</h3>
+                <p class="text-xs text-gray-400 mb-3">Entradas, saídas, alertas e inventário.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-estoque&nome=Gest%C3%A3o+Estoque"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
+                onclick="openSistemaDemo('Gestão Distribuidora','Distribuidoras e atacados','Sistemas_Gestão/gestao-distribuidora/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
+                      class="ph ph-buildings text-lg"></i></div><span
+                    class="text-xs bg-violet-500/10 px-2 py-0.5 rounded text-violet-300">Varejo</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Distribuidora</h3>
+                <p class="text-xs text-gray-400 mb-3">Pedidos, rotas de entrega e clientes.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-distribuidora&nome=Gest%C3%A3o+Distribuidora"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
+                onclick="openSistemaDemo('Gestão Feirante','Feirantes e vendedores ambulantes','Sistemas_Gestão/gestao-feirante/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
+                      class="ph ph-basket text-lg"></i></div><span
+                    class="text-xs bg-violet-500/10 px-2 py-0.5 rounded text-violet-300">Varejo</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Feirante</h3>
+                <p class="text-xs text-gray-400 mb-3">Vendas no ato, troco e fechamento de dia.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-feirante&nome=Gest%C3%A3o+Feirante"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
+                onclick="openSistemaDemo('Gestão Artesanato','Artesãos e produção manual','Sistemas_Gestão/gestao-artesanato/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
+                      class="ph ph-palette text-lg"></i></div><span
+                    class="text-xs bg-violet-500/10 px-2 py-0.5 rounded text-violet-300">Varejo</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Artesanato</h3>
+                <p class="text-xs text-gray-400 mb-3">Produção, materiais, encomendas e vendas.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-artesanato&nome=Gest%C3%A3o+Artesanato"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
+                onclick="openSistemaDemo('Gestão Aluguéis','Imóveis e locação em geral','Sistemas_Gestão/gestao-alugueis/index.html')">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
+                      class="ph ph-house-line text-lg"></i></div><span
+                    class="text-xs bg-violet-500/10 px-2 py-0.5 rounded text-violet-300">Varejo</span>
+                </div>
+                <h3 class="font-bold text-white text-base mb-1">Gestão Aluguéis</h3>
+                <p class="text-xs text-gray-400 mb-3">Contratos, vencimentos e recibos de aluguel.</p>
+                <div class="flex items-center justify-between">
+                  <a href="checkout.php?sistema=gestao-alugueis&nome=Gest%C3%A3o+Alugu%C3%A9is"
+                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                  <span class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
+                </div>
+              </div>
+            </div><!-- fim sistemas-track -->
+          </div><!-- fim sistemas-carousel -->
+        </div><!-- fim relative wrapper -->
+        <div class="text-center mt-10">
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="tecnologia.html#sistemas" class="btn btn-primary text-sm">
+              <i class="ph ph-app-window text-lg"></i> Ver todos os sistemas — R$ 97
+            </a>
+            <a href="https://wa.me/5512992191018?text=Quero+saber+mais" target="_blank" class="btn btn-ghost text-sm">
+              <i class="ph ph-whatsapp-logo text-lg"></i> Falar com especialista
+            </a>
+          </div>
+          <p class="text-xs text-gray-500 mt-3">Licença vitalícia • Link de acesso imediato • Suporte incluso</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODAL SISTEMA -->
+    <div id="sistema-modal" class="modal-backdrop" onclick="closeSistemaDemo(event)">
+      <div class="modal-content" style="max-width:90vw;width:1100px;">
+        <div
+          style="background:#0d0d14;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;flex-shrink:0">
+          <div>
+            <div id="sistema-modal-nome" class="text-white text-sm font-bold"></div>
+            <div id="sistema-modal-nicho" class="text-gray-400 text-xs"></div>
+          </div>
+          <div class="flex items-center gap-3"><a id="sistema-modal-cta" href="#" target="_blank"
+              class="btn btn-primary text-xs py-1.5 px-4"><i class="ph ph-whatsapp-logo"></i> Contratar — R$
+              97</a><button onclick="closeSistemaDemo(event)" class="text-gray-500 hover:text-white"><i
+                class="ph ph-x text-lg"></i></button></div>
+        </div>
+        <div class="flex-grow bg-gray-800 overflow-hidden" style="height:85vh"><iframe id="sistema-frame"
+            src="about:blank" class="w-full h-full border-0"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe></div>
+      </div>
+    </div>
+
+    <!-- DEPOIMENTOS -->
+    <section class="py-14 md:py-20 border-t border-white/5">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-10">
+          <span class="text-emerald-400 font-mono text-xs tracking-widest uppercase">Clientes reais</span>
+          <h2 class="text-3xl font-bold text-white mt-2">O que nossos clientes dizem</h2>
+          <p class="text-gray-400 mt-3 text-sm">Negócios reais que já transformaram sua gestão.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+
+          <!-- Card 1 -->
+          <div class="glass-wet p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div
+                class="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                R</div>
+              <div>
+                <div class="text-white text-sm font-bold">Ricardo M.</div>
+                <div class="text-gray-500 text-xs">Hamburgueria Sabor da Casa</div>
+              </div>
+            </div>
+            <div class="flex gap-0.5 mb-3">
+              <i class="ph-fill ph-star text-yellow-400 text-sm"></i>
+              <i class="ph-fill ph-star text-yellow-400 text-sm"></i>
+              <i class="ph-fill ph-star text-yellow-400 text-sm"></i>
+              <i class="ph-fill ph-star text-yellow-400 text-sm"></i>
+              <i class="ph-fill ph-star text-yellow-400 text-sm"></i>
+            </div>
+            <p class="text-sm text-gray-300 leading-relaxed">"Antes eu controlava tudo no caderno. Agora vejo meu caixa
+              e estoque em tempo real. Valeu cada centavo."</p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="glass-wet p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div
+                class="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                A</div>
+              <div>
+                <div class="text-white text-sm font-bold">Amanda S.</div>
+                <div class="text-gray-500 text-xs">Studio de Beleza</div>
+              </div>
+            </div>
+            <div class="flex gap-0.5 mb-3">
+              <i class="ph-fill ph-star text-yellow-400 text-sm"></i>
+              <i class="ph-fill ph-star text-yellow-400 text-sm"></i>
+              <i class="ph-fill ph-star text-yellow-400 text-sm"></i>
+              <i class="ph-fill ph-star text-yellow-400 text-sm"></i>
+              <i class="ph-fill ph-star text-yellow-400 text-sm"></i>
+            </div>
+            <p class="text-sm text-gray-300 leading-relaxed">"Sistema de agendamento transformou meu atendimento.
+              Clientes confirmam sozinhos e eu não perco mais horário."</p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="glass-wet p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div
+                class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                P</div>
+              <div>
+                <div class="text-white text-sm font-bold">Paulo R.</div>
+                <div class="text-gray-500 text-xs">Entregador Autônomo</div>
+              </div>
+            </div>
+            <div class="flex gap-0.5 mb-3">
+              <i class="ph-fill ph-star text-yellow-400 text-sm"></i>
+              <i class="ph-fill ph-star text-yellow-400 text-sm"></i>
+              <i class="ph-fill ph-star text-yellow-400 text-sm"></i>
+              <i class="ph-fill ph-star text-yellow-400 text-sm"></i>
+              <i class="ph-fill ph-star text-yellow-400 text-sm"></i>
+            </div>
+            <p class="text-sm text-gray-300 leading-relaxed">"Controlo todas as minhas corridas, despesas e ganhos.
+              Finalmente sei se estou lucrando de verdade."</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-14 md:py-20 bg-black/20 border-t border-white/5">
+      <div class="container mx-auto px-6 max-w-3xl">
+        <div class="text-center mb-10">
+          <span class="text-emerald-400 font-mono text-xs tracking-widest uppercase">Tire suas dúvidas</span>
+          <h2 class="text-3xl font-bold text-white mt-2">Dúvidas frequentes</h2>
+          <p class="text-gray-400 mt-3 text-sm">Tudo que você precisa saber antes de contratar.</p>
+        </div>
+
+        <div class="space-y-0 divide-y divide-white/10 border border-white/10 rounded-xl overflow-hidden">
+
+          <!-- Item 1 -->
+          <div class="faq-item">
+            <button onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between gap-4 p-5 text-left hover:bg-white/5 transition-colors">
+              <span class="font-semibold text-white text-sm">O sistema funciona no celular?</span>
+              <i class="ph ph-plus text-emerald-400 text-lg flex-shrink-0 faq-icon transition-transform"></i>
+            </button>
+            <div class="faq-answer hidden px-5 pb-5">
+              <p class="text-sm text-gray-400 leading-relaxed">Sim! Todos os sistemas são PWA (Progressive Web App), ou
+                seja, funcionam no navegador do celular como se fossem um app. Sem baixar nada na App Store.</p>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="faq-item">
+            <button onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between gap-4 p-5 text-left hover:bg-white/5 transition-colors">
+              <span class="font-semibold text-white text-sm">Preciso pagar mensalidade?</span>
+              <i class="ph ph-plus text-emerald-400 text-lg flex-shrink-0 faq-icon transition-transform"></i>
+            </button>
+            <div class="faq-answer hidden px-5 pb-5">
+              <p class="text-sm text-gray-400 leading-relaxed">Não. O pagamento é único — R$ 97 por sistema — e a
+                licença é vitalícia. Sem cobranças mensais.</p>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="faq-item">
+            <button onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between gap-4 p-5 text-left hover:bg-white/5 transition-colors">
+              <span class="font-semibold text-white text-sm">O sistema fica na nuvem ou precisa instalar?</span>
+              <i class="ph ph-plus text-emerald-400 text-lg flex-shrink-0 faq-icon transition-transform"></i>
+            </button>
+            <div class="faq-answer hidden px-5 pb-5">
+              <p class="text-sm text-gray-400 leading-relaxed">Fica na nuvem, hospedado nos nossos servidores. Você
+                acessa de qualquer dispositivo, a qualquer hora, só precisando de internet.</p>
+            </div>
+          </div>
+
+          <!-- Item 4 -->
+          <div class="faq-item">
+            <button onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between gap-4 p-5 text-left hover:bg-white/5 transition-colors">
+              <span class="font-semibold text-white text-sm">Quanto tempo leva para receber o acesso?</span>
+              <i class="ph ph-plus text-emerald-400 text-lg flex-shrink-0 faq-icon transition-transform"></i>
+            </button>
+            <div class="faq-answer hidden px-5 pb-5">
+              <p class="text-sm text-gray-400 leading-relaxed">Após a confirmação do pagamento, o link e a chave de
+                acesso são enviados em poucos minutos via WhatsApp.</p>
+            </div>
+          </div>
+
+          <!-- Item 5 -->
+          <div class="faq-item">
+            <button onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between gap-4 p-5 text-left hover:bg-white/5 transition-colors">
+              <span class="font-semibold text-white text-sm">Posso personalizar o sistema para o meu negócio?</span>
+              <i class="ph ph-plus text-emerald-400 text-lg flex-shrink-0 faq-icon transition-transform"></i>
+            </button>
+            <div class="faq-answer hidden px-5 pb-5">
+              <p class="text-sm text-gray-400 leading-relaxed">Sim! Fazemos ajustes como nome da empresa, cores e
+                logotipo. Personalizações mais profundas podem ser orçadas separadamente.</p>
+            </div>
+          </div>
+
+          <!-- Item 6 -->
+          <div class="faq-item">
+            <button onclick="toggleFaq(this)"
+              class="w-full flex items-center justify-between gap-4 p-5 text-left hover:bg-white/5 transition-colors">
+              <span class="font-semibold text-white text-sm">Tem suporte depois da compra?</span>
+              <i class="ph ph-plus text-emerald-400 text-lg flex-shrink-0 faq-icon transition-transform"></i>
+            </button>
+            <div class="faq-answer hidden px-5 pb-5">
+              <p class="text-sm text-gray-400 leading-relaxed">Sim. Suporte via WhatsApp está incluso na licença. Nossa
+                equipe fica disponível de segunda a sexta, 13h às 18h.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
     <!-- VITRINE DE PRODUTOS -->
-    <section id="solucoes" class="py-12 md:py-20 relative">
+    <section id="solucoes" class="py-12 md:py-20 relative border-t border-white/5">
       <div class="container mx-auto px-6">
         <div class="mb-12 flex flex-col md:flex-row justify-between items-end gap-4">
           <div>
@@ -720,483 +1656,6 @@
         </div>
       </div>
     </section>
-
-
-    <!-- SISTEMAS DE GESTÃO -->
-    <section id="sistemas" class="py-14 md:py-24 bg-black/30 border-t border-white/5">
-      <div class="container mx-auto px-6">
-        <div class="text-center mb-10">
-          <span class="text-emerald-400 font-mono text-xs tracking-widest uppercase">Software House — Soluções
-            Prontas</span>
-          <h2 class="text-3xl md:text-4xl font-bold text-white mt-2">Sistemas de Gestão por Nicho</h2>
-          <p class="text-gray-400 mt-3 max-w-xl mx-auto text-sm">+ de 50 sistemas PWA prontos para o seu segmento.
-            Licença
-            vitalícia, suporte local e demo disponível agora mesmo.</p>
-        </div>
-        <!-- Filtros -->
-        <div id="cat-filters" class="flex flex-wrap gap-2 justify-center mb-8">
-          <button data-cat="todos"
-            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-emerald-500 text-emerald-400 bg-emerald-500/10 transition-all">Todos
-          </button>
-          <button data-cat="food"
-            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-orange-500/50 hover:text-orange-400 transition-all">🍕
-            Food &amp; Delivery</button>
-          <button data-cat="saude"
-            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-pink-500/50 hover:text-pink-400 transition-all">💆
-            Saúde &amp; Bem-estar</button>
-          <button data-cat="servicos"
-            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-yellow-500/50 hover:text-yellow-400 transition-all">🔧
-            Serviços</button>
-          <button data-cat="logistica"
-            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-blue-500/50 hover:text-blue-400 transition-all">🚚
-            Logística</button>
-          <button data-cat="financas"
-            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-emerald-500/50 hover:text-emerald-400 transition-all">💰
-            Finanças</button>
-          <button data-cat="varejo"
-            class="cat-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 text-gray-400 hover:border-violet-500/50 hover:text-violet-400 transition-all">🏪
-            Varejo</button>
-        </div>
-        <!-- Carousel -->
-        <!-- Setas de navegação -->
-        <div class="relative">
-          <button id="carousel-prev" aria-label="Anterior" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-3
-                   w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white/70
-                   hover:text-emerald-400 hover:border-emerald-500/40 transition-all flex items-center justify-center
-                   backdrop-blur-sm shadow-lg">
-            <i class="ph ph-caret-left text-lg"></i>
-          </button>
-          <button id="carousel-next" aria-label="Próximo" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-3
-                   w-10 h-10 rounded-full bg-black/60 border border-white/10 text-white/70
-                   hover:text-emerald-400 hover:border-emerald-500/40 transition-all flex items-center justify-center
-                   backdrop-blur-sm shadow-lg">
-            <i class="ph ph-caret-right text-lg"></i>
-          </button>
-
-          <div id="sistemas-carousel" class="overflow-hidden" style="mask-image:linear-gradient(90deg,transparent 0%,black 5%,black 95%,transparent 100%);
-                   -webkit-mask-image:linear-gradient(90deg,transparent 0%,black 5%,black 95%,transparent 100%);">
-            <div id="sistemas-track" class="flex gap-5 transition-none" style="width:max-content">
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="food"
-                onclick="openSistemaDemo('Gestão Hamburgueria','Hamburguerias e lanchonetes','Sistemas_Gestão/gestao-hamburgueria/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i
-                      class="ph ph-hamburger text-xl"></i></div><span
-                    class="text-xs bg-orange-500/10 px-2 py-0.5 rounded text-orange-300">Food</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Hamburgueria</h3>
-                <p class="text-xs text-gray-400 mb-3">Pedidos, estoque, financeiro e relatórios.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-orange-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="food"
-                onclick="openSistemaDemo('Gestão Pizzaria','Pizzarias e restaurantes','Sistemas_Gestão/gestao-pizzaria/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i
-                      class="ph ph-pizza text-lg"></i></div><span
-                    class="text-xs bg-orange-500/10 px-2 py-0.5 rounded text-orange-300">Food</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Pizzaria</h3>
-                <p class="text-xs text-gray-400 mb-3">Comanda digital, filas e controle de produção.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-orange-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="food"
-                onclick="openSistemaDemo('Gestão Sorveteria','Sorveterias e açaí','Sistemas_Gestão/gestao-sorveteria/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-blue-400/20 rounded flex items-center justify-center text-blue-300"><i
-                      class="ph ph-ice-cream text-lg"></i></div><span
-                    class="text-xs bg-orange-500/10 px-2 py-0.5 rounded text-orange-300">Food</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Sorveteria</h3>
-                <p class="text-xs text-gray-400 mb-3">Sabores, estoque e vendas no balcão.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-blue-300 text-xs group-hover:translate-x-1 transition-transform">Demo
-                    →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="food"
-                onclick="openSistemaDemo('Gestão Marmita','Marmitarias e quentinhas','Sistemas_Gestão/gestao-marmita/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i
-                      class="ph ph-bowl-food text-lg"></i></div><span
-                    class="text-xs bg-orange-500/10 px-2 py-0.5 rounded text-orange-300">Food</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Marmita</h3>
-                <p class="text-xs text-gray-400 mb-3">Pedidos diários, assinaturas e rotas.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-orange-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="food"
-                onclick="openSistemaDemo('Gestão Delivery','Delivery e dark kitchen','Sistemas_Gestão/gestao-delivery/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i
-                      class="ph ph-motorcycle text-lg"></i></div><span
-                    class="text-xs bg-orange-500/10 px-2 py-0.5 rounded text-orange-300">Food</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Delivery</h3>
-                <p class="text-xs text-gray-400 mb-3">Pedidos, entregadores e rastreio.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-orange-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
-                onclick="openSistemaDemo('Gestão Barbearia','Barbearias e salões masculinos','Sistemas_Gestão/gestao-barbearia/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-pink-500/20 rounded flex items-center justify-center text-pink-400"><i
-                      class="ph ph-scissors text-lg"></i></div><span
-                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Barbearia</h3>
-                <p class="text-xs text-gray-400 mb-3">Agenda, clientes, serviços e financeiro.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-pink-400 text-xs group-hover:translate-x-1 transition-transform">Demo
-                    →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
-                onclick="openSistemaDemo('Gestão Beleza','Salões e estúdios de beleza','Sistemas_Gestão/gestao-beleza/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-pink-500/20 rounded flex items-center justify-center text-pink-400"><i
-                      class="ph ph-sparkle text-lg"></i></div><span
-                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Beleza</h3>
-                <p class="text-xs text-gray-400 mb-3">Agendamentos, comissões e fidelidade.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-pink-400 text-xs group-hover:translate-x-1 transition-transform">Demo
-                    →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
-                onclick="openSistemaDemo('Gestão Fit','Academias e studios de treino','Sistemas_Gestão/gestao-fit/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-pink-500/20 rounded flex items-center justify-center text-pink-400"><i
-                      class="ph ph-barbell text-lg"></i></div><span
-                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Fit</h3>
-                <p class="text-xs text-gray-400 mb-3">Alunos, treinos, planos e mensalidades.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-pink-400 text-xs group-hover:translate-x-1 transition-transform">Demo
-                    →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
-                onclick="openSistemaDemo('Gestão Nutri','Nutricionistas e clínicas','Sistemas_Gestão/gestao-nutri/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-green-500/20 rounded flex items-center justify-center text-green-400"><i
-                      class="ph ph-leaf text-lg"></i></div><span
-                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Nutri</h3>
-                <p class="text-xs text-gray-400 mb-3">Pacientes, planos alimentares e consultas.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-green-400 text-xs group-hover:translate-x-1 transition-transform">Demo
-                    →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
-                onclick="openSistemaDemo('Gestão Odonto','Clínicas odontológicas','Sistemas_Gestão/gestao-odonto/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
-                      class="ph ph-tooth text-lg"></i></div><span
-                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Odonto</h3>
-                <p class="text-xs text-gray-400 mb-3">Prontuários, agenda e orçamentos.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo
-                    →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
-                onclick="openSistemaDemo('Gestão Terapia','Terapeutas e psicólogos','Sistemas_Gestão/gestao-terapia/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-purple-500/20 rounded flex items-center justify-center text-purple-400"><i
-                      class="ph ph-brain text-lg"></i></div><span
-                    class="text-xs bg-pink-500/10 px-2 py-0.5 rounded text-pink-300">Saúde</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Terapia</h3>
-                <p class="text-xs text-gray-400 mb-3">Sessões, prontuários e cobranças.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-purple-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
-                onclick="openSistemaDemo('Gestão Assistência','Assistências técnicas e consertos','Sistemas_Gestão/gestao-assistencia/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
-                      class="ph ph-wrench text-lg"></i></div><span
-                    class="text-xs bg-yellow-500/10 px-2 py-0.5 rounded text-yellow-300">Serviços</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Assistência</h3>
-                <p class="text-xs text-gray-400 mb-3">Ordens de serviço, peças e clientes.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-yellow-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
-                onclick="openSistemaDemo('Gestão Checklist','Inspeções e auditorias','Sistemas_Gestão/gestao-checklist/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
-                      class="ph ph-check-square text-lg"></i></div><span
-                    class="text-xs bg-yellow-500/10 px-2 py-0.5 rounded text-yellow-300">Serviços</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Checklist</h3>
-                <p class="text-xs text-gray-400 mb-3">Listas de verificação, relatórios e aprovações.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-yellow-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
-                onclick="openSistemaDemo('Gestão Orçamentos','Prestadores de serviços','Sistemas_Gestão/gestao-orcamentos/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
-                      class="ph ph-file-text text-lg"></i></div><span
-                    class="text-xs bg-yellow-500/10 px-2 py-0.5 rounded text-yellow-300">Serviços</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Orçamentos</h3>
-                <p class="text-xs text-gray-400 mb-3">Propostas, aprovações e controle de projetos.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-yellow-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
-                onclick="openSistemaDemo('Gestão Obras','Construtoras e pedreiros','Sistemas_Gestão/gestao-obras/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-amber-500/20 rounded flex items-center justify-center text-amber-400"><i
-                      class="ph ph-hard-hat text-lg"></i></div><span
-                    class="text-xs bg-yellow-500/10 px-2 py-0.5 rounded text-yellow-300">Serviços</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Obras</h3>
-                <p class="text-xs text-gray-400 mb-3">Etapas, materiais, mão de obra e cronogramas.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-amber-400 text-xs group-hover:translate-x-1 transition-transform">Demo
-                    →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
-                onclick="openSistemaDemo('Gestão Controle','Controle geral de processos','Sistemas_Gestão/gestao-controle/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
-                      class="ph ph-sliders text-lg"></i></div><span
-                    class="text-xs bg-yellow-500/10 px-2 py-0.5 rounded text-yellow-300">Serviços</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Controle</h3>
-                <p class="text-xs text-gray-400 mb-3">Tarefas, prazos e equipes em um painel.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-yellow-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
-                onclick="openSistemaDemo('Gestão Driver','Motoristas e transporte particular','Sistemas_Gestão/gestao-driver/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
-                      class="ph ph-steering-wheel text-lg"></i></div><span
-                    class="text-xs bg-blue-500/10 px-2 py-0.5 rounded text-blue-300">Logística</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Driver</h3>
-                <p class="text-xs text-gray-400 mb-3">Corridas, pagamentos e histórico de viagens.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo
-                    →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
-                onclick="openSistemaDemo('Gestão Entregas','Empresas de entregas locais','Sistemas_Gestão/gestao-entregas/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
-                      class="ph ph-package text-lg"></i></div><span
-                    class="text-xs bg-blue-500/10 px-2 py-0.5 rounded text-blue-300">Logística</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Entregas</h3>
-                <p class="text-xs text-gray-400 mb-3">Romaneios, rotas e confirmação de entrega.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo
-                    →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
-                onclick="openSistemaDemo('Gestão Frota','Frotas e transportadoras','Sistemas_Gestão/gestao-frota/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
-                      class="ph ph-truck text-lg"></i></div><span
-                    class="text-xs bg-blue-500/10 px-2 py-0.5 rounded text-blue-300">Logística</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Frota</h3>
-                <p class="text-xs text-gray-400 mb-3">Veículos, manutenções, abastecimentos e KPIs.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo
-                    →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
-                onclick="openSistemaDemo('Gestão Motoboy','Motoboys e small delivery','Sistemas_Gestão/gestao-motoboy/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
-                      class="ph ph-motorcycle text-lg"></i></div><span
-                    class="text-xs bg-blue-500/10 px-2 py-0.5 rounded text-blue-300">Logística</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Motoboy</h3>
-                <p class="text-xs text-gray-400 mb-3">Corridas, pontos e comissões de motoboys.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo
-                    →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
-                onclick="openSistemaDemo('Gestão Motorista','Motoristas autônomos','Sistemas_Gestão/gestao-motorista/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
-                      class="ph ph-car text-lg"></i></div><span
-                    class="text-xs bg-blue-500/10 px-2 py-0.5 rounded text-blue-300">Logística</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Motorista</h3>
-                <p class="text-xs text-gray-400 mb-3">Viagens, despesas, lucro e desempenho.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo
-                    →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="financas"
-                onclick="openSistemaDemo('Gestão Finanças','Controle financeiro empresarial','Sistemas_Gestão/gestao-financas/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
-                      class="ph ph-chart-line-up text-lg"></i></div><span
-                    class="text-xs bg-emerald-500/10 px-2 py-0.5 rounded text-emerald-300">Finanças</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Finanças</h3>
-                <p class="text-xs text-gray-400 mb-3">Fluxo de caixa, DRE e contas a pagar/receber.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-emerald-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="financas"
-                onclick="openSistemaDemo('Gestão PDV','Ponto de venda e caixa','Sistemas_Gestão/gestao-pdv/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
-                      class="ph ph-cash-register text-lg"></i></div><span
-                    class="text-xs bg-emerald-500/10 px-2 py-0.5 rounded text-emerald-300">Finanças</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão PDV</h3>
-                <p class="text-xs text-gray-400 mb-3">Caixa, vendas, sangria e fechamento diário.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-emerald-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="financas"
-                onclick="openSistemaDemo('Gestão Card','Controle de despesas em cartão','Sistemas_Gestão/gestao-card/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
-                      class="ph ph-credit-card text-lg"></i></div><span
-                    class="text-xs bg-emerald-500/10 px-2 py-0.5 rounded text-emerald-300">Finanças</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Card</h3>
-                <p class="text-xs text-gray-400 mb-3">Controle de gastos em cartão por categoria.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-emerald-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
-                onclick="openSistemaDemo('Gestão Estoque','Comércio e depósitos','Sistemas_Gestão/gestao-estoque/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
-                      class="ph ph-warehouse text-lg"></i></div><span
-                    class="text-xs bg-violet-500/10 px-2 py-0.5 rounded text-violet-300">Varejo</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Estoque</h3>
-                <p class="text-xs text-gray-400 mb-3">Entradas, saídas, alertas e inventário.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
-                onclick="openSistemaDemo('Gestão Distribuidora','Distribuidoras e atacados','Sistemas_Gestão/gestao-distribuidora/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
-                      class="ph ph-buildings text-lg"></i></div><span
-                    class="text-xs bg-violet-500/10 px-2 py-0.5 rounded text-violet-300">Varejo</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Distribuidora</h3>
-                <p class="text-xs text-gray-400 mb-3">Pedidos, rotas de entrega e clientes.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
-                onclick="openSistemaDemo('Gestão Feirante','Feirantes e vendedores ambulantes','Sistemas_Gestão/gestao-feirante/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
-                      class="ph ph-basket text-lg"></i></div><span
-                    class="text-xs bg-violet-500/10 px-2 py-0.5 rounded text-violet-300">Varejo</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Feirante</h3>
-                <p class="text-xs text-gray-400 mb-3">Vendas no ato, troco e fechamento de dia.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
-                onclick="openSistemaDemo('Gestão Artesanato','Artesãos e produção manual','Sistemas_Gestão/gestao-artesanato/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
-                      class="ph ph-palette text-lg"></i></div><span
-                    class="text-xs bg-violet-500/10 px-2 py-0.5 rounded text-violet-300">Varejo</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Artesanato</h3>
-                <p class="text-xs text-gray-400 mb-3">Produção, materiais, encomendas e vendas.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-              <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
-                onclick="openSistemaDemo('Gestão Aluguéis','Imóveis e locação em geral','Sistemas_Gestão/gestao-alugueis/index.html')">
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
-                      class="ph ph-house-line text-lg"></i></div><span
-                    class="text-xs bg-violet-500/10 px-2 py-0.5 rounded text-violet-300">Varejo</span>
-                </div>
-                <h3 class="font-bold text-white text-base mb-1">Gestão Aluguéis</h3>
-                <p class="text-xs text-gray-400 mb-3">Contratos, vencimentos e recibos de aluguel.</p>
-                <div class="flex items-center justify-between"><span class="text-emerald-400 text-xs font-bold">R$ 97
-                    licença</span><span
-                    class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span></div>
-              </div>
-            </div><!-- fim sistemas-track -->
-          </div><!-- fim sistemas-carousel -->
-        </div><!-- fim relative wrapper -->
-        <div class="text-center mt-10">
-          <a href="https://wa.me/5512992191018?text=Ol%C3%A1!%20Quero%20licenciar%20um%20sistema%20de%20gest%C3%A3o%20por%20R%24%2097.%20Pode%20me%20ajudar?"
-            target="_blank" class="btn btn-primary text-sm">
-            <i class="ph ph-whatsapp-logo text-lg"></i> Quero meu sistema agora — R$ 97
-          </a>
-          <p class="text-xs text-gray-500 mt-3">Licença vitalícia • Link de acesso imediato • Suporte incluso</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- MODAL SISTEMA -->
-    <div id="sistema-modal" class="modal-backdrop" onclick="closeSistemaDemo(event)">
-      <div class="modal-content" style="max-width:90vw;width:1100px;">
-        <div
-          style="background:#0d0d14;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;flex-shrink:0">
-          <div>
-            <div id="sistema-modal-nome" class="text-white text-sm font-bold"></div>
-            <div id="sistema-modal-nicho" class="text-gray-400 text-xs"></div>
-          </div>
-          <div class="flex items-center gap-3"><a id="sistema-modal-cta" href="#" target="_blank"
-              class="btn btn-primary text-xs py-1.5 px-4"><i class="ph ph-whatsapp-logo"></i> Contratar — R$
-              97</a><button onclick="closeSistemaDemo(event)" class="text-gray-500 hover:text-white"><i
-                class="ph ph-x text-lg"></i></button></div>
-        </div>
-        <div class="flex-grow bg-gray-800 overflow-hidden" style="height:85vh"><iframe id="sistema-frame"
-            src="about:blank" class="w-full h-full border-0"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe></div>
-      </div>
-    </div>
 
     <!-- PLANOS -->
     <section id="planos" class="py-12 md:py-20 bg-black/30 border-t border-white/5">
@@ -1720,6 +2179,59 @@
       </div>
     </div>
   </div>
+
+  <!-- Scripts auxiliares: Announcement Strip + FAQ Accordion -->
+  <script>
+    // ── ANNOUNCEMENT STRIP ──
+    function closeStrip() {
+      const strip = document.getElementById('announcement-strip');
+      if (strip) {
+        strip.style.display = 'none';
+        localStorage.setItem('strip-closed', '1');
+        // Ajustar padding-top do main para compensar altura da faixa removida
+        const main = document.getElementById('main-content');
+        if (main) main.style.paddingTop = '5rem'; // volta para padding da navbar apenas
+      }
+    }
+
+    // Verificar ao carregar se strip já foi fechado
+    (function initStrip() {
+      if (localStorage.getItem('strip-closed') === '1') {
+        const strip = document.getElementById('announcement-strip');
+        if (strip) strip.style.display = 'none';
+        const main = document.getElementById('main-content');
+        if (main) main.style.paddingTop = '5rem';
+      }
+    })();
+
+    // ── FAQ ACCORDION ──
+    function toggleFaq(btn) {
+      const item = btn.closest('.faq-item');
+      const answer = item.querySelector('.faq-answer');
+      const icon = btn.querySelector('.faq-icon');
+      const isOpen = !answer.classList.contains('hidden');
+
+      // Fechar todos os outros
+      document.querySelectorAll('.faq-item').forEach(function (i) {
+        const a = i.querySelector('.faq-answer');
+        const ic = i.querySelector('.faq-icon');
+        if (a && !a.classList.contains('hidden')) {
+          a.classList.add('hidden');
+          if (ic) {
+            ic.classList.remove('ph-minus');
+            ic.classList.add('ph-plus');
+          }
+        }
+      });
+
+      // Abrir/fechar o clicado
+      if (!isOpen) {
+        answer.classList.remove('hidden');
+        icon.classList.remove('ph-plus');
+        icon.classList.add('ph-minus');
+      }
+    }
+  </script>
 
   <!-- Scripts (Lógica + Firebase) -->
   <script type="module">
