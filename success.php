@@ -111,7 +111,7 @@ try {
 // 6. Montar link do sistema
 // ─────────────────────────────────────────────
 
-$linkSistema = BASE_URL . '/Sistemas_Gestão/' . $externalReference . '/index.html';
+$linkSistema = BASE_URL . '/Sistemas_Gestao/' . $externalReference . '/index.html';
 
 ?>
 <!DOCTYPE html>

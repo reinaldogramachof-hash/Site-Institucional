@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 
 <head>
@@ -29,6 +29,48 @@
     <!-- Premium Assets -->
     <script src="assets/js/tailwind_config.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
+    
+    
+    <!-- INÃCIO BYPASS DEMO -->
+    <script>
+        (function() {
+            const isIframe = window !== window.parent;
+            const isDemoUrl = window.location.search.includes('demo=true');
+            if (isIframe || isDemoUrl) {
+                console.log('Modo Demo Detectado: Bypass Ativado.');
+                
+                // ForÃ§a no carregamento e mutaÃ§Ãµes agressivo
+                const enforceBypassTimer = setInterval(() => {
+                    const viewLogin = document.getElementById('view-login');
+                    if(viewLogin) {
+                        viewLogin.style.setProperty('display', 'none', 'important');
+                        viewLogin.style.opacity = '0';
+                        viewLogin.style.visibility = 'hidden';
+                        viewLogin.style.zIndex = '-9999';
+                        
+                        // Retira todas as classes relativas a flex layout do tailwind (caso conflito)
+                        viewLogin.classList.remove('flex', 'grid', 'block');
+                        viewLogin.classList.add('hidden'); // hidden do tailwind (display: none)
+                    }
+                    
+                    if(typeof unlockSystem === 'function') {
+                        unlockSystem();
+                    } else {
+                        // caso o sistema nao tenha unlockSystem mas tenha algo escondendo app-main-content
+                        const mainContent = document.getElementById('app-main-content');
+                        if(mainContent) {
+                            mainContent.style.display = 'block';
+                            mainContent.classList.remove('hidden');
+                        }
+                    }
+                }, 100);
+                
+                // Apos 5 segundos (carregamento total), encerra o timer intensivo pra n prejudicar performance
+                setTimeout(() => clearInterval(enforceBypassTimer), 5000);
+            }
+        })();
+    </script>
+    <!-- FIM BYPASS DEMO -->
 </head>
 
 <body class="bg-body-bg text-text-main antialiased transition-colors duration-300">

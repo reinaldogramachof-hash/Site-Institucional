@@ -140,6 +140,8 @@ async function init() {
 // LÓGICA DE SEGURANÇA E ATIVAÇÃO
 // ==========================================
 async function checkAirlock() {
+
+
     const key = localStorage.getItem('plena_license');
     const receiptConfirmed = localStorage.getItem('ml_receipt_confirmed');
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR" class="scroll-smooth">
 
 <head>
@@ -42,7 +42,7 @@
       position: fixed;
       inset: 0;
       z-index: -2;
-      opacity: 0.4;
+      opacity: 0.2;
       pointer-events: none;
     }
 
@@ -446,13 +446,13 @@
                 </div>
                 <!-- Tela do sistema -->
                 <div class="relative" style="height: 340px; overflow: hidden;">
-                  <iframe src="Sistemas_Gestão/gestao-barbearia/index.html" class="w-full border-0"
+                  <iframe src="Sistemas_Gestao/gestao-barbearia/index.html" class="w-full border-0"
                     style="height:600px; transform: scale(0.57); transform-origin: top left; width: 175.4%; pointer-events: none;"
                     sandbox="allow-scripts allow-same-origin" loading="lazy" title="Preview Gestão Barbearia">
                   </iframe>
                   <!-- Overlay para evitar interação -->
                   <div class="absolute inset-0 cursor-default"
-                    onclick="openSistemaDemo('Gestão Barbearia','Barbearias e salões masculinos','Sistemas_Gestão/gestao-barbearia/index.html')"
+                    onclick="openSistemaDemo('Gestão Barbearia','Barbearias e salões masculinos','Sistemas_Gestao/gestao-barbearia/index.html')"
                     title="Clique para ver demo"></div>
                   <!-- Label no overlay -->
                   <div class="absolute bottom-3 right-3">
@@ -463,7 +463,7 @@
                 </div>
               </div>
               <p class="text-center text-xs text-gray-500 mt-3">↑ Preview real do Gestão Barbearia — <button
-                  onclick="openSistemaDemo('Gestão Barbearia','Barbearias e salões masculinos','Sistemas_Gestão/gestao-barbearia/index.html')"
+                  onclick="openSistemaDemo('Gestão Barbearia','Barbearias e salões masculinos','Sistemas_Gestao/gestao-barbearia/index.html')"
                   class="text-emerald-400 hover:underline">ver demo completo</button></p>
             </div>
           </div>
@@ -697,7 +697,7 @@
                    -webkit-mask-image:linear-gradient(90deg,transparent 0%,black 5%,black 95%,transparent 100%);">
             <div id="sistemas-track" class="flex gap-5 transition-none" style="width:max-content">
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0 relative" data-cat="food"
-                onclick="openSistemaDemo('Gestão Hamburgueria','Hamburguerias e lanchonetes','Sistemas_Gestão/gestao-hamburgueria/index.html')">
+                onclick="openSistemaDemo('Gestão Hamburgueria','Hamburguerias e lanchonetes','Sistemas_Gestao/gestao-hamburgueria/index.html')">
                 <span
                   class="absolute top-3 right-3 bg-emerald-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">POPULAR</span>
                 <div class="flex justify-between items-start mb-3">
@@ -709,13 +709,13 @@
                 <p class="text-xs text-gray-400 mb-3">Pedidos, estoque, financeiro e relatórios.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-hamburgueria&nome=Gest%C3%A3o+Hamburgueria"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-orange-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="food"
-                onclick="openSistemaDemo('Gestão Pizzaria','Pizzarias e restaurantes','Sistemas_Gestão/gestao-pizzaria/index.html')">
+                onclick="openSistemaDemo('Gestão Pizzaria','Pizzarias e restaurantes','Sistemas_Gestao/gestao-pizzaria/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i
                       class="ph ph-pizza text-lg"></i></div><span
@@ -725,13 +725,13 @@
                 <p class="text-xs text-gray-400 mb-3">Comanda digital, filas e controle de produção.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-pizzaria&nome=Gest%C3%A3o+Pizzaria"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-orange-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="food"
-                onclick="openSistemaDemo('Gestão Sorveteria','Sorveterias e açaí','Sistemas_Gestão/gestao-sorveteria/index.html')">
+                onclick="openSistemaDemo('Gestão Sorveteria','Sorveterias e açaí','Sistemas_Gestao/gestao-sorveteria/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-blue-400/20 rounded flex items-center justify-center text-blue-300"><i
                       class="ph ph-ice-cream text-lg"></i></div><span
@@ -741,13 +741,13 @@
                 <p class="text-xs text-gray-400 mb-3">Sabores, estoque e vendas no balcão.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-sorveteria&nome=Gest%C3%A3o+Sorveteria"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-blue-300 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="food"
-                onclick="openSistemaDemo('Gestão Marmita','Marmitarias e quentinhas','Sistemas_Gestão/gestao-marmita/index.html')">
+                onclick="openSistemaDemo('Gestão Marmita','Marmitarias e quentinhas','Sistemas_Gestao/gestao-marmita/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-orange-500/20 rounded flex items-center justify-center text-orange-400"><i
                       class="ph ph-bowl-food text-lg"></i></div><span
@@ -757,13 +757,13 @@
                 <p class="text-xs text-gray-400 mb-3">Pedidos diários, assinaturas e rotas.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-marmita&nome=Gest%C3%A3o+Marmita"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-orange-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0 relative" data-cat="food"
-                onclick="openSistemaDemo('Gestão Delivery','Delivery e dark kitchen','Sistemas_Gestão/gestao-delivery/index.html')">
+                onclick="openSistemaDemo('Gestão Delivery','Delivery e dark kitchen','Sistemas_Gestao/gestao-delivery/index.html')">
                 <span
                   class="absolute top-3 right-3 bg-emerald-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">POPULAR</span>
                 <div class="flex justify-between items-start mb-3">
@@ -775,13 +775,13 @@
                 <p class="text-xs text-gray-400 mb-3">Pedidos, entregadores e rastreio.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-delivery&nome=Gest%C3%A3o+Delivery"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-orange-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0 relative" data-cat="saude"
-                onclick="openSistemaDemo('Gestão Barbearia','Barbearias e salões masculinos','Sistemas_Gestão/gestao-barbearia/index.html')">
+                onclick="openSistemaDemo('Gestão Barbearia','Barbearias e salões masculinos','Sistemas_Gestao/gestao-barbearia/index.html')">
                 <span
                   class="absolute top-3 right-3 bg-emerald-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">POPULAR</span>
                 <div class="flex justify-between items-start mb-3">
@@ -793,13 +793,13 @@
                 <p class="text-xs text-gray-400 mb-3">Agenda, clientes, serviços e financeiro.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-barbearia&nome=Gest%C3%A3o+Barbearia"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-pink-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0 relative" data-cat="saude"
-                onclick="openSistemaDemo('Gestão Beleza','Salões e estúdios de beleza','Sistemas_Gestão/gestao-beleza/index.html')">
+                onclick="openSistemaDemo('Gestão Beleza','Salões e estúdios de beleza','Sistemas_Gestao/gestao-beleza/index.html')">
                 <span
                   class="absolute top-3 right-3 bg-emerald-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">POPULAR</span>
                 <div class="flex justify-between items-start mb-3">
@@ -811,13 +811,13 @@
                 <p class="text-xs text-gray-400 mb-3">Agendamentos, comissões e fidelidade.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-beleza&nome=Gest%C3%A3o+Beleza"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-pink-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
-                onclick="openSistemaDemo('Gestão Fit','Academias e studios de treino','Sistemas_Gestão/gestao-fit/index.html')">
+                onclick="openSistemaDemo('Gestão Fit','Academias e studios de treino','Sistemas_Gestao/gestao-fit/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-pink-500/20 rounded flex items-center justify-center text-pink-400"><i
                       class="ph ph-barbell text-lg"></i></div><span
@@ -827,13 +827,13 @@
                 <p class="text-xs text-gray-400 mb-3">Alunos, treinos, planos e mensalidades.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-fit&nome=Gest%C3%A3o+Fit"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-pink-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
-                onclick="openSistemaDemo('Gestão Nutri','Nutricionistas e clínicas','Sistemas_Gestão/gestao-nutri/index.html')">
+                onclick="openSistemaDemo('Gestão Nutri','Nutricionistas e clínicas','Sistemas_Gestao/gestao-nutri/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-green-500/20 rounded flex items-center justify-center text-green-400"><i
                       class="ph ph-leaf text-lg"></i></div><span
@@ -843,13 +843,13 @@
                 <p class="text-xs text-gray-400 mb-3">Pacientes, planos alimentares e consultas.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-nutri&nome=Gest%C3%A3o+Nutri"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-green-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
-                onclick="openSistemaDemo('Gestão Odonto','Clínicas odontológicas','Sistemas_Gestão/gestao-odonto/index.html')">
+                onclick="openSistemaDemo('Gestão Odonto','Clínicas odontológicas','Sistemas_Gestao/gestao-odonto/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
                       class="ph ph-tooth text-lg"></i></div><span
@@ -859,13 +859,13 @@
                 <p class="text-xs text-gray-400 mb-3">Prontuários, agenda e orçamentos.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-odonto&nome=Gest%C3%A3o+Odonto"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="saude"
-                onclick="openSistemaDemo('Gestão Terapia','Terapeutas e psicólogos','Sistemas_Gestão/gestao-terapia/index.html')">
+                onclick="openSistemaDemo('Gestão Terapia','Terapeutas e psicólogos','Sistemas_Gestao/gestao-terapia/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-purple-500/20 rounded flex items-center justify-center text-purple-400"><i
                       class="ph ph-brain text-lg"></i></div><span
@@ -875,13 +875,13 @@
                 <p class="text-xs text-gray-400 mb-3">Sessões, prontuários e cobranças.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-terapia&nome=Gest%C3%A3o+Terapia"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-purple-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
-                onclick="openSistemaDemo('Gestão Assistência','Assistências técnicas e consertos','Sistemas_Gestão/gestao-assistencia/index.html')">
+                onclick="openSistemaDemo('Gestão Assistência','Assistências técnicas e consertos','Sistemas_Gestao/gestao-assistencia/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
                       class="ph ph-wrench text-lg"></i></div><span
@@ -891,13 +891,13 @@
                 <p class="text-xs text-gray-400 mb-3">Ordens de serviço, peças e clientes.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-assistencia&nome=Gest%C3%A3o+Assist%C3%AAncia"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-yellow-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
-                onclick="openSistemaDemo('Gestão Checklist','Inspeções e auditorias','Sistemas_Gestão/gestao-checklist/index.html')">
+                onclick="openSistemaDemo('Gestão Checklist','Inspeções e auditorias','Sistemas_Gestao/gestao-checklist/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
                       class="ph ph-check-square text-lg"></i></div><span
@@ -907,14 +907,14 @@
                 <p class="text-xs text-gray-400 mb-3">Listas de verificação, relatórios e aprovações.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-checklist&nome=Gest%C3%A3o+Checklist"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-yellow-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0 relative"
                 data-cat="servicos"
-                onclick="openSistemaDemo('Gestão Orçamentos','Prestadores de serviços','Sistemas_Gestão/gestao-orcamentos/index.html')">
+                onclick="openSistemaDemo('Gestão Orçamentos','Prestadores de serviços','Sistemas_Gestao/gestao-orcamentos/index.html')">
                 <span
                   class="absolute top-3 right-3 bg-emerald-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">POPULAR</span>
                 <div class="flex justify-between items-start mb-3">
@@ -926,13 +926,13 @@
                 <p class="text-xs text-gray-400 mb-3">Propostas, aprovações e controle de projetos.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-orcamentos&nome=Gest%C3%A3o+Or%C3%A7amentos"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-yellow-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
-                onclick="openSistemaDemo('Gestão Obras','Construtoras e pedreiros','Sistemas_Gestão/gestao-obras/index.html')">
+                onclick="openSistemaDemo('Gestão Obras','Construtoras e pedreiros','Sistemas_Gestao/gestao-obras/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-amber-500/20 rounded flex items-center justify-center text-amber-400"><i
                       class="ph ph-hard-hat text-lg"></i></div><span
@@ -942,13 +942,13 @@
                 <p class="text-xs text-gray-400 mb-3">Etapas, materiais, mão de obra e cronogramas.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-obras&nome=Gest%C3%A3o+Obras"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-amber-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="servicos"
-                onclick="openSistemaDemo('Gestão Controle','Controle geral de processos','Sistemas_Gestão/gestao-controle/index.html')">
+                onclick="openSistemaDemo('Gestão Controle','Controle geral de processos','Sistemas_Gestao/gestao-controle/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-yellow-500/20 rounded flex items-center justify-center text-yellow-400"><i
                       class="ph ph-sliders text-lg"></i></div><span
@@ -958,13 +958,13 @@
                 <p class="text-xs text-gray-400 mb-3">Tarefas, prazos e equipes em um painel.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-controle&nome=Gest%C3%A3o+Controle"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-yellow-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
-                onclick="openSistemaDemo('Gestão Driver','Motoristas e transporte particular','Sistemas_Gestão/gestao-driver/index.html')">
+                onclick="openSistemaDemo('Gestão Driver','Motoristas e transporte particular','Sistemas_Gestao/gestao-driver/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
                       class="ph ph-steering-wheel text-lg"></i></div><span
@@ -974,13 +974,13 @@
                 <p class="text-xs text-gray-400 mb-3">Corridas, pagamentos e histórico de viagens.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-driver&nome=Gest%C3%A3o+Driver"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
-                onclick="openSistemaDemo('Gestão Entregas','Empresas de entregas locais','Sistemas_Gestão/gestao-entregas/index.html')">
+                onclick="openSistemaDemo('Gestão Entregas','Empresas de entregas locais','Sistemas_Gestao/gestao-entregas/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
                       class="ph ph-package text-lg"></i></div><span
@@ -990,13 +990,13 @@
                 <p class="text-xs text-gray-400 mb-3">Romaneios, rotas e confirmação de entrega.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-entregas&nome=Gest%C3%A3o+Entregas"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
-                onclick="openSistemaDemo('Gestão Frota','Frotas e transportadoras','Sistemas_Gestão/gestao-frota/index.html')">
+                onclick="openSistemaDemo('Gestão Frota','Frotas e transportadoras','Sistemas_Gestao/gestao-frota/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
                       class="ph ph-truck text-lg"></i></div><span
@@ -1006,13 +1006,13 @@
                 <p class="text-xs text-gray-400 mb-3">Veículos, manutenções, abastecimentos e KPIs.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-frota&nome=Gest%C3%A3o+Frota"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
-                onclick="openSistemaDemo('Gestão Motoboy','Motoboys e small delivery','Sistemas_Gestão/gestao-motoboy/index.html')">
+                onclick="openSistemaDemo('Gestão Motoboy','Motoboys e small delivery','Sistemas_Gestao/gestao-motoboy/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
                       class="ph ph-motorcycle text-lg"></i></div><span
@@ -1022,13 +1022,13 @@
                 <p class="text-xs text-gray-400 mb-3">Corridas, pontos e comissões de motoboys.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-motoboy&nome=Gest%C3%A3o+Motoboy"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="logistica"
-                onclick="openSistemaDemo('Gestão Motorista','Motoristas autônomos','Sistemas_Gestão/gestao-motorista/index.html')">
+                onclick="openSistemaDemo('Gestão Motorista','Motoristas autônomos','Sistemas_Gestao/gestao-motorista/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-blue-500/20 rounded flex items-center justify-center text-blue-400"><i
                       class="ph ph-car text-lg"></i></div><span
@@ -1038,13 +1038,13 @@
                 <p class="text-xs text-gray-400 mb-3">Viagens, despesas, lucro e desempenho.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-motorista&nome=Gest%C3%A3o+Motorista"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-blue-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="financas"
-                onclick="openSistemaDemo('Gestão Finanças','Controle financeiro empresarial','Sistemas_Gestão/gestao-financas/index.html')">
+                onclick="openSistemaDemo('Gestão Finanças','Controle financeiro empresarial','Sistemas_Gestao/gestao-financas/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
                       class="ph ph-chart-line-up text-lg"></i></div><span
@@ -1054,13 +1054,13 @@
                 <p class="text-xs text-gray-400 mb-3">Fluxo de caixa, DRE e contas a pagar/receber.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-financas&nome=Gest%C3%A3o+Finan%C3%A7as"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-emerald-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="financas"
-                onclick="openSistemaDemo('Gestão PDV','Ponto de venda e caixa','Sistemas_Gestão/gestao-pdv/index.html')">
+                onclick="openSistemaDemo('Gestão PDV','Ponto de venda e caixa','Sistemas_Gestao/gestao-pdv/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
                       class="ph ph-cash-register text-lg"></i></div><span
@@ -1070,13 +1070,13 @@
                 <p class="text-xs text-gray-400 mb-3">Caixa, vendas, sangria e fechamento diário.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-pdv&nome=Gest%C3%A3o+PDV"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-emerald-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="financas"
-                onclick="openSistemaDemo('Gestão Card','Controle de despesas em cartão','Sistemas_Gestão/gestao-card/index.html')">
+                onclick="openSistemaDemo('Gestão Card','Controle de despesas em cartão','Sistemas_Gestao/gestao-card/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-emerald-500/20 rounded flex items-center justify-center text-emerald-400"><i
                       class="ph ph-credit-card text-lg"></i></div><span
@@ -1086,13 +1086,13 @@
                 <p class="text-xs text-gray-400 mb-3">Controle de gastos em cartão por categoria.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-card&nome=Gest%C3%A3o+Card"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-emerald-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
-                onclick="openSistemaDemo('Gestão Estoque','Comércio e depósitos','Sistemas_Gestão/gestao-estoque/index.html')">
+                onclick="openSistemaDemo('Gestão Estoque','Comércio e depósitos','Sistemas_Gestao/gestao-estoque/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
                       class="ph ph-warehouse text-lg"></i></div><span
@@ -1102,13 +1102,13 @@
                 <p class="text-xs text-gray-400 mb-3">Entradas, saídas, alertas e inventário.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-estoque&nome=Gest%C3%A3o+Estoque"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
-                onclick="openSistemaDemo('Gestão Distribuidora','Distribuidoras e atacados','Sistemas_Gestão/gestao-distribuidora/index.html')">
+                onclick="openSistemaDemo('Gestão Distribuidora','Distribuidoras e atacados','Sistemas_Gestao/gestao-distribuidora/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
                       class="ph ph-buildings text-lg"></i></div><span
@@ -1118,13 +1118,13 @@
                 <p class="text-xs text-gray-400 mb-3">Pedidos, rotas de entrega e clientes.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-distribuidora&nome=Gest%C3%A3o+Distribuidora"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
-                onclick="openSistemaDemo('Gestão Feirante','Feirantes e vendedores ambulantes','Sistemas_Gestão/gestao-feirante/index.html')">
+                onclick="openSistemaDemo('Gestão Feirante','Feirantes e vendedores ambulantes','Sistemas_Gestao/gestao-feirante/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
                       class="ph ph-basket text-lg"></i></div><span
@@ -1134,13 +1134,13 @@
                 <p class="text-xs text-gray-400 mb-3">Vendas no ato, troco e fechamento de dia.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-feirante&nome=Gest%C3%A3o+Feirante"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
-                onclick="openSistemaDemo('Gestão Artesanato','Artesãos e produção manual','Sistemas_Gestão/gestao-artesanato/index.html')">
+                onclick="openSistemaDemo('Gestão Artesanato','Artesãos e produção manual','Sistemas_Gestao/gestao-artesanato/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
                       class="ph ph-palette text-lg"></i></div><span
@@ -1150,13 +1150,13 @@
                 <p class="text-xs text-gray-400 mb-3">Produção, materiais, encomendas e vendas.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-artesanato&nome=Gest%C3%A3o+Artesanato"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
               <div class="sistema-card glass-wet p-6 w-72 cursor-pointer group flex-shrink-0" data-cat="varejo"
-                onclick="openSistemaDemo('Gestão Aluguéis','Imóveis e locação em geral','Sistemas_Gestão/gestao-alugueis/index.html')">
+                onclick="openSistemaDemo('Gestão Aluguéis','Imóveis e locação em geral','Sistemas_Gestao/gestao-alugueis/index.html')">
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-11 h-11 bg-violet-500/20 rounded flex items-center justify-center text-violet-400"><i
                       class="ph ph-house-line text-lg"></i></div><span
@@ -1166,8 +1166,8 @@
                 <p class="text-xs text-gray-400 mb-3">Contratos, vencimentos e recibos de aluguel.</p>
                 <div class="flex items-center justify-between">
                   <a href="checkout.php?sistema=gestao-alugueis&nome=Gest%C3%A3o+Alugu%C3%A9is"
-                     class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
-                     onclick="event.stopPropagation()">Comprar R$ 97</a>
+                    class="text-xs bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-3 py-1 rounded transition-colors"
+                    onclick="event.stopPropagation()">Comprar R$ 97</a>
                   <span class="text-violet-400 text-xs group-hover:translate-x-1 transition-transform">Demo →</span>
                 </div>
               </div>
@@ -2914,7 +2914,8 @@
     function openSistemaDemo(nome, nicho, src) {
       document.getElementById('sistema-modal-nome').textContent = nome;
       document.getElementById('sistema-modal-nicho').textContent = nicho;
-      document.getElementById('sistema-frame').src = src;
+      const separator = src.includes('?') ? '&' : '?';
+      document.getElementById('sistema-frame').src = src + separator + 'demo=true';
       const msg = encodeURIComponent('Olá! Quero adquirir o ' + nome + ' por R$ 97. Pode me ajudar?');
       document.getElementById('sistema-modal-cta').href = 'https://wa.me/5512992191018?text=' + msg;
       document.getElementById('sistema-modal').classList.add('active');

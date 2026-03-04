@@ -11,26 +11,26 @@
 // ─────────────────────────────────────────────
 
 /** Token de acesso da API do Mercado Pago (produção) */
-define('MP_ACCESS_TOKEN', 'APP_USR-2857913492720459-021618-d2fa8b61ae535b334d4cdd28f720880c-3202258925');
+define('MP_ACCESS_TOKEN', 'APP_USR-4084040189980704-030413-06a65397f2c8b514fb4b21e70b895acc-3202258925');
 
 /** Public Key do Mercado Pago (caso precise no front-end) */
-define('MP_PUBLIC_KEY', 'APP_USR-c1325f57-e5dc-4dd0-b36d-fc7d1cf237b1');
+define('MP_PUBLIC_KEY', 'APP_USR-04b911d8-3f12-4c59-b912-f61790a76a5b');
 
 // ─────────────────────────────────────────────
 // BANCO DE DADOS
 // ─────────────────────────────────────────────
 
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'SEU_BANCO');
-define('DB_USER', 'SEU_USUARIO');
-define('DB_PASS', 'SUA_SENHA');
+define('DB_NAME', 'hg2fbe99_plena_informatica');
+define('DB_USER', 'hg2fbe99_reinaldogramacho');
+define('DB_PASS', 'Rein@ldo1912');
 
 // ─────────────────────────────────────────────
 // URLS E PREÇOS
 // ─────────────────────────────────────────────
 
 /** URL base do site (sem barra final) */
-define('BASE_URL', 'https://seudominio.com.br');
+define('BASE_URL', 'https://plenainformatica.com.br');
 
 /** Preço padrão de cada licença em reais */
 define('PRECO_SISTEMA', 97.00);
@@ -57,9 +57,9 @@ function getPDO(): PDO
         );
 
         $options = [
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES   => false,
+            PDO::ATTR_EMULATE_PREPARES => false,
         ];
 
         $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
@@ -93,7 +93,7 @@ function gerarLicenca(): string
         $chave = implode('-', $partes); // Ex.: ABCD-EFGH-JKLM
 
         // Verificar unicidade no banco
-        $pdo  = getPDO();
+        $pdo = getPDO();
         $stmt = $pdo->prepare('SELECT COUNT(*) FROM licencas WHERE license_key = ?');
         $stmt->execute([$chave]);
         $existe = (int) $stmt->fetchColumn() > 0;
